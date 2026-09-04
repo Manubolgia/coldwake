@@ -1,0 +1,108 @@
+{
+  "hourQuiet": [
+    "Nothing moves that you can hear.",
+    "The deck plates tick as they cool.",
+    "Somewhere aft, a pump cycles and stops.",
+    "The lights hold steady. That is all the good news there is.",
+    "Air moves through the ducts and nothing rides it.",
+    "You count the hull noises and none of them are new."
+  ],
+  "hourWatchful": [
+    "Something is aboard with you and it is not in this compartment.",
+    "A long way off, weight shifts on a plate.",
+    "The hull carries a sound you cannot place.",
+    "Whatever it is, it has not found you yet.",
+    "You hear it stop when you stop."
+  ],
+  "hourTense": [
+    "It is close. Close enough that you can hear it breathing through the wall.",
+    "Something is one compartment away and it is not moving randomly.",
+    "The sound is coming from the next bulkhead and it is coming this way.",
+    "You have run out of distance."
+  ],
+  "hourLoud": [
+    "The noise you made is still hanging in the air.",
+    "Whatever heard that is on its way.",
+    "You were loud. The ship remembers where.",
+    "Sound carries a long way through a hull this thin."
+  ],
+  "hourLate": [
+    "The floor is warmer than it was. That is the atmosphere, and it is early.",
+    "The orbit is tightening. You can feel the floor lean.",
+    "Not much of the window left.",
+    "The hull has started to sing at a frequency you do not like."
+  ],
+  "arrive": [
+    "{place}. Your boots make more noise than you want them to.",
+    "{place}. You are not quiet about it.",
+    "You cross into {place}. Anything nearby heard that.",
+    "{place}, at speed. Speed is loud."
+  ],
+  "arriveQuiet": [
+    "{place}. Heel, toe, nothing.",
+    "You put yourself into {place} without a sound.",
+    "{place}. Not so much as a breath.",
+    "You take {place} slowly, and nothing turns around."
+  ],
+  "spawn": [
+    "{thing} in {place}. It came out of the dark and it is not confused.",
+    "{thing} in {place}. It knows where the noise came from.",
+    "Something resolves in {place}. The sensors label it {thing}.",
+    "{thing}, {place}. It was probably always there.",
+    "{thing} in {place}. It does not look for long before it starts moving."
+  ],
+  "blank": [
+    "Nothing there. The hull settling, or something that did not want to be seen.",
+    "The return comes back empty. It is never quite reassuring.",
+    "Nothing. You listen anyway.",
+    "Whatever made that sound is not making it now."
+  ],
+  "blankWorse": [
+    "Nothing there \u2014 and the ship gets a little worse anyway. Something else woke up.",
+    "Nothing. But the count of what is unaccounted for just went up.",
+    "Empty. The dark is not: there is one more thing in it now.",
+    "Nothing there. Somewhere else, something opens its eyes."
+  ],
+  "wound": [
+    "{source} gets a hand on you before you are ready.",
+    "{source} catches you against a bulkhead.",
+    "{source} is faster than it looks.",
+    "{source} reaches you. It is not quick and it is not clean."
+  ],
+  "woundHard": [
+    "{source} puts you down hard. You get up missing things.",
+    "{source} takes you apart and lets go. It costs you twice.",
+    "{source} hits you twice before you are out of reach."
+  ],
+  "kill": [
+    "{thing} stops moving.",
+    "{thing} goes down and stays down.",
+    "{thing} folds up and does not get back up.",
+    "That is the end of {thing}. There is more of it than you expected."
+  ],
+  "miss": [
+    "You miss. {roll} against {target}. The weapon is empty \u2014 the armory can refill it.",
+    "Wide. {roll} against {target}, and now there is nothing left in it.",
+    "It moves and you do not hit it. {roll} against {target}. Empty."
+  ],
+  "found": [
+    "You find {thing}.",
+    "{thing}, under a panel somebody left open.",
+    "{thing}. Somebody stowed it here and did not come back for it.",
+    "There is {thing} in here."
+  ],
+  "charge": [
+    "The line takes it. {total} of {need} in the shuttle.",
+    "{n} across into the shuttle. {total} of {need}.",
+    "You dump the pool into the shuttle. {total} of {need} now."
+  ],
+  "ward": [
+    "It comes in and you are ready. Nothing lands.",
+    "You take it on your shoulder and it does not cost you anything.",
+    "It reaches you and finds you braced."
+  ],
+  "sweepNothing": [
+    "Nothing left unaccounted for. That is worse than it sounds.",
+    "The hull is quiet all the way through. Everything that was out there has already found somewhere to be."
+  ]
+}

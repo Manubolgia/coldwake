@@ -18,22 +18,26 @@ export function StatusStrip({
   onMenu: () => void;
 }): React.ReactElement {
   const pips = '●'.repeat(state.player.ap) + '○'.repeat(Math.max(0, RULES.apPerTurn - state.player.ap));
+  const need = shuttleRequirement(state.role, state.depth);
+  const short = state.ship.shuttleCharge < need;
   return (
-    <div className="strip display">
+    <div className="strip">
       <span>
-        HR <Value n={state.turn} instant={instant} />/{turnLimit(state.depth)}
+        HOUR <Value n={state.turn} instant={instant} />
+        <span className="dim">/{turnLimit(state.depth)}</span>
       </span>
       <span>
-        PWR <Value n={state.ship.power} instant={instant} />
+        POWER <Value n={state.ship.power} instant={instant} />
       </span>
-      <span>
-        SHT <Value n={state.ship.shuttleCharge} instant={instant} />/
-        {shuttleRequirement(state.role, state.depth)}
+      {/* The number the whole run is about, named so that nothing has to
+          explain where to look for it. */}
+      <span className={short ? '' : 'alarm'}>
+        SHUTTLE <Value n={state.ship.shuttleCharge} instant={instant} />
+        <span className="dim">/{need}</span>
       </span>
-      <span>
-        RCT <Value n={state.ship.reactorOutput} instant={instant} />
+      <span className="pips glow" aria-label="actions left this hour">
+        {pips}
       </span>
-      <span className="pips glow">{pips}</span>
       <button
         style={{ border: 'none', minHeight: 'auto', padding: '2px 4px' }}
         onClick={onMenu}
@@ -54,7 +58,13 @@ export function Readout({ state }: { state: GameState }): React.ReactElement {
   const infested = revealed.filter((c) => c.id === 'infested').length;
   return (
     <div className="readout" data-testid="readout">
-      <span className="dim">UNRESOLVED</span>
+      <span className="dim">REACTOR</span>
+      <span>
+        {state.ship.reactorOutput}
+        <span className="dim">/HR</span>
+      </span>
+      <span className="dim">│</span>
+      <span className="dim">STILL OUT THERE</span>
       {known ? (
         <span className="glow" data-testid="bag-known">
           {(
@@ -62,7 +72,7 @@ export function Readout({ state }: { state: GameState }): React.ReactElement {
               ['blank', 'NOTHING'],
               ['contact', 'MOVING'],
               ['drifter', 'HEAVY'],
-              ['burrower', 'IN THE WALLS'],
+              ['burrower', 'IN THE DUCTS'],
               ['chorus', 'SINGING'],
             ] as const
           )

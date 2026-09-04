@@ -1,4 +1,5 @@
-import { MAP, NODE_IDS, RULES, THREATS, depthDef, node, threatDef } from './content';
+import { MAP, NODE_IDS, RULES, THREATS, depthDef, threatDef } from './content';
+import { blankLine, spawnLine } from './voice';
 import { cardIdOf } from './deck';
 import { nextInt } from './rng';
 import { noiseFloor } from './state';
@@ -40,11 +41,7 @@ export function spawnThreat(state: GameState, type: ThreatType, at: NodeId | 've
   const id = `t${state.nextThreatId}`;
   state.nextThreatId += 1;
   state.threats.push({ id, type, node: at, hp: def.hp });
-  state.feed.push({
-    turn: state.turn,
-    kind: 'threat',
-    text: `>> ${def.name} IN ${at === 'vents' ? 'THE CRAWLSPACE' : node(at).name}. IT KNOWS WHERE THE NOISE CAME FROM.`,
-  });
+  state.feed.push({ turn: state.turn, kind: 'threat', text: spawnLine(state, type, at) });
 }
 
 /** Weighted pick of one token type out of the bag. */
@@ -87,14 +84,7 @@ export function bagDraw(state: GameState, at: NodeId | 'vents'): TokenType | 'em
     const moved = Math.min(THREATS.blankEscalation, state.reserve.contact ?? 0);
     state.reserve.contact -= moved;
     state.bag.contact = (state.bag.contact ?? 0) + moved;
-    state.feed.push({
-      turn: state.turn,
-      kind: 'sys',
-      text:
-        moved > 0
-          ? '>> NOTHING THERE. THE SHIP GETS WORSE ANYWAY.'
-          : '>> NOTHING THERE.',
-    });
+    state.feed.push({ turn: state.turn, kind: 'sys', text: blankLine(state, moved > 0) });
     return 'blank';
   }
   state.bag[token] = (state.bag[token] ?? 0) - 1;

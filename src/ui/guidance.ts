@@ -15,6 +15,10 @@ export type DisplayLine = { turn: number; kind: LogLine['kind'] | 'guide'; text:
 const TRIGGERS: Record<string, (s: GameState) => boolean> = {
   always: () => true,
   moved: (s) => s.player.node !== MAP.start,
+  spentTime: (s) => s.player.ap < RULES.apPerTurn,
+  listened: (s) => s.bagKnownTurn > 0,
+  carryingWeapon: (s) =>
+    [...s.player.hand, ...s.player.deck, ...s.player.discard].some((u) => u.startsWith('salv_sidearm')),
   noiseHereNear: (s) =>
     s.player.node !== 'vents' &&
     (s.ship.noise[s.player.node] ?? 0) >= RULES.noiseThreshold - 1,
@@ -48,18 +52,18 @@ const TRIGGERS: Record<string, (s: GameState) => boolean> = {
 };
 
 /**
- * Advisories that have come true and not yet been said. Mutates `fired` so a
- * line is never repeated inside a run.
+ * The next advisory that has come true and not yet been said — one at a time,
+ * never a wall of them, so a bad hour teaches one thing rather than five.
+ * Mutates `fired` so a line is never repeated inside a run.
  */
 export function newAdvisories(state: GameState, fired: Set<string>): DisplayLine[] {
   if (state.status !== 'active') return [];
-  const out: DisplayLine[] = [];
   for (const a of ADVISORIES) {
     if (fired.has(a.id)) continue;
     const test = TRIGGERS[a.trigger];
     if (test === undefined || !test(state)) continue;
     fired.add(a.id);
-    out.push({ turn: state.turn, kind: 'guide', text: a.text });
+    return [{ turn: state.turn, kind: 'guide', text: a.text }];
   }
-  return out;
+  return [];
 }

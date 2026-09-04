@@ -11,8 +11,25 @@ import { at, endTurn, fresh, put, spawn } from './helpers';
  * card text, salvage logs, role blurbs, advisories, and every line the ship
  * says during a run — is checked against the vocabulary that would give it away.
  */
-const FORBIDDEN =
-  /\b(cards?|decks?|tokens?|bag|nodes?|turns?|AP|hit ?points?|dice|d6|no roll|tiles?|discard|shuffle|draw pile)\b/i;
+// Board-game vocabulary, precisely: a ship has deck plates and things turn
+// around in it, so the patterns match the table senses of those words and not
+// the fiction's own furniture.
+const FORBIDDEN = [
+  /\bcards?\b/i,
+  /\bdecks?\b(?![ -]plate)/i,
+  /\btokens?\b/i,
+  /\bbag\b/i,
+  /\bnodes?\b/i,
+  /\d+\s+turns?\b/i,
+  /\b(this|next|each|per|every|last|one|two|three)\s+turns?\b/i,
+  /\bturn\s+(limit|order|phase)\b/i,
+  /\bAP\b/,
+  /\bhit ?points?\b/i,
+  /\b(dice|d6|tiles?|shuffle|draw pile|no roll)\b/i,
+  /\bdiscard\b/i,
+];
+
+const breaksCharacter = (text: string): boolean => FORBIDDEN.some((r) => r.test(text));
 
 function playerFacingStrings(): { where: string; text: string }[] {
   const out: { where: string; text: string }[] = [];
@@ -27,7 +44,7 @@ function playerFacingStrings(): { where: string; text: string }[] {
 
 describe('the ship never breaks character', () => {
   it('keeps board-game vocabulary out of every written string', () => {
-    const offenders = playerFacingStrings().filter((s) => FORBIDDEN.test(s.text));
+    const offenders = playerFacingStrings().filter((s) => breaksCharacter(s.text));
     expect(offenders.map((o) => `${o.where}: ${o.text}`)).toEqual([]);
   });
 
@@ -45,7 +62,7 @@ describe('the ship never breaks character', () => {
         for (const line of s.feed) seen.add(line.text);
       }
     }
-    const offenders = [...seen].filter((t) => FORBIDDEN.test(t));
+    const offenders = [...seen].filter((t) => breaksCharacter(t));
     expect(offenders).toEqual([]);
     expect(seen.size).toBeGreaterThan(30);
   });
@@ -82,8 +99,8 @@ describe('every action tells you what happened', () => {
   it('reports what a listen actually heard, not that you listened', () => {
     const s = fresh();
     const heard = reduce(s, { t: 'listen' }).feed.at(-1)?.text ?? '';
-    expect(heard).toContain('SWEEP');
-    expect(heard).toMatch(/NOTHING|MOVING|HEAVY|WALLS|SINGING/);
+    expect(heard).toMatch(/unaccounted for/i);
+    expect(heard).toMatch(/nothing at all|moving|heavy|ducts|singing/i);
     expect(sweepReport(s)).toBe(heard);
   });
 
@@ -94,7 +111,7 @@ describe('every action tells you what happened', () => {
     });
     s = endTurn(s);
     const said = s.feed.map((l) => l.text).join(' ');
-    expect(said).toMatch(/CANNOT DO THAT ANY MORE|NOTHING LEFT TO GIVE/);
+    expect(said).toMatch(/cannot do that any more|nothing left to give/i);
     expect(roleDeck('engineer').length).toBe(12);
   });
 });

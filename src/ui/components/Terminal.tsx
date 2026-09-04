@@ -1,11 +1,17 @@
-import { useEffect, useRef } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import type { DisplayLine } from '../guidance';
 import { useTypedFeed } from '../hooks';
 
+/** How long the finished text stays up before the ship hands control back. */
+function readingTime(lines: DisplayLine[], from: number): number {
+  const chars = lines.slice(from).reduce((n, l) => n + l.text.length, 0);
+  return Math.min(3200, Math.max(700, chars * 16));
+}
+
 /**
- * The ship's readout. Everything the player learns arrives here, written out
- * rather than printed, so a turn resolves at the terminal's pace and not
- * instantly. Tapping it skips to the end.
+ * The ship's readout. Everything the player learns arrives here, written out at
+ * reading pace rather than printed. A tap finishes the line; holding the screen
+ * runs the whole thing fast.
  */
 export function Terminal({
   lines,
@@ -18,22 +24,61 @@ export function Terminal({
   instant: boolean;
   onComplete: () => void;
 }): React.ReactElement {
-  const typed = useTypedFeed(lines, instant);
+  const [held, setHeld] = useState(false);
+  const pressedAt = useRef(0);
+  const typed = useTypedFeed(lines, instant, held);
   const scroller = useRef<HTMLDivElement>(null);
   const wasComplete = useRef(true);
+  const startedAt = useRef(0);
+  const holdTimer = useRef<number | undefined>(undefined);
 
+  const finishNow = useCallback(() => {
+    if (holdTimer.current !== undefined) {
+      window.clearTimeout(holdTimer.current);
+      holdTimer.current = undefined;
+    }
+    onComplete();
+  }, [onComplete]);
+
+  // Finish, then hold the last of it on screen long enough to be read.
   useEffect(() => {
-    if (typed.complete && !wasComplete.current) onComplete();
+    if (typed.complete && !wasComplete.current) {
+      const wait = instant || held ? 0 : readingTime(lines, startedAt.current);
+      holdTimer.current = window.setTimeout(() => {
+        holdTimer.current = undefined;
+        onComplete();
+      }, wait);
+      wasComplete.current = true;
+      return () => {
+        if (holdTimer.current !== undefined) window.clearTimeout(holdTimer.current);
+      };
+    }
+    if (!typed.complete && wasComplete.current) {
+      startedAt.current = Math.max(0, typed.done - 1);
+    }
     wasComplete.current = typed.complete;
-  }, [typed.complete, onComplete]);
+    return undefined;
+  }, [typed.complete, typed.done, onComplete, instant, held, lines]);
 
   useEffect(() => {
     const el = scroller.current;
     if (el) el.scrollTop = el.scrollHeight;
   }, [typed.done, typed.chars, resolving]);
 
-  // Older output does not vanish, it burns in: the further back a line is, the
-  // dimmer it sits, until it is part of the chrome.
+  const press = useCallback(() => {
+    pressedAt.current = Date.now();
+    setHeld(true);
+  }, []);
+  const release = useCallback(() => {
+    // A tap finishes the sentence, and a second tap dismisses what is left on
+    // screen; a hold has already run both forward.
+    if (Date.now() - pressedAt.current < 200) {
+      if (typed.complete) finishNow();
+      else typed.skip();
+    }
+    setHeld(false);
+  }, [typed, finishNow]);
+
   const window_ = resolving ? 26 : 6;
   const first = Math.max(0, typed.done + 1 - window_);
   const visible = lines.slice(first, typed.done);
@@ -58,7 +103,11 @@ export function Terminal({
       data-testid="terminal"
       data-resolving={resolving ? 'yes' : 'no'}
       data-complete={typed.complete ? 'yes' : 'no'}
-      onClick={typed.skip}
+      data-held={held ? 'yes' : 'no'}
+      onPointerDown={press}
+      onPointerUp={release}
+      onPointerCancel={() => setHeld(false)}
+      onPointerLeave={() => setHeld(false)}
       role="log"
       aria-live="polite"
       ref={scroller}
@@ -69,7 +118,17 @@ export function Terminal({
         </div>
       ))}
       {current ? (
-        <div className={current.kind === 'guide' ? 'guide' : current.kind === 'alarm' ? 'alarm' : current.kind === 'threat' ? '' : 'dim'}>
+        <div
+          className={
+            current.kind === 'guide'
+              ? 'guide'
+              : current.kind === 'alarm'
+                ? 'alarm'
+                : current.kind === 'threat'
+                  ? ''
+                  : 'dim'
+          }
+        >
           {body(current).slice(0, typed.chars)}
           <span className="caret" />
         </div>
@@ -79,7 +138,9 @@ export function Terminal({
           <span className="caret idle" />
         </div>
       )}
-      {resolving && !typed.complete ? <div className="ghost skip-hint">TAP TO SKIP</div> : null}
+      {resolving ? (
+        <div className="ghost skip-hint">{held ? 'RUNNING' : 'HOLD TO RUN IT FAST'}</div>
+      ) : null}
     </div>
   );
 }

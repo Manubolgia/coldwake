@@ -241,7 +241,9 @@ export function App(): React.ReactElement {
             // Advisories already true on a resumed run are treated as said, so
             // picking a run back up does not bury the player in a backlog.
             advised.current = new Set();
-            newAdvisories(savedRun, advised.current);
+            // Retire everything already true, so a resumed run does not open
+            // with a backlog of lessons.
+            while (newAdvisories(savedRun, advised.current).length > 0);
             setLines([...savedRun.feed]);
             setState(savedRun);
             setScreen('run');

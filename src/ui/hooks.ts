@@ -29,18 +29,22 @@ export type TypedFeed = {
   skip: () => void;
 };
 
+/**
+ * Written at reading pace, not at machine pace. Holding the screen multiplies
+ * all of it, so an impatient player is never made to wait and a new one is
+ * never outrun.
+ */
 const SPEED = {
-  normal: { tick: 14, step: 3, gap: 60 },
-  loud: { tick: 18, step: 1, gap: 190 },
-  // Advisories are long by nature; they run out quickly so that reading them is
-  // a choice rather than a wait.
-  guide: { tick: 12, step: 5, gap: 120 },
+  normal: { tick: 18, step: 1, gap: 150 },
+  loud: { tick: 28, step: 1, gap: 320 },
+  guide: { tick: 16, step: 1, gap: 260 },
 };
+const HELD = 6;
 
 const isLoud = (line: DisplayLine | undefined): boolean =>
   line?.kind === 'alarm' || line?.kind === 'threat';
 
-export function useTypedFeed(lines: DisplayLine[], instant: boolean): TypedFeed {
+export function useTypedFeed(lines: DisplayLine[], instant: boolean, fast = false): TypedFeed {
   const [done, setDone] = useState(lines.length);
   const [chars, setChars] = useState(0);
   const previousLength = useRef(lines.length);
@@ -66,7 +70,10 @@ export function useTypedFeed(lines: DisplayLine[], instant: boolean): TypedFeed 
     if (done >= lines.length) return;
     const line = lines[done];
     if (!line) return;
-    const speed = line.kind === 'guide' ? SPEED.guide : isLoud(line) ? SPEED.loud : SPEED.normal;
+    const base = line.kind === 'guide' ? SPEED.guide : isLoud(line) ? SPEED.loud : SPEED.normal;
+    const speed = fast
+      ? { tick: Math.max(4, Math.round(base.tick / HELD)), step: base.step * 3, gap: 20 }
+      : base;
     const length = line.kind === 'guide' ? line.text.length + 3 : line.text.length;
     if (chars >= length) {
       const t = window.setTimeout(() => {
@@ -80,7 +87,7 @@ export function useTypedFeed(lines: DisplayLine[], instant: boolean): TypedFeed 
       chars === 0 && isLoud(line) ? speed.gap : speed.tick,
     );
     return () => window.clearTimeout(t);
-  }, [lines, done, chars, instant]);
+  }, [lines, done, chars, instant, fast]);
 
   return {
     done,

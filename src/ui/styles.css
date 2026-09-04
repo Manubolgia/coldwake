@@ -178,7 +178,11 @@ button:focus-visible,
   gap: var(--g1);
   padding: var(--g1) var(--g1);
   border-bottom: 1px solid var(--phos-dim);
-  font-size: 12px;
+  /* Data font, not the display face: these are numbers the player reads every
+     few seconds and they have to fit on a phone. */
+  font-family: var(--data);
+  letter-spacing: 0.02em;
+  font-size: 13px;
   flex: 0 0 auto;
   padding-top: max(var(--g1), env(safe-area-inset-top));
 }
@@ -186,6 +190,11 @@ button:focus-visible,
 .strip b {
   font-weight: 400;
   color: var(--phosphor);
+}
+
+.strip .alarm b,
+.strip .alarm {
+  color: var(--alarm);
 }
 
 .pips {

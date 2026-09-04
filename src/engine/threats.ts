@@ -1,6 +1,7 @@
 import { NODE_IDS, NODE_INDEX, THREAT_ORDER, THREATS, VENT_NODES, threatDef } from './content';
 import { addPanic, cardOf, nonPanicCount } from './deck';
 import { addNoise, NEST } from './noise';
+import { killLine, wardLine, woundLine } from './voice';
 import { distance, loudestNode, stepToward } from './graph';
 import { nextInt } from './rng';
 import { resolveRun } from './scoring';
@@ -40,27 +41,20 @@ function burnRandomOwned(state: GameState): Uid | undefined {
  */
 export function wound(state: GameState, count: number, source: string, drawsCarry = true): void {
   if (count > 0 && state.player.wardsThisTurn === 0 && nonPanicCount(state) > 0) {
-    state.feed.push({
-      turn: state.turn,
-      kind: 'alarm',
-      text:
-        count > 1
-          ? `>> ${source} PUTS YOU DOWN HARD. IT COSTS YOU TWICE.`
-          : `>> ${source} CATCHES YOU.`,
-    });
+    state.feed.push({ turn: state.turn, kind: 'alarm', text: woundLine(state, source, count > 1) });
   }
   for (let i = 0; i < count; i++) {
     if (state.status !== 'active') return;
     if (state.player.wardsThisTurn > 0) {
       state.player.wardsThisTurn -= 1;
-      state.feed.push({ turn: state.turn, kind: 'player', text: '>> IT COMES IN AND YOU ARE READY. NOTHING LANDS.' });
+      state.feed.push({ turn: state.turn, kind: 'player', text: wardLine(state) });
       continue;
     }
     if (nonPanicCount(state) === 0) {
       state.feed.push({
         turn: state.turn,
         kind: 'alarm',
-        text: `>> ${source} REACHES YOU AND THERE IS NOTHING LEFT TO GIVE UP.`,
+        text: `>> ${source} reaches you, and there is nothing left to give up.`,
       });
       resolveRun(state, 'death');
       return;
@@ -78,8 +72,8 @@ export function wound(state: GameState, count: number, source: string, drawsCarr
         kind: 'alarm',
         text:
           taken === undefined
-            ? '>> SOMETHING GOES.'
-            : `>> ${cardOf(taken).name} — YOU CANNOT DO THAT ANY MORE.`,
+            ? '>> Something goes.'
+            : `>> ${cardOf(taken).name} — you cannot do that any more.`,
       });
     }
   }
@@ -173,7 +167,7 @@ function activate(state: GameState, threat: Threat): void {
 
   if (def.behaviour === 'nest') {
     for (const id of NODE_IDS) addNoise(state, id, THREATS.chorusNoisePerTurn);
-    state.feed.push({ turn: state.turn, kind: 'threat', text: '>> THE HULL IS SINGING. EVERY COMPARTMENT HEARS IT.' });
+    state.feed.push({ turn: state.turn, kind: 'threat', text: '>> The hull is singing. Every compartment hears it.' });
   }
 
   moveThreat(state, threat);
@@ -183,7 +177,7 @@ function activate(state: GameState, threat: Threat): void {
     state.reserve.contact -= moved;
     state.bag.contact = (state.bag.contact ?? 0) + moved;
     threat.fed = true;
-    state.feed.push({ turn: state.turn, kind: 'alarm', text: '>> THE HOLD ANSWERS. THERE ARE MORE OF THEM NOW.' });
+    state.feed.push({ turn: state.turn, kind: 'alarm', text: '>> The hold answers it. There are more of them now.' });
   }
 
   if (def.behaviour === 'burrow' && threat.node === 'reactor') {
@@ -192,7 +186,7 @@ function activate(state: GameState, threat: Threat): void {
       state.feed.push({
         turn: state.turn,
         kind: 'alarm',
-        text: `>> REACTOR OUTPUT DEGRADED ${state.ship.reactorOutput + 1} -> ${state.ship.reactorOutput}`,
+        text: `>> Something is in the reactor. Output drops to ${state.ship.reactorOutput} an hour.`,
       });
     }
     return;
@@ -226,10 +220,6 @@ export function killThreat(state: GameState, id: string): boolean {
   state.threats.splice(i, 1);
   state.bag[t.type] = (state.bag[t.type] ?? 0) + 1;
   state.stats.threatsKilled += 1;
-  state.feed.push({
-    turn: state.turn,
-    kind: 'player',
-    text: `>> ${threatDef(t.type).name} DOWN. IT STOPS MOVING.`,
-  });
+  state.feed.push({ turn: state.turn, kind: 'player', text: killLine(state, t.type) });
   return true;
 }

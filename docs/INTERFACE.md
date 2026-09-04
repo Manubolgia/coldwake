@@ -20,12 +20,16 @@ then holds, then types the ship's name one letter at a time and lets it sit for
 a beat. About 1.5 seconds of typing and 0.9 of hold, skippable by tapping,
 instant on every launch after the first.
 
-**2. The terminal.** Every line the ship has to say is written out. Ordinary
-lines run out at three characters a tick; anything the ship is alarmed about —
-a threat, a wound, a bag draw — waits a beat first and is then typed one
-character at a time. Quiet turns take about a fifth of a second. A turn that
-goes wrong takes over a second, and that difference is the point: you can feel
-a bad turn before you can read it.
+**2. The terminal.** Every line the ship has to say is written out at reading
+pace — about fifty characters a second, and slower for anything it is alarmed
+about, which also waits a beat before it starts. When the writing finishes, the
+last of it holds on screen long enough to be read (up to about three seconds,
+scaled to how much there is) before the ship hands control back.
+
+**Tapping finishes the sentence; a second tap dismisses what is left. Holding
+the screen runs the whole thing at six times the speed and skips the hold.**
+Nobody is ever made to wait for text they have already read, and nobody is ever
+outrun by it. A new player reads; a veteran holds their thumb down.
 
 **3. The turn taking over the screen.** When the ship has something loud to say,
 the commands and the hand stand down and the terminal takes their space until it
@@ -40,6 +44,25 @@ epilogue arrives.
 
 Plus the single blinking cursor the document permits: `_` when the ship is
 waiting for you, a solid `█` while it is still writing.
+
+## The narrator
+
+The ship does not repeat itself. Seventy phrasings across eighteen pools live in
+`src/content/narration.json`, and every event — an hour beginning, something
+resolving out of the dark, a wound, a kill, a miss, arriving somewhere — picks
+one. The hour opener reads the room first: whether something is next door, how
+loud this compartment is, and how much of the window is left, and draws from a
+different pool for each. `HOUR 7, 13 hours left. You hear it stop when you
+stop.`
+
+The variant is chosen from a hash of the state — the hour, and how much has been
+said — rather than from the game's own generator. That keeps a replay reading
+identically to the run it records without disturbing the random stream the rules
+depend on, which is what lets the golden replays stay valid.
+
+Narration is prose and sits in sentence case. Names and labels — compartments,
+equipment, commands — stay in capitals, so the reader can tell the difference
+between the ship talking and the ship labelling something.
 
 Values in the status strip invert for a third of a second when they change.
 That is not motion, it is inverse video — the same trick the document specifies
@@ -109,6 +132,10 @@ a wound really cost you the first time one lands, what an empty weapon means,
 where the medbay comes in, and what is still worth doing once the shuttle is out
 of reach. They are written in the same voice as everything else and marked with
 `::` so they read as somebody explaining rather than the hull reporting.
+
+Only one fires at a time. A bad hour teaches one thing rather than five, and the
+rest wait their turn — the first version said everything at once and read as a
+wall of text.
 
 The conditions are code (`src/ui/guidance.ts`), the words are content. The
 evaluator is a pure function of the state and the set already said, so it is

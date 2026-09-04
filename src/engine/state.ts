@@ -162,8 +162,8 @@ export function initialState(seed: string, role: RoleId, depth: Depth): GameStat
     turn: 1,
     kind: 'sys',
     text:
-      `COLD WAKE. YOU HAVE ${turnLimit(depth)} HOURS BEFORE THE ORBIT CLOSES. ` +
-      `THE SHUTTLE WILL NOT LIFT ON LESS THAN ${shuttleRequirement(role, depth)} POWER.`,
+      `You wake because your pod failed. ${turnLimit(depth)} hours before the orbit closes, ` +
+      `and the shuttle will not lift on less than ${shuttleRequirement(role, depth)} power.`,
   });
   return state;
 }
@@ -181,7 +181,7 @@ export function drawUpToHandSize(state: GameState): void {
       state.feed.push({
         turn: state.turn,
         kind: 'alarm',
-        text: '>> YOUR VISION GOES. YOU PUT A HAND OUT AND KNOCK SOMETHING OVER.',
+        text: '>> Your vision goes. You put a hand out and knock something over.',
       });
     }
   }

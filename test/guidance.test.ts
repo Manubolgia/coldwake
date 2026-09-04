@@ -8,9 +8,13 @@ describe('the advisory voice', () => {
     const fired = new Set<string>();
     const s = initialState('guide', 'engineer', 1);
     const first = newAdvisories(s, fired);
-    expect(first.map((l) => l.kind)).toEqual(first.map(() => 'guide'));
-    expect(first.some((l) => l.text.includes('shuttle will not lift'))).toBe(true);
-    expect(newAdvisories(s, fired)).toEqual([]);
+    // One at a time, never a wall of them.
+    expect(first).toHaveLength(1);
+    expect(first[0]?.kind).toBe('guide');
+    expect(first[0]?.text).toContain('SHUTTLE is what you have banked');
+    // Whatever comes next, it is never the same lesson twice.
+    const second = newAdvisories(s, fired);
+    expect(second.map((l) => l.text)).not.toContain(first[0]?.text);
   });
 
   it('says nothing at all once the run is over', () => {

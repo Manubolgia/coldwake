@@ -18,11 +18,15 @@ async function isResolving(page: Page): Promise<boolean> {
   return (await page.getByTestId('terminal').getAttribute('data-resolving').catch(() => null)) === 'yes';
 }
 
+/** Tap the terminal through whatever it is saying and wait for it to hand back. */
 async function settle(page: Page): Promise<void> {
-  for (let i = 0; i < 20 && (await isResolving(page)); i++) {
+  for (let i = 0; i < 30 && (await isResolving(page)); i++) {
     await page.getByTestId('terminal').click({ timeout: 1000 }).catch(() => {});
-    await page.waitForTimeout(60);
+    await page.waitForTimeout(120);
   }
+  await page
+    .waitForSelector('[data-testid="terminal"][data-resolving="no"]', { timeout: 8000 })
+    .catch(() => {});
 }
 
 async function bootToMenu(page: Page): Promise<void> {
@@ -48,7 +52,7 @@ async function playToEnding(page: Page, maxClicks = 900): Promise<string> {
     // The terminal writes the turn out before handing the ship back. Tap
     // through it; it also finishes on its own.
     if (await isResolving(page)) {
-      await page.getByTestId('terminal').click({ timeout: 2000 }).catch(() => {});
+      await settle(page);
       continue;
     }
     const buttons = page.locator('.commands .cmd');
