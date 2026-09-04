@@ -1,0 +1,80 @@
+{
+  "perNode": 2,
+  "deck": [
+    {
+      "card": "salv_cell"
+    },
+    {
+      "card": "salv_cell"
+    },
+    {
+      "card": "salv_cell"
+    },
+    {
+      "card": "salv_cell"
+    },
+    {
+      "card": "salv_sidearm"
+    },
+    {
+      "card": "salv_sidearm"
+    },
+    {
+      "card": "salv_stim"
+    },
+    {
+      "card": "salv_stim"
+    },
+    {
+      "card": "salv_corpse"
+    },
+    {
+      "card": "salv_corpse"
+    },
+    {
+      "card": "salv_jam"
+    },
+    {
+      "card": "salv_jam"
+    },
+    {
+      "card": "salv_jam"
+    },
+    {
+      "card": "salv_log",
+      "log": "Day nine. The drill log is signed by someone who is still in cold sleep."
+    },
+    {
+      "card": "salv_log",
+      "log": "We voted. Six to three. The three are not on this list any more."
+    },
+    {
+      "card": "salv_log",
+      "log": "Hold temperature is up again and nobody will say the obvious thing."
+    },
+    {
+      "card": "salv_log",
+      "log": "If you are reading this, do not open the hold. That is the whole entry."
+    },
+    {
+      "card": "salv_log",
+      "log": "My pod cycled twice last night. I did not set it to."
+    },
+    {
+      "card": "salv_log",
+      "log": "Assay will bill us for the assay. That is the joke I have been making."
+    },
+    {
+      "card": "salv_log",
+      "log": "It came up in the concentrate. It was not in the concentrate for long."
+    },
+    {
+      "card": "salv_log",
+      "log": "Thirty-one hours to the relay and every hour of it is ours alone."
+    },
+    {
+      "card": "salv_log",
+      "log": "I keep hearing the vent fans stop when I stop walking."
+    }
+  ]
+}

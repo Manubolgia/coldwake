@@ -1,0 +1,172 @@
+{
+  "nodes": [
+    {
+      "id": "cryobay",
+      "name": "CRYOBAY",
+      "short": "CRY",
+      "vent": false,
+      "safe": true,
+      "noiseFloor": 0,
+      "x": 0,
+      "y": 0
+    },
+    {
+      "id": "spine_a",
+      "name": "SPINE-A",
+      "short": "SPA",
+      "vent": false,
+      "safe": false,
+      "noiseFloor": 0,
+      "x": 1,
+      "y": 0
+    },
+    {
+      "id": "spine_b",
+      "name": "SPINE-B",
+      "short": "SPB",
+      "vent": false,
+      "safe": false,
+      "noiseFloor": 0,
+      "x": 2,
+      "y": 0
+    },
+    {
+      "id": "spine_c",
+      "name": "SPINE-C",
+      "short": "SPC",
+      "vent": false,
+      "safe": false,
+      "noiseFloor": 0,
+      "x": 3,
+      "y": 0
+    },
+    {
+      "id": "shuttle_bay",
+      "name": "SHUTTLE BAY",
+      "short": "SHB",
+      "vent": true,
+      "safe": false,
+      "noiseFloor": 0,
+      "x": 4,
+      "y": 0
+    },
+    {
+      "id": "medbay",
+      "name": "MEDBAY",
+      "short": "MED",
+      "vent": true,
+      "safe": false,
+      "noiseFloor": 0,
+      "x": 1,
+      "y": 1
+    },
+    {
+      "id": "reactor",
+      "name": "REACTOR",
+      "short": "RCT",
+      "vent": false,
+      "safe": false,
+      "noiseFloor": 0,
+      "x": 2,
+      "y": 1
+    },
+    {
+      "id": "bridge",
+      "name": "BRIDGE",
+      "short": "BRG",
+      "vent": true,
+      "safe": false,
+      "noiseFloor": 0,
+      "x": 3,
+      "y": 1
+    },
+    {
+      "id": "armory",
+      "name": "ARMORY",
+      "short": "ARM",
+      "vent": false,
+      "safe": false,
+      "noiseFloor": 0,
+      "x": 1,
+      "y": 2
+    },
+    {
+      "id": "ore_hold",
+      "name": "ORE HOLD",
+      "short": "ORE",
+      "vent": true,
+      "safe": false,
+      "noiseFloor": 2,
+      "x": 2,
+      "y": 2
+    },
+    {
+      "id": "comms",
+      "name": "COMMS",
+      "short": "CMS",
+      "vent": false,
+      "safe": false,
+      "noiseFloor": 0,
+      "x": 3,
+      "y": 2
+    }
+  ],
+  "edges": [
+    [
+      "cryobay",
+      "spine_a"
+    ],
+    [
+      "spine_a",
+      "spine_b"
+    ],
+    [
+      "spine_b",
+      "spine_c"
+    ],
+    [
+      "spine_c",
+      "shuttle_bay"
+    ],
+    [
+      "spine_a",
+      "medbay"
+    ],
+    [
+      "spine_b",
+      "reactor"
+    ],
+    [
+      "spine_c",
+      "bridge"
+    ],
+    [
+      "medbay",
+      "armory"
+    ],
+    [
+      "reactor",
+      "ore_hold"
+    ],
+    [
+      "bridge",
+      "comms"
+    ],
+    [
+      "armory",
+      "ore_hold"
+    ],
+    [
+      "ore_hold",
+      "comms"
+    ]
+  ],
+  "start": "cryobay",
+  "nest": "ore_hold",
+  "escape": "shuttle_bay",
+  "spines": [
+    "spine_a",
+    "spine_b",
+    "spine_c"
+  ]
+}
