@@ -134,6 +134,8 @@ export type GameState = {
     searched: NodeId[];
     salvage: Record<NodeId, string[]>;
     scuttleArmed: boolean;
+    /** The turn the overload was armed; it needs time to build (§4.4). */
+    scuttleArmedTurn: number;
     beaconSent: boolean;
   };
   bag: Record<TokenType, number>;

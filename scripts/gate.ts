@@ -228,14 +228,24 @@ async function m5(): Promise<void> {
 
   const radii = [...css.matchAll(/border-radius:\s*([^;}]+)/g)].map((m) => m[1]?.trim() ?? '');
   record('5.8', 'no border-radius other than 0', radii.every((r) => r === '0' || r === '0px'), radii.join('|'));
-  record('5.9', 'no gradients', !css.includes('gradient') || css.match(/gradient/g)?.length === 1, 'one repeating-linear-gradient: the scanline overlay');
+  // §11 forbids gradients and forbids all shadows but .glow, and in the same
+  // breath requires a scanline overlay and a vignette. These two are the
+  // documented exceptions; anything beyond them fails.
+  const gradients = css.match(/gradient/g)?.length ?? 0;
+  record('5.9', 'no gradients but the scanline overlay', gradients <= 1, `${gradients} found`);
   const shadows = [...css.matchAll(/box-shadow:\s*([^;}]+)/g)].map((m) => m[1]?.trim() ?? '');
   record('5.10', 'box-shadow only for the CRT vignette; no blur filters', shadows.length <= 1 && !css.includes('filter:blur') && !css.includes('filter: blur'), shadows.join('|'));
 
+  // The six tokens, plus pure black at any alpha — the CRT scanline and
+  // vignette layers darken, they do not introduce a hue.
   const allowed = ['#0a0705', '#ffb000', '#c97f00', '#6b4200', '#2a1a05', '#ffd98a'];
+  const isBlackOverlay = (h: string): boolean => /^#0{3,6}[0-9a-f]{0,2}$/.test(h);
   const hexes = [...css.matchAll(/#[0-9a-fA-F]{3,8}/g)].map((m) => m[0].toLowerCase());
-  const stray = [...new Set(hexes)].filter((h) => !allowed.includes(h));
-  record('5.11', 'palette locked to the six tokens', stray.length === 0, stray.join(' '));
+  const stray = [...new Set(hexes)].filter((h) => !allowed.includes(h) && !isBlackOverlay(h));
+  const strayRgb = [...css.matchAll(/rgba?\(([^)]*)\)/g)]
+    .map((m) => (m[1] ?? '').replace(/\s/g, ''))
+    .filter((v) => !v.startsWith('0,0,0') && !v.startsWith('255,176,0'));
+  record('5.11', 'palette locked to the six tokens', stray.length === 0 && strayRgb.length === 0, [...stray, ...strayRgb].join(' '));
 
   const html = existsSync('dist/index.html') ? readFileSync('dist/index.html', 'utf8') : '';
   const external = /https?:\/\/(?!www\.w3\.org)/.test(html + css);

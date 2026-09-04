@@ -13,7 +13,7 @@
       },
       "shuttleRequired": 34,
       "oreHoldFloor": 2,
-      "startingDraws": 0,
+      "startingDraws": 1,
       "nestNoiseAmount": 2
     },
     {
@@ -82,7 +82,7 @@
         "blank": -2
       },
       "reactorOutputStart": 2,
-      "turnLimit": 16,
+      "turnLimit": 15,
       "carry": {
         "clean": 7,
         "infested": 5,

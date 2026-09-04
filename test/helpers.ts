@@ -10,8 +10,23 @@ import type {
   Uid,
 } from '../src/engine/types';
 
+/**
+ * A run at its first turn with the board cleared: every depth now places
+ * something at the nest on setup, and a rule test wants to state its own
+ * starting position. The opening draw itself is asserted in the depth test.
+ */
 export function fresh(role: RoleId = 'engineer', depth: Depth = 1, seed = 'test'): GameState {
-  return initialState(seed, role, depth);
+  return clearBoard(initialState(seed, role, depth));
+}
+
+/** Return every threat on the board to the bag, keeping conservation. */
+export function clearBoard(state: GameState): GameState {
+  return put(state, (s) => {
+    for (const t of s.threats) s.bag[t.type] = (s.bag[t.type] ?? 0) + 1;
+    s.threats = [];
+    s.stats.bagDraws = 0;
+    s.feed = [];
+  });
 }
 
 /**

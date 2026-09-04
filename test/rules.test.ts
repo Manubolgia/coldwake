@@ -499,6 +499,17 @@ describe('§4.11 endings and score', () => {
     expect(s.status).toBe('scuttle');
   });
 
+  it('does not give Scuttle to an overload armed too late', () => {
+    let s = put(at(fresh(), 'bridge'), (x) => {
+      x.ship.power = RULES.powerCap;
+      x.turn = turnLimit(1);
+    });
+    s = reduce(s, { t: 'armScuttle' });
+    expect(s.ship.scuttleArmedTurn).toBe(turnLimit(1));
+    s = endTurn(s);
+    expect(s.status).toBe('lost');
+  });
+
   it('gives Beacon when broadcast and nothing armed', () => {
     let s = put(fresh(), (x) => {
       x.ship.beaconSent = true;
@@ -566,7 +577,9 @@ describe('§4.12-4.13 roles and depths', () => {
       expect(s.ship.reactorOutput).toBe(d.reactorOutputStart);
       expect(s.player.carry).toHaveLength(d.carry.startCards);
       expect(s.ship.noise.ore_hold).toBeGreaterThanOrEqual(d.oreHoldFloor);
-      expect(s.threats).toHaveLength(d.startingDraws === 0 ? 0 : s.threats.length);
+      // The opening draws can come up blank, so this is a ceiling, not a count.
+      expect(s.threats.length).toBeLessThanOrEqual(d.startingDraws);
+      expect(s.stats.bagDraws).toBe(d.startingDraws);
     }
   });
 

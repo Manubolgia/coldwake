@@ -131,7 +131,13 @@ export function objective(state: GameState): NodeId {
     state.player.node === 'vents' ? 9 : distance(state, state.player.node, 'medbay', false);
   if (unread >= 3 && turnsLeft > 7 && toMedbay <= 3 && launchFeasible(state)) return 'medbay';
   if (!launchFeasible(state)) {
-    if (!state.ship.scuttleArmed && state.ship.power >= (RULES.systemActions.armScuttle?.power ?? 5)) {
+    const fuse = RULES.systemActions.armScuttle?.fuseTurns ?? 0;
+    const turnsLeftNow = turnLimit(state.depth) - state.turn;
+    if (
+      !state.ship.scuttleArmed &&
+      state.ship.power >= (RULES.systemActions.armScuttle?.power ?? 5) &&
+      turnsLeftNow >= fuse
+    ) {
       return 'bridge';
     }
     if (!state.ship.beaconSent) return 'comms';
@@ -157,7 +163,10 @@ export function evaluateStrategic(state: GameState): number {
     // reactor is worth far more than power nobody will ever bank.
     v -= 12;
     v -= Math.min(state.ship.power, 10) * 2.5;
-    v += state.ship.scuttleArmed ? 55 : 0;
+    // An overload that will not reach critical in time is worth nothing.
+    const fuseLeft =
+      (RULES.systemActions.armScuttle?.fuseTurns ?? 0) - (state.turn - state.ship.scuttleArmedTurn);
+    v += state.ship.scuttleArmed && fuseLeft <= turnsLeft ? 55 : 0;
     v += state.ship.beaconSent ? 22 : 0;
   }
   // Late in the run, banked power is the only power that counts.

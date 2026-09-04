@@ -400,10 +400,17 @@ function systemAction(state: GameState, action: Action): void {
       state.ship.beaconSent = true;
       state.feed.push({ turn: state.turn, kind: 'alarm', text: '>> BROADCAST AWAY. EVERYTHING HEARD IT.' });
       return;
-    case 'armScuttle':
+    case 'armScuttle': {
       state.ship.scuttleArmed = true;
-      state.feed.push({ turn: state.turn, kind: 'alarm', text: '>> OVERLOAD ARMED.' });
+      state.ship.scuttleArmedTurn = state.turn;
+      const fuse = RULES.systemActions.armScuttle?.fuseTurns ?? 0;
+      state.feed.push({
+        turn: state.turn,
+        kind: 'alarm',
+        text: `>> OVERLOAD ARMED. ${fuse} TURNS TO CRITICAL.`,
+      });
       return;
+    }
     case 'launch':
       resolveRun(state, 'launch');
       return;

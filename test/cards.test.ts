@@ -53,7 +53,7 @@ function targetsFor(s: GameState, c: Card): Partial<{ to: string; edge: [string,
     case 'edgeHere':
       return { edge: [s.player.node as string, s.player.node === 'spine_b' ? 'reactor' : 'spine_b'] };
     case 'threat':
-      return { threat: s.threats[0]?.id as string };
+      return { threat: s.threats.find((t) => t.node === s.player.node)?.id as string };
     case 'spent':
       return { target: s.player.spent[0] as string };
     default:

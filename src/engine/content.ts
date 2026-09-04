@@ -85,7 +85,10 @@ export const RULES = rulesJson as unknown as {
   noiseDecay: number;
   carry: { clean: number; infested: number; startCards: number; carrierThreshold: number };
   basicActions: Record<string, { ap: number; noise: number }>;
-  systemActions: Record<string, { node: string; ap: number; power: number; noise: number; turns?: number }>;
+  systemActions: Record<
+    string,
+    { node: string; ap: number; power: number; noise: number; turns?: number; fuseTurns?: number }
+  >;
   ventAmbushPenalty: number;
   score: {
     powerBanked: number;

@@ -4,13 +4,20 @@ import type { Ending, GameState } from './types';
 
 export type ResolveCause = 'death' | 'timeout' | 'launch';
 
+/** An overload armed too late never reaches critical before the orbit does. */
+export function scuttleReady(state: GameState): boolean {
+  if (!state.ship.scuttleArmed) return false;
+  const fuse = RULES.systemActions.armScuttle?.fuseTurns ?? 0;
+  return state.turn - state.ship.scuttleArmedTurn >= fuse;
+}
+
 export function endingFor(state: GameState, cause: ResolveCause): Ending {
   if (cause === 'launch') {
     return state.player.carry.filter((c) => c.id === 'infested').length >= RULES.carry.carrierThreshold
       ? 'carrier'
       : 'clean_break';
   }
-  if (state.ship.scuttleArmed) return 'scuttle';
+  if (scuttleReady(state)) return 'scuttle';
   if (state.ship.beaconSent) return 'beacon';
   return 'lost';
 }

@@ -11,6 +11,7 @@ import { Boot } from './components/Boot';
 import { Commands } from './components/Commands';
 import { EndingScreen } from './components/Ending';
 import { Hand } from './components/Hand';
+import { Manual } from './components/Manual';
 import { Menu } from './components/Menu';
 import { ShipGraph } from './components/ShipGraph';
 import { Feed, Readout, StatusStrip } from './components/Status';
@@ -46,6 +47,7 @@ export function App(): React.ReactElement {
   const [selectedNode, setSelectedNode] = useState<NodeId | null>(null);
   const [selectedCard, setSelectedCard] = useState<Uid | null>(null);
   const [drawBanner, setDrawBanner] = useState<string | null>(null);
+  const [manualOpen, setManualOpen] = useState(false);
   const turnStarted = useRef<number>(Date.now());
   const telemetry = useRef<RunTelemetry | null>(null);
 
@@ -211,12 +213,14 @@ export function App(): React.ReactElement {
             setScreen('run');
           }}
           onExport={exportTelemetry}
+          onManual={() => setManualOpen(true)}
           onToggleCrt={() => {
             const next = { ...meta, crt: !meta.crt };
             setMeta(next);
             void saveMeta(next);
           }}
         />
+        {manualOpen ? <Manual onClose={() => setManualOpen(false)} /> : null}
         <div className="crt-overlay" />
       </>
     );

@@ -98,8 +98,9 @@
     "armScuttle": {
       "node": "bridge",
       "ap": 3,
-      "power": 8,
-      "noise": 3
+      "power": 10,
+      "noise": 3,
+      "fuseTurns": 3
     },
     "launch": {
       "node": "shuttle_bay",

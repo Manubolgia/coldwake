@@ -35,15 +35,7 @@
     "to": "spine_a"
    },
    {
-    "t": "creep",
-    "to": "medbay"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "creep",
-    "to": "armory"
+    "t": "listen"
    },
    {
     "t": "play",
@@ -51,39 +43,15 @@
     "to": "medbay"
    },
    {
-    "t": "play",
-    "uid": "steady_hands@1"
-   },
-   {
     "t": "endTurn"
    },
    {
-    "t": "play",
-    "uid": "reroute@1",
-    "to": "armory"
-   },
-   {
-    "t": "discard",
-    "uid": "brace@1"
+    "t": "carryScan",
+    "index": 0
    },
    {
     "t": "discard",
     "uid": "cutting_torch@1"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "burn",
-    "uid": "bypass@2"
-   },
-   {
-    "t": "move",
-    "to": "medbay"
-   },
-   {
-    "t": "play",
-    "uid": "bypass@1"
    },
    {
     "t": "move",
@@ -93,177 +61,97 @@
     "t": "endTurn"
    },
    {
-    "t": "play",
-    "uid": "reroute@1",
-    "to": "ore_hold"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "creep",
-    "to": "reactor"
-   },
-   {
-    "t": "discard",
-    "uid": "panic_shaking@1001"
-   },
-   {
-    "t": "play",
-    "uid": "steady_hands@1"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "search"
-   },
-   {
-    "t": "play",
-    "uid": "reroute@1",
-    "to": "ore_hold"
-   },
-   {
     "t": "discard",
     "uid": "cutting_torch@1"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "play",
-    "uid": "brace@2"
-   },
-   {
-    "t": "search"
-   },
-   {
-    "t": "ventEnter"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "discard",
-    "uid": "brace@2"
-   },
-   {
-    "t": "discard",
-    "uid": "bypass@1"
-   },
-   {
-    "t": "ventExit",
-    "to": "medbay"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "search"
-   },
-   {
-    "t": "ventEnter"
-   },
-   {
-    "t": "discard",
-    "uid": "brace@2"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "ventExit",
-    "to": "medbay"
    },
    {
     "t": "play",
     "uid": "reroute@2",
-    "to": "spine_a"
-   },
-   {
-    "t": "play",
-    "uid": "reroute@1",
-    "to": "medbay"
-   },
-   {
-    "t": "play",
-    "uid": "steady_hands@1"
+    "to": "ore_hold"
    },
    {
     "t": "endTurn"
-   },
-   {
-    "t": "discard",
-    "uid": "cutting_torch@1"
-   },
-   {
-    "t": "purgeBlood",
-    "index": 0
    },
    {
     "t": "burn",
-    "uid": "reroute@1"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "move",
-    "to": "spine_a"
-   },
-   {
-    "t": "discard",
-    "uid": "brace@1"
-   },
-   {
-    "t": "listen"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "creep",
-    "to": "cryobay"
-   },
-   {
-    "t": "play",
-    "uid": "bypass@1"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "discard",
     "uid": "brace@2"
-   },
-   {
-    "t": "endTurn"
    },
    {
     "t": "burn",
     "uid": "load_shed@1"
    },
    {
-    "t": "burn",
-    "uid": "brace@1"
+    "t": "ventEnter"
    },
    {
-    "t": "discard",
-    "uid": "field_repair@1"
+    "t": "ventExit",
+    "to": "shuttle_bay"
    },
    {
     "t": "play",
-    "uid": "bypass@1"
-   },
-   {
-    "t": "discard",
-    "uid": "hardline@1"
+    "uid": "reroute@1",
+    "to": "spine_c"
    },
    {
     "t": "endTurn"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "creep",
+    "to": "spine_b"
+   },
+   {
+    "t": "discard",
+    "uid": "bypass@1"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "burn",
+    "uid": "field_repair@1"
+   },
+   {
+    "t": "burn",
+    "uid": "steady_hands@1"
+   },
+   {
+    "t": "burn",
+    "uid": "bypass@1"
+   },
+   {
+    "t": "burn",
+    "uid": "panic_blackout@1002"
+   },
+   {
+    "t": "seal",
+    "edge": [
+     "spine_b",
+     "spine_a"
+    ]
+   },
+   {
+    "t": "discard",
+    "uid": "brace@1"
+   },
+   {
+    "t": "seal",
+    "edge": [
+     "spine_b",
+     "spine_c"
+    ]
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "burn",
+    "uid": "panic_sweat@1005"
    },
    {
     "t": "burn",
@@ -274,35 +162,292 @@
     "uid": "panic_tunnel@1003"
    },
    {
+    "t": "burn",
+    "uid": "panic_tunnel@1006"
+   },
+   {
+    "t": "discard",
+    "uid": "cutting_torch@1"
+   },
+   {
     "t": "search"
    },
    {
-    "t": "play",
-    "uid": "steady_hands@1"
-   },
-   {
     "t": "discard",
-    "uid": "panic_blackout@1004"
-   },
-   {
-    "t": "discard",
-    "uid": "panic_shaking@1001"
+    "uid": "hardline@1"
    },
    {
     "t": "endTurn"
    },
    {
     "t": "burn",
-    "uid": "bypass@1"
+    "uid": "panic_shaking@1010"
    },
    {
     "t": "burn",
-    "uid": "brace@2"
+    "uid": "reroute@1"
+   },
+   {
+    "t": "burn",
+    "uid": "panic_blackout@1004"
+   },
+   {
+    "t": "discard",
+    "uid": "panic_sweat@1009"
+   },
+   {
+    "t": "discard",
+    "uid": "panic_blackout@1001"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "burn",
+    "uid": "panic_sweat@1011"
+   },
+   {
+    "t": "burn",
+    "uid": "panic_tunnel@1014"
+   },
+   {
+    "t": "burn",
+    "uid": "panic_shaking@1013"
+   },
+   {
+    "t": "listen"
+   },
+   {
+    "t": "move",
+    "to": "spine_a"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "burn",
+    "uid": "panic_shaking@1012"
+   },
+   {
+    "t": "burn",
+    "uid": "panic_sweat@1020"
+   },
+   {
+    "t": "burn",
+    "uid": "panic_tunnel@1007"
+   },
+   {
+    "t": "burn",
+    "uid": "panic_blackout@1015"
+   },
+   {
+    "t": "seal",
+    "edge": [
+     "spine_a",
+     "cryobay"
+    ]
+   },
+   {
+    "t": "discard",
+    "uid": "panic_shaking@1021"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "burn",
+    "uid": "panic_sweat@1009"
+   },
+   {
+    "t": "burn",
+    "uid": "panic_tunnel@1022"
+   },
+   {
+    "t": "burn",
+    "uid": "panic_blackout@1023"
+   },
+   {
+    "t": "burn",
+    "uid": "panic_tunnel@1024"
+   },
+   {
+    "t": "discard",
+    "uid": "panic_tunnel@1019"
+   },
+   {
+    "t": "seal",
+    "edge": [
+     "spine_a",
+     "spine_b"
+    ]
+   },
+   {
+    "t": "discard",
+    "uid": "panic_blackout@1025"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "burn",
+    "uid": "panic_blackout@1028"
+   },
+   {
+    "t": "burn",
+    "uid": "panic_blackout@1001"
+   },
+   {
+    "t": "burn",
+    "uid": "bypass@2"
+   },
+   {
+    "t": "listen"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "burn",
+    "uid": "brace@1"
+   },
+   {
+    "t": "burn",
+    "uid": "panic_sweat@1032"
+   },
+   {
+    "t": "burn",
+    "uid": "hardline@1"
+   },
+   {
+    "t": "burn",
+    "uid": "panic_tunnel@1031"
+   },
+   {
+    "t": "burn",
+    "uid": "panic_blackout@1030"
+   },
+   {
+    "t": "discard",
+    "uid": "panic_blackout@1035"
+   },
+   {
+    "t": "move",
+    "to": "medbay"
+   },
+   {
+    "t": "search"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "burn",
+    "uid": "panic_sweat@1036"
+   },
+   {
+    "t": "burn",
+    "uid": "panic_shaking@1026"
+   },
+   {
+    "t": "burn",
+    "uid": "panic_blackout@1033"
+   },
+   {
+    "t": "burn",
+    "uid": "panic_tunnel@1037"
+   },
+   {
+    "t": "move",
+    "to": "spine_a"
+   },
+   {
+    "t": "discard",
+    "uid": "panic_blackout@1042"
+   },
+   {
+    "t": "discard",
+    "uid": "cutting_torch@1"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "burn",
+    "uid": "panic_sweat@1041"
+   },
+   {
+    "t": "burn",
+    "uid": "panic_blackout@1040"
+   },
+   {
+    "t": "burn",
+    "uid": "panic_sweat@1039"
+   },
+   {
+    "t": "discard",
+    "uid": "panic_sweat@1029"
+   },
+   {
+    "t": "discard",
+    "uid": "panic_blackout@1034"
+   },
+   {
+    "t": "seal",
+    "edge": [
+     "spine_a",
+     "spine_b"
+    ]
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "burn",
+    "uid": "panic_shaking@1043"
+   },
+   {
+    "t": "burn",
+    "uid": "panic_shaking@1046"
+   },
+   {
+    "t": "burn",
+    "uid": "panic_shaking@1045"
+   },
+   {
+    "t": "creep",
+    "to": "medbay"
+   },
+   {
+    "t": "carryScan",
+    "index": 1
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "burn",
+    "uid": "panic_blackout@1052"
+   },
+   {
+    "t": "burn",
+    "uid": "panic_sweat@1049"
+   },
+   {
+    "t": "burn",
+    "uid": "panic_tunnel@1050"
+   },
+   {
+    "t": "burn",
+    "uid": "panic_blackout@1042"
+   },
+   {
+    "t": "burn",
+    "uid": "panic_blackout@1034"
    }
   ],
   "ending": "lost",
-  "score": 15,
-  "hash": "a29db4d438101c07"
+  "score": 8,
+  "hash": "301f7aaa96fc05a0"
  },
  {
   "seed": "golden-1",
@@ -373,7 +518,7 @@
   ],
   "ending": "lost",
   "score": 13,
-  "hash": "87e54b5764f3933c"
+  "hash": "f085a9be22c9a90d"
  },
  {
   "seed": "golden-2",
@@ -593,7 +738,7 @@
   ],
   "ending": "lost",
   "score": 30,
-  "hash": "32d008fdb045c1ab"
+  "hash": "7e11011e6a78c13c"
  },
  {
   "seed": "golden-3",
@@ -985,7 +1130,7 @@
   ],
   "ending": "beacon",
   "score": 33,
-  "hash": "395a64193c070596"
+  "hash": "98c0236e78402489"
  },
  {
   "seed": "golden-4",
@@ -1137,7 +1282,7 @@
   ],
   "ending": "carrier",
   "score": 69,
-  "hash": "99dcf51b9ce64cac"
+  "hash": "f330d498a1ac96fc"
  },
  {
   "seed": "golden-5",
@@ -1178,7 +1323,7 @@
    },
    {
     "t": "play",
-    "uid": "reroute@1",
+    "uid": "reroute@2",
     "to": "shuttle_bay"
    },
    {
@@ -1197,17 +1342,6 @@
     "n": 4
    },
    {
-    "t": "play",
-    "uid": "bypass@1"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "chargeShuttle",
-    "n": 4
-   },
-   {
     "t": "endTurn"
    },
    {
@@ -1233,15 +1367,40 @@
     "t": "endTurn"
    },
    {
+    "t": "burn",
+    "uid": "reroute@1"
+   },
+   {
+    "t": "burn",
+    "uid": "steady_hands@1"
+   },
+   {
+    "t": "ventEnter"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "ventExit",
+    "to": "shuttle_bay"
+   },
+   {
+    "t": "chargeShuttle",
+    "n": 6
+   },
+   {
     "t": "play",
     "uid": "bypass@2"
    },
    {
-    "t": "chargeShuttle",
-    "n": 4
+    "t": "endTurn"
    },
    {
-    "t": "endTurn"
+    "t": "chargeShuttle",
+    "n": 4
    },
    {
     "t": "play",
@@ -1249,15 +1408,26 @@
    },
    {
     "t": "chargeShuttle",
-    "n": 4
+    "n": 2
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "burn",
+    "uid": "panic_shaking@1002"
+   },
+   {
+    "t": "burn",
+    "uid": "brace@2"
    },
    {
     "t": "launch"
    }
   ],
-  "ending": "clean_break",
-  "score": 156,
-  "hash": "513ffcf6ffb1f786"
+  "ending": "carrier",
+  "score": 80,
+  "hash": "59364c8f80d3bb7e"
  },
  {
   "seed": "golden-6",
@@ -1560,42 +1730,56 @@
     "uid": "panic_shaking@1039"
    },
    {
-    "t": "play",
-    "uid": "hold_the_line@1"
+    "t": "ventEnter"
+   },
+   {
+    "t": "ventExit",
+    "to": "medbay"
+   },
+   {
+    "t": "carryScan",
+    "index": 6
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "purgeBlood",
+    "index": 9
+   },
+   {
+    "t": "burn",
+    "uid": "panic_tunnel@1027"
    },
    {
     "t": "move",
-    "to": "comms"
+    "to": "armory"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "burn",
+    "uid": "panic_blackout@1047"
+   },
+   {
+    "t": "burn",
+    "uid": "panic_shaking@1023"
    },
    {
     "t": "discard",
-    "uid": "panic_sweat@1042"
+    "uid": "panic_sweat@1051"
+   },
+   {
+    "t": "discard",
+    "uid": "panic_blackout@1050"
+   },
+   {
+    "t": "move",
+    "to": "ore_hold"
    },
    {
     "t": "endTurn"
-   },
-   {
-    "t": "burn",
-    "uid": "panic_shaking@1046"
-   },
-   {
-    "t": "burn",
-    "uid": "panic_shaking@1048"
-   },
-   {
-    "t": "burn",
-    "uid": "panic_tunnel@1025"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "burn",
-    "uid": "panic_tunnel@1022"
-   },
-   {
-    "t": "burn",
-    "uid": "panic_tunnel@1050"
    },
    {
     "t": "burn",
@@ -1603,58 +1787,25 @@
    },
    {
     "t": "burn",
-    "uid": "panic_tunnel@1043"
-   },
-   {
-    "t": "creep",
-    "to": "bridge"
-   },
-   {
-    "t": "ventEnter"
-   },
-   {
-    "t": "endTurn"
+    "uid": "panic_shaking@1045"
    },
    {
     "t": "burn",
-    "uid": "panic_tunnel@1027"
+    "uid": "panic_tunnel@1022"
+   },
+   {
+    "t": "move",
+    "to": "comms"
    },
    {
     "t": "discard",
-    "uid": "panic_shaking@1056"
+    "uid": "panic_tunnel@1043"
    },
    {
-    "t": "ventExit",
-    "to": "medbay"
-   },
-   {
-    "t": "carryScan",
-    "index": 7
+    "t": "search"
    },
    {
     "t": "endTurn"
-   },
-   {
-    "t": "burn",
-    "uid": "panic_tunnel@1055"
-   },
-   {
-    "t": "ventEnter"
-   },
-   {
-    "t": "ventExit",
-    "to": "medbay"
-   },
-   {
-    "t": "burn",
-    "uid": "panic_tunnel@1058"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "burn",
-    "uid": "panic_shaking@1045"
    },
    {
     "t": "burn",
@@ -1662,43 +1813,30 @@
    },
    {
     "t": "burn",
-    "uid": "panic_shaking@1023"
-   },
-   {
-    "t": "carryScan",
-    "index": 2
-   },
-   {
-    "t": "purgeBlood",
-    "index": 5
+    "uid": "hold_the_line@1"
    },
    {
     "t": "burn",
-    "uid": "panic_shaking@1065"
+    "uid": "panic_tunnel@1025"
+   },
+   {
+    "t": "burn",
+    "uid": "panic_shaking@1048"
+   },
+   {
+    "t": "listen"
+   },
+   {
+    "t": "discard",
+    "uid": "panic_tunnel@1056"
    },
    {
     "t": "endTurn"
-   },
-   {
-    "t": "burn",
-    "uid": "panic_blackout@1064"
-   },
-   {
-    "t": "burn",
-    "uid": "panic_tunnel@1062"
-   },
-   {
-    "t": "burn",
-    "uid": "panic_sweat@1063"
-   },
-   {
-    "t": "burn",
-    "uid": "hold_the_line@1"
    }
   ],
   "ending": "beacon",
-  "score": 17,
-  "hash": "93f01c425354507e"
+  "score": 18,
+  "hash": "06de3c3db401f2f6"
  },
  {
   "seed": "golden-7",
@@ -1874,7 +2012,7 @@
   ],
   "ending": "lost",
   "score": 31,
-  "hash": "0bc9fbf8d50a14f7"
+  "hash": "892a79a7c6bd056f"
  },
  {
   "seed": "golden-8",
@@ -2003,7 +2141,7 @@
   ],
   "ending": "clean_break",
   "score": 168,
-  "hash": "fb437c04f07cdd41"
+  "hash": "9d96309fbfa95e37"
  },
  {
   "seed": "golden-9",
@@ -2342,37 +2480,11 @@
    {
     "t": "burn",
     "uid": "panic_sweat@1052"
-   },
-   {
-    "t": "discard",
-    "uid": "panic_shaking@1080"
-   },
-   {
-    "t": "search"
-   },
-   {
-    "t": "discard",
-    "uid": "panic_sweat@1082"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "burn",
-    "uid": "panic_shaking@1083"
-   },
-   {
-    "t": "burn",
-    "uid": "panic_blackout@1084"
-   },
-   {
-    "t": "burn",
-    "uid": "panic_shaking@1081"
    }
   ],
   "ending": "lost",
-  "score": 9,
-  "hash": "f49adcba49b1fac4"
+  "score": 7,
+  "hash": "11bd67ad250381dc"
  },
  {
   "seed": "golden-10",
@@ -2451,7 +2563,7 @@
   ],
   "ending": "lost",
   "score": 13,
-  "hash": "08be6aca4b0bb049"
+  "hash": "90a23e6e5036fc57"
  },
  {
   "seed": "golden-11",
@@ -2597,7 +2709,7 @@
   ],
   "ending": "clean_break",
   "score": 165,
-  "hash": "1dd155d76dcf4f95"
+  "hash": "cebc01e464ba8a9b"
  },
  {
   "seed": "golden-12",
@@ -2964,7 +3076,7 @@
   ],
   "ending": "lost",
   "score": 8,
-  "hash": "ec4fe10247306dcb"
+  "hash": "959bdd750596ba6c"
  },
  {
   "seed": "golden-13",
@@ -3078,7 +3190,7 @@
   ],
   "ending": "clean_break",
   "score": 162,
-  "hash": "80d5ad170700a612"
+  "hash": "66f061c50c0f18e1"
  },
  {
   "seed": "golden-14",
@@ -3178,7 +3290,7 @@
   ],
   "ending": "clean_break",
   "score": 128,
-  "hash": "01a4f2331293c7a7"
+  "hash": "125949f0ef0d443c"
  },
  {
   "seed": "golden-15",
@@ -3235,18 +3347,18 @@
    },
    {
     "t": "play",
-    "uid": "bypass@1"
+    "uid": "brace@2"
    },
    {
     "t": "endTurn"
    },
    {
     "t": "play",
-    "uid": "brace@2"
+    "uid": "bypass@1"
    },
    {
     "t": "discard",
-    "uid": "cutting_torch@1"
+    "uid": "field_repair@1"
    },
    {
     "t": "move",
@@ -3256,124 +3368,12 @@
     "t": "endTurn"
    },
    {
-    "t": "listen"
+    "t": "burn",
+    "uid": "hardline@1"
    },
    {
     "t": "creep",
     "to": "medbay"
-   },
-   {
-    "t": "play",
-    "uid": "steady_hands@1"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "discard",
-    "uid": "brace@2"
-   },
-   {
-    "t": "creep",
-    "to": "armory"
-   },
-   {
-    "t": "play",
-    "uid": "steady_hands@1"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "burn",
-    "uid": "reroute@2"
-   },
-   {
-    "t": "search"
-   },
-   {
-    "t": "search"
-   },
-   {
-    "t": "listen"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "creep",
-    "to": "medbay"
-   },
-   {
-    "t": "discard",
-    "uid": "panic_shaking@1001"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "purgeBlood",
-    "index": 1
-   },
-   {
-    "t": "burn",
-    "uid": "reroute@1"
-   },
-   {
-    "t": "carryScan",
-    "index": 0
-   },
-   {
-    "t": "play",
-    "uid": "steady_hands@1"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "burn",
-    "uid": "brace@1"
-   },
-   {
-    "t": "carryScan",
-    "index": 1
-   },
-   {
-    "t": "discard",
-    "uid": "panic_shaking@1001"
-   },
-   {
-    "t": "discard",
-    "uid": "steady_hands@1"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "burn",
-    "uid": "load_shed@1"
-   },
-   {
-    "t": "search"
-   },
-   {
-    "t": "play",
-    "uid": "bypass@2"
-   },
-   {
-    "t": "discard",
-    "uid": "panic_tunnel@1002"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "play",
-    "uid": "steady_hands@1"
-   },
-   {
-    "t": "creep",
-    "to": "armory"
    },
    {
     "t": "discard",
@@ -3383,124 +3383,87 @@
     "t": "endTurn"
    },
    {
-    "t": "burn",
-    "uid": "bypass@1"
-   },
-   {
     "t": "discard",
     "uid": "bypass@2"
+   },
+   {
+    "t": "creep",
+    "to": "armory"
    },
    {
     "t": "endTurn"
    },
    {
-    "t": "burn",
+    "t": "discard",
     "uid": "panic_shaking@1001"
    },
    {
-    "t": "burn",
-    "uid": "panic_sweat@1005"
+    "t": "discard",
+    "uid": "steady_hands@1"
+   },
+   {
+    "t": "search"
+   },
+   {
+    "t": "endTurn"
    },
    {
     "t": "burn",
     "uid": "field_repair@1"
    },
    {
-    "t": "listen"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
     "t": "burn",
-    "uid": "panic_blackout@1008"
+    "uid": "bypass@1"
    },
    {
-    "t": "move",
-    "to": "ore_hold"
-   },
-   {
-    "t": "discard",
-    "uid": "panic_tunnel@1009"
-   },
-   {
-    "t": "ventEnter"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "burn",
-    "uid": "panic_tunnel@1002"
-   },
-   {
-    "t": "ventExit",
-    "to": "bridge"
-   },
-   {
-    "t": "burn",
-    "uid": "steady_hands@1"
-   },
-   {
-    "t": "burn",
-    "uid": "bypass@2"
+    "t": "creep",
+    "to": "medbay"
    },
    {
     "t": "play",
     "uid": "brace@2"
    },
    {
-    "t": "move",
-    "to": "spine_c"
+    "t": "endTurn"
+   },
+   {
+    "t": "burn",
+    "uid": "reroute@1"
+   },
+   {
+    "t": "creep",
+    "to": "armory"
+   },
+   {
+    "t": "play",
+    "uid": "steady_hands@1"
+   },
+   {
+    "t": "discard",
+    "uid": "brace@1"
    },
    {
     "t": "endTurn"
    },
    {
     "t": "burn",
-    "uid": "panic_tunnel@1010"
+    "uid": "bypass@2"
    },
    {
     "t": "burn",
-    "uid": "cutting_torch@1"
+    "uid": "panic_shaking@1001"
    },
    {
     "t": "discard",
-    "uid": "panic_sweat@1014"
+    "uid": "panic_sweat@1005"
    },
    {
     "t": "discard",
-    "uid": "panic_shaking@1003"
-   },
-   {
-    "t": "move",
-    "to": "bridge"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "burn",
-    "uid": "panic_tunnel@1011"
-   },
-   {
-    "t": "burn",
-    "uid": "panic_blackout@1013"
-   },
-   {
-    "t": "burn",
-    "uid": "panic_shaking@1007"
-   },
-   {
-    "t": "ventEnter"
+    "uid": "brace@2"
    },
    {
     "t": "discard",
-    "uid": "panic_sweat@1004"
-   },
-   {
-    "t": "ventExit",
-    "to": "bridge"
+    "uid": "panic_sweat@1003"
    },
    {
     "t": "endTurn"
@@ -3511,18 +3474,147 @@
    },
    {
     "t": "burn",
-    "uid": "panic_blackout@1012"
+    "uid": "brace@1"
    },
    {
-    "t": "burn",
-    "uid": "panic_tunnel@1017"
+    "t": "search"
+   },
+   {
+    "t": "play",
+    "uid": "cutting_torch@1",
+    "threat": "t1"
    },
    {
     "t": "endTurn"
    },
    {
     "t": "burn",
-    "uid": "panic_tunnel@1009"
+    "uid": "panic_shaking@1004"
+   },
+   {
+    "t": "burn",
+    "uid": "panic_blackout@1008"
+   },
+   {
+    "t": "listen"
+   },
+   {
+    "t": "discard",
+    "uid": "panic_shaking@1012"
+   },
+   {
+    "t": "discard",
+    "uid": "panic_sweat@1011"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "burn",
+    "uid": "steady_hands@1"
+   },
+   {
+    "t": "burn",
+    "uid": "panic_sweat@1010"
+   },
+   {
+    "t": "burn",
+    "uid": "load_shed@1"
+   },
+   {
+    "t": "listen"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "burn",
+    "uid": "panic_tunnel@1014"
+   },
+   {
+    "t": "burn",
+    "uid": "panic_blackout@1016"
+   },
+   {
+    "t": "discard",
+    "uid": "panic_sweat@1011"
+   },
+   {
+    "t": "play",
+    "uid": "cutting_torch@1",
+    "threat": "t2"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "burn",
+    "uid": "panic_sweat@1018"
+   },
+   {
+    "t": "burn",
+    "uid": "panic_shaking@1012"
+   },
+   {
+    "t": "burn",
+    "uid": "panic_sweat@1017"
+   },
+   {
+    "t": "listen"
+   },
+   {
+    "t": "discard",
+    "uid": "panic_blackout@1020"
+   },
+   {
+    "t": "move",
+    "to": "ore_hold"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "burn",
+    "uid": "panic_sweat@1009"
+   },
+   {
+    "t": "burn",
+    "uid": "panic_sweat@1021"
+   },
+   {
+    "t": "burn",
+    "uid": "panic_sweat@1003"
+   },
+   {
+    "t": "burn",
+    "uid": "panic_sweat@1019"
+   },
+   {
+    "t": "creep",
+    "to": "reactor"
+   },
+   {
+    "t": "play",
+    "uid": "reroute@2",
+    "to": "ore_hold"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "move",
+    "to": "armory"
+   },
+   {
+    "t": "move",
+    "to": "ore_hold"
+   },
+   {
+    "t": "discard",
+    "uid": "panic_blackout@1024"
+   },
+   {
+    "t": "endTurn"
    },
    {
     "t": "burn",
@@ -3530,16 +3622,34 @@
    },
    {
     "t": "burn",
-    "uid": "panic_tunnel@1016"
+    "uid": "cutting_torch@1"
    },
    {
     "t": "burn",
-    "uid": "panic_tunnel@1018"
+    "uid": "panic_tunnel@1025"
+   },
+   {
+    "t": "burn",
+    "uid": "panic_sweat@1023"
+   },
+   {
+    "t": "discard",
+    "uid": "panic_sweat@1005"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "move",
+    "to": "armory"
+   },
+   {
+    "t": "endTurn"
    }
   ],
   "ending": "lost",
   "score": 12,
-  "hash": "48b3bcfd1aac473b"
+  "hash": "43b55f3108251aea"
  },
  {
   "seed": "golden-16",
@@ -3610,7 +3720,7 @@
   ],
   "ending": "lost",
   "score": 13,
-  "hash": "58749f1154453bb5"
+  "hash": "3ea898197781331d"
  },
  {
   "seed": "golden-17",
@@ -3822,7 +3932,7 @@
   ],
   "ending": "scuttle",
   "score": 35,
-  "hash": "8bf514d179a2229a"
+  "hash": "38ec9a401a2e1e0c"
  },
  {
   "seed": "golden-18",
@@ -4103,7 +4213,7 @@
   ],
   "ending": "lost",
   "score": 20,
-  "hash": "bbcadb2ab77db269"
+  "hash": "5f3e073cb8cecc33"
  },
  {
   "seed": "golden-19",
@@ -4267,18 +4377,11 @@
    {
     "t": "burn",
     "uid": "panic_shaking@1013"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "burn",
-    "uid": "panic_tunnel@1014"
    }
   ],
   "ending": "lost",
   "score": 18,
-  "hash": "2568aae5a4850cd4"
+  "hash": "dc4e5fcab774f8f6"
  },
  {
   "seed": "golden-20",
@@ -4300,15 +4403,15 @@
    },
    {
     "t": "play",
-    "uid": "bypass@1"
-   },
-   {
-    "t": "play",
     "uid": "reroute@1",
     "to": "spine_c"
    },
    {
     "t": "search"
+   },
+   {
+    "t": "play",
+    "uid": "bypass@1"
    },
    {
     "t": "endTurn"
@@ -4351,48 +4454,35 @@
     "n": 4
    },
    {
+    "t": "ventEnter"
+   },
+   {
     "t": "endTurn"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "ventExit",
+    "to": "shuttle_bay"
    },
    {
     "t": "chargeShuttle",
-    "n": 2
-   },
-   {
-    "t": "play",
-    "uid": "load_shed@1"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "play",
-    "uid": "bypass@1"
-   },
-   {
-    "t": "chargeShuttle",
-    "n": 4
-   },
-   {
-    "t": "endTurn"
+    "n": 6
    },
    {
     "t": "play",
     "uid": "bypass@2"
    },
    {
-    "t": "chargeShuttle",
-    "n": 4
-   },
-   {
-    "t": "play",
-    "uid": "bypass@1"
-   },
-   {
     "t": "endTurn"
    },
    {
     "t": "burn",
-    "uid": "field_repair@1"
+    "uid": "brace@2"
    },
    {
     "t": "ventEnter"
@@ -4401,29 +4491,29 @@
     "t": "endTurn"
    },
    {
-    "t": "burn",
-    "uid": "panic_blackout@1001"
+    "t": "ventExit",
+    "to": "shuttle_bay"
+   },
+   {
+    "t": "chargeShuttle",
+    "n": 6
+   },
+   {
+    "t": "play",
+    "uid": "bypass@1"
    },
    {
     "t": "endTurn"
    },
    {
     "t": "burn",
-    "uid": "panic_blackout@1002"
+    "uid": "cutting_torch@1"
+   },
+   {
+    "t": "ventEnter"
    },
    {
     "t": "endTurn"
-   },
-   {
-    "t": "burn",
-    "uid": "panic_tunnel@1003"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "burn",
-    "uid": "panic_blackout@1004"
    },
    {
     "t": "ventExit",
@@ -4431,15 +4521,15 @@
    },
    {
     "t": "chargeShuttle",
-    "n": 5
+    "n": 3
    },
    {
     "t": "launch"
    }
   ],
   "ending": "clean_break",
-  "score": 158,
-  "hash": "fd7251d6b8eb4349"
+  "score": 156,
+  "hash": "82e3075e0c730d37"
  },
  {
   "seed": "golden-21",
@@ -4904,7 +4994,7 @@
   ],
   "ending": "lost",
   "score": 12,
-  "hash": "1bdb0fda6bb52c03"
+  "hash": "ec4aff8d3524b7f5"
  },
  {
   "seed": "golden-22",
@@ -4978,7 +5068,7 @@
   ],
   "ending": "lost",
   "score": 12,
-  "hash": "c89065b6f10d0612"
+  "hash": "471b1d85983a5710"
  },
  {
   "seed": "golden-23",
@@ -5118,7 +5208,7 @@
   ],
   "ending": "clean_break",
   "score": 155,
-  "hash": "594796ef1726234f"
+  "hash": "e97270887a571058"
  },
  {
   "seed": "golden-24",
@@ -5491,38 +5581,11 @@
    {
     "t": "burn",
     "uid": "nerve@1"
-   },
-   {
-    "t": "chargeShuttle",
-    "n": 2
-   },
-   {
-    "t": "discard",
-    "uid": "checklist@1"
-   },
-   {
-    "t": "discard",
-    "uid": "panic_tunnel@1029"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "burn",
-    "uid": "panic_sweat@1044"
-   },
-   {
-    "t": "burn",
-    "uid": "panic_tunnel@1043"
-   },
-   {
-    "t": "burn",
-    "uid": "panic_shaking@1037"
    }
   ],
   "ending": "lost",
-  "score": 18,
-  "hash": "d373a36a982a6418"
+  "score": 16,
+  "hash": "0427f851db559572"
  },
  {
   "seed": "golden-25",
@@ -5553,8 +5616,8 @@
     "t": "endTurn"
    },
    {
-    "t": "play",
-    "uid": "bypass@1"
+    "t": "burn",
+    "uid": "field_repair@1"
    },
    {
     "t": "play",
@@ -5562,42 +5625,67 @@
     "to": "spine_c"
    },
    {
-    "t": "endTurn"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "endTurn"
+    "t": "creep",
+    "to": "shuttle_bay"
    },
    {
     "t": "endTurn"
    },
    {
     "t": "burn",
-    "uid": "load_shed@1"
+    "uid": "panic_tunnel@1001"
    },
    {
-    "t": "play",
-    "uid": "reroute@2",
+    "t": "chargeShuttle",
+    "n": 10
+   },
+   {
+    "t": "ventEnter"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "burn",
+    "uid": "steady_hands@1"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "burn",
+    "uid": "panic_blackout@1003"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "burn",
+    "uid": "reroute@1"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "burn",
+    "uid": "panic_blackout@1004"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "burn",
+    "uid": "panic_shaking@1002"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "burn",
+    "uid": "panic_blackout@1007"
+   },
+   {
+    "t": "ventExit",
     "to": "shuttle_bay"
    },
    {
@@ -5613,7 +5701,7 @@
    },
    {
     "t": "burn",
-    "uid": "panic_blackout@1001"
+    "uid": "panic_blackout@1008"
    },
    {
     "t": "ventEnter"
@@ -5623,7 +5711,7 @@
    },
    {
     "t": "burn",
-    "uid": "panic_tunnel@1002"
+    "uid": "panic_sweat@1005"
    },
    {
     "t": "ventExit",
@@ -5634,11 +5722,15 @@
     "n": 6
    },
    {
+    "t": "play",
+    "uid": "bypass@2"
+   },
+   {
     "t": "endTurn"
    },
    {
     "t": "burn",
-    "uid": "panic_sweat@1003"
+    "uid": "panic_tunnel@1010"
    },
    {
     "t": "ventEnter"
@@ -5648,7 +5740,49 @@
    },
    {
     "t": "burn",
-    "uid": "reroute@1"
+    "uid": "panic_sweat@1011"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "burn",
+    "uid": "panic_blackout@1012"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "burn",
+    "uid": "panic_sweat@1013"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "burn",
+    "uid": "panic_blackout@1014"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "burn",
+    "uid": "panic_blackout@1015"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "burn",
+    "uid": "brace@2"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "burn",
+    "uid": "panic_shaking@1016"
    },
    {
     "t": "ventExit",
@@ -5656,47 +5790,15 @@
    },
    {
     "t": "chargeShuttle",
-    "n": 4
+    "n": 8
    },
    {
-    "t": "play",
-    "uid": "bypass@1"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "burn",
-    "uid": "panic_sweat@1004"
-   },
-   {
-    "t": "ventEnter"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "burn",
-    "uid": "panic_blackout@1006"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "burn",
-    "uid": "panic_sweat@1007"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "burn",
-    "uid": "panic_blackout@1005"
+    "t": "launch"
    }
   ],
-  "ending": "lost",
-  "score": 25,
-  "hash": "5ffc89fa894c4f88"
+  "ending": "carrier",
+  "score": 86,
+  "hash": "0bb8500813c2dfc9"
  },
  {
   "seed": "golden-26",
@@ -5868,7 +5970,7 @@
   ],
   "ending": "clean_break",
   "score": 182,
-  "hash": "d605caddbaec2f26"
+  "hash": "28aa4823092a34ee"
  },
  {
   "seed": "golden-27",
@@ -6070,7 +6172,7 @@
    },
    {
     "t": "discard",
-    "uid": "panic_shaking@1002"
+    "uid": "panic_shaking@1003"
    },
    {
     "t": "play",
@@ -6084,7 +6186,7 @@
    },
    {
     "t": "burn",
-    "uid": "panic_shaking@1003"
+    "uid": "panic_shaking@1002"
    },
    {
     "t": "endTurn"
@@ -6144,7 +6246,7 @@
    },
    {
     "t": "burn",
-    "uid": "panic_shaking@1002"
+    "uid": "panic_shaking@1003"
    },
    {
     "t": "burn",
@@ -6171,7 +6273,7 @@
   ],
   "ending": "lost",
   "score": 8,
-  "hash": "8ea25120f130f89d"
+  "hash": "7f18fafbd4c309d5"
  },
  {
   "seed": "golden-28",
@@ -6237,7 +6339,7 @@
   ],
   "ending": "lost",
   "score": 13,
-  "hash": "6053fb5b935d7130"
+  "hash": "56f00c96821d9ab0"
  },
  {
   "seed": "golden-29",
@@ -6431,20 +6533,10 @@
    {
     "t": "burn",
     "uid": "checklist@1"
-   },
-   {
-    "t": "ventEnter"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "burn",
-    "uid": "panic_blackout@1020"
    }
   ],
-  "ending": "scuttle",
-  "score": 70,
-  "hash": "c2f50b7a0182de16"
+  "ending": "lost",
+  "score": 17,
+  "hash": "30dbebb9b0393ea6"
  }
 ]

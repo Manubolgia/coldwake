@@ -11,6 +11,7 @@ export function Menu({
   onResume,
   onExport,
   onToggleCrt,
+  onManual,
 }: {
   meta: Meta;
   hasSavedRun: boolean;
@@ -18,6 +19,7 @@ export function Menu({
   onResume: () => void;
   onExport: () => void;
   onToggleCrt: () => void;
+  onManual: () => void;
 }): React.ReactElement {
   const [role, setRole] = useState<RoleId>(meta.roles[0] ?? 'engineer');
   const [depth, setDepth] = useState<Depth>(meta.depths[meta.depths.length - 1] ?? 1);
@@ -39,6 +41,11 @@ export function Menu({
           <span className="glow">RESUME RUN</span>
         </button>
       ) : null}
+
+      <button className="cmd" data-testid="manual-open" onClick={onManual}>
+        <span>OPERATIONS MANUAL</span>
+        <span className="cost">HOW THE SHIP WORKS</span>
+      </button>
 
       <h2>Crew</h2>
       {ROLES.map((r) => {
