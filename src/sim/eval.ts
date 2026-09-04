@@ -64,6 +64,12 @@ function noisePressure(state: GameState): number {
 export function evaluateImmediate(state: GameState): number {
   if (state.status !== 'active') return terminalValue(state);
   const need = shuttleRequirement(state.role, state.depth) - state.ship.shuttleCharge;
+  const pressure = threatPressure(state);
+  // A ward is worth exactly as much as the wound it is about to prevent, and
+  // nothing at all when nothing is near. Without this the bot never braces.
+  const wards = Math.min(state.player.wardsThisTurn, 2) * Math.min(pressure, 9) * 0.55;
+  // A spent weapon is a card that does nothing until the armory sees it.
+  const spent = state.player.spent.length * 2.5;
   const owned = ownedCards(state);
   const panics = owned.filter((u) => isPanic(u)).length;
   const turnsLeft = turnLimit(state.depth) - state.turn;
@@ -75,9 +81,12 @@ export function evaluateImmediate(state: GameState): number {
     state.player.ap * 0.6 +
     (owned.length - panics) * 1.2 -
     panics * 1.5 +
-    state.ship.searched.length * 1.5 -
+    state.ship.searched.length * 1.5 +
+    wards -
+    spent +
+    (state.bagKnownTurn === state.turn ? 1.2 : 0) -
     noisePressure(state) -
-    threatPressure(state) -
+    pressure -
     state.player.carry.filter((c) => c.revealed && c.id === 'infested').length * 9 -
     // An unread sample is worth roughly a third of a known infection, so
     // reading one that comes back clean is a real gain.

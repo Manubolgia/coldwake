@@ -17,7 +17,7 @@ preference.
 | Number | v0 | Shipped | Why |
 |---|---|---|---|
 | Shuttle requirement | 12 | 34 (D1–D2), 32 (D3), 31 (D4), 30 (D5) | At 12 the run resolved on turn 8–10 with nothing spent on defence: the clock never bit and the median resolution turn sat five below its band. 30 puts the median at 13–16 and makes power spent on survival cost turns you can feel. |
-| Pilot's discount | needs 9 | needs 5 less than the depth's requirement | Same shape, rescaled: a flat delta so the role stays distinct at every depth. |
+| Pilot's discount | needs 9 | needs 3 less than the depth's requirement | Same shape, rescaled: a flat delta so the role stays distinct at every depth. |
 | Reactor output at depth 2+ | starts at 1 | starts at 2 (1 at depth 5 was tried and cut) | Starting degraded is a cliff, not a slope: the reactor sits next to the nest, so the repair the player needs is exactly where the threats congregate. Depth 2 fell from ~60% to 17% on this modifier alone. Depth now escalates through the bag, the clock, the CARRY deck and the ore-hold floor instead. |
 | CARRY deck | 8 clean / 4 infested at every depth | 10/2 (D1–D2), 9/3 (D3), 8/4 (D4), 7/5 (D5) | At 8/4 the Carrier ending took 36–52% of runs at every depth and was 80% of all losses — one system dominating the loss table. The ladder now makes infection a depth pressure rather than a constant. |
 | Scuttle cost | 5 power | 10 power, on a 3-turn fuse | At 5 it was a free consolation prize taken on the turn the shuttle became unreachable. At 8 it is a real fork: the power you arm with is power you cannot bank. |

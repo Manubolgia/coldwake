@@ -80,7 +80,7 @@ Order: burrowers, drifters, contacts, chorus.
 Reactor output starts at 2 at every depth; only a burrower in the reactor takes
 it down.
 
-The pilot launches on 5 less than the depth's requirement.
+The pilot launches on 3 less than the depth's requirement.
 
 ## Endings
 

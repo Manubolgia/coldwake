@@ -42,14 +42,14 @@
     {
       "id": "pilot",
       "name": "PILOT",
-      "strength": "Shuttle efficiency. Launches on four less power.",
+      "strength": "Shuttle efficiency. Launches on three less power.",
       "weakness": "Weakest deck otherwise.",
       "unlock": {
         "type": "ending",
         "ending": "clean_break",
         "label": "Achieve a Clean Break."
       },
-      "shuttleRequired": 29
+      "shuttleRequired": 31
     }
   ]
 }

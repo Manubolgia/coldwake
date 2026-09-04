@@ -43,6 +43,8 @@ export function scoreFor(state: GameState, ending: Ending): number {
 export function resolveRun(state: GameState, cause: ResolveCause): void {
   if (state.status !== 'active') return;
   const ending = endingFor(state, cause);
+  // §4.10: at the moment of escape, every sample is read.
+  for (const c of state.player.carry) c.revealed = true;
   const score = scoreFor(state, ending);
   state.status = ending;
   state.player.pendingWounds = 0;
