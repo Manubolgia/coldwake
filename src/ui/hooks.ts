@@ -32,6 +32,9 @@ export type TypedFeed = {
 const SPEED = {
   normal: { tick: 14, step: 3, gap: 60 },
   loud: { tick: 18, step: 1, gap: 190 },
+  // Advisories are long by nature; they run out quickly so that reading them is
+  // a choice rather than a wait.
+  guide: { tick: 12, step: 5, gap: 120 },
 };
 
 const isLoud = (line: DisplayLine | undefined): boolean =>
@@ -63,7 +66,7 @@ export function useTypedFeed(lines: DisplayLine[], instant: boolean): TypedFeed 
     if (done >= lines.length) return;
     const line = lines[done];
     if (!line) return;
-    const speed = isLoud(line) ? SPEED.loud : SPEED.normal;
+    const speed = line.kind === 'guide' ? SPEED.guide : isLoud(line) ? SPEED.loud : SPEED.normal;
     const length = line.kind === 'guide' ? line.text.length + 3 : line.text.length;
     if (chars >= length) {
       const t = window.setTimeout(() => {
