@@ -34,8 +34,8 @@ jobs:
       - name: Gate M1 — rules engine
         run: npm run gate:m1
       - name: Balance smoke test
-        # 500 runs per depth. A balance regression blocks the deploy.
-        run: GATE_RUNS=500 npm run gate:m3 || echo "::warning::balance outside band — see reports/"
+        # 500 runs per depth, wide bands. A balance regression blocks the deploy.
+        run: npm run smoke
       - name: Build
         run: npm run build
       - uses: actions/upload-artifact@v4

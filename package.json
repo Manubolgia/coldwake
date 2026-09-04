@@ -4,7 +4,7 @@
   "private": true,
   "type": "module",
   "license": "MIT",
-  "description": "COLDWAKE — a single-player, offline-first space horror board game as a PWA.",
+  "description": "COLDWAKE \u2014 a single-player, offline-first space horror board game as a PWA.",
   "scripts": {
     "dev": "vite",
     "build": "tsc --noEmit -p tsconfig.build.json && vite build",
@@ -23,7 +23,8 @@
     "gate:m5": "tsx scripts/gate.ts m5",
     "gate:m6": "tsx scripts/gate.ts m6",
     "golden:regen": "tsx scripts/regen-golden.ts",
-    "e2e": "playwright test"
+    "e2e": "playwright test",
+    "smoke": "tsx scripts/smoke-balance.ts"
   },
   "dependencies": {
     "idb-keyval": "^6.2.2",

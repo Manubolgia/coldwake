@@ -456,61 +456,121 @@
   "bot": "greedy",
   "actions": [
    {
-    "t": "endTurn"
+    "t": "listen"
    },
    {
     "t": "endTurn"
    },
    {
-    "t": "endTurn"
+    "t": "listen"
    },
    {
     "t": "endTurn"
    },
    {
-    "t": "endTurn"
+    "t": "listen"
    },
    {
     "t": "endTurn"
    },
    {
-    "t": "endTurn"
+    "t": "listen"
    },
    {
     "t": "endTurn"
    },
    {
-    "t": "endTurn"
+    "t": "listen"
    },
    {
     "t": "endTurn"
    },
    {
-    "t": "endTurn"
+    "t": "listen"
    },
    {
     "t": "endTurn"
    },
    {
-    "t": "endTurn"
+    "t": "listen"
    },
    {
     "t": "endTurn"
    },
    {
-    "t": "endTurn"
+    "t": "listen"
    },
    {
     "t": "endTurn"
    },
    {
-    "t": "endTurn"
+    "t": "listen"
    },
    {
     "t": "endTurn"
    },
    {
+    "t": "listen"
+   },
+   {
     "t": "endTurn"
+   },
+   {
+    "t": "listen"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "listen"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "listen"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "listen"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "listen"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "listen"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "listen"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "listen"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "listen"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "listen"
    },
    {
     "t": "endTurn"
@@ -518,7 +578,7 @@
   ],
   "ending": "lost",
   "score": 13,
-  "hash": "84f0ca0f60530d22"
+  "hash": "b85f1e7669a60dcf"
  },
  {
   "seed": "golden-2",
@@ -545,15 +605,17 @@
     "to": "spine_a"
    },
    {
+    "t": "listen"
+   },
+   {
     "t": "endTurn"
+   },
+   {
+    "t": "listen"
    },
    {
     "t": "creep",
     "to": "spine_b"
-   },
-   {
-    "t": "move",
-    "to": "spine_c"
    },
    {
     "t": "endTurn"
@@ -561,7 +623,14 @@
    {
     "t": "play",
     "uid": "careful_step@1",
+    "to": "spine_c"
+   },
+   {
+    "t": "creep",
     "to": "shuttle_bay"
+   },
+   {
+    "t": "endTurn"
    },
    {
     "t": "chargeShuttle",
@@ -571,18 +640,7 @@
     "t": "search"
    },
    {
-    "t": "endTurn"
-   },
-   {
-    "t": "chargeShuttle",
-    "n": 6
-   },
-   {
     "t": "search"
-   },
-   {
-    "t": "chargeShuttle",
-    "n": 3
    },
    {
     "t": "endTurn"
@@ -596,6 +654,10 @@
     "uid": "steady@1"
    },
    {
+    "t": "chargeShuttle",
+    "n": 9
+   },
+   {
     "t": "ventEnter"
    },
    {
@@ -607,81 +669,21 @@
    },
    {
     "t": "play",
-    "uid": "triage@1"
-   },
-   {
-    "t": "search"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "ventEnter"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "burn",
-    "uid": "antiseptic@1"
-   },
-   {
-    "t": "ventExit",
-    "to": "shuttle_bay"
-   },
-   {
-    "t": "chargeShuttle",
-    "n": 10
-   },
-   {
-    "t": "play",
-    "uid": "diagnostic@2"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "burn",
-    "uid": "careful_step@1"
-   },
-   {
-    "t": "ventEnter"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "burn",
-    "uid": "panic_shaking@1003"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "burn",
-    "uid": "panic_shaking@1005"
-   },
-   {
-    "t": "ventExit",
-    "to": "bridge"
-   },
-   {
-    "t": "play",
-    "uid": "triage@2"
+    "uid": "steady@2"
    },
    {
     "t": "play",
     "uid": "triage@1"
    },
    {
+    "t": "listen"
+   },
+   {
     "t": "endTurn"
    },
    {
     "t": "burn",
-    "uid": "scalpel@1"
+    "uid": "diagnostic@1"
    },
    {
     "t": "ventEnter"
@@ -690,55 +692,39 @@
     "t": "endTurn"
    },
    {
-    "t": "burn",
-    "uid": "panic_blackout@1007"
+    "t": "endTurn"
    },
    {
     "t": "endTurn"
    },
    {
-    "t": "burn",
-    "uid": "panic_sweat@1008"
-   },
-   {
-    "t": "ventExit",
-    "to": "bridge"
-   },
-   {
-    "t": "play",
-    "uid": "triage@1"
+    "t": "endTurn"
    },
    {
     "t": "endTurn"
    },
    {
-    "t": "burn",
-    "uid": "diagnostic@2"
-   },
-   {
-    "t": "ventEnter"
+    "t": "endTurn"
    },
    {
     "t": "endTurn"
    },
    {
-    "t": "burn",
-    "uid": "panic_blackout@1010"
+    "t": "endTurn"
    },
    {
-    "t": "ventExit",
-    "to": "bridge"
+    "t": "endTurn"
    },
    {
-    "t": "purgeVents"
+    "t": "endTurn"
    },
    {
     "t": "endTurn"
    }
   ],
   "ending": "lost",
-  "score": 30,
-  "hash": "d80a71fce35e17d7"
+  "score": 24,
+  "hash": "3d72c8949a5f8f03"
  },
  {
   "seed": "golden-3",
@@ -1143,23 +1129,29 @@
     "uid": "course_correct@1"
    },
    {
+    "t": "listen"
+   },
+   {
     "t": "play",
     "uid": "hand_off@1",
     "to": "spine_a"
    },
    {
+    "t": "endTurn"
+   },
+   {
     "t": "search"
    },
    {
-    "t": "endTurn"
+    "t": "play",
+    "uid": "checklist@1"
    },
    {
     "t": "play",
     "uid": "course_correct@2"
    },
    {
-    "t": "play",
-    "uid": "checklist@1"
+    "t": "listen"
    },
    {
     "t": "endTurn"
@@ -1171,11 +1163,10 @@
    {
     "t": "play",
     "uid": "hand_off@1",
-    "to": "spine_b"
+    "to": "cryobay"
    },
    {
-    "t": "creep",
-    "to": "spine_c"
+    "t": "listen"
    },
    {
     "t": "endTurn"
@@ -1187,26 +1178,18 @@
    {
     "t": "play",
     "uid": "hand_off@2",
-    "to": "shuttle_bay"
+    "to": "spine_a"
    },
    {
-    "t": "chargeShuttle",
-    "n": 10
-   },
-   {
-    "t": "play",
-    "uid": "course_correct@2"
-   },
-   {
-    "t": "play",
-    "uid": "checklist@1"
+    "t": "creep",
+    "to": "medbay"
    },
    {
     "t": "endTurn"
    },
    {
     "t": "burn",
-    "uid": "panic_tunnel@1002"
+    "uid": "punch_it@1"
    },
    {
     "t": "ventEnter"
@@ -1249,14 +1232,22 @@
    },
    {
     "t": "play",
-    "uid": "checklist@1"
+    "uid": "course_correct@1"
    },
    {
     "t": "endTurn"
    },
    {
     "t": "burn",
+    "uid": "panic_tunnel@1002"
+   },
+   {
+    "t": "burn",
     "uid": "panic_sweat@1007"
+   },
+   {
+    "t": "burn",
+    "uid": "sidearm@1"
    },
    {
     "t": "ventEnter"
@@ -1266,7 +1257,14 @@
    },
    {
     "t": "burn",
-    "uid": "panic_shaking@1008"
+    "uid": "panic_shaking@1010"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "burn",
+    "uid": "panic_sweat@1008"
    },
    {
     "t": "ventExit",
@@ -1274,15 +1272,46 @@
    },
    {
     "t": "chargeShuttle",
-    "n": 5
+    "n": 7
    },
    {
-    "t": "launch"
+    "t": "listen"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "burn",
+    "uid": "panic_sweat@1012"
+   },
+   {
+    "t": "ventEnter"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "burn",
+    "uid": "panic_shaking@1011"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "burn",
+    "uid": "panic_tunnel@1014"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "burn",
+    "uid": "hand_off@2"
    }
   ],
-  "ending": "carrier",
-  "score": 69,
-  "hash": "c5d91581703bcad1"
+  "ending": "lost",
+  "score": 20,
+  "hash": "436b896499a73c2e"
  },
  {
   "seed": "golden-5",
@@ -1331,6 +1360,9 @@
     "n": 10
    },
    {
+    "t": "listen"
+   },
+   {
     "t": "endTurn"
    },
    {
@@ -1340,6 +1372,9 @@
    {
     "t": "chargeShuttle",
     "n": 4
+   },
+   {
+    "t": "listen"
    },
    {
     "t": "endTurn"
@@ -1362,6 +1397,9 @@
    {
     "t": "chargeShuttle",
     "n": 4
+   },
+   {
+    "t": "listen"
    },
    {
     "t": "endTurn"
@@ -1427,7 +1465,7 @@
   ],
   "ending": "carrier",
   "score": 80,
-  "hash": "c7468dbdd1ee143d"
+  "hash": "a6808a6d617196b2"
  },
  {
   "seed": "golden-6",
@@ -1852,69 +1890,18 @@
     "uid": "diagnostic@2"
    },
    {
-    "t": "move",
-    "to": "spine_a"
+    "t": "listen"
    },
    {
     "t": "endTurn"
-   },
-   {
-    "t": "burn",
-    "uid": "stimulant@1"
    },
    {
     "t": "play",
     "uid": "careful_step@1",
-    "to": "spine_b"
+    "to": "spine_a"
    },
    {
-    "t": "play",
-    "uid": "antiseptic@1"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "burn",
-    "uid": "panic_blackout@1001"
-   },
-   {
-    "t": "creep",
-    "to": "spine_c"
-   },
-   {
-    "t": "move",
-    "to": "shuttle_bay"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "chargeShuttle",
-    "n": 9
-   },
-   {
-    "t": "ventEnter"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "ventExit",
-    "to": "shuttle_bay"
-   },
-   {
-    "t": "chargeShuttle",
-    "n": 8
+    "t": "listen"
    },
    {
     "t": "search"
@@ -1923,63 +1910,18 @@
     "t": "endTurn"
    },
    {
-    "t": "chargeShuttle",
-    "n": 6
-   },
-   {
-    "t": "ventEnter"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "ventExit",
-    "to": "shuttle_bay"
-   },
-   {
-    "t": "chargeShuttle",
-    "n": 8
-   },
-   {
-    "t": "endTurn"
-   },
-   {
     "t": "play",
-    "uid": "triage@2"
+    "uid": "careful_step@1",
+    "to": "cryobay"
+   },
+   {
+    "t": "listen"
    },
    {
     "t": "endTurn"
    },
    {
-    "t": "burn",
-    "uid": "steady@1"
-   },
-   {
-    "t": "ventEnter"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "burn",
-    "uid": "panic_sweat@1003"
-   },
-   {
-    "t": "ventExit",
-    "to": "shuttle_bay"
-   },
-   {
-    "t": "play",
-    "uid": "triage@1"
+    "t": "listen"
    },
    {
     "t": "endTurn"
@@ -1989,30 +1931,183 @@
     "uid": "diagnostic@2"
    },
    {
-    "t": "ventEnter"
+    "t": "burn",
+    "uid": "antiseptic@1"
+   },
+   {
+    "t": "creep",
+    "to": "spine_a"
+   },
+   {
+    "t": "play",
+    "uid": "steady@1"
    },
    {
     "t": "endTurn"
    },
    {
     "t": "burn",
-    "uid": "panic_sweat@1005"
+    "uid": "panic_sweat@1001"
    },
    {
-    "t": "ventExit",
+    "t": "play",
+    "uid": "salv_sidearm@4",
+    "threat": "t1"
+   },
+   {
+    "t": "play",
+    "uid": "triage@2"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "play",
+    "uid": "triage@1"
+   },
+   {
+    "t": "listen"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "play",
+    "uid": "careful_step@1",
+    "to": "cryobay"
+   },
+   {
+    "t": "listen"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "play",
+    "uid": "steady@1"
+   },
+   {
+    "t": "play",
+    "uid": "steady@2"
+   },
+   {
+    "t": "listen"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "creep",
+    "to": "spine_a"
+   },
+   {
+    "t": "play",
+    "uid": "steady@1"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "burn",
+    "uid": "sample@1"
+   },
+   {
+    "t": "play",
+    "uid": "scalpel@1",
+    "threat": "t2"
+   },
+   {
+    "t": "play",
+    "uid": "triage@1"
+   },
+   {
+    "t": "play",
+    "uid": "careful_step@1",
+    "to": "spine_b"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "play",
+    "uid": "careful_step@1",
+    "to": "spine_c"
+   },
+   {
+    "t": "listen"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "creep",
     "to": "shuttle_bay"
    },
    {
+    "t": "chargeShuttle",
+    "n": 10
+   },
+   {
     "t": "endTurn"
    },
    {
-    "t": "burn",
-    "uid": "panic_shaking@1006"
+    "t": "chargeShuttle",
+    "n": 2
+   },
+   {
+    "t": "search"
+   },
+   {
+    "t": "chargeShuttle",
+    "n": 4
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "chargeShuttle",
+    "n": 2
+   },
+   {
+    "t": "listen"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "chargeShuttle",
+    "n": 2
+   },
+   {
+    "t": "listen"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "chargeShuttle",
+    "n": 2
+   },
+   {
+    "t": "listen"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "chargeShuttle",
+    "n": 2
+   },
+   {
+    "t": "listen"
+   },
+   {
+    "t": "endTurn"
    }
   ],
   "ending": "lost",
   "score": 31,
-  "hash": "6b6ac33bcb0a44f7"
+  "hash": "fb37fc40223dfe53"
  },
  {
   "seed": "golden-8",
@@ -2028,6 +2123,9 @@
    {
     "t": "play",
     "uid": "sweep@1"
+   },
+   {
+    "t": "listen"
    },
    {
     "t": "endTurn"
@@ -2048,6 +2146,9 @@
     "n": 7
    },
    {
+    "t": "listen"
+   },
+   {
     "t": "play",
     "uid": "sweep@1"
    },
@@ -2059,11 +2160,7 @@
     "n": 2
    },
    {
-    "t": "endTurn"
-   },
-   {
-    "t": "chargeShuttle",
-    "n": 2
+    "t": "listen"
    },
    {
     "t": "endTurn"
@@ -2073,11 +2170,7 @@
     "n": 2
    },
    {
-    "t": "endTurn"
-   },
-   {
-    "t": "chargeShuttle",
-    "n": 2
+    "t": "listen"
    },
    {
     "t": "endTurn"
@@ -2087,11 +2180,7 @@
     "n": 2
    },
    {
-    "t": "endTurn"
-   },
-   {
-    "t": "chargeShuttle",
-    "n": 2
+    "t": "listen"
    },
    {
     "t": "endTurn"
@@ -2101,11 +2190,7 @@
     "n": 2
    },
    {
-    "t": "endTurn"
-   },
-   {
-    "t": "chargeShuttle",
-    "n": 2
+    "t": "listen"
    },
    {
     "t": "endTurn"
@@ -2115,11 +2200,7 @@
     "n": 2
    },
    {
-    "t": "endTurn"
-   },
-   {
-    "t": "chargeShuttle",
-    "n": 2
+    "t": "listen"
    },
    {
     "t": "endTurn"
@@ -2127,6 +2208,59 @@
    {
     "t": "chargeShuttle",
     "n": 2
+   },
+   {
+    "t": "listen"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "chargeShuttle",
+    "n": 2
+   },
+   {
+    "t": "listen"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "chargeShuttle",
+    "n": 2
+   },
+   {
+    "t": "listen"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "chargeShuttle",
+    "n": 2
+   },
+   {
+    "t": "listen"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "chargeShuttle",
+    "n": 2
+   },
+   {
+    "t": "listen"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "chargeShuttle",
+    "n": 2
+   },
+   {
+    "t": "listen"
    },
    {
     "t": "endTurn"
@@ -2141,7 +2275,7 @@
   ],
   "ending": "clean_break",
   "score": 168,
-  "hash": "5f675b8f383b021b"
+  "hash": "f7d97d4c7eb8d963"
  },
  {
   "seed": "golden-9",
@@ -2188,11 +2322,36 @@
     "uid": "nerve@2"
    },
    {
+    "t": "move",
+    "to": "spine_a"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "creep",
+    "to": "cryobay"
+   },
+   {
     "t": "endTurn"
    },
    {
     "t": "discard",
-    "uid": "nerve@1"
+    "uid": "checklist@1"
+   },
+   {
+    "t": "discard",
+    "uid": "sidearm@1"
+   },
+   {
+    "t": "listen"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "discard",
+    "uid": "hand_off@2"
    },
    {
     "t": "creep",
@@ -2203,42 +2362,41 @@
    },
    {
     "t": "play",
-    "uid": "hand_off@1",
-    "to": "spine_b"
+    "uid": "bail@1",
+    "to": "medbay"
    },
    {
     "t": "play",
-    "uid": "nerve@2"
+    "uid": "checklist@1"
    },
    {
-    "t": "move",
-    "to": "reactor"
+    "t": "discard",
+    "uid": "course_correct@2"
+   },
+   {
+    "t": "carryScan",
+    "index": 0
+   },
+   {
+    "t": "play",
+    "uid": "nerve@1"
    },
    {
     "t": "endTurn"
    },
    {
     "t": "burn",
+    "uid": "nerve@2"
+   },
+   {
+    "t": "search"
+   },
+   {
+    "t": "play",
     "uid": "course_correct@2"
    },
    {
-    "t": "burn",
-    "uid": "flight_jacket@1"
-   },
-   {
-    "t": "burn",
-    "uid": "course_correct@1"
-   },
-   {
-    "t": "burn",
-    "uid": "checklist@1"
-   },
-   {
-    "t": "discard",
-    "uid": "panic_blackout@1002"
-   },
-   {
-    "t": "listen"
+    "t": "search"
    },
    {
     "t": "endTurn"
@@ -2249,69 +2407,42 @@
    },
    {
     "t": "burn",
+    "uid": "hand_off@1"
+   },
+   {
+    "t": "burn",
+    "uid": "punch_it@1"
+   },
+   {
+    "t": "move",
+    "to": "armory"
+   },
+   {
+    "t": "play",
+    "uid": "nerve@1"
+   },
+   {
+    "t": "discard",
+    "uid": "panic_blackout@1004"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "burn",
     "uid": "hand_off@2"
    },
    {
     "t": "burn",
-    "uid": "panic_tunnel@1004"
+    "uid": "checklist@1"
    },
    {
     "t": "burn",
-    "uid": "panic_sweat@1003"
-   },
-   {
-    "t": "discard",
-    "uid": "nerve@1"
-   },
-   {
-    "t": "creep",
-    "to": "spine_b"
-   },
-   {
-    "t": "endTurn"
+    "uid": "panic_blackout@1002"
    },
    {
     "t": "burn",
-    "uid": "panic_blackout@1008"
-   },
-   {
-    "t": "burn",
-    "uid": "panic_blackout@1007"
-   },
-   {
-    "t": "burn",
-    "uid": "panic_tunnel@1005"
-   },
-   {
-    "t": "burn",
-    "uid": "panic_sweat@1012"
-   },
-   {
-    "t": "play",
-    "uid": "bail@1",
-    "to": "reactor"
-   },
-   {
-    "t": "search"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "burn",
-    "uid": "sidearm@1"
-   },
-   {
-    "t": "burn",
-    "uid": "panic_sweat@1018"
-   },
-   {
-    "t": "burn",
-    "uid": "panic_blackout@1013"
-   },
-   {
-    "t": "burn",
-    "uid": "panic_tunnel@1017"
+    "uid": "docking_clamp@1"
    },
    {
     "t": "move",
@@ -2319,7 +2450,7 @@
    },
    {
     "t": "discard",
-    "uid": "panic_sweat@1023"
+    "uid": "panic_sweat@1008"
    },
    {
     "t": "move",
@@ -2330,50 +2461,51 @@
    },
    {
     "t": "burn",
-    "uid": "panic_blackout@1020"
+    "uid": "panic_sweat@1009"
    },
    {
     "t": "burn",
-    "uid": "panic_shaking@1015"
+    "uid": "panic_tunnel@1006"
    },
    {
-    "t": "creep",
-    "to": "ore_hold"
+    "t": "burn",
+    "uid": "panic_blackout@1005"
    },
    {
-    "t": "play",
-    "uid": "nerve@2"
+    "t": "burn",
+    "uid": "panic_tunnel@1003"
+   },
+   {
+    "t": "beacon"
+   },
+   {
+    "t": "search"
    },
    {
     "t": "endTurn"
    },
    {
     "t": "burn",
-    "uid": "panic_sweat@1027"
+    "uid": "panic_tunnel@1013"
    },
    {
     "t": "burn",
-    "uid": "panic_sweat@1023"
+    "uid": "panic_sweat@1014"
    },
    {
     "t": "burn",
-    "uid": "panic_tunnel@1022"
+    "uid": "panic_sweat@1011"
    },
    {
     "t": "burn",
-    "uid": "panic_shaking@1028"
-   },
-   {
-    "t": "burn",
-    "uid": "panic_tunnel@1024"
-   },
-   {
-    "t": "burn",
-    "uid": "panic_blackout@1021"
+    "uid": "panic_shaking@1010"
    },
    {
     "t": "move",
-    "to": "armory"
+    "to": "bridge"
+   },
+   {
+    "t": "search"
    },
    {
     "t": "listen"
@@ -2383,108 +2515,72 @@
    },
    {
     "t": "burn",
-    "uid": "salv_sidearm@5"
+    "uid": "panic_blackout@1020"
    },
    {
     "t": "burn",
-    "uid": "panic_blackout@1009"
-   },
-   {
-    "t": "burn",
-    "uid": "panic_tunnel@1036"
-   },
-   {
-    "t": "burn",
-    "uid": "panic_blackout@1032"
-   },
-   {
-    "t": "burn",
-    "uid": "panic_sweat@1029"
-   },
-   {
-    "t": "discard",
-    "uid": "panic_tunnel@1051"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "burn",
-    "uid": "panic_sweat@1044"
-   },
-   {
-    "t": "burn",
-    "uid": "panic_shaking@1042"
-   },
-   {
-    "t": "burn",
-    "uid": "panic_blackout@1046"
+    "uid": "panic_blackout@1018"
    },
    {
     "t": "burn",
     "uid": "panic_blackout@1016"
    },
    {
-    "t": "discard",
-    "uid": "panic_sweat@1064"
+    "t": "burn",
+    "uid": "panic_shaking@1012"
+   },
+   {
+    "t": "burn",
+    "uid": "panic_blackout@1019"
+   },
+   {
+    "t": "armScuttle"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "burn",
+    "uid": "panic_shaking@1025"
+   },
+   {
+    "t": "burn",
+    "uid": "panic_tunnel@1024"
+   },
+   {
+    "t": "burn",
+    "uid": "panic_shaking@1027"
+   },
+   {
+    "t": "burn",
+    "uid": "panic_sweat@1028"
+   },
+   {
+    "t": "burn",
+    "uid": "panic_blackout@1026"
+   },
+   {
+    "t": "move",
+    "to": "spine_c"
    },
    {
     "t": "search"
    },
    {
     "t": "move",
-    "to": "medbay"
+    "to": "shuttle_bay"
    },
    {
     "t": "endTurn"
    },
    {
     "t": "burn",
-    "uid": "panic_sweat@1062"
-   },
-   {
-    "t": "burn",
-    "uid": "panic_shaking@1033"
-   },
-   {
-    "t": "burn",
-    "uid": "panic_sweat@1059"
-   },
-   {
-    "t": "burn",
-    "uid": "panic_blackout@1034"
-   },
-   {
-    "t": "move",
-    "to": "armory"
-   },
-   {
-    "t": "discard",
-    "uid": "panic_tunnel@1065"
-   },
-   {
-    "t": "discard",
-    "uid": "panic_shaking@1058"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "burn",
-    "uid": "panic_blackout@1067"
-   },
-   {
-    "t": "burn",
-    "uid": "panic_sweat@1072"
-   },
-   {
-    "t": "burn",
-    "uid": "panic_sweat@1052"
+    "uid": "panic_blackout@1029"
    }
   ],
-  "ending": "lost",
-  "score": 7,
-  "hash": "31baccf44411e6f7"
+  "ending": "beacon",
+  "score": 20,
+  "hash": "4406e687cc827113"
  },
  {
   "seed": "golden-10",
@@ -2492,6 +2588,9 @@
   "depth": 1,
   "bot": "greedy",
   "actions": [
+   {
+    "t": "listen"
+   },
    {
     "t": "endTurn"
    },
@@ -2504,58 +2603,115 @@
     "uid": "bypass@1"
    },
    {
-    "t": "endTurn"
+    "t": "listen"
    },
    {
     "t": "endTurn"
    },
    {
-    "t": "endTurn"
+    "t": "listen"
    },
    {
     "t": "endTurn"
    },
    {
-    "t": "endTurn"
+    "t": "listen"
    },
    {
     "t": "endTurn"
    },
    {
-    "t": "endTurn"
+    "t": "listen"
    },
    {
     "t": "endTurn"
    },
    {
-    "t": "endTurn"
+    "t": "listen"
    },
    {
     "t": "endTurn"
    },
    {
-    "t": "endTurn"
+    "t": "listen"
    },
    {
     "t": "endTurn"
    },
    {
-    "t": "endTurn"
+    "t": "listen"
    },
    {
     "t": "endTurn"
    },
    {
-    "t": "endTurn"
+    "t": "listen"
    },
    {
     "t": "endTurn"
    },
    {
-    "t": "endTurn"
+    "t": "listen"
    },
    {
     "t": "endTurn"
+   },
+   {
+    "t": "listen"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "listen"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "listen"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "listen"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "listen"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "listen"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "listen"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "listen"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "listen"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "listen"
    },
    {
     "t": "endTurn"
@@ -2563,7 +2719,7 @@
   ],
   "ending": "lost",
   "score": 13,
-  "hash": "a091e3a61440387a"
+  "hash": "08b12d6aee169a3f"
  },
  {
   "seed": "golden-11",
@@ -2576,8 +2732,33 @@
     "to": "spine_a"
    },
    {
-    "t": "move",
+    "t": "listen"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "listen"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "listen"
+   },
+   {
+    "t": "creep",
     "to": "spine_b"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "creep",
+    "to": "spine_c"
+   },
+   {
+    "t": "listen"
    },
    {
     "t": "endTurn"
@@ -2585,25 +2766,14 @@
    {
     "t": "play",
     "uid": "advance@1",
-    "to": "spine_c"
-   },
-   {
-    "t": "creep",
     "to": "shuttle_bay"
    },
    {
-    "t": "endTurn"
-   },
-   {
     "t": "chargeShuttle",
-    "n": 4
+    "n": 8
    },
    {
-    "t": "endTurn"
-   },
-   {
-    "t": "chargeShuttle",
-    "n": 2
+    "t": "listen"
    },
    {
     "t": "endTurn"
@@ -2613,11 +2783,7 @@
     "n": 2
    },
    {
-    "t": "endTurn"
-   },
-   {
-    "t": "chargeShuttle",
-    "n": 2
+    "t": "listen"
    },
    {
     "t": "endTurn"
@@ -2627,11 +2793,7 @@
     "n": 2
    },
    {
-    "t": "endTurn"
-   },
-   {
-    "t": "chargeShuttle",
-    "n": 2
+    "t": "listen"
    },
    {
     "t": "endTurn"
@@ -2641,11 +2803,7 @@
     "n": 2
    },
    {
-    "t": "endTurn"
-   },
-   {
-    "t": "chargeShuttle",
-    "n": 2
+    "t": "listen"
    },
    {
     "t": "endTurn"
@@ -2655,11 +2813,7 @@
     "n": 2
    },
    {
-    "t": "endTurn"
-   },
-   {
-    "t": "chargeShuttle",
-    "n": 2
+    "t": "listen"
    },
    {
     "t": "endTurn"
@@ -2669,11 +2823,7 @@
     "n": 2
    },
    {
-    "t": "endTurn"
-   },
-   {
-    "t": "chargeShuttle",
-    "n": 2
+    "t": "listen"
    },
    {
     "t": "endTurn"
@@ -2683,11 +2833,7 @@
     "n": 2
    },
    {
-    "t": "endTurn"
-   },
-   {
-    "t": "chargeShuttle",
-    "n": 2
+    "t": "listen"
    },
    {
     "t": "endTurn"
@@ -2695,6 +2841,59 @@
    {
     "t": "chargeShuttle",
     "n": 2
+   },
+   {
+    "t": "listen"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "chargeShuttle",
+    "n": 2
+   },
+   {
+    "t": "listen"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "chargeShuttle",
+    "n": 2
+   },
+   {
+    "t": "listen"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "chargeShuttle",
+    "n": 2
+   },
+   {
+    "t": "listen"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "chargeShuttle",
+    "n": 2
+   },
+   {
+    "t": "listen"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "chargeShuttle",
+    "n": 2
+   },
+   {
+    "t": "listen"
    },
    {
     "t": "endTurn"
@@ -2709,7 +2908,7 @@
   ],
   "ending": "clean_break",
   "score": 165,
-  "hash": "d370965db41b674a"
+  "hash": "fa82f72d1880c380"
  },
  {
   "seed": "golden-12",
@@ -3092,6 +3291,9 @@
     "t": "search"
    },
    {
+    "t": "listen"
+   },
+   {
     "t": "endTurn"
    },
    {
@@ -3111,6 +3313,9 @@
     "n": 2
    },
    {
+    "t": "listen"
+   },
+   {
     "t": "endTurn"
    },
    {
@@ -3122,11 +3327,7 @@
     "uid": "sweep@2"
    },
    {
-    "t": "endTurn"
-   },
-   {
-    "t": "chargeShuttle",
-    "n": 2
+    "t": "listen"
    },
    {
     "t": "endTurn"
@@ -3136,11 +3337,7 @@
     "n": 2
    },
    {
-    "t": "endTurn"
-   },
-   {
-    "t": "chargeShuttle",
-    "n": 2
+    "t": "listen"
    },
    {
     "t": "endTurn"
@@ -3150,11 +3347,7 @@
     "n": 2
    },
    {
-    "t": "endTurn"
-   },
-   {
-    "t": "chargeShuttle",
-    "n": 2
+    "t": "listen"
    },
    {
     "t": "endTurn"
@@ -3164,11 +3357,7 @@
     "n": 2
    },
    {
-    "t": "endTurn"
-   },
-   {
-    "t": "chargeShuttle",
-    "n": 2
+    "t": "listen"
    },
    {
     "t": "endTurn"
@@ -3176,6 +3365,49 @@
    {
     "t": "chargeShuttle",
     "n": 2
+   },
+   {
+    "t": "listen"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "chargeShuttle",
+    "n": 2
+   },
+   {
+    "t": "listen"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "chargeShuttle",
+    "n": 2
+   },
+   {
+    "t": "listen"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "chargeShuttle",
+    "n": 2
+   },
+   {
+    "t": "listen"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "chargeShuttle",
+    "n": 2
+   },
+   {
+    "t": "listen"
    },
    {
     "t": "endTurn"
@@ -3190,7 +3422,7 @@
   ],
   "ending": "clean_break",
   "score": 162,
-  "hash": "9fa8775a2aac2649"
+  "hash": "3b1fd7d2d10ebc1f"
  },
  {
   "seed": "golden-14",
@@ -3198,10 +3430,6 @@
   "depth": 5,
   "bot": "heuristic",
   "actions": [
-   {
-    "t": "play",
-    "uid": "course_correct@2"
-   },
    {
     "t": "play",
     "uid": "checklist@1"
@@ -3215,82 +3443,140 @@
     "t": "search"
    },
    {
-    "t": "endTurn"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "creep",
-    "to": "spine_b"
-   },
-   {
-    "t": "move",
-    "to": "spine_c"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "play",
-    "uid": "hand_off@2",
-    "to": "shuttle_bay"
-   },
-   {
-    "t": "chargeShuttle",
-    "n": 10
-   },
-   {
-    "t": "endTurn"
-   },
-   {
     "t": "play",
     "uid": "course_correct@2"
    },
    {
-    "t": "chargeShuttle",
-    "n": 4
+    "t": "endTurn"
+   },
+   {
+    "t": "listen"
    },
    {
     "t": "endTurn"
    },
    {
     "t": "play",
-    "uid": "checklist@1"
-   },
-   {
-    "t": "play",
-    "uid": "course_correct@1"
-   },
-   {
-    "t": "chargeShuttle",
-    "n": 5
-   },
-   {
-    "t": "endTurn"
+    "uid": "hand_off@1",
+    "to": "cryobay"
    },
    {
     "t": "play",
     "uid": "course_correct@1"
    },
    {
-    "t": "chargeShuttle",
-    "n": 4
+    "t": "listen"
    },
    {
     "t": "endTurn"
    },
    {
-    "t": "chargeShuttle",
-    "n": 2
+    "t": "play",
+    "uid": "flight_jacket@1"
    },
    {
-    "t": "launch"
+    "t": "listen"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "burn",
+    "uid": "hand_off@2"
+   },
+   {
+    "t": "burn",
+    "uid": "nerve@1"
+   },
+   {
+    "t": "burn",
+    "uid": "punch_it@1"
+   },
+   {
+    "t": "creep",
+    "to": "spine_a"
+   },
+   {
+    "t": "move",
+    "to": "medbay"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "ventEnter"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "ventExit",
+    "to": "bridge"
+   },
+   {
+    "t": "listen"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "armScuttle"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "burn",
+    "uid": "panic_sweat@1003"
+   },
+   {
+    "t": "burn",
+    "uid": "course_correct@2"
+   },
+   {
+    "t": "burn",
+    "uid": "nerve@2"
+   },
+   {
+    "t": "burn",
+    "uid": "flight_jacket@1"
+   },
+   {
+    "t": "burn",
+    "uid": "bail@1"
+   },
+   {
+    "t": "ventEnter"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "burn",
+    "uid": "panic_shaking@1009"
    }
   ],
-  "ending": "clean_break",
-  "score": 128,
-  "hash": "b1ee46c163b824be"
+  "ending": "scuttle",
+  "score": 34,
+  "hash": "ed7e17b4cb894a73"
  },
  {
   "seed": "golden-15",
@@ -3658,61 +3944,121 @@
   "bot": "greedy",
   "actions": [
    {
-    "t": "endTurn"
+    "t": "listen"
    },
    {
     "t": "endTurn"
    },
    {
-    "t": "endTurn"
+    "t": "listen"
    },
    {
     "t": "endTurn"
    },
    {
-    "t": "endTurn"
+    "t": "listen"
    },
    {
     "t": "endTurn"
    },
    {
-    "t": "endTurn"
+    "t": "listen"
    },
    {
     "t": "endTurn"
    },
    {
-    "t": "endTurn"
+    "t": "listen"
    },
    {
     "t": "endTurn"
    },
    {
-    "t": "endTurn"
+    "t": "listen"
    },
    {
     "t": "endTurn"
    },
    {
-    "t": "endTurn"
+    "t": "listen"
    },
    {
     "t": "endTurn"
    },
    {
-    "t": "endTurn"
+    "t": "listen"
    },
    {
     "t": "endTurn"
    },
    {
-    "t": "endTurn"
+    "t": "listen"
    },
    {
     "t": "endTurn"
    },
    {
+    "t": "listen"
+   },
+   {
     "t": "endTurn"
+   },
+   {
+    "t": "listen"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "listen"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "listen"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "listen"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "listen"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "listen"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "listen"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "listen"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "listen"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "listen"
    },
    {
     "t": "endTurn"
@@ -3720,7 +4066,7 @@
   ],
   "ending": "lost",
   "score": 13,
-  "hash": "c2e769656a810192"
+  "hash": "a0f698e7ded7bdf2"
  },
  {
   "seed": "golden-17",
@@ -3743,12 +4089,18 @@
     "t": "search"
    },
    {
+    "t": "listen"
+   },
+   {
     "t": "endTurn"
    },
    {
     "t": "play",
     "uid": "careful_step@1",
     "to": "cryobay"
+   },
+   {
+    "t": "listen"
    },
    {
     "t": "endTurn"
@@ -3760,6 +4112,9 @@
      "cryobay",
      "spine_a"
     ]
+   },
+   {
+    "t": "listen"
    },
    {
     "t": "endTurn"
@@ -3774,27 +4129,32 @@
    },
    {
     "t": "play",
+    "uid": "steady@1"
+   },
+   {
+    "t": "play",
     "uid": "triage@1"
    },
    {
     "t": "endTurn"
    },
    {
-    "t": "burn",
-    "uid": "steady@1"
+    "t": "play",
+    "uid": "steady@2"
+   },
+   {
+    "t": "listen"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "creep",
+    "to": "spine_a"
    },
    {
     "t": "play",
-    "uid": "scalpel@1",
-    "threat": "t3"
-   },
-   {
-    "t": "play",
-    "uid": "sample@1"
-   },
-   {
-    "t": "play",
-    "uid": "triage@2"
+    "uid": "steady@2"
    },
    {
     "t": "endTurn"
@@ -3802,20 +4162,32 @@
    {
     "t": "play",
     "uid": "careful_step@1",
-    "to": "spine_a"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "creep",
     "to": "cryobay"
    },
    {
-    "t": "endTurn"
+    "t": "play",
+    "uid": "steady@1"
+   },
+   {
+    "t": "play",
+    "uid": "steady@2"
    },
    {
     "t": "endTurn"
+   },
+   {
+    "t": "play",
+    "uid": "steady@1"
+   },
+   {
+    "t": "listen"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "burn",
+    "uid": "scalpel@1"
    },
    {
     "t": "burn",
@@ -3823,23 +4195,20 @@
    },
    {
     "t": "burn",
-    "uid": "diagnostic@2"
-   },
-   {
-    "t": "burn",
-    "uid": "careful_step@1"
+    "uid": "triage@1"
    },
    {
     "t": "burn",
     "uid": "sample@1"
    },
    {
-    "t": "creep",
+    "t": "play",
+    "uid": "careful_step@1",
     "to": "spine_a"
    },
    {
-    "t": "play",
-    "uid": "diagnostic@1"
+    "t": "creep",
+    "to": "spine_b"
    },
    {
     "t": "endTurn"
@@ -3849,38 +4218,19 @@
     "uid": "panic_blackout@1004"
    },
    {
-    "t": "burn",
-    "uid": "panic_tunnel@1006"
-   },
-   {
-    "t": "burn",
-    "uid": "steady@2"
-   },
-   {
-    "t": "burn",
-    "uid": "scalpel@1"
-   },
-   {
     "t": "creep",
-    "to": "spine_b"
-   },
-   {
-    "t": "move",
     "to": "spine_c"
    },
    {
-    "t": "endTurn"
-   },
-   {
-    "t": "creep",
+    "t": "move",
     "to": "bridge"
    },
    {
-    "t": "play",
-    "uid": "diagnostic@1"
+    "t": "endTurn"
    },
    {
-    "t": "endTurn"
+    "t": "burn",
+    "uid": "panic_shaking@1006"
    },
    {
     "t": "armScuttle"
@@ -3890,15 +4240,39 @@
    },
    {
     "t": "burn",
-    "uid": "panic_sweat@1007"
+    "uid": "panic_shaking@1007"
+   },
+   {
+    "t": "ventEnter"
+   },
+   {
+    "t": "endTurn"
    },
    {
     "t": "burn",
-    "uid": "panic_sweat@1009"
+    "uid": "panic_sweat@1008"
+   },
+   {
+    "t": "endTurn"
    },
    {
     "t": "burn",
-    "uid": "panic_sweat@1005"
+    "uid": "panic_blackout@1002"
+   },
+   {
+    "t": "ventExit",
+    "to": "shuttle_bay"
+   },
+   {
+    "t": "chargeShuttle",
+    "n": 6
+   },
+   {
+    "t": "play",
+    "uid": "diagnostic@2"
+   },
+   {
+    "t": "endTurn"
    },
    {
     "t": "burn",
@@ -3908,15 +4282,6 @@
     "t": "ventEnter"
    },
    {
-    "t": "endTurn"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
     "t": "ventExit",
     "to": "bridge"
    },
@@ -3924,15 +4289,30 @@
     "t": "endTurn"
    },
    {
+    "t": "burn",
+    "uid": "panic_sweat@1009"
+   },
+   {
     "t": "ventEnter"
    },
    {
     "t": "endTurn"
+   },
+   {
+    "t": "burn",
+    "uid": "panic_shaking@1012"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "burn",
+    "uid": "panic_shaking@1005"
    }
   ],
   "ending": "scuttle",
-  "score": 35,
-  "hash": "d80f50660f7851e2"
+  "score": 52,
+  "hash": "3175a2f7472e2e05"
  },
  {
   "seed": "golden-18",
@@ -4226,18 +4606,28 @@
     "uid": "course_correct@1"
    },
    {
+    "t": "listen"
+   },
+   {
     "t": "play",
     "uid": "hand_off@2",
     "to": "spine_a"
-   },
-   {
-    "t": "search"
    },
    {
     "t": "endTurn"
    },
    {
     "t": "search"
+   },
+   {
+    "t": "search"
+   },
+   {
+    "t": "play",
+    "uid": "checklist@1"
+   },
+   {
+    "t": "listen"
    },
    {
     "t": "endTurn"
@@ -4251,15 +4641,15 @@
     "to": "cryobay"
    },
    {
+    "t": "play",
+    "uid": "flight_jacket@1"
+   },
+   {
     "t": "endTurn"
    },
    {
-    "t": "burn",
-    "uid": "panic_sweat@1001"
-   },
-   {
     "t": "play",
-    "uid": "hand_off@2",
+    "uid": "hand_off@1",
     "to": "spine_a"
    },
    {
@@ -4271,7 +4661,7 @@
    },
    {
     "t": "burn",
-    "uid": "bail@1"
+    "uid": "nerve@1"
    },
    {
     "t": "ventEnter"
@@ -4281,49 +4671,7 @@
    },
    {
     "t": "burn",
-    "uid": "panic_sweat@1002"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "burn",
-    "uid": "panic_blackout@1004"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "burn",
-    "uid": "panic_tunnel@1005"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "burn",
-    "uid": "panic_tunnel@1003"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "burn",
-    "uid": "panic_sweat@1006"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "burn",
-    "uid": "hand_off@2"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "burn",
-    "uid": "panic_tunnel@1008"
+    "uid": "panic_tunnel@1002"
    },
    {
     "t": "ventExit",
@@ -4334,30 +4682,6 @@
     "n": 10
    },
    {
-    "t": "endTurn"
-   },
-   {
-    "t": "burn",
-    "uid": "panic_sweat@1010"
-   },
-   {
-    "t": "ventEnter"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "burn",
-    "uid": "panic_blackout@1011"
-   },
-   {
-    "t": "ventExit",
-    "to": "bridge"
-   },
-   {
-    "t": "search"
-   },
-   {
     "t": "play",
     "uid": "course_correct@1"
    },
@@ -4366,7 +4690,7 @@
    },
    {
     "t": "burn",
-    "uid": "panic_sweat@1007"
+    "uid": "panic_tunnel@1001"
    },
    {
     "t": "ventEnter"
@@ -4376,12 +4700,94 @@
    },
    {
     "t": "burn",
-    "uid": "panic_shaking@1013"
+    "uid": "panic_sweat@1004"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "burn",
+    "uid": "docking_clamp@1"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "burn",
+    "uid": "panic_blackout@1005"
+   },
+   {
+    "t": "ventExit",
+    "to": "shuttle_bay"
+   },
+   {
+    "t": "chargeShuttle",
+    "n": 9
+   },
+   {
+    "t": "listen"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "burn",
+    "uid": "panic_sweat@1003"
+   },
+   {
+    "t": "ventEnter"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "burn",
+    "uid": "panic_blackout@1008"
+   },
+   {
+    "t": "ventExit",
+    "to": "shuttle_bay"
+   },
+   {
+    "t": "chargeShuttle",
+    "n": 4
+   },
+   {
+    "t": "play",
+    "uid": "course_correct@2"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "burn",
+    "uid": "panic_blackout@1006"
+   },
+   {
+    "t": "ventEnter"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "burn",
+    "uid": "panic_blackout@1010"
+   },
+   {
+    "t": "ventExit",
+    "to": "shuttle_bay"
+   },
+   {
+    "t": "chargeShuttle",
+    "n": 5
+   },
+   {
+    "t": "launch"
    }
   ],
-  "ending": "lost",
-  "score": 18,
-  "hash": "013c3d6fed8501ff"
+  "ending": "carrier",
+  "score": 73,
+  "hash": "969b8c575a5a8d5c"
  },
  {
   "seed": "golden-20",
@@ -4430,6 +4836,13 @@
    {
     "t": "chargeShuttle",
     "n": 2
+   },
+   {
+    "t": "play",
+    "uid": "brace@2"
+   },
+   {
+    "t": "listen"
    },
    {
     "t": "endTurn"
@@ -4529,7 +4942,7 @@
   ],
   "ending": "clean_break",
   "score": 156,
-  "hash": "cafc2350329dd926"
+  "hash": "237dedf4614006e8"
  },
  {
   "seed": "golden-21",
@@ -5003,7 +5416,13 @@
   "bot": "greedy",
   "actions": [
    {
+    "t": "listen"
+   },
+   {
     "t": "endTurn"
+   },
+   {
+    "t": "listen"
    },
    {
     "t": "endTurn"
@@ -5013,10 +5432,19 @@
     "uid": "antiseptic@1"
    },
    {
-    "t": "endTurn"
+    "t": "listen"
    },
    {
     "t": "endTurn"
+   },
+   {
+    "t": "listen"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "listen"
    },
    {
     "t": "play",
@@ -5027,40 +5455,79 @@
     "t": "endTurn"
    },
    {
-    "t": "endTurn"
+    "t": "listen"
    },
    {
     "t": "endTurn"
    },
    {
-    "t": "endTurn"
+    "t": "listen"
    },
    {
     "t": "endTurn"
    },
    {
-    "t": "endTurn"
+    "t": "listen"
    },
    {
     "t": "endTurn"
    },
    {
-    "t": "endTurn"
+    "t": "listen"
    },
    {
     "t": "endTurn"
    },
    {
-    "t": "endTurn"
+    "t": "listen"
    },
    {
     "t": "endTurn"
    },
    {
-    "t": "endTurn"
+    "t": "listen"
    },
    {
     "t": "endTurn"
+   },
+   {
+    "t": "listen"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "listen"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "listen"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "listen"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "listen"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "listen"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "listen"
    },
    {
     "t": "endTurn"
@@ -5068,7 +5535,7 @@
   ],
   "ending": "lost",
   "score": 12,
-  "hash": "471b1d85983a5710"
+  "hash": "994c1f43d7c9963f"
  },
  {
   "seed": "golden-23",
@@ -5082,23 +5549,24 @@
     "to": "spine_a"
    },
    {
-    "t": "creep",
-    "to": "spine_b"
+    "t": "listen"
+   },
+   {
+    "t": "search"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "listen"
    },
    {
     "t": "endTurn"
    },
    {
     "t": "play",
-    "uid": "quick_step@1",
-    "to": "spine_c"
-   },
-   {
-    "t": "creep",
+    "uid": "rappel@1",
     "to": "shuttle_bay"
-   },
-   {
-    "t": "endTurn"
    },
    {
     "t": "chargeShuttle",
@@ -5112,7 +5580,19 @@
     "n": 2
    },
    {
+    "t": "listen"
+   },
+   {
     "t": "endTurn"
+   },
+   {
+    "t": "burn",
+    "uid": "quick_step@1"
+   },
+   {
+    "t": "play",
+    "uid": "cutting_bar@1",
+    "threat": "t2"
    },
    {
     "t": "chargeShuttle",
@@ -5126,7 +5606,103 @@
     "n": 2
    },
    {
+    "t": "play",
+    "uid": "steady_nerves@1"
+   },
+   {
+    "t": "listen"
+   },
+   {
     "t": "endTurn"
+   },
+   {
+    "t": "chargeShuttle",
+    "n": 2
+   },
+   {
+    "t": "listen"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "chargeShuttle",
+    "n": 2
+   },
+   {
+    "t": "listen"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "chargeShuttle",
+    "n": 2
+   },
+   {
+    "t": "listen"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "chargeShuttle",
+    "n": 2
+   },
+   {
+    "t": "listen"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "chargeShuttle",
+    "n": 2
+   },
+   {
+    "t": "listen"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "chargeShuttle",
+    "n": 2
+   },
+   {
+    "t": "listen"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "chargeShuttle",
+    "n": 2
+   },
+   {
+    "t": "listen"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "chargeShuttle",
+    "n": 2
+   },
+   {
+    "t": "listen"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "burn",
+    "uid": "sweep@2"
+   },
+   {
+    "t": "play",
+    "uid": "salv_sidearm@5",
+    "threat": "t5"
    },
    {
     "t": "chargeShuttle",
@@ -5140,60 +5716,7 @@
     "n": 2
    },
    {
-    "t": "endTurn"
-   },
-   {
-    "t": "chargeShuttle",
-    "n": 2
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "chargeShuttle",
-    "n": 2
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "chargeShuttle",
-    "n": 2
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "chargeShuttle",
-    "n": 2
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "chargeShuttle",
-    "n": 2
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "chargeShuttle",
-    "n": 2
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "chargeShuttle",
-    "n": 2
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "chargeShuttle",
-    "n": 2
+    "t": "listen"
    },
    {
     "t": "endTurn"
@@ -5207,8 +5730,8 @@
    }
   ],
   "ending": "clean_break",
-  "score": 155,
-  "hash": "d0f9b759cecb62b9"
+  "score": 165,
+  "hash": "9c0c5d4c597c39c8"
  },
  {
   "seed": "golden-24",
@@ -5597,6 +6120,9 @@
     "t": "search"
    },
    {
+    "t": "listen"
+   },
+   {
     "t": "play",
     "uid": "reroute@1",
     "to": "spine_a"
@@ -5609,8 +6135,7 @@
     "uid": "bypass@2"
    },
    {
-    "t": "creep",
-    "to": "spine_b"
+    "t": "listen"
    },
    {
     "t": "endTurn"
@@ -5622,11 +6147,11 @@
    {
     "t": "play",
     "uid": "reroute@2",
-    "to": "spine_c"
+    "to": "spine_b"
    },
    {
     "t": "creep",
-    "to": "shuttle_bay"
+    "to": "spine_c"
    },
    {
     "t": "endTurn"
@@ -5634,6 +6159,11 @@
    {
     "t": "burn",
     "uid": "panic_tunnel@1001"
+   },
+   {
+    "t": "play",
+    "uid": "reroute@1",
+    "to": "shuttle_bay"
    },
    {
     "t": "chargeShuttle",
@@ -5661,7 +6191,7 @@
    },
    {
     "t": "burn",
-    "uid": "reroute@1"
+    "uid": "brace@2"
    },
    {
     "t": "endTurn"
@@ -5775,7 +6305,7 @@
    },
    {
     "t": "burn",
-    "uid": "brace@2"
+    "uid": "reroute@1"
    },
    {
     "t": "endTurn"
@@ -5798,7 +6328,7 @@
   ],
   "ending": "carrier",
   "score": 86,
-  "hash": "fd08cf12a8ab8677"
+  "hash": "9b1954aadc3ccafc"
  },
  {
   "seed": "golden-26",
@@ -5817,10 +6347,16 @@
     "t": "endTurn"
    },
    {
+    "t": "listen"
+   },
+   {
     "t": "search"
    },
    {
     "t": "endTurn"
+   },
+   {
+    "t": "listen"
    },
    {
     "t": "play",
@@ -5831,19 +6367,51 @@
     "t": "endTurn"
    },
    {
+    "t": "listen"
+   },
+   {
+    "t": "play",
+    "uid": "hold_the_line@2"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "play",
+    "uid": "service_pistol@1",
+    "threat": "t2"
+   },
+   {
+    "t": "listen"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "listen"
+   },
+   {
     "t": "endTurn"
    },
    {
     "t": "burn",
-    "uid": "last_stand@1"
+    "uid": "service_pistol@2"
    },
    {
     "t": "play",
-    "uid": "salv_sidearm@5",
-    "threat": "t2"
+    "uid": "advance@1",
+    "to": "spine_a"
+   },
+   {
+    "t": "creep",
+    "to": "spine_b"
    },
    {
     "t": "endTurn"
+   },
+   {
+    "t": "creep",
+    "to": "spine_c"
    },
    {
     "t": "play",
@@ -5853,25 +6421,7 @@
     "t": "endTurn"
    },
    {
-    "t": "burn",
-    "uid": "advance@1"
-   },
-   {
     "t": "creep",
-    "to": "spine_a"
-   },
-   {
-    "t": "move",
-    "to": "medbay"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "ventEnter"
-   },
-   {
-    "t": "ventExit",
     "to": "shuttle_bay"
    },
    {
@@ -5889,6 +6439,19 @@
     "n": 5
    },
    {
+    "t": "listen"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "chargeShuttle",
+    "n": 2
+   },
+   {
+    "t": "listen"
+   },
+   {
     "t": "endTurn"
    },
    {
@@ -5905,21 +6468,10 @@
     "t": "endTurn"
    },
    {
-    "t": "ventExit",
-    "to": "medbay"
-   },
-   {
-    "t": "search"
-   },
-   {
-    "t": "carryScan",
-    "index": 0
-   },
-   {
     "t": "endTurn"
    },
    {
-    "t": "ventEnter"
+    "t": "endTurn"
    },
    {
     "t": "ventExit",
@@ -5927,7 +6479,10 @@
    },
    {
     "t": "chargeShuttle",
-    "n": 9
+    "n": 8
+   },
+   {
+    "t": "listen"
    },
    {
     "t": "endTurn"
@@ -5937,40 +6492,42 @@
     "n": 2
    },
    {
-    "t": "endTurn"
-   },
-   {
-    "t": "burn",
-    "uid": "panic_tunnel@1002"
-   },
-   {
-    "t": "burn",
-    "uid": "salv_sidearm@5"
-   },
-   {
-    "t": "ventEnter"
+    "t": "listen"
    },
    {
     "t": "endTurn"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "ventExit",
-    "to": "shuttle_bay"
    },
    {
     "t": "chargeShuttle",
-    "n": 6
+    "n": 2
+   },
+   {
+    "t": "listen"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "chargeShuttle",
+    "n": 2
+   },
+   {
+    "t": "listen"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "chargeShuttle",
+    "n": 1
    },
    {
     "t": "launch"
    }
   ],
   "ending": "clean_break",
-  "score": 182,
-  "hash": "2c591e113a47ef38"
+  "score": 188,
+  "hash": "8fe3ca99aa1204d6"
  },
  {
   "seed": "golden-27",
@@ -6286,52 +6843,103 @@
     "uid": "sweep@1"
    },
    {
-    "t": "endTurn"
+    "t": "listen"
    },
    {
     "t": "endTurn"
    },
    {
-    "t": "endTurn"
+    "t": "listen"
    },
    {
     "t": "endTurn"
    },
    {
-    "t": "endTurn"
+    "t": "listen"
    },
    {
     "t": "endTurn"
    },
    {
-    "t": "endTurn"
+    "t": "listen"
    },
    {
     "t": "endTurn"
    },
    {
-    "t": "endTurn"
+    "t": "listen"
    },
    {
     "t": "endTurn"
    },
    {
-    "t": "endTurn"
+    "t": "listen"
    },
    {
     "t": "endTurn"
    },
    {
-    "t": "endTurn"
+    "t": "listen"
    },
    {
     "t": "endTurn"
    },
    {
-    "t": "endTurn"
+    "t": "listen"
    },
    {
     "t": "endTurn"
+   },
+   {
+    "t": "listen"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "listen"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "listen"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "listen"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "listen"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "listen"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "listen"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "listen"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "listen"
    },
    {
     "t": "endTurn"
@@ -6339,7 +6947,7 @@
   ],
   "ending": "lost",
   "score": 13,
-  "hash": "c9518b3065f103b2"
+  "hash": "b3c96b51fc5a8234"
  },
  {
   "seed": "golden-29",
@@ -6352,15 +6960,10 @@
     "to": "spine_a"
    },
    {
+    "t": "listen"
+   },
+   {
     "t": "endTurn"
-   },
-   {
-    "t": "play",
-    "uid": "course_correct@1"
-   },
-   {
-    "t": "play",
-    "uid": "course_correct@2"
    },
    {
     "t": "play",
@@ -6372,20 +6975,31 @@
     "to": "spine_b"
    },
    {
+    "t": "search"
+   },
+   {
+    "t": "play",
+    "uid": "hand_off@2",
+    "to": "spine_c"
+   },
+   {
     "t": "endTurn"
    },
    {
     "t": "burn",
-    "uid": "hand_off@2"
+    "uid": "course_correct@1"
    },
    {
     "t": "play",
-    "uid": "bail@1",
-    "to": "spine_a"
+    "uid": "hand_off@1",
+    "to": "shuttle_bay"
    },
    {
-    "t": "creep",
-    "to": "medbay"
+    "t": "chargeShuttle",
+    "n": 8
+   },
+   {
+    "t": "ventEnter"
    },
    {
     "t": "endTurn"
@@ -6393,9 +7007,6 @@
    {
     "t": "burn",
     "uid": "panic_sweat@1001"
-   },
-   {
-    "t": "ventEnter"
    },
    {
     "t": "endTurn"
@@ -6416,7 +7027,7 @@
    },
    {
     "t": "burn",
-    "uid": "panic_sweat@1004"
+    "uid": "panic_shaking@1004"
    },
    {
     "t": "endTurn"
@@ -6424,6 +7035,20 @@
    {
     "t": "burn",
     "uid": "panic_blackout@1005"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "burn",
+    "uid": "panic_tunnel@1006"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "burn",
+    "uid": "panic_tunnel@1007"
    },
    {
     "t": "ventExit",
@@ -6435,14 +7060,18 @@
    },
    {
     "t": "play",
-    "uid": "course_correct@1"
+    "uid": "checklist@1"
+   },
+   {
+    "t": "play",
+    "uid": "course_correct@2"
    },
    {
     "t": "endTurn"
    },
    {
     "t": "burn",
-    "uid": "panic_blackout@1006"
+    "uid": "hand_off@2"
    },
    {
     "t": "ventEnter"
@@ -6452,7 +7081,7 @@
    },
    {
     "t": "burn",
-    "uid": "panic_shaking@1007"
+    "uid": "panic_shaking@1009"
    },
    {
     "t": "ventExit",
@@ -6464,79 +7093,44 @@
    },
    {
     "t": "play",
-    "uid": "course_correct@2"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "burn",
-    "uid": "nerve@2"
-   },
-   {
-    "t": "ventEnter"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "burn",
-    "uid": "panic_tunnel@1009"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "burn",
-    "uid": "panic_tunnel@1010"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "burn",
-    "uid": "panic_tunnel@1011"
-   },
-   {
-    "t": "ventExit",
-    "to": "bridge"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "burn",
-    "uid": "panic_shaking@1012"
-   },
-   {
-    "t": "armScuttle"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "burn",
-    "uid": "panic_sweat@1013"
-   },
-   {
-    "t": "burn",
-    "uid": "punch_it@1"
-   },
-   {
-    "t": "burn",
-    "uid": "hand_off@1"
-   },
-   {
-    "t": "burn",
-    "uid": "course_correct@1"
-   },
-   {
-    "t": "burn",
     "uid": "checklist@1"
+   },
+   {
+    "t": "chargeShuttle",
+    "n": 1
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "burn",
+    "uid": "panic_shaking@1010"
+   },
+   {
+    "t": "play",
+    "uid": "sidearm@1",
+    "threat": "t1"
+   },
+   {
+    "t": "chargeShuttle",
+    "n": 2
+   },
+   {
+    "t": "listen"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "chargeShuttle",
+    "n": 1
+   },
+   {
+    "t": "launch"
    }
   ],
-  "ending": "lost",
-  "score": 17,
-  "hash": "f3c9126250a7a93d"
+  "ending": "carrier",
+  "score": 78,
+  "hash": "f106e5b0d7671ca8"
  }
 ]

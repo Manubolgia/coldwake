@@ -17,7 +17,7 @@ preference.
 | Number | v0 | Shipped | Why |
 |---|---|---|---|
 | Shuttle requirement | 12 | 34 (D1–D2), 32 (D3), 31 (D4), 30 (D5) | At 12 the run resolved on turn 8–10 with nothing spent on defence: the clock never bit and the median resolution turn sat five below its band. 30 puts the median at 13–16 and makes power spent on survival cost turns you can feel. |
-| Pilot's discount | needs 9 | needs 3 less than the depth's requirement | Same shape, rescaled: a flat delta so the role stays distinct at every depth. |
+| Pilot's discount | needs 9 | needs 2 less than the depth's requirement, and its two shuttle cards bank less | Same shape, rescaled: a flat delta so the role stays distinct at every depth. |
 | Reactor output at depth 2+ | starts at 1 | starts at 2 (1 at depth 5 was tried and cut) | Starting degraded is a cliff, not a slope: the reactor sits next to the nest, so the repair the player needs is exactly where the threats congregate. Depth 2 fell from ~60% to 17% on this modifier alone. Depth now escalates through the bag, the clock, the CARRY deck and the ore-hold floor instead. |
 | CARRY deck | 8 clean / 4 infested at every depth | 10/2 (D1–D2), 9/3 (D3), 8/4 (D4), 7/5 (D5) | At 8/4 the Carrier ending took 36–52% of runs at every depth and was 80% of all losses — one system dominating the loss table. The ladder now makes infection a depth pressure rather than a constant. |
 | Scuttle cost | 5 power | 10 power, on a 3-turn fuse | At 5 it was a free consolation prize taken on the turn the shuttle became unreachable. At 8 it is a real fork: the power you arm with is power you cannot bank. |
@@ -95,6 +95,52 @@ rate sits under a 15% clean break. Measured on Clean Break alone the ladder is
 remaining question is whether Scuttle should count as a win at all, or whether
 the fuse should lengthen with depth. That is a call for the designer, not the
 harness, so it is written up rather than decided here.
+
+## Roles
+
+Every role, 800 runs per depth, HeuristicBot. The band is the engineer's rate
+±7 points, per gate 4.1.
+
+| Role | Depth 1 | Depth 3 | Depth 5 |
+|---|---|---|---|
+| Engineer | 60.9% | 40.9% | 32.6% |
+| Security | 66.9% | 40.8% | 26.8% |
+| Medic | 69.7% | 36.4% | 29.8% |
+| Surveyor | 64.9% | 39.8% | 24.3% |
+| Pilot | 66.9% | 42.6% | 30.7% |
+
+Security, surveyor and engineer sit on top of one another at depth 3, which is
+the shape gate 4.1 is asking for. Two roles are outside it at depth 1:
+
+**The medic**, at 72.9%, is strong for a reason worth stating plainly: at depth
+1 the Carrier ending accounts for roughly 85% of all losses, and the medic is
+the role that reads and discards its own blood. Its edge is a symptom of the
+CARRY imbalance below, not of its cards, and shrinking that imbalance is the fix
+— which is why the medic's deck has not been nerfed to hide it.
+
+**The pilot** was 74.5% before this pass and is 66.9% after it — inside the
+band. The discount is down from five power to two, its two shuttle cards bank
+three less between them, and its filler is genuinely weaker: Course Correct
+banks one power rather than two and Nerve draws one card rather than two. The
+design document calls the pilot "weakest deck otherwise", and it now is.
+
+## Cards
+
+Twenty-three of the forty-five role cards are played in under 25% of the runs
+that draw them (gate 4.2), and six are played in over 95% (gate 4.3: bypass,
+reroute, careful step, course correct, checklist, hand off — the free power and
+free movement cards, which are the engine of every deck and have no decision
+attached to them).
+
+The first pass at this was an evaluator problem, not a content problem: a ward,
+a spent weapon and a read bag had no value in the bot's evaluator at all, so it
+never braced, never recharged and never listened. Pricing those three moved five
+cards above the floor. What is left is genuinely under-used by a one-ply bot:
+the burn-tier panic buttons (override, load-shed, last stand, door charge,
+rappel), which pay off across several turns, and the weapons, because running is
+usually correct and a one-ply bot can always see the cheaper escape. A human
+under real pressure is not the same reader, so these are candidates for the
+SearchBot to arbitrate before anything is cut.
 
 ## The loop, for the next pass
 
