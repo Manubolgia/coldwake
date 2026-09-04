@@ -15,9 +15,15 @@ export default defineConfig({
       : {},
   },
   webServer: {
-    command: 'npm run preview -- --port 4173 --strictPort',
+    // Bind the loopback address explicitly. Left to itself Vite listens on
+    // "localhost", and on a runner whose hosts file has an IPv6 loopback that
+    // resolves to ::1 first — so the server comes up on [::1] while Playwright
+    // waits on 127.0.0.1 until it gives up.
+    command: 'npm run preview -- --port 4173 --strictPort --host 127.0.0.1',
     url: 'http://127.0.0.1:4173/coldwake/',
-    reuseExistingServer: true,
-    timeout: 150_000,
+    reuseExistingServer: !process.env.CI,
+    timeout: 90_000,
+    stdout: 'pipe',
+    stderr: 'pipe',
   },
 });
