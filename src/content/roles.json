@@ -1,0 +1,55 @@
+{
+  "roles": [
+    {
+      "id": "engineer",
+      "name": "ENGINEER",
+      "strength": "Repairs and power efficiency.",
+      "weakness": "Poor in a fight.",
+      "unlock": {
+        "type": "start"
+      }
+    },
+    {
+      "id": "security",
+      "name": "SECURITY",
+      "strength": "Weapons and wound tolerance.",
+      "weakness": "Loud. No technical options.",
+      "unlock": {
+        "type": "start"
+      }
+    },
+    {
+      "id": "medic",
+      "name": "MEDIC",
+      "strength": "CARRY control and wound mitigation.",
+      "weakness": "Slow. Low damage.",
+      "unlock": {
+        "type": "win",
+        "label": "Win any run."
+      }
+    },
+    {
+      "id": "surveyor",
+      "name": "SURVEYOR",
+      "strength": "Movement, vents, searching.",
+      "weakness": "Fragile deck.",
+      "unlock": {
+        "type": "depth",
+        "depth": 3,
+        "label": "Reach depth 3."
+      }
+    },
+    {
+      "id": "pilot",
+      "name": "PILOT",
+      "strength": "Shuttle efficiency. Launches on two less power.",
+      "weakness": "Weakest deck otherwise.",
+      "unlock": {
+        "type": "ending",
+        "ending": "clean_break",
+        "label": "Achieve a Clean Break."
+      },
+      "shuttleRequired": 32
+    }
+  ]
+}

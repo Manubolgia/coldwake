@@ -1,0 +1,841 @@
+{
+  "cards": [
+    {
+      "id": "bypass",
+      "name": "BYPASS",
+      "role": "engineer",
+      "copies": 2,
+      "ap": 1,
+      "noise": 1,
+      "burn": false,
+      "text": "Shunt reserve cells. Gain 2 power.",
+      "effect": {
+        "op": "gainPower",
+        "n": 2
+      }
+    },
+    {
+      "id": "brace",
+      "name": "BRACE",
+      "role": "engineer",
+      "copies": 2,
+      "ap": 1,
+      "noise": 0,
+      "burn": false,
+      "text": "Set yourself. Prevent the next wound this turn.",
+      "effect": {
+        "op": "preventWound",
+        "duration": "turn"
+      }
+    },
+    {
+      "id": "cutting_torch",
+      "name": "CUTTING TORCH",
+      "role": "engineer",
+      "copies": 1,
+      "ap": 2,
+      "noise": 3,
+      "burn": false,
+      "weapon": true,
+      "bonus": 2,
+      "text": "Cut it open. Weapon, +2.",
+      "effect": {
+        "op": "attack",
+        "bonus": 2
+      }
+    },
+    {
+      "id": "hardline",
+      "name": "HARDLINE",
+      "role": "engineer",
+      "copies": 1,
+      "ap": 1,
+      "noise": 2,
+      "burn": false,
+      "requires": {
+        "node": "reactor"
+      },
+      "text": "Bridge the bus. Reactor output +1.",
+      "effect": {
+        "op": "reactorOutput",
+        "n": 1
+      }
+    },
+    {
+      "id": "reroute",
+      "name": "REROUTE",
+      "role": "engineer",
+      "copies": 2,
+      "ap": 1,
+      "noise": 1,
+      "burn": false,
+      "text": "Take the maintenance run. Move one node.",
+      "effect": {
+        "op": "move",
+        "silent": true
+      }
+    },
+    {
+      "id": "override",
+      "name": "OVERRIDE",
+      "role": "engineer",
+      "copies": 1,
+      "ap": 2,
+      "noise": 2,
+      "burn": true,
+      "text": "Drop a door anywhere on the ship for three turns.",
+      "effect": {
+        "op": "sealEdge",
+        "turns": 3,
+        "anywhere": true
+      }
+    },
+    {
+      "id": "field_repair",
+      "name": "FIELD REPAIR",
+      "role": "engineer",
+      "copies": 1,
+      "ap": 1,
+      "noise": 1,
+      "burn": false,
+      "text": "Restore one spent weapon.",
+      "effect": {
+        "op": "recharge"
+      }
+    },
+    {
+      "id": "steady_hands",
+      "name": "STEADY HANDS",
+      "role": "engineer",
+      "copies": 1,
+      "ap": 0,
+      "noise": 0,
+      "burn": false,
+      "text": "Work the problem. Draw 2 cards.",
+      "effect": {
+        "op": "draw",
+        "n": 2
+      }
+    },
+    {
+      "id": "load_shed",
+      "name": "LOAD-SHED",
+      "role": "engineer",
+      "copies": 1,
+      "ap": 2,
+      "noise": 0,
+      "burn": true,
+      "text": "Kill every non-essential circuit. All noise to zero.",
+      "effect": {
+        "op": "setNoise",
+        "scope": "all",
+        "n": 0
+      }
+    },
+    {
+      "id": "breaching_gun",
+      "name": "BREACHING GUN",
+      "role": "security",
+      "copies": 1,
+      "ap": 2,
+      "noise": 4,
+      "burn": false,
+      "weapon": true,
+      "bonus": 3,
+      "text": "It is very loud. Weapon, +3.",
+      "effect": {
+        "op": "attack",
+        "bonus": 3
+      }
+    },
+    {
+      "id": "service_pistol",
+      "name": "SERVICE PISTOL",
+      "role": "security",
+      "copies": 2,
+      "ap": 1,
+      "noise": 3,
+      "burn": false,
+      "weapon": true,
+      "bonus": 1,
+      "text": "Standard issue. Weapon, +1.",
+      "effect": {
+        "op": "attack",
+        "bonus": 1
+      }
+    },
+    {
+      "id": "hold_the_line",
+      "name": "HOLD THE LINE",
+      "role": "security",
+      "copies": 2,
+      "ap": 1,
+      "noise": 1,
+      "burn": false,
+      "text": "Brace the door. Prevent the next wound this turn.",
+      "effect": {
+        "op": "preventWound",
+        "duration": "turn"
+      }
+    },
+    {
+      "id": "suppress",
+      "name": "SUPPRESS",
+      "role": "security",
+      "copies": 2,
+      "ap": 1,
+      "noise": 2,
+      "burn": false,
+      "requires": {
+        "threatHere": true
+      },
+      "text": "Drive one threat out of this node.",
+      "effect": {
+        "op": "pushThreat"
+      }
+    },
+    {
+      "id": "adrenaline",
+      "name": "ADRENALINE",
+      "role": "security",
+      "copies": 1,
+      "ap": 0,
+      "noise": 1,
+      "burn": false,
+      "text": "Gain 1 action point.",
+      "effect": {
+        "op": "gainAp",
+        "n": 1
+      }
+    },
+    {
+      "id": "door_charge",
+      "name": "DOOR CHARGE",
+      "role": "security",
+      "copies": 1,
+      "ap": 1,
+      "noise": 3,
+      "burn": true,
+      "text": "Blow a hatch. Seal one edge from here for three turns.",
+      "effect": {
+        "op": "sealEdge",
+        "turns": 3,
+        "anywhere": false
+      }
+    },
+    {
+      "id": "field_dressing",
+      "name": "FIELD DRESSING",
+      "role": "security",
+      "copies": 1,
+      "ap": 1,
+      "noise": 0,
+      "burn": false,
+      "text": "Breathe. Remove one panic from your deck.",
+      "effect": {
+        "op": "removePanic",
+        "n": 1
+      }
+    },
+    {
+      "id": "last_stand",
+      "name": "LAST STAND",
+      "role": "security",
+      "copies": 1,
+      "ap": 2,
+      "noise": 4,
+      "burn": true,
+      "requires": {
+        "threatHere": true
+      },
+      "text": "Kill one threat here. No roll.",
+      "effect": {
+        "op": "execute"
+      }
+    },
+    {
+      "id": "advance",
+      "name": "ADVANCE",
+      "role": "security",
+      "copies": 1,
+      "ap": 1,
+      "noise": 1,
+      "burn": false,
+      "text": "Move one node.",
+      "effect": {
+        "op": "move",
+        "silent": true
+      }
+    },
+    {
+      "id": "triage",
+      "name": "TRIAGE",
+      "role": "medic",
+      "copies": 2,
+      "ap": 1,
+      "noise": 0,
+      "burn": false,
+      "text": "Remove one panic from your deck.",
+      "effect": {
+        "op": "removePanic",
+        "n": 1
+      }
+    },
+    {
+      "id": "diagnostic",
+      "name": "DIAGNOSTIC",
+      "role": "medic",
+      "copies": 2,
+      "ap": 1,
+      "noise": 1,
+      "burn": false,
+      "text": "Read your own blood. Reveal one CARRY card.",
+      "effect": {
+        "op": "revealCarry",
+        "n": 1
+      }
+    },
+    {
+      "id": "antiseptic",
+      "name": "ANTISEPTIC",
+      "role": "medic",
+      "copies": 1,
+      "ap": 2,
+      "noise": 1,
+      "burn": true,
+      "text": "Discard one unrevealed CARRY card. No wound.",
+      "effect": {
+        "op": "discardCarry",
+        "n": 1
+      }
+    },
+    {
+      "id": "scalpel",
+      "name": "SCALPEL",
+      "role": "medic",
+      "copies": 1,
+      "ap": 1,
+      "noise": 2,
+      "burn": false,
+      "weapon": true,
+      "bonus": 0,
+      "text": "Close work. Weapon, +0.",
+      "effect": {
+        "op": "attack",
+        "bonus": 0
+      }
+    },
+    {
+      "id": "steady",
+      "name": "STEADY",
+      "role": "medic",
+      "copies": 2,
+      "ap": 1,
+      "noise": 0,
+      "burn": false,
+      "text": "Prevent the next wound this turn.",
+      "effect": {
+        "op": "preventWound",
+        "duration": "turn"
+      }
+    },
+    {
+      "id": "stimulant",
+      "name": "STIMULANT",
+      "role": "medic",
+      "copies": 1,
+      "ap": 0,
+      "noise": 0,
+      "burn": false,
+      "text": "Draw 2 cards.",
+      "effect": {
+        "op": "draw",
+        "n": 2
+      }
+    },
+    {
+      "id": "quarantine",
+      "name": "QUARANTINE",
+      "role": "medic",
+      "copies": 1,
+      "ap": 2,
+      "noise": 1,
+      "burn": true,
+      "text": "Seal one edge from here for three turns.",
+      "effect": {
+        "op": "sealEdge",
+        "turns": 3,
+        "anywhere": false
+      }
+    },
+    {
+      "id": "careful_step",
+      "name": "CAREFUL STEP",
+      "role": "medic",
+      "copies": 1,
+      "ap": 1,
+      "noise": 0,
+      "burn": false,
+      "text": "Move one node in silence.",
+      "effect": {
+        "op": "move",
+        "silent": true
+      }
+    },
+    {
+      "id": "sample",
+      "name": "SAMPLE",
+      "role": "medic",
+      "copies": 1,
+      "ap": 1,
+      "noise": 1,
+      "burn": false,
+      "text": "Reveal one CARRY card. Draw 1.",
+      "effect": {
+        "op": "sequence",
+        "steps": [
+          {
+            "op": "revealCarry",
+            "n": 1
+          },
+          {
+            "op": "draw",
+            "n": 1
+          }
+        ]
+      }
+    },
+    {
+      "id": "vent_crawl",
+      "name": "VENT CRAWL",
+      "role": "surveyor",
+      "copies": 2,
+      "ap": 1,
+      "noise": 0,
+      "burn": false,
+      "requires": {
+        "ventAccess": true
+      },
+      "text": "Into the crawlspace.",
+      "effect": {
+        "op": "ventEnter"
+      }
+    },
+    {
+      "id": "sweep",
+      "name": "SWEEP",
+      "role": "surveyor",
+      "copies": 2,
+      "ap": 1,
+      "noise": 0,
+      "burn": false,
+      "requires": {
+        "unsearched": true
+      },
+      "text": "Search this node without a sound.",
+      "effect": {
+        "op": "search"
+      }
+    },
+    {
+      "id": "quick_step",
+      "name": "QUICK STEP",
+      "role": "surveyor",
+      "copies": 2,
+      "ap": 1,
+      "noise": 0,
+      "burn": false,
+      "text": "Move one node in silence.",
+      "effect": {
+        "op": "move",
+        "silent": true
+      }
+    },
+    {
+      "id": "mapping_kit",
+      "name": "MAPPING KIT",
+      "role": "surveyor",
+      "copies": 1,
+      "ap": 1,
+      "noise": 0,
+      "burn": false,
+      "text": "Count what is left in the bag.",
+      "effect": {
+        "op": "listen"
+      }
+    },
+    {
+      "id": "flare",
+      "name": "FLARE",
+      "role": "surveyor",
+      "copies": 1,
+      "ap": 1,
+      "noise": 0,
+      "burn": false,
+      "text": "Throw it. Add 3 noise to another node.",
+      "effect": {
+        "op": "addNoise",
+        "scope": "target",
+        "n": 3
+      }
+    },
+    {
+      "id": "cutting_bar",
+      "name": "CUTTING BAR",
+      "role": "surveyor",
+      "copies": 1,
+      "ap": 2,
+      "noise": 3,
+      "burn": false,
+      "weapon": true,
+      "bonus": 1,
+      "text": "Salvage tool. Weapon, +1.",
+      "effect": {
+        "op": "attack",
+        "bonus": 1
+      }
+    },
+    {
+      "id": "rappel",
+      "name": "RAPPEL",
+      "role": "surveyor",
+      "copies": 1,
+      "ap": 2,
+      "noise": 0,
+      "burn": true,
+      "text": "Drop straight to any vent access. Nothing hears you.",
+      "effect": {
+        "op": "ventJump"
+      }
+    },
+    {
+      "id": "scavenge",
+      "name": "SCAVENGE",
+      "role": "surveyor",
+      "copies": 1,
+      "ap": 1,
+      "noise": 1,
+      "burn": false,
+      "text": "Draw 2 cards.",
+      "effect": {
+        "op": "draw",
+        "n": 2
+      }
+    },
+    {
+      "id": "steady_nerves",
+      "name": "STEADY NERVES",
+      "role": "surveyor",
+      "copies": 1,
+      "ap": 1,
+      "noise": 0,
+      "burn": false,
+      "text": "Prevent the next wound this turn.",
+      "effect": {
+        "op": "preventWound",
+        "duration": "turn"
+      }
+    },
+    {
+      "id": "course_correct",
+      "name": "COURSE CORRECT",
+      "role": "pilot",
+      "copies": 2,
+      "ap": 1,
+      "noise": 1,
+      "burn": false,
+      "text": "Trim the load. Gain 1 power.",
+      "effect": {
+        "op": "gainPower",
+        "n": 1
+      }
+    },
+    {
+      "id": "hand_off",
+      "name": "HAND OFF",
+      "role": "pilot",
+      "copies": 2,
+      "ap": 1,
+      "noise": 0,
+      "burn": false,
+      "text": "Move one node in silence.",
+      "effect": {
+        "op": "move",
+        "silent": true
+      }
+    },
+    {
+      "id": "flight_jacket",
+      "name": "FLIGHT JACKET",
+      "role": "pilot",
+      "copies": 1,
+      "ap": 1,
+      "noise": 0,
+      "burn": false,
+      "text": "Prevent the next wound this turn.",
+      "effect": {
+        "op": "preventWound",
+        "duration": "turn"
+      }
+    },
+    {
+      "id": "sidearm",
+      "name": "SIDEARM",
+      "role": "pilot",
+      "copies": 1,
+      "ap": 1,
+      "noise": 2,
+      "burn": false,
+      "weapon": true,
+      "bonus": 1,
+      "text": "Weapon, +1.",
+      "effect": {
+        "op": "attack",
+        "bonus": 1
+      }
+    },
+    {
+      "id": "docking_clamp",
+      "name": "DOCKING CLAMP",
+      "role": "pilot",
+      "copies": 1,
+      "ap": 1,
+      "noise": 1,
+      "burn": false,
+      "requires": {
+        "node": "shuttle_bay"
+      },
+      "text": "Bank 2 power into the shuttle.",
+      "effect": {
+        "op": "chargeShuttle",
+        "n": 2
+      }
+    },
+    {
+      "id": "nerve",
+      "name": "NERVE",
+      "role": "pilot",
+      "copies": 2,
+      "ap": 0,
+      "noise": 0,
+      "burn": false,
+      "text": "Draw a card.",
+      "effect": {
+        "op": "draw",
+        "n": 1
+      }
+    },
+    {
+      "id": "punch_it",
+      "name": "PUNCH IT",
+      "role": "pilot",
+      "copies": 1,
+      "ap": 2,
+      "noise": 2,
+      "burn": true,
+      "requires": {
+        "node": "shuttle_bay"
+      },
+      "text": "Bank 3 power into the shuttle.",
+      "effect": {
+        "op": "chargeShuttle",
+        "n": 3
+      }
+    },
+    {
+      "id": "bail",
+      "name": "BAIL",
+      "role": "pilot",
+      "copies": 1,
+      "ap": 1,
+      "noise": 0,
+      "burn": true,
+      "text": "Move one node and kill the noise behind you.",
+      "effect": {
+        "op": "sequence",
+        "steps": [
+          {
+            "op": "move",
+            "silent": true
+          },
+          {
+            "op": "setNoise",
+            "scope": "here",
+            "n": 0
+          }
+        ]
+      }
+    },
+    {
+      "id": "checklist",
+      "name": "CHECKLIST",
+      "role": "pilot",
+      "copies": 1,
+      "ap": 0,
+      "noise": 0,
+      "burn": false,
+      "text": "Draw 1. Gain 1 power.",
+      "effect": {
+        "op": "sequence",
+        "steps": [
+          {
+            "op": "draw",
+            "n": 1
+          },
+          {
+            "op": "gainPower",
+            "n": 1
+          }
+        ]
+      }
+    },
+    {
+      "id": "panic_shaking",
+      "name": "SHAKING",
+      "role": "panic",
+      "copies": 0,
+      "ap": 1,
+      "noise": 0,
+      "burn": false,
+      "text": "Your hands will not hold still.",
+      "effect": {
+        "op": "none"
+      }
+    },
+    {
+      "id": "panic_tunnel",
+      "name": "TUNNEL VISION",
+      "role": "panic",
+      "copies": 0,
+      "ap": 1,
+      "noise": 0,
+      "burn": false,
+      "text": "While held, LISTEN costs 2 AP.",
+      "effect": {
+        "op": "none"
+      }
+    },
+    {
+      "id": "panic_sweat",
+      "name": "COLD SWEAT",
+      "role": "panic",
+      "copies": 0,
+      "ap": 1,
+      "noise": 0,
+      "burn": false,
+      "text": "While held, everything you do is 1 louder.",
+      "effect": {
+        "op": "none"
+      }
+    },
+    {
+      "id": "panic_blackout",
+      "name": "BLACKOUT",
+      "role": "panic",
+      "copies": 0,
+      "ap": 1,
+      "noise": 0,
+      "burn": false,
+      "text": "When drawn, add 1 noise here.",
+      "effect": {
+        "op": "none"
+      }
+    },
+    {
+      "id": "salv_cell",
+      "name": "POWER CELLS",
+      "role": "salvage",
+      "copies": 0,
+      "ap": 0,
+      "noise": 0,
+      "burn": true,
+      "text": "Gain 3 power.",
+      "effect": {
+        "op": "gainPower",
+        "n": 3
+      }
+    },
+    {
+      "id": "salv_sidearm",
+      "name": "SALVAGED SIDEARM",
+      "role": "salvage",
+      "copies": 0,
+      "ap": 1,
+      "noise": 2,
+      "burn": false,
+      "weapon": true,
+      "bonus": 1,
+      "text": "Weapon, +1.",
+      "effect": {
+        "op": "attack",
+        "bonus": 1
+      }
+    },
+    {
+      "id": "salv_stim",
+      "name": "STIMULANT AMPOULE",
+      "role": "salvage",
+      "copies": 0,
+      "ap": 1,
+      "noise": 0,
+      "burn": true,
+      "text": "Remove one panic from your deck.",
+      "effect": {
+        "op": "removePanic",
+        "n": 1
+      }
+    },
+    {
+      "id": "salv_corpse",
+      "name": "SEALED CORPSE",
+      "role": "salvage",
+      "copies": 0,
+      "ap": 0,
+      "noise": 0,
+      "burn": true,
+      "text": "Strip the suit. Gain 4 power. Draw a CARRY card.",
+      "effect": {
+        "op": "sequence",
+        "steps": [
+          {
+            "op": "gainPower",
+            "n": 4
+          },
+          {
+            "op": "drawCarry",
+            "n": 1
+          }
+        ]
+      }
+    },
+    {
+      "id": "salv_jam",
+      "name": "JAMMED DOOR",
+      "role": "salvage",
+      "copies": 0,
+      "ap": 0,
+      "noise": 0,
+      "burn": true,
+      "text": "It will not stay shut. Add 2 noise here.",
+      "effect": {
+        "op": "addNoise",
+        "scope": "here",
+        "n": 2
+      }
+    },
+    {
+      "id": "salv_log",
+      "name": "PERSONAL LOG",
+      "role": "salvage",
+      "copies": 0,
+      "ap": 0,
+      "noise": 0,
+      "burn": true,
+      "text": "Somebody's last entry. Score +5.",
+      "effect": {
+        "op": "score",
+        "n": 5
+      }
+    }
+  ]
+}

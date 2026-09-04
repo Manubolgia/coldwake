@@ -1,0 +1,70 @@
+{
+  "types": [
+    {
+      "id": "contact",
+      "name": "CONTACT",
+      "glyph": "\u2593",
+      "hp": 2,
+      "damage": 1,
+      "speed": 1,
+      "behaviour": "loudest",
+      "order": 3,
+      "text": "Moves toward the loudest node. Attacks if co-located."
+    },
+    {
+      "id": "drifter",
+      "name": "DRIFTER",
+      "glyph": "\u2588",
+      "hp": 3,
+      "damage": 2,
+      "speed": 1,
+      "behaviour": "hunter",
+      "hunterRange": 2,
+      "order": 2,
+      "text": "Hunts the player within 2 nodes, else moves toward the loudest node."
+    },
+    {
+      "id": "burrower",
+      "name": "BURROWER",
+      "glyph": "\u2592",
+      "hp": 2,
+      "damage": 1,
+      "speed": 2,
+      "behaviour": "burrow",
+      "order": 1,
+      "text": "Uses the vents. Ignores seals. In REACTOR it degrades output instead of attacking."
+    },
+    {
+      "id": "chorus",
+      "name": "CHORUS",
+      "glyph": "\u2591",
+      "hp": 5,
+      "damage": 2,
+      "speed": 1,
+      "behaviour": "nest",
+      "order": 4,
+      "text": "Moves toward ORE HOLD. Adds 1 noise everywhere each turn. On arrival, feeds the bag."
+    }
+  ],
+  "bag": {
+    "blank": 5,
+    "contact": 3,
+    "drifter": 2,
+    "burrower": 1,
+    "chorus": 0
+  },
+  "reserve": {
+    "blank": 0,
+    "contact": 4,
+    "drifter": 2,
+    "burrower": 0,
+    "chorus": 1
+  },
+  "chorusNoisePerTurn": 1,
+  "chorusArrivalContacts": 2,
+  "blankEscalation": 1,
+  "nestNoise": {
+    "amount": 2,
+    "everyTurns": 2
+  }
+}

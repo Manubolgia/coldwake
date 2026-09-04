@@ -1,0 +1,97 @@
+{
+  "depths": [
+    {
+      "depth": 1,
+      "label": "SHALLOW",
+      "bag": {},
+      "reactorOutputStart": 2,
+      "turnLimit": 20,
+      "carry": {
+        "clean": 10,
+        "infested": 2,
+        "startCards": 1
+      },
+      "shuttleRequired": 34,
+      "oreHoldFloor": 2,
+      "startingDraws": 1,
+      "nestNoiseAmount": 2
+    },
+    {
+      "depth": 2,
+      "label": "STANDARD",
+      "bag": {
+        "drifter": 1
+      },
+      "reactorOutputStart": 2,
+      "turnLimit": 20,
+      "carry": {
+        "clean": 10,
+        "infested": 2,
+        "startCards": 1
+      },
+      "shuttleRequired": 34,
+      "oreHoldFloor": 2,
+      "startingDraws": 1,
+      "nestNoiseAmount": 2
+    },
+    {
+      "depth": 3,
+      "label": "DEEP",
+      "bag": {
+        "drifter": 1,
+        "chorus": 1
+      },
+      "reactorOutputStart": 2,
+      "turnLimit": 18,
+      "carry": {
+        "clean": 9,
+        "infested": 3,
+        "startCards": 1
+      },
+      "shuttleRequired": 32,
+      "oreHoldFloor": 2,
+      "startingDraws": 2,
+      "nestNoiseAmount": 2
+    },
+    {
+      "depth": 4,
+      "label": "BLACK",
+      "bag": {
+        "drifter": 1,
+        "chorus": 1,
+        "blank": -1
+      },
+      "reactorOutputStart": 2,
+      "turnLimit": 17,
+      "carry": {
+        "clean": 8,
+        "infested": 4,
+        "startCards": 2
+      },
+      "shuttleRequired": 31,
+      "oreHoldFloor": 3,
+      "startingDraws": 3,
+      "nestNoiseAmount": 2
+    },
+    {
+      "depth": 5,
+      "label": "KELL",
+      "bag": {
+        "drifter": 2,
+        "chorus": 1,
+        "blank": -2
+      },
+      "reactorOutputStart": 2,
+      "turnLimit": 15,
+      "carry": {
+        "clean": 7,
+        "infested": 5,
+        "startCards": 2
+      },
+      "shuttleRequired": 30,
+      "oreHoldFloor": 3,
+      "startingDraws": 4,
+      "nestNoiseAmount": 2
+    }
+  ]
+}

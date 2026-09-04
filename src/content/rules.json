@@ -1,0 +1,142 @@
+{
+  "turnLimit": 20,
+  "handSize": 5,
+  "apPerTurn": 3,
+  "powerCap": 10,
+  "reactorOutputMax": 2,
+  "reactorOutputStart": 2,
+  "shuttleRequired": 34,
+  "noiseMax": 6,
+  "noiseThreshold": 4,
+  "noiseDecay": 1,
+  "carry": {
+    "clean": 10,
+    "infested": 2,
+    "startCards": 1,
+    "carrierThreshold": 2
+  },
+  "basicActions": {
+    "move": {
+      "ap": 1,
+      "noise": 2
+    },
+    "creep": {
+      "ap": 2,
+      "noise": 0
+    },
+    "listen": {
+      "ap": 1,
+      "noise": 0
+    },
+    "search": {
+      "ap": 1,
+      "noise": 2
+    },
+    "discard": {
+      "ap": 1,
+      "noise": 0
+    },
+    "ventEnter": {
+      "ap": 1,
+      "noise": 0
+    },
+    "ventExit": {
+      "ap": 1,
+      "noise": 0
+    }
+  },
+  "systemActions": {
+    "repair": {
+      "node": "reactor",
+      "ap": 2,
+      "power": 0,
+      "noise": 3
+    },
+    "seal": {
+      "node": "@spines",
+      "ap": 1,
+      "power": 2,
+      "noise": 1,
+      "turns": 3
+    },
+    "purgeVents": {
+      "node": "bridge",
+      "ap": 2,
+      "power": 3,
+      "noise": 4
+    },
+    "carryScan": {
+      "node": "medbay",
+      "ap": 1,
+      "power": 1,
+      "noise": 1
+    },
+    "purgeBlood": {
+      "node": "medbay",
+      "ap": 2,
+      "power": 2,
+      "noise": 1
+    },
+    "recharge": {
+      "node": "armory",
+      "ap": 1,
+      "power": 1,
+      "noise": 2
+    },
+    "chargeShuttle": {
+      "node": "shuttle_bay",
+      "ap": 1,
+      "power": 0,
+      "noise": 1
+    },
+    "beacon": {
+      "node": "comms",
+      "ap": 2,
+      "power": 3,
+      "noise": 5
+    },
+    "armScuttle": {
+      "node": "bridge",
+      "ap": 3,
+      "power": 10,
+      "noise": 3,
+      "fuseTurns": 3
+    },
+    "launch": {
+      "node": "shuttle_bay",
+      "ap": 1,
+      "power": 0,
+      "noise": 0
+    }
+  },
+  "ventAmbushPenalty": -2,
+  "score": {
+    "powerBanked": 2,
+    "nodesSearched": 3,
+    "threatsKilled": 4,
+    "turnsSurvived": 1,
+    "survivingCards": 2
+  },
+  "endings": {
+    "clean_break": {
+      "name": "CLEAN BREAK",
+      "multiplier": 1.5
+    },
+    "carrier": {
+      "name": "CARRIER",
+      "multiplier": 0.8
+    },
+    "scuttle": {
+      "name": "SCUTTLE",
+      "multiplier": 1.2
+    },
+    "beacon": {
+      "name": "BEACON",
+      "multiplier": 0.6
+    },
+    "lost": {
+      "name": "LOST",
+      "multiplier": 0.3
+    }
+  }
+}
