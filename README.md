@@ -48,6 +48,7 @@ src/
   content/     every game number, as JSON. No numbers in code.
   sim/         bots, harness, metrics, reports
   ui/          React, hand-written CSS, amber phosphor terminal
+    components/Terminal.tsx  the ship writes its output rather than printing it
 test/          unit, property (fast-check) and 30 golden replays
 e2e/           Playwright, the real interface only
 scripts/       gates, golden regeneration, icons, probes
@@ -82,7 +83,8 @@ from the game's, so `(gameSeed, botSeed)` reproduces a run exactly.
 
 `docs/BALANCE.md` carries the tuned numbers, the measurements behind them, and
 every place the shipped values differ from the v0 numbers in the design
-document — with the reason.
+document — with the reason. `docs/RULES-AS-BUILT.md` is the ruleset as shipped,
+and `docs/INTERFACE.md` records how the interface moves and why.
 
 ## Deploying
 

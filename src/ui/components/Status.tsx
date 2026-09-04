@@ -1,22 +1,37 @@
 import { RULES, shuttleRequirement, turnLimit } from '../../engine';
 import type { GameState } from '../../engine/types';
 import { tokensInBag } from '../../engine/noise';
+import { useFlash } from '../hooks';
 
-export function StatusStrip({ state, onMenu }: { state: GameState; onMenu: () => void }): React.ReactElement {
+/** A number that inverts for a moment when it changes. */
+function Value({ n, instant }: { n: number; instant: boolean }): React.ReactElement {
+  return <b className={useFlash(n, instant) ? 'inverse' : ''}>{n}</b>;
+}
+
+export function StatusStrip({
+  state,
+  instant,
+  onMenu,
+}: {
+  state: GameState;
+  instant: boolean;
+  onMenu: () => void;
+}): React.ReactElement {
   const pips = '●'.repeat(state.player.ap) + '○'.repeat(Math.max(0, RULES.apPerTurn - state.player.ap));
   return (
     <div className="strip display">
       <span>
-        T <b>{state.turn}</b>/{turnLimit(state.depth)}
+        T <Value n={state.turn} instant={instant} />/{turnLimit(state.depth)}
       </span>
       <span>
-        PWR <b>{state.ship.power}</b>
+        PWR <Value n={state.ship.power} instant={instant} />
       </span>
       <span>
-        SHT <b>{state.ship.shuttleCharge}</b>/{shuttleRequirement(state.role, state.depth)}
+        SHT <Value n={state.ship.shuttleCharge} instant={instant} />/
+        {shuttleRequirement(state.role, state.depth)}
       </span>
       <span>
-        RCT <b>{state.ship.reactorOutput}</b>
+        RCT <Value n={state.ship.reactorOutput} instant={instant} />
       </span>
       <span className="pips glow">{pips}</span>
       <button
@@ -66,19 +81,6 @@ export function Readout({ state }: { state: GameState }): React.ReactElement {
       <span className="dim">
         DECK {state.player.deck.length + state.player.discard.length} · BURNED {state.player.burned.length}
       </span>
-    </div>
-  );
-}
-
-export function Feed({ state }: { state: GameState }): React.ReactElement {
-  const lines = state.feed.slice(-6);
-  return (
-    <div className="feed" data-testid="feed">
-      {lines.map((l, i) => (
-        <div key={i} className={l.kind === 'alarm' ? 'alarm' : ''}>
-          {l.text}
-        </div>
-      ))}
     </div>
   );
 }

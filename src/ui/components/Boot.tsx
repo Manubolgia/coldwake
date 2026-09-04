@@ -13,37 +13,55 @@ const LINES = [
   'COLDWAKE',
 ];
 
+const BODY = LINES.join('\n');
+const TITLE_AT = BODY.length - (LINES[LINES.length - 1] as string).length;
+const TICK = 11;
+const STEP = 3;
+// The self-test rattles out; the ship's name is typed, one letter at a time,
+// after a pause. It is the only thing on this screen worth waiting for.
+const TITLE_TICK = 62;
+const TITLE_HOLD = 300;
+
+/** The self-test types itself out. Under two seconds, and a tap skips it. */
 export function Boot({ instant, onDone }: { instant: boolean; onDone: () => void }): React.ReactElement {
-  const [shown, setShown] = useState(instant ? LINES.length : 0);
+  const [written, setWritten] = useState(instant ? BODY.length : 0);
+  const complete = written >= BODY.length;
 
   useEffect(() => {
     if (instant) {
-      const t = setTimeout(onDone, 300);
-      return () => clearTimeout(t);
+      const t = window.setTimeout(onDone, 250);
+      return () => window.clearTimeout(t);
     }
-    if (shown >= LINES.length) {
-      const t = setTimeout(onDone, 500);
-      return () => clearTimeout(t);
+    if (complete) {
+      // The name holds for a beat before the bay comes up.
+      const t = window.setTimeout(onDone, 900);
+      return () => window.clearTimeout(t);
     }
-    const t = setTimeout(() => setShown((n) => n + 1), 130);
-    return () => clearTimeout(t);
-  }, [shown, instant, onDone]);
+    const inTitle = written >= TITLE_AT;
+    const delay = written === TITLE_AT ? TITLE_HOLD : inTitle ? TITLE_TICK : TICK;
+    const step = inTitle ? 1 : STEP;
+    const t = window.setTimeout(() => setWritten((n) => Math.min(n + step, BODY.length)), delay);
+    return () => window.clearTimeout(t);
+  }, [written, complete, instant, onDone]);
+
+  const shown = BODY.slice(0, written).split('\n');
 
   return (
     <div
       className="boot"
-      onClick={onDone}
+      onClick={() => (complete ? onDone() : setWritten(BODY.length))}
       role="button"
       tabIndex={0}
       data-testid="boot"
+      data-complete={complete ? 'yes' : 'no'}
       aria-label="skip boot sequence"
     >
-      {LINES.slice(0, shown).map((l, i) => (
-        <div key={i} className={l === 'COLDWAKE' ? 'title glow' : ''}>
-          {l || ' '}
+      {shown.map((l, i) => (
+        <div key={i} className={l.startsWith('COLDWAKE') ? 'title glow' : ''}>
+          {l || ' '}
+          {i === shown.length - 1 ? <span className={`caret${complete ? ' idle' : ''}`} /> : null}
         </div>
       ))}
-      <span className="cursor" />
     </div>
   );
 }

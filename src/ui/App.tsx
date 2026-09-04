@@ -14,7 +14,9 @@ import { Hand } from './components/Hand';
 import { Manual } from './components/Manual';
 import { Menu } from './components/Menu';
 import { ShipGraph } from './components/ShipGraph';
-import { Feed, Readout, StatusStrip } from './components/Status';
+import { Readout, StatusStrip } from './components/Status';
+import { Terminal } from './components/Terminal';
+import { useReducedMotion } from './hooks';
 import {
   DEFAULT_META,
   applyUnlocks,
@@ -36,9 +38,6 @@ setInvariantChecking(import.meta.env.DEV);
 
 type Screen = 'boot' | 'menu' | 'run' | 'ending';
 
-const prefersReducedMotion = (): boolean =>
-  typeof window !== 'undefined' && window.matchMedia?.('(prefers-reduced-motion: reduce)').matches === true;
-
 export function App(): React.ReactElement {
   const [screen, setScreen] = useState<Screen>('boot');
   const [meta, setMeta] = useState<Meta>(DEFAULT_META);
@@ -46,8 +45,14 @@ export function App(): React.ReactElement {
   const [savedRun, setSavedRun] = useState<GameState | null>(null);
   const [selectedNode, setSelectedNode] = useState<NodeId | null>(null);
   const [selectedCard, setSelectedCard] = useState<Uid | null>(null);
-  const [drawBanner, setDrawBanner] = useState<string | null>(null);
   const [manualOpen, setManualOpen] = useState(false);
+  // The terminal is mid-sentence: the commands stand down until it finishes.
+  const [resolving, setResolving] = useState(false);
+  const [pendingEnding, setPendingEnding] = useState<GameState | null>(null);
+  // What the panels show while the terminal is still talking: the ship the
+  // player last saw, so the readout catches up to the text and not before it.
+  const heldState = useRef<GameState | null>(null);
+  const reducedMotion = useReducedMotion();
   const turnStarted = useRef<number>(Date.now());
   const telemetry = useRef<RunTelemetry | null>(null);
 
@@ -90,7 +95,8 @@ export function App(): React.ReactElement {
         turnMs: telemetry.current?.turnMs ?? [],
         actions: telemetry.current?.actions ?? {},
       });
-      setScreen('ending');
+      // The ship says what happened before the epilogue does.
+      setPendingEnding(finished);
     },
     [meta],
   );
@@ -108,19 +114,16 @@ export function App(): React.ReactElement {
         const key = actionKey(action);
         telemetry.current.actions[key] = (telemetry.current.actions[key] ?? 0) + 1;
       }
+      // Anything the ship raises its voice about gets the terminal to itself.
+      // A quiet turn is one line and does not interrupt anybody.
+      const fresh = next.feed.slice(state.feed.length);
+      const loud = fresh.some((l) => l.kind === 'alarm' || l.kind === 'threat');
+      if (!reducedMotion && (loud || fresh.length >= 3)) {
+        heldState.current = state;
+        setResolving(true);
+      }
       if (action.t === 'endTurn') {
-        const drew = next.stats.bagDraws - state.stats.bagDraws;
-        if (drew > 0) {
-          const line = next.feed
-            .slice(state.feed.length)
-            .find((l) => l.text.startsWith('>> ') && (l.kind === 'threat' || l.text.includes('NO CONTACT')));
-          if (line) {
-            setDrawBanner(line.text.replace('>> ', ''));
-            window.setTimeout(() => setDrawBanner(null), prefersReducedMotion() ? 1 : 900);
-          }
-        }
         if (telemetry.current) telemetry.current.turnMs.push(Date.now() - turnStarted.current);
-        turnStarted.current = Date.now();
         void saveRun(next.status === 'active' ? next : null);
       }
       setSelectedCard(null);
@@ -128,8 +131,19 @@ export function App(): React.ReactElement {
       setState(next);
       if (next.status !== 'active') void finish(next);
     },
-    [state, finish],
+    [state, finish, reducedMotion],
   );
+
+  /** The terminal has caught up: hand the ship back to the player. */
+  const onTerminalComplete = useCallback(() => {
+    setResolving(false);
+    heldState.current = null;
+    turnStarted.current = Date.now();
+    if (pendingEnding !== null) {
+      setScreen('ending');
+      setPendingEnding(null);
+    }
+  }, [pendingEnding]);
 
   const start = useCallback((seed: string, role: RoleId, depth: Depth) => {
     const fresh = initialState(seed, role, depth);
@@ -176,7 +190,7 @@ export function App(): React.ReactElement {
     return (
       <>
         <Boot
-          instant={meta.bootSeen || prefersReducedMotion()}
+          instant={meta.bootSeen || reducedMotion}
           onDone={() => {
             if (!meta.bootSeen) {
               const next = { ...meta, bootSeen: true };
@@ -242,10 +256,13 @@ export function App(): React.ReactElement {
     );
   }
 
+  const shown = resolving && heldState.current !== null ? heldState.current : state;
+
   return (
     <>
       <StatusStrip
-        state={state}
+        state={shown}
+        instant={reducedMotion}
         onMenu={() => {
           void saveRun(state);
           setSavedRun(state);
@@ -253,37 +270,39 @@ export function App(): React.ReactElement {
         }}
       />
       <ShipGraph
-        state={state}
+        state={shown}
         selected={selectedNode}
         onSelect={(id) => {
           setSelectedCard(null);
           setSelectedNode(selectedNode === id ? null : id);
         }}
       />
-      <Readout state={state} />
-      <Commands
-        state={state}
-        actions={actions}
-        selectedNode={selectedNode}
-        selectedCard={selectedCard}
-        onAct={act}
+      <Readout state={shown} />
+      {resolving ? null : (
+        <Commands
+          state={state}
+          actions={actions}
+          selectedNode={selectedNode}
+          selectedCard={selectedCard}
+          onAct={act}
+        />
+      )}
+      <Terminal
+        lines={state.feed}
+        resolving={resolving}
+        instant={reducedMotion}
+        onComplete={onTerminalComplete}
       />
-      <Feed state={state} />
-      <Hand
-        state={state}
-        selected={selectedCard}
-        onSelect={(uid) => {
-          setSelectedNode(null);
-          setSelectedCard(uid);
-        }}
-      />
-      {drawBanner !== null ? (
-        <div className="modal" data-testid="draw-banner" onClick={() => setDrawBanner(null)}>
-          <div className="rule">{'─'.repeat(40)}</div>
-          <div className="draw-result glow alarm">{drawBanner}</div>
-          <div className="rule">{'─'.repeat(40)}</div>
-        </div>
-      ) : null}
+      {resolving ? null : (
+        <Hand
+          state={state}
+          selected={selectedCard}
+          onSelect={(uid) => {
+            setSelectedNode(null);
+            setSelectedCard(uid);
+          }}
+        />
+      )}
       <div className="crt-overlay" />
     </>
   );

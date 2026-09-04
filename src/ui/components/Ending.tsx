@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { RULES, isPanic } from '../../engine';
 import type { GameState } from '../../engine/types';
+import { useReducedMotion, useTypedText } from '../hooks';
 
 const EPILOGUE: Record<string, string> = {
   clean_break:
@@ -29,6 +30,10 @@ export function EndingScreen({
   const [note, setNote] = useState('');
   const r = state.result;
   const ending = r?.ending ?? 'lost';
+  const reduced = useReducedMotion();
+  const name = RULES.endings[ending].name;
+  const typedName = useTypedText(name, reduced, 90);
+  const named = typedName.length >= name.length;
   const surviving = [...state.player.hand, ...state.player.deck, ...state.player.discard].filter(
     (u) => !isPanic(u),
   ).length;
@@ -37,10 +42,11 @@ export function EndingScreen({
     <div className="screen" data-testid="ending" data-ending={ending}>
       <div className="rule">{'─'.repeat(40)}</div>
       <div className="title glow" data-testid="ending-name">
-        {RULES.endings[ending].name}
+        {typedName}
+        {named ? null : <span className="caret" />}
       </div>
       <div className="rule">{'─'.repeat(40)}</div>
-      <p className="epilogue">{EPILOGUE[ending]}</p>
+      {named ? <p className="epilogue">{EPILOGUE[ending]}</p> : null}
 
       <h2>Readout</h2>
       <div className="stat">

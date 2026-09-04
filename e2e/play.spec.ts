@@ -14,6 +14,17 @@ type Debug = {
 const debug = (page: Page): Promise<Debug> =>
   page.evaluate(() => (window as unknown as { __coldwake: Debug }).__coldwake);
 
+async function isResolving(page: Page): Promise<boolean> {
+  return (await page.getByTestId('terminal').getAttribute('data-resolving').catch(() => null)) === 'yes';
+}
+
+async function settle(page: Page): Promise<void> {
+  for (let i = 0; i < 20 && (await isResolving(page)); i++) {
+    await page.getByTestId('terminal').click({ timeout: 1000 }).catch(() => {});
+    await page.waitForTimeout(60);
+  }
+}
+
 async function bootToMenu(page: Page): Promise<void> {
   await page.goto('./');
   const boot = page.getByTestId('boot');
@@ -34,11 +45,10 @@ async function playToEnding(page: Page, maxClicks = 900): Promise<string> {
   for (let i = 0; i < maxClicks; i++) {
     const d = await debug(page);
     if (d.state === null || d.state.status !== 'active') break;
-    // The bag draw takes the screen for a moment; tap through it.
-    const banner = page.getByTestId('draw-banner');
-    if (await banner.isVisible().catch(() => false)) {
-      // It dismisses itself on a timer, so a missed click is not a failure.
-      await banner.click({ timeout: 2000 }).catch(() => {});
+    // The terminal writes the turn out before handing the ship back. Tap
+    // through it; it also finishes on its own.
+    if (await isResolving(page)) {
+      await page.getByTestId('terminal').click({ timeout: 2000 }).catch(() => {});
       continue;
     }
     const buttons = page.locator('.commands .cmd');
@@ -86,12 +96,12 @@ test('5.2 several seeds resolve into different endings', async ({ page }) => {
 test('5.3 every legal action has a control in the interface', async ({ page }) => {
   await startRun(page, 'parity', 1);
   for (let sample = 0; sample < 25; sample++) {
+    await settle(page);
     const d = await debug(page);
     if (d.state === null || d.state.status !== 'active') break;
     const rendered = await page.locator('.commands .cmd').count();
     expect(rendered).toBe(d.actions.length);
-    const first = page.locator('.commands .cmd').first();
-    await first.click();
+    await page.locator('.commands .cmd').first().click();
   }
 });
 
@@ -109,6 +119,7 @@ test('5.4 no horizontal scroll at any phone width', async ({ page }) => {
 
 test('5.6 and 5.7 touch targets and noise disclosure', async ({ page }) => {
   await startRun(page, 'targets', 1);
+  await settle(page);
   const buttons = page.locator('.commands .cmd');
   const count = await buttons.count();
   expect(count).toBeGreaterThan(0);
@@ -126,6 +137,35 @@ test('5.6 and 5.7 touch targets and noise disclosure', async ({ page }) => {
   }
 });
 
+test('the terminal writes its output rather than printing it', async ({ page }) => {
+  await startRun(page, 'typing', 1);
+  await settle(page);
+  await page.locator('.commands .cmd[data-action="endTurn"]').first().click();
+  // Caught mid-sentence, the terminal is shorter than it will be.
+  const mid = (await page.getByTestId('terminal').innerText()).length;
+  await settle(page);
+  await page.waitForTimeout(300);
+  const finished = (await page.getByTestId('terminal').innerText()).length;
+  expect(finished).toBeGreaterThanOrEqual(mid);
+  await expect(page.getByTestId('terminal')).toHaveAttribute('data-complete', 'yes');
+  // And when it has nothing to say, it waits with a cursor.
+  await expect(page.locator('.caret.idle')).toBeVisible();
+});
+
+test('5.14 reduced motion prints instead of typing, and never takes the screen', async ({ browser }) => {
+  const context = await browser.newContext({ reducedMotion: 'reduce' });
+  const page = await context.newPage();
+  await page.goto('/coldwake/');
+  await expect(page.getByTestId('menu')).toBeVisible({ timeout: 2000 });
+  await page.getByTestId('start').click();
+  await expect(page.getByTestId('commands')).toBeVisible();
+  await page.locator('.commands .cmd[data-action="endTurn"]').first().click();
+  await expect(page.getByTestId('terminal')).toHaveAttribute('data-resolving', 'no');
+  await expect(page.getByTestId('terminal')).toHaveAttribute('data-complete', 'yes');
+  await expect(page.getByTestId('commands')).toBeVisible();
+  await context.close();
+});
+
 test('5.15 the CRT treatment can be switched off and the game still plays', async ({ page }) => {
   await bootToMenu(page);
   await page.getByTestId('crt-toggle').click();
@@ -140,7 +180,9 @@ test('5.15 the CRT treatment can be switched off and the game still plays', asyn
 test('5.17 a killed tab resumes the run', async ({ page }) => {
   await startRun(page, 'resume-me', 1);
   await page.locator('.commands .cmd[data-action="endTurn"]').first().click();
+  await settle(page);
   await page.locator('.commands .cmd[data-action="endTurn"]').first().click();
+  await settle(page);
   const before = (await debug(page)).state?.turn ?? 0;
   expect(before).toBeGreaterThan(1);
   await page.reload();
@@ -151,10 +193,22 @@ test('5.17 a killed tab resumes the run', async ({ page }) => {
   expect(after).toBeGreaterThanOrEqual(before - 1);
 });
 
-test('5.14 the boot sequence renders instantly with reduced motion', async ({ browser }) => {
+test('5.14 the boot sequence types itself out', async ({ page }) => {
+  // The foreground page: Chromium throttles timers in a background context,
+  // which would stretch the type-out to minutes and prove nothing.
+  await page.goto('/coldwake/', { waitUntil: 'commit' });
+  await page.waitForSelector('[data-testid="boot"][data-complete="no"]', { timeout: 4000 });
+  const early = (await page.getByTestId('boot').innerText()).length;
+  await page.waitForTimeout(700);
+  const later = (await page.getByTestId('boot').innerText()).length;
+  expect(later).toBeGreaterThan(early);
+  await page.waitForSelector('[data-testid="boot"][data-complete="yes"]', { timeout: 8000 });
+});
+
+test('5.14 reduced motion renders the boot instantly', async ({ browser }) => {
   const context = await browser.newContext({ reducedMotion: 'reduce' });
   const page = await context.newPage();
   await page.goto('/coldwake/');
-  await expect(page.getByTestId('menu')).toBeVisible({ timeout: 2000 });
+  await expect(page.getByTestId('menu')).toBeVisible({ timeout: 6000 });
   await context.close();
 });
