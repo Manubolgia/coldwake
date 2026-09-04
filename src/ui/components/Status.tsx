@@ -21,7 +21,7 @@ export function StatusStrip({
   return (
     <div className="strip display">
       <span>
-        T <Value n={state.turn} instant={instant} />/{turnLimit(state.depth)}
+        HR <Value n={state.turn} instant={instant} />/{turnLimit(state.depth)}
       </span>
       <span>
         PWR <Value n={state.ship.power} instant={instant} />
@@ -38,6 +38,7 @@ export function StatusStrip({
         style={{ border: 'none', minHeight: 'auto', padding: '2px 4px' }}
         onClick={onMenu}
         aria-label="menu"
+        data-testid="menu-button"
       >
         ≡
       </button>
@@ -53,21 +54,29 @@ export function Readout({ state }: { state: GameState }): React.ReactElement {
   const infested = revealed.filter((c) => c.id === 'infested').length;
   return (
     <div className="readout" data-testid="readout">
-      <span className="dim">BAG</span>
+      <span className="dim">UNRESOLVED</span>
       {known ? (
         <span className="glow" data-testid="bag-known">
-          {(['blank', 'contact', 'drifter', 'burrower', 'chorus'] as const)
-            .filter((t) => (state.bag[t] ?? 0) > 0)
-            .map((t) => `${t[0]?.toUpperCase()}${state.bag[t]}`)
-            .join(' ')}
+          {(
+            [
+              ['blank', 'NOTHING'],
+              ['contact', 'MOVING'],
+              ['drifter', 'HEAVY'],
+              ['burrower', 'IN THE WALLS'],
+              ['chorus', 'SINGING'],
+            ] as const
+          )
+            .filter(([t]) => (state.bag[t] ?? 0) > 0)
+            .map(([t, label]) => `${state.bag[t]} ${label}`)
+            .join(' · ')}
         </span>
       ) : (
         <span>
-          {'▓'.repeat(Math.min(total, 12))} <span className="dim">{total} UNKNOWN</span>
+          {'▓'.repeat(Math.min(total, 12))} <span className="dim">{total}</span>
         </span>
       )}
       <span className="dim">│</span>
-      <span className="dim">CARRY</span>
+      <span className="dim">BLOOD</span>
       <span>
         {carry.slice(0, 6).map((c, i) => (
           <span key={i} className={c.revealed && c.id === 'infested' ? 'inverse-alarm' : ''}>
@@ -79,7 +88,8 @@ export function Readout({ state }: { state: GameState }): React.ReactElement {
       </span>
       <span className="dim">│</span>
       <span className="dim">
-        DECK {state.player.deck.length + state.player.discard.length} · BURNED {state.player.burned.length}
+        KIT {state.player.deck.length + state.player.discard.length} · LOST{' '}
+        {state.player.burned.length}
       </span>
     </div>
   );

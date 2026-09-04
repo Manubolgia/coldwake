@@ -161,7 +161,9 @@ export function initialState(seed: string, role: RoleId, depth: Depth): GameStat
   state.feed.push({
     turn: 1,
     kind: 'sys',
-    text: `COLD WAKE. ORBIT DECAY ${turnLimit(depth)} TURNS. SHUTTLE NEEDS ${shuttleRequirement(role, depth)} PWR.`,
+    text:
+      `COLD WAKE. YOU HAVE ${turnLimit(depth)} HOURS BEFORE THE ORBIT CLOSES. ` +
+      `THE SHUTTLE WILL NOT LIFT ON LESS THAN ${shuttleRequirement(role, depth)} POWER.`,
   });
   return state;
 }
@@ -176,7 +178,11 @@ export function drawUpToHandSize(state: GameState): void {
         RULES.noiseMax,
         (state.ship.noise[state.player.node] ?? 0) + 1,
       );
-      state.feed.push({ turn: state.turn, kind: 'alarm', text: '>> BLACKOUT. NOISE +1 HERE.' });
+      state.feed.push({
+        turn: state.turn,
+        kind: 'alarm',
+        text: '>> YOUR VISION GOES. YOU PUT A HAND OUT AND KNOCK SOMETHING OVER.',
+      });
     }
   }
 }

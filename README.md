@@ -83,8 +83,9 @@ from the game's, so `(gameSeed, botSeed)` reproduces a run exactly.
 
 `docs/BALANCE.md` carries the tuned numbers, the measurements behind them, and
 every place the shipped values differ from the v0 numbers in the design
-document — with the reason. `docs/RULES-AS-BUILT.md` is the ruleset as shipped,
-and `docs/INTERFACE.md` records how the interface moves and why.
+document — with the reason. `docs/RULES-AS-BUILT.md` is the ruleset as shipped.
+`docs/INTERFACE.md` records how the interface moves, how the ship talks, and the
+advisory voice that teaches the game while you play it.
 
 ## Deploying
 

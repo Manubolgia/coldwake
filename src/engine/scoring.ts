@@ -60,6 +60,6 @@ export function resolveRun(state: GameState, cause: ResolveCause): void {
   state.feed.push({
     turn: state.turn,
     kind: 'alarm',
-    text: `>> RUN RESOLVED: ${RULES.endings[ending].name}. SCORE ${score}.`,
+    text: `>> ${RULES.endings[ending].name}.`,
   });
 }

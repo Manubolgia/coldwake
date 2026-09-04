@@ -13,6 +13,7 @@ export type Meta = {
   best: Record<string, number>;
   daily: Record<string, { score: number; ending: Ending }>;
   crt: boolean;
+  guidance: boolean;
   reducedMotion: boolean;
   bootSeen: boolean;
 };
@@ -39,6 +40,7 @@ export const DEFAULT_META: Meta = {
   best: {},
   daily: {},
   crt: true,
+  guidance: true,
   reducedMotion: false,
   bootSeen: false,
 };

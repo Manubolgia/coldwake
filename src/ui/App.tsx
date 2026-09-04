@@ -16,6 +16,7 @@ import { Menu } from './components/Menu';
 import { ShipGraph } from './components/ShipGraph';
 import { Readout, StatusStrip } from './components/Status';
 import { Terminal } from './components/Terminal';
+import { newAdvisories, type DisplayLine } from './guidance';
 import { useReducedMotion } from './hooks';
 import {
   DEFAULT_META,
@@ -46,6 +47,10 @@ export function App(): React.ReactElement {
   const [selectedNode, setSelectedNode] = useState<NodeId | null>(null);
   const [selectedCard, setSelectedCard] = useState<Uid | null>(null);
   const [manualOpen, setManualOpen] = useState(false);
+  // Everything the terminal has said this run: the ship's own output, plus the
+  // advisories, which are the interface talking rather than the ship.
+  const [lines, setLines] = useState<DisplayLine[]>([]);
+  const advised = useRef<Set<string>>(new Set());
   // The terminal is mid-sentence: the commands stand down until it finishes.
   const [resolving, setResolving] = useState(false);
   const [pendingEnding, setPendingEnding] = useState<GameState | null>(null);
@@ -114,11 +119,13 @@ export function App(): React.ReactElement {
         const key = actionKey(action);
         telemetry.current.actions[key] = (telemetry.current.actions[key] ?? 0) + 1;
       }
+      const fresh: DisplayLine[] = next.feed.slice(state.feed.length);
+      const advice = meta.guidance ? newAdvisories(next, advised.current) : [];
+      setLines((l) => [...l, ...fresh, ...advice]);
       // Anything the ship raises its voice about gets the terminal to itself.
       // A quiet turn is one line and does not interrupt anybody.
-      const fresh = next.feed.slice(state.feed.length);
       const loud = fresh.some((l) => l.kind === 'alarm' || l.kind === 'threat');
-      if (!reducedMotion && (loud || fresh.length >= 3)) {
+      if (!reducedMotion && (loud || advice.length > 0 || fresh.length >= 3)) {
         heldState.current = state;
         setResolving(true);
       }
@@ -131,7 +138,7 @@ export function App(): React.ReactElement {
       setState(next);
       if (next.status !== 'active') void finish(next);
     },
-    [state, finish, reducedMotion],
+    [state, finish, reducedMotion, meta.guidance],
   );
 
   /** The terminal has caught up: hand the ship back to the player. */
@@ -145,8 +152,14 @@ export function App(): React.ReactElement {
     }
   }, [pendingEnding]);
 
-  const start = useCallback((seed: string, role: RoleId, depth: Depth) => {
-    const fresh = initialState(seed, role, depth);
+  const start = useCallback(
+    (seed: string, role: RoleId, depth: Depth) => {
+      const fresh = initialState(seed, role, depth);
+      advised.current = new Set();
+      setLines([
+        ...fresh.feed,
+        ...(meta.guidance ? newAdvisories(fresh, advised.current) : []),
+      ]);
     telemetry.current = {
       seed,
       role,
@@ -156,11 +169,13 @@ export function App(): React.ReactElement {
       actions: {},
     };
     void pushTelemetry(telemetry.current);
-    turnStarted.current = Date.now();
-    setState(fresh);
-    setScreen('run');
-    void saveRun(fresh);
-  }, []);
+      turnStarted.current = Date.now();
+      setState(fresh);
+      setScreen('run');
+      void saveRun(fresh);
+    },
+    [meta.guidance],
+  );
 
   const exportTelemetry = useCallback(() => {
     void (async () => {
@@ -223,11 +238,21 @@ export function App(): React.ReactElement {
               actions: {},
             };
             void pushTelemetry(telemetry.current);
+            // Advisories already true on a resumed run are treated as said, so
+            // picking a run back up does not bury the player in a backlog.
+            advised.current = new Set();
+            newAdvisories(savedRun, advised.current);
+            setLines([...savedRun.feed]);
             setState(savedRun);
             setScreen('run');
           }}
           onExport={exportTelemetry}
           onManual={() => setManualOpen(true)}
+          onToggleGuidance={() => {
+            const next = { ...meta, guidance: !meta.guidance };
+            setMeta(next);
+            void saveMeta(next);
+          }}
           onToggleCrt={() => {
             const next = { ...meta, crt: !meta.crt };
             setMeta(next);
@@ -288,7 +313,7 @@ export function App(): React.ReactElement {
         />
       )}
       <Terminal
-        lines={state.feed}
+        lines={lines}
         resolving={resolving}
         instant={reducedMotion}
         onComplete={onTerminalComplete}

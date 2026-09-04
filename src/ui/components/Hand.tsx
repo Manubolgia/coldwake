@@ -12,7 +12,9 @@ export function Hand({
 }): React.ReactElement {
   return (
     <div className="hand" data-testid="hand">
-      {state.player.hand.length === 0 ? <div className="card ghost">EMPTY</div> : null}
+      {state.player.hand.length === 0 ? (
+        <div className="card ghost">NOTHING AT HAND</div>
+      ) : null}
       {state.player.hand.map((uid) => {
         const c = cardOf(uid);
         const spent = isSpent(state, uid);
@@ -34,9 +36,9 @@ export function Hand({
             <span className="name glow">{c.name}</span>
             <span className="body">{c.text}</span>
             <span className="foot">
-              AP {c.ap} · N{c.noise}
-              {c.burn ? ' · BURN' : ''}
-              {spent ? ' · SPENT' : ''}
+              TIME {c.ap} · NOISE {c.noise}
+              {c.burn ? ' · ONE USE' : ''}
+              {spent ? ' · EMPTY' : ''}
             </span>
           </button>
         );

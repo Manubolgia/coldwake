@@ -12,6 +12,7 @@ export function Menu({
   onExport,
   onToggleCrt,
   onManual,
+  onToggleGuidance,
 }: {
   meta: Meta;
   hasSavedRun: boolean;
@@ -20,6 +21,7 @@ export function Menu({
   onExport: () => void;
   onToggleCrt: () => void;
   onManual: () => void;
+  onToggleGuidance: () => void;
 }): React.ReactElement {
   const [role, setRole] = useState<RoleId>(meta.roles[0] ?? 'engineer');
   const [depth, setDepth] = useState<Depth>(meta.depths[meta.depths.length - 1] ?? 1);
@@ -32,8 +34,8 @@ export function Menu({
       <div className="title glow">COLDWAKE</div>
       <div className="rule">{'─'.repeat(40)}</div>
       <p>
-        You wake because your pod failed. Eight others are open. The orbit is decaying and the
-        shuttle needs power you have not got.
+        You wake because your pod failed, not because the run ended. Eight others are open. The
+        orbit is decaying and the shuttle needs power you have not got.
       </p>
 
       {hasSavedRun ? (
@@ -47,7 +49,7 @@ export function Menu({
         <span className="cost">HOW THE SHIP WORKS</span>
       </button>
 
-      <h2>Crew</h2>
+      <h2>Who you were</h2>
       {ROLES.map((r) => {
         const unlocked = meta.roles.includes(r.id);
         return (
@@ -64,7 +66,7 @@ export function Menu({
         );
       })}
 
-      <h2>Depth</h2>
+      <h2>How far down</h2>
       <div className="row">
         {DEPTHS.map((d) => {
           const unlocked = meta.depths.includes(d.depth);
@@ -83,16 +85,16 @@ export function Menu({
         })}
       </div>
       <p>
-        {depthDef(depth).label} — {depthDef(depth).turnLimit} turns, shuttle needs{' '}
+        {depthDef(depth).label} — {depthDef(depth).turnLimit} hours, and the shuttle wants{' '}
         {depthDef(depth).shuttleRequired} power
-        {roleDef(role).shuttleRequired !== undefined ? ' (less for the pilot)' : ''}.
+        {roleDef(role).shuttleRequired !== undefined ? ', less in your hands' : ''}.
       </p>
 
-      <h2>Seed</h2>
+      <h2>Which Bellwether</h2>
       <input
         value={seed}
         onChange={(e) => setSeed(e.target.value)}
-        placeholder="BLANK FOR RANDOM"
+        placeholder="LEAVE BLANK AND IT PICKS ONE"
         data-testid="seed-input"
         style={{
           background: 'transparent',
@@ -119,19 +121,19 @@ export function Menu({
         disabled={dailyDone || !meta.depths.includes(3)}
         onClick={() => onStart(today, role, 3)}
       >
-        <span>DAILY RUN — DEPTH 3</span>
+        <span>TODAY'S BELLWETHER</span>
         <span className="cost">
           {!meta.depths.includes(3)
             ? 'LOCKED'
             : dailyDone
-              ? `DONE · ${meta.daily[today]?.score ?? 0}`
-              : 'ONE ATTEMPT'}
+              ? `LOGGED · ${meta.daily[today]?.score ?? 0}`
+              : 'ONE ATTEMPT, EVERYBODY THE SAME SHIP'}
         </span>
       </button>
 
-      <h2>Records</h2>
+      <h2>What is on file</h2>
       <div className="stat">
-        <span>RUNS</span>
+        <span>WAKINGS</span>
         <b>{meta.runs}</b>
       </div>
       {Object.entries(meta.endings).map(([k, v]) => (
@@ -148,6 +150,12 @@ export function Menu({
       ))}
 
       <h2>Settings</h2>
+      <button className="cmd" data-testid="guidance-toggle" onClick={onToggleGuidance}>
+        <span>ADVISORY VOICE</span>
+        <span className="cost">
+          {meta.guidance ? 'ON — IT TALKS YOU THROUGH IT' : 'OFF — YOU ARE ON YOUR OWN'}
+        </span>
+      </button>
       <button className="cmd" data-testid="crt-toggle" onClick={onToggleCrt}>
         <span>CRT TREATMENT</span>
         <span className="cost">{meta.crt ? 'ON' : 'OFF'}</span>

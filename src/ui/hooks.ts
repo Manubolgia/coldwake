@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import type { LogLine } from '../engine/types';
+import type { DisplayLine } from './guidance';
 
 export function useReducedMotion(): boolean {
   const [reduced, setReduced] = useState(
@@ -34,10 +34,10 @@ const SPEED = {
   loud: { tick: 18, step: 1, gap: 190 },
 };
 
-const isLoud = (line: LogLine | undefined): boolean =>
+const isLoud = (line: DisplayLine | undefined): boolean =>
   line?.kind === 'alarm' || line?.kind === 'threat';
 
-export function useTypedFeed(lines: LogLine[], instant: boolean): TypedFeed {
+export function useTypedFeed(lines: DisplayLine[], instant: boolean): TypedFeed {
   const [done, setDone] = useState(lines.length);
   const [chars, setChars] = useState(0);
   const previousLength = useRef(lines.length);
@@ -64,7 +64,8 @@ export function useTypedFeed(lines: LogLine[], instant: boolean): TypedFeed {
     const line = lines[done];
     if (!line) return;
     const speed = isLoud(line) ? SPEED.loud : SPEED.normal;
-    if (chars >= line.text.length) {
+    const length = line.kind === 'guide' ? line.text.length + 3 : line.text.length;
+    if (chars >= length) {
       const t = window.setTimeout(() => {
         setDone((d) => d + 1);
         setChars(0);
@@ -72,7 +73,7 @@ export function useTypedFeed(lines: LogLine[], instant: boolean): TypedFeed {
       return () => window.clearTimeout(t);
     }
     const t = window.setTimeout(
-      () => setChars((c) => Math.min(c + speed.step, line.text.length)),
+      () => setChars((c) => Math.min(c + speed.step, length)),
       chars === 0 && isLoud(line) ? speed.gap : speed.tick,
     );
     return () => window.clearTimeout(t);

@@ -1,10 +1,10 @@
 import { NODE_IDS, NODE_INDEX, THREAT_ORDER, THREATS, VENT_NODES, threatDef } from './content';
-import { addPanic, nonPanicCount } from './deck';
+import { addPanic, cardOf, nonPanicCount } from './deck';
 import { addNoise, NEST } from './noise';
 import { distance, loudestNode, stepToward } from './graph';
 import { nextInt } from './rng';
 import { resolveRun } from './scoring';
-import type { GameState, NodeId, Threat } from './types';
+import type { GameState, NodeId, Threat, Uid } from './types';
 
 export function drawCarry(state: GameState, n = 1): void {
   for (let i = 0; i < n; i++) {
@@ -18,7 +18,7 @@ export function infestedCount(state: GameState): number {
   return state.player.carry.filter((c) => c.id === 'infested').length;
 }
 
-function burnRandomOwned(state: GameState): void {
+function burnRandomOwned(state: GameState): Uid | undefined {
   const piles: ('deck' | 'discard')[] = ['deck', 'discard'];
   for (const pile of piles) {
     const list = state.player[pile];
@@ -28,8 +28,9 @@ function burnRandomOwned(state: GameState): void {
     state.rng = rng;
     const [uid] = list.splice(pick, 1);
     if (uid !== undefined) state.player.burned.push(uid);
-    return;
+    return uid;
   }
+  return undefined;
 }
 
 /**
@@ -38,27 +39,48 @@ function burnRandomOwned(state: GameState): void {
  * else happens.
  */
 export function wound(state: GameState, count: number, source: string, drawsCarry = true): void {
+  if (count > 0 && state.player.wardsThisTurn === 0 && nonPanicCount(state) > 0) {
+    state.feed.push({
+      turn: state.turn,
+      kind: 'alarm',
+      text:
+        count > 1
+          ? `>> ${source} PUTS YOU DOWN HARD. IT COSTS YOU TWICE.`
+          : `>> ${source} CATCHES YOU.`,
+    });
+  }
   for (let i = 0; i < count; i++) {
     if (state.status !== 'active') return;
     if (state.player.wardsThisTurn > 0) {
       state.player.wardsThisTurn -= 1;
-      state.feed.push({ turn: state.turn, kind: 'player', text: '>> WOUND PREVENTED.' });
+      state.feed.push({ turn: state.turn, kind: 'player', text: '>> IT COMES IN AND YOU ARE READY. NOTHING LANDS.' });
       continue;
     }
     if (nonPanicCount(state) === 0) {
-      state.feed.push({ turn: state.turn, kind: 'alarm', text: `>> ${source}. NOTHING LEFT TO GIVE.` });
+      state.feed.push({
+        turn: state.turn,
+        kind: 'alarm',
+        text: `>> ${source} REACHES YOU AND THERE IS NOTHING LEFT TO GIVE UP.`,
+      });
       resolveRun(state, 'death');
       return;
     }
     state.stats.wounds += 1;
     addPanic(state);
     if (drawsCarry) drawCarry(state, 1);
-    state.feed.push({ turn: state.turn, kind: 'alarm', text: `>> ${source}. WOUND.` });
     if (state.player.hand.length > 0) {
       state.player.pendingWounds += 1;
       state.phase = 'wound';
     } else {
-      burnRandomOwned(state);
+      const taken = burnRandomOwned(state);
+      state.feed.push({
+        turn: state.turn,
+        kind: 'alarm',
+        text:
+          taken === undefined
+            ? '>> SOMETHING GOES.'
+            : `>> ${cardOf(taken).name} — YOU CANNOT DO THAT ANY MORE.`,
+      });
     }
   }
 }
@@ -151,7 +173,7 @@ function activate(state: GameState, threat: Threat): void {
 
   if (def.behaviour === 'nest') {
     for (const id of NODE_IDS) addNoise(state, id, THREATS.chorusNoisePerTurn);
-    state.feed.push({ turn: state.turn, kind: 'threat', text: '>> CHORUS. THE HULL IS SINGING.' });
+    state.feed.push({ turn: state.turn, kind: 'threat', text: '>> THE HULL IS SINGING. EVERY COMPARTMENT HEARS IT.' });
   }
 
   moveThreat(state, threat);
@@ -161,7 +183,7 @@ function activate(state: GameState, threat: Threat): void {
     state.reserve.contact -= moved;
     state.bag.contact = (state.bag.contact ?? 0) + moved;
     threat.fed = true;
-    state.feed.push({ turn: state.turn, kind: 'alarm', text: '>> THE HOLD ANSWERS. BAG DEEPENS.' });
+    state.feed.push({ turn: state.turn, kind: 'alarm', text: '>> THE HOLD ANSWERS. THERE ARE MORE OF THEM NOW.' });
   }
 
   if (def.behaviour === 'burrow' && threat.node === 'reactor') {
@@ -207,7 +229,7 @@ export function killThreat(state: GameState, id: string): boolean {
   state.feed.push({
     turn: state.turn,
     kind: 'player',
-    text: `>> ${threatDef(t.type).name} DOWN.`,
+    text: `>> ${threatDef(t.type).name} DOWN. IT STOPS MOVING.`,
   });
   return true;
 }

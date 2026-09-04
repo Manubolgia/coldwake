@@ -1,4 +1,4 @@
-import { MAP, NODE_IDS, RULES, THREATS, depthDef, threatDef } from './content';
+import { MAP, NODE_IDS, RULES, THREATS, depthDef, node, threatDef } from './content';
 import { cardIdOf } from './deck';
 import { nextInt } from './rng';
 import { noiseFloor } from './state';
@@ -43,7 +43,7 @@ export function spawnThreat(state: GameState, type: ThreatType, at: NodeId | 've
   state.feed.push({
     turn: state.turn,
     kind: 'threat',
-    text: `>> ${def.name} IN ${at === 'vents' ? 'VENTS' : at.toUpperCase().replace('_', '-')}`,
+    text: `>> ${def.name} IN ${at === 'vents' ? 'THE CRAWLSPACE' : node(at).name}. IT KNOWS WHERE THE NOISE CAME FROM.`,
   });
 }
 
@@ -73,10 +73,14 @@ export function bagDraw(state: GameState, at: NodeId | 'vents'): TokenType | 'em
     if ((state.reserve.contact ?? 0) > 0) {
       state.reserve.contact -= 1;
       spawnThreat(state, 'contact', at);
-      state.feed.push({ turn: state.turn, kind: 'alarm', text: '>> BAG EMPTY. SOMETHING WALKS IN.' });
+      state.feed.push({ turn: state.turn, kind: 'alarm', text: '>> SOMETHING THAT WAS NOT ABOARD BEFORE WALKS IN.' });
       return 'contact';
     }
-    state.feed.push({ turn: state.turn, kind: 'alarm', text: '>> BAG EMPTY. EVERYTHING MOVES AGAIN.' });
+    state.feed.push({
+      turn: state.turn,
+      kind: 'alarm',
+      text: '>> NOTHING LEFT UNACCOUNTED FOR. EVERYTHING ABOARD MOVES AGAIN.',
+    });
     return 'empty';
   }
   if (token === 'blank') {
@@ -86,7 +90,10 @@ export function bagDraw(state: GameState, at: NodeId | 'vents'): TokenType | 'em
     state.feed.push({
       turn: state.turn,
       kind: 'sys',
-      text: moved > 0 ? '>> NO CONTACT. THE SHIP GETS WORSE.' : '>> NO CONTACT.',
+      text:
+        moved > 0
+          ? '>> NOTHING THERE. THE SHIP GETS WORSE ANYWAY.'
+          : '>> NOTHING THERE.',
     });
     return 'blank';
   }

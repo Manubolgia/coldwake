@@ -3,7 +3,7 @@
     {
       "id": "engineer",
       "name": "ENGINEER",
-      "strength": "Repairs and power efficiency.",
+      "strength": "Repairs and power. Poor in a fight.",
       "weakness": "Poor in a fight.",
       "unlock": {
         "type": "start"
@@ -12,8 +12,8 @@
     {
       "id": "security",
       "name": "SECURITY",
-      "strength": "Weapons and wound tolerance.",
-      "weakness": "Loud. No technical options.",
+      "strength": "Weapons, and can take a hit.",
+      "weakness": "Loud. Nothing technical.",
       "unlock": {
         "type": "start"
       }
@@ -21,8 +21,8 @@
     {
       "id": "medic",
       "name": "MEDIC",
-      "strength": "CARRY control and wound mitigation.",
-      "weakness": "Slow. Low damage.",
+      "strength": "Reads and flushes blood. Mitigates wounds.",
+      "weakness": "Slow. Hits softly.",
       "unlock": {
         "type": "win",
         "label": "Win any run."
@@ -31,8 +31,8 @@
     {
       "id": "surveyor",
       "name": "SURVEYOR",
-      "strength": "Movement, vents, searching.",
-      "weakness": "Fragile deck.",
+      "strength": "Moves, searches, lives in the vents.",
+      "weakness": "Comes apart quickly.",
       "unlock": {
         "type": "depth",
         "depth": 3,
@@ -42,8 +42,8 @@
     {
       "id": "pilot",
       "name": "PILOT",
-      "strength": "Shuttle efficiency. Launches on two less power.",
-      "weakness": "Weakest deck otherwise.",
+      "strength": "Lifts the shuttle on less power.",
+      "weakness": "Weakest otherwise.",
       "unlock": {
         "type": "ending",
         "ending": "clean_break",

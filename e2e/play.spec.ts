@@ -166,6 +166,31 @@ test('5.14 reduced motion prints instead of typing, and never takes the screen',
   await context.close();
 });
 
+test('the advisory voice explains itself, and can be switched off', async ({ page }) => {
+  await bootToMenu(page);
+  await expect(page.getByTestId('guidance-toggle')).toContainText('ON');
+  await page.getByTestId('start').click();
+  await expect(page.getByTestId('commands')).toBeVisible();
+  await settle(page);
+  // It says something about the shuttle before the player has done anything.
+  await expect(page.getByTestId('terminal')).toContainText('shuttle');
+
+  await page.getByTestId('menu-button').click();
+  await page.getByTestId('guidance-toggle').click();
+  await expect(page.getByTestId('guidance-toggle')).toContainText('OFF');
+});
+
+test('nothing on screen mentions cards, decks or turns', async ({ page }) => {
+  await startRun(page, 'immersion', 1);
+  await settle(page);
+  const shown = (await page.locator('#root').innerText()).replace(/COLDWAKE/g, '');
+  expect(shown).not.toMatch(/\b(cards?|decks?|tokens?|nodes?|turns?|AP)\b/i);
+  await page.locator('.commands .cmd[data-action="endTurn"]').first().click();
+  await settle(page);
+  const after = (await page.locator('#root').innerText()).replace(/COLDWAKE/g, '');
+  expect(after).not.toMatch(/\b(cards?|decks?|tokens?|nodes?|turns?|AP)\b/i);
+});
+
 test('5.15 the CRT treatment can be switched off and the game still plays', async ({ page }) => {
   await bootToMenu(page);
   await page.getByTestId('crt-toggle').click();

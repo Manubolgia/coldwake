@@ -8,6 +8,7 @@ import { resolveRun } from './scoring';
 import { cloneState, drawUpToHandSize, noiseFloor, shuttleRequirement, turnLimit } from './state';
 import { drawCarry, killThreat, threatPhase, wound } from './threats';
 import { listenCost, playable, salvageLeft, systemAt } from './actions';
+import { arrival, lost, say, sweepReport, where } from './voice';
 import type { Action, EffectSpec, GameState, NodeId, Threat, Uid } from './types';
 
 export class IllegalActionError extends Error {}
@@ -46,7 +47,7 @@ function sealEdge(state: GameState, edge: [NodeId, NodeId], turns: number): void
   const [a, b] = edge;
   if (!neighbours(state, a, false).includes(b)) fail(`no such edge: ${a}-${b}`);
   state.ship.sealedEdges.push({ edge: [a, b], expiresTurn: state.turn + turns });
-  state.feed.push({ turn: state.turn, kind: 'player', text: `>> BULKHEAD SEALED ${node(a).short}-${node(b).short}` });
+  state.feed.push({ turn: state.turn, kind: 'player', text: `>> BULKHEAD DOWN BETWEEN ${node(a).name} AND ${node(b).name}. NOTHING CROSSES, INCLUDING YOU.` });
 }
 
 function pushThreat(state: GameState, threatId: string): void {
@@ -69,10 +70,10 @@ function resolveSalvage(state: GameState, entryId: string): void {
     // A found weapon joins the deck rather than firing itself.
     const uid = makeUid(def.id, index);
     state.player.discard.push(uid);
-    state.feed.push({ turn: state.turn, kind: 'player', text: `>> SALVAGE: ${def.name}. IN THE DECK.` });
+    state.feed.push({ turn: state.turn, kind: 'player', text: `>> FOUND: ${def.name}. IT GOES ON YOUR BELT.` });
     return;
   }
-  state.feed.push({ turn: state.turn, kind: 'player', text: `>> SALVAGE: ${def.name}` });
+  state.feed.push({ turn: state.turn, kind: 'player', text: `>> FOUND: ${def.name}.` });
   if (entry?.log !== undefined) {
     state.feed.push({ turn: state.turn, kind: 'sys', text: entry.log });
   }
@@ -87,18 +88,26 @@ function applyEffect(state: GameState, effect: EffectSpec, ctx: Ctx): void {
       return;
     case 'gainPower':
       gainPower(state, effect.n);
+      say(state, 'player', `>> POWER ${state.ship.power}.`);
       return;
     case 'gainAp':
       state.player.ap += effect.n;
+      say(state, 'player', '>> YOU FIND ANOTHER MINUTE IN THE HOUR.');
       return;
     case 'move':
       if (ctx.to === undefined) fail('move needs a destination');
       moveTo(state, ctx.to);
       if (!effect.silent) makeNoise(state, RULES.basicActions.move?.noise ?? 2);
       return;
-    case 'draw':
+    case 'draw': {
+      const before = state.player.hand.length;
       for (let i = 0; i < effect.n; i++) drawOne(state);
+      const drew = state.player.hand.length - before;
+      if (drew > 0) {
+        say(state, 'player', `>> ${drew === 1 ? 'ONE MORE THING COMES' : `${drew} MORE THINGS COME`} TO HAND.`);
+      }
       return;
+    }
     case 'attack': {
       const t = state.threats.find((x) => x.id === ctx.threat);
       if (!t || t.node !== state.player.node) fail('no target here');
@@ -112,7 +121,7 @@ function applyEffect(state: GameState, effect: EffectSpec, ctx: Ctx): void {
         state.feed.push({
           turn: state.turn,
           kind: 'alarm',
-          text: `>> MISS. ${roll}+${effect.bonus} VS ${t.hp}. WEAPON SPENT.`,
+          text: `>> MISS. ${roll}+${effect.bonus} AGAINST ${t.hp}. IT IS EMPTY — THE ARMORY CAN REFILL IT.`,
         });
       }
       return;
@@ -123,10 +132,13 @@ function applyEffect(state: GameState, effect: EffectSpec, ctx: Ctx): void {
       killThreat(state, t.id);
       return;
     }
-    case 'pushThreat':
+    case 'pushThreat': {
       if (ctx.threat === undefined) fail('push needs a target');
+      const pushed = state.threats.find((x) => x.id === ctx.threat);
       pushThreat(state, ctx.threat);
+      if (pushed) say(state, 'player', `>> DRIVEN BACK INTO ${where(pushed.node)}.`);
       return;
+    }
     case 'sealEdge': {
       if (ctx.edge === undefined) fail('seal needs an edge');
       if (!effect.anywhere && !ctx.edge.includes(state.player.node as NodeId)) {
@@ -146,22 +158,36 @@ function applyEffect(state: GameState, effect: EffectSpec, ctx: Ctx): void {
           effect.n,
         );
       }
+      say(
+        state,
+        'player',
+        effect.scope === 'all' ? '>> EVERY COMPARTMENT FALLS QUIET.' : '>> IT GOES QUIET HERE.',
+      );
       return;
     }
     case 'addNoise': {
       const target = effect.scope === 'target' ? ctx.to : (state.player.node as NodeId);
       if (target === undefined || target === 'vents') fail('noise needs a node');
       addNoise(state, target, effect.n);
+      say(
+        state,
+        'player',
+        effect.scope === 'target'
+          ? `>> IT LANDS IN ${where(target)} AND KEEPS SHOUTING.`
+          : '>> THAT WAS LOUD.',
+      );
       return;
     }
     case 'preventWound':
       state.player.wardsThisTurn += 1;
+      say(state, 'player', '>> SET. THE NEXT ONE WILL NOT LAND.');
       return;
     case 'reactorOutput':
       state.ship.reactorOutput = Math.min(
         RULES.reactorOutputMax,
         Math.max(0, state.ship.reactorOutput + effect.n),
       );
+      say(state, 'player', `>> REACTOR HOLDING AT ${state.ship.reactorOutput} AN HOUR.`);
       return;
     case 'recharge': {
       const uid = ctx.target;
@@ -169,10 +195,14 @@ function applyEffect(state: GameState, effect: EffectSpec, ctx: Ctx): void {
       const i = state.player.spent.indexOf(uid);
       if (i < 0) fail('that weapon is not spent');
       state.player.spent.splice(i, 1);
+      say(state, 'player', `>> ${cardOf(uid).name} LOADED AGAIN.`);
       return;
     }
     case 'removePanic':
-      for (let i = 0; i < effect.n; i++) removePanic(state);
+      for (let i = 0; i < effect.n; i++) {
+        const gone = removePanic(state);
+        if (gone !== undefined) say(state, 'player', `>> ${cardOf(gone).name} PASSES.`);
+      }
       return;
     case 'revealCarry': {
       for (let i = 0; i < effect.n; i++) {
@@ -183,7 +213,10 @@ function applyEffect(state: GameState, effect: EffectSpec, ctx: Ctx): void {
         state.feed.push({
           turn: state.turn,
           kind: c.id === 'infested' ? 'alarm' : 'sys',
-          text: `>> CARRY: ${c.id === 'infested' ? 'INFESTED' : 'CLEAN'}`,
+          text:
+            c.id === 'infested'
+              ? '>> BLOOD READS INFESTED. IT IS ALREADY IN YOU.'
+              : '>> BLOOD READS CLEAN. THAT SAMPLE, ANYWAY.',
         });
       }
       return;
@@ -193,11 +226,13 @@ function applyEffect(state: GameState, effect: EffectSpec, ctx: Ctx): void {
         const idx = state.player.carry.findIndex((x) => !x.revealed);
         if (idx < 0) break;
         state.player.carry.splice(idx, 1);
+        say(state, 'player', '>> A SAMPLE GOES DOWN THE DRAIN UNREAD.');
       }
       return;
     }
     case 'drawCarry':
       drawCarry(state, effect.n);
+      say(state, 'alarm', '>> YOU ARE BLEEDING. ANOTHER SAMPLE GOES IN THE RACK.');
       return;
     case 'chargeShuttle': {
       const n = Math.min(effect.n, state.ship.power);
@@ -222,6 +257,7 @@ function applyEffect(state: GameState, effect: EffectSpec, ctx: Ctx): void {
       return;
     case 'score':
       state.stats.salvageScore += effect.n;
+      say(state, 'sys', '>> LOGGED. SOMEBODY SHOULD KNOW THEY WERE HERE.');
       return;
     case 'sequence':
       for (const step of effect.steps) applyEffect(state, step, ctx);
@@ -253,7 +289,7 @@ function finishTurn(state: GameState): void {
   state.ship.sealedEdges = state.ship.sealedEdges.filter((e) => e.expiresTurn > state.turn);
 
   if (state.turn >= turnLimit(state.depth)) {
-    state.feed.push({ turn: state.turn, kind: 'alarm', text: '>> ORBIT LOST. HULL TEMPERATURE RISING.' });
+    state.feed.push({ turn: state.turn, kind: 'alarm', text: '>> ORBIT LOST. THE HULL IS GETTING WARM.' });
     resolveRun(state, 'timeout');
     return;
   }
@@ -261,7 +297,11 @@ function finishTurn(state: GameState): void {
   state.turn += 1;
   state.player.ap = RULES.apPerTurn;
   drawUpToHandSize(state);
-  state.feed.push({ turn: state.turn, kind: 'sys', text: `-- TURN ${state.turn} --` });
+  state.feed.push({
+    turn: state.turn,
+    kind: 'sys',
+    text: `-- HOUR ${state.turn}. ${turnLimit(state.depth) - state.turn + 1} BEFORE THE ORBIT CLOSES --`,
+  });
 }
 
 function endTurn(state: GameState): void {
@@ -280,7 +320,7 @@ function resolveBurn(state: GameState, uid: Uid): void {
   if (!removeFromHand(state, uid)) fail('that card is not in hand');
   state.player.burned.push(uid);
   state.player.pendingWounds -= 1;
-  state.feed.push({ turn: state.turn, kind: 'alarm', text: `>> BURNED ${cardOf(uid).name}.` });
+  state.feed.push({ turn: state.turn, kind: 'alarm', text: lost(uid) });
   // A wound with nothing left in hand takes a card at random instead.
   while (state.player.pendingWounds > 0 && state.player.hand.length === 0) {
     const pile = state.player.deck.length > 0 ? state.player.deck : state.player.discard;
@@ -307,13 +347,14 @@ function playCard(state: GameState, action: Extract<Action, { t: 'play' }>): voi
   if (action.edge !== undefined) ctx.edge = action.edge;
   if (action.threat !== undefined) ctx.threat = action.threat;
   if (action.target !== undefined) ctx.target = action.target;
+  say(state, 'player', `>> ${c.name}.`);
   applyEffect(state, c.effect, ctx);
   if (c.burn) {
     state.player.burned.push(uid);
+    say(state, 'sys', `>> ${c.name} IS SPENT. THERE WAS ONLY THE ONE.`);
   } else {
     state.player.discard.push(uid);
   }
-  state.feed.push({ turn: state.turn, kind: 'player', text: `>> ${c.name}` });
 }
 
 function ventExit(state: GameState, to: NodeId): void {
@@ -327,7 +368,11 @@ function ventExit(state: GameState, to: NodeId): void {
   if (token !== 'blank' && token !== 'empty' && state.threats.length > before) {
     const t = state.threats[state.threats.length - 1] as Threat;
     state.player.combatPenalty = RULES.ventAmbushPenalty;
-    state.feed.push({ turn: state.turn, kind: 'alarm', text: '>> AMBUSH IN THE DARK.' });
+    state.feed.push({
+      turn: state.turn,
+      kind: 'alarm',
+      text: '>> IT WAS WAITING IN THE DUCT. YOU CANNOT SWING PROPERLY IN HERE.',
+    });
     wound(state, threatDef(t.type).damage, `${threatDef(t.type).name} AMBUSH`);
   }
 }
@@ -344,7 +389,7 @@ function systemAction(state: GameState, action: Action): void {
   switch (action.t) {
     case 'repair':
       state.ship.reactorOutput = Math.min(RULES.reactorOutputMax, state.ship.reactorOutput + 1);
-      state.feed.push({ turn: state.turn, kind: 'player', text: `>> REACTOR OUTPUT ${state.ship.reactorOutput}` });
+      state.feed.push({ turn: state.turn, kind: 'player', text: `>> REACTOR HOLDING AT ${state.ship.reactorOutput} AN HOUR.` });
       return;
     case 'seal':
       // "Block one edge from this node" — not any edge on the ship.
@@ -354,7 +399,7 @@ function systemAction(state: GameState, action: Action): void {
     case 'purgeVents': {
       const inVents = state.threats.filter((t) => t.node === 'vents');
       for (const t of inVents) killThreat(state, t.id);
-      state.feed.push({ turn: state.turn, kind: 'player', text: `>> VENTS PURGED. ${inVents.length} CLEARED.` });
+      state.feed.push({ turn: state.turn, kind: 'player', text: inVents.length === 0 ? '>> VENTS FLOODED. NOTHING WAS IN THEM.' : `>> VENTS FLOODED. ${inVents.length} COOKED IN THE DUCTS.` });
       return;
     }
     case 'carryScan': {
@@ -373,7 +418,7 @@ function systemAction(state: GameState, action: Action): void {
       const c = state.player.carry[action.index];
       if (!c || c.revealed) fail('that sample is already read');
       state.player.carry.splice(action.index, 1);
-      state.feed.push({ turn: state.turn, kind: 'player', text: '>> BLOOD PURGED.' });
+      state.feed.push({ turn: state.turn, kind: 'player', text: '>> THE LINE RUNS RED AND THEN CLEAR.' });
       wound(state, 1, 'PURGE', false);
       return;
     }
@@ -381,7 +426,7 @@ function systemAction(state: GameState, action: Action): void {
       const i = state.player.spent.indexOf(action.target);
       if (i < 0) fail('that weapon is not spent');
       state.player.spent.splice(i, 1);
-      state.feed.push({ turn: state.turn, kind: 'player', text: '>> WEAPON RECHARGED.' });
+      state.feed.push({ turn: state.turn, kind: 'player', text: `>> ${cardOf(action.target).name} LOADED AGAIN.` });
       return;
     }
     case 'chargeShuttle': {
@@ -398,7 +443,11 @@ function systemAction(state: GameState, action: Action): void {
     }
     case 'beacon':
       state.ship.beaconSent = true;
-      state.feed.push({ turn: state.turn, kind: 'alarm', text: '>> BROADCAST AWAY. EVERYTHING HEARD IT.' });
+      state.feed.push({
+      turn: state.turn,
+      kind: 'alarm',
+      text: '>> BROADCAST AWAY. THIRTY-ONE HOURS TO THE RELAY. EVERYTHING ABOARD HEARD IT TOO.',
+    });
       return;
     case 'armScuttle': {
       state.ship.scuttleArmed = true;
@@ -407,7 +456,7 @@ function systemAction(state: GameState, action: Action): void {
       state.feed.push({
         turn: state.turn,
         kind: 'alarm',
-        text: `>> OVERLOAD ARMED. ${fuse} TURNS TO CRITICAL.`,
+        text: `>> OVERLOAD ARMED. ${fuse} HOURS TO CRITICAL. YOU CANNOT CALL IT BACK.`,
       });
       return;
     }
@@ -431,15 +480,17 @@ function apply(state: GameState, action: Action): void {
       payAp(state, RULES.basicActions.move?.ap ?? 1);
       makeNoise(state, RULES.basicActions.move?.noise ?? 2);
       moveTo(state, action.to);
+      say(state, 'player', arrival(state, action.to, false));
       return;
     case 'creep':
       payAp(state, RULES.basicActions.creep?.ap ?? 2);
       moveTo(state, action.to);
+      say(state, 'player', arrival(state, action.to, true));
       return;
     case 'listen':
       payAp(state, listenCost(state));
       state.bagKnownTurn = state.turn;
-      state.feed.push({ turn: state.turn, kind: 'player', text: '>> LISTENING.' });
+      say(state, 'player', sweepReport(state));
       return;
     case 'search': {
       if (state.player.node === 'vents' || salvageLeft(state, state.player.node) === 0) {
@@ -455,9 +506,13 @@ function apply(state: GameState, action: Action): void {
       payAp(state, RULES.basicActions.discard?.ap ?? 1);
       removeFromHand(state, action.uid);
       state.player.discard.push(action.uid);
-      if (isPanic(action.uid)) {
-        state.feed.push({ turn: state.turn, kind: 'player', text: '>> PANIC SHED.' });
-      }
+      say(
+        state,
+        'player',
+        isPanic(action.uid)
+          ? `>> ${cardOf(action.uid).name} PASSES. YOU BREATHE.`
+          : `>> ${cardOf(action.uid).name} SET ASIDE FOR NOW.`,
+      );
       return;
     }
     case 'play':
@@ -467,7 +522,7 @@ function apply(state: GameState, action: Action): void {
       if (state.player.node === 'vents' || !node(state.player.node).vent) fail('no vent access here');
       payAp(state, RULES.basicActions.ventEnter?.ap ?? 1);
       state.player.node = 'vents';
-      state.feed.push({ turn: state.turn, kind: 'player', text: '>> INTO THE CRAWLSPACE.' });
+      say(state, 'player', '>> INTO THE CRAWLSPACE. NOTHING CAN SEE YOU IN HERE.');
       return;
     case 'ventExit':
       ventExit(state, action.to);

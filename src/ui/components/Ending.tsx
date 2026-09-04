@@ -48,40 +48,40 @@ export function EndingScreen({
       <div className="rule">{'─'.repeat(40)}</div>
       {named ? <p className="epilogue">{EPILOGUE[ending]}</p> : null}
 
-      <h2>Readout</h2>
+      <h2>Assay report</h2>
       <div className="stat">
         <span>SCORE</span>
         <b data-testid="score">{r?.score ?? 0}</b>
       </div>
       <div className="stat">
-        <span>MULTIPLIER</span>
+        <span>ASSAY WEIGHTING</span>
         <b>×{RULES.endings[ending].multiplier}</b>
       </div>
       <div className="stat">
-        <span>POWER BANKED</span>
+        <span>POWER INTO THE SHUTTLE</span>
         <b>{state.ship.shuttleCharge}</b>
       </div>
       <div className="stat">
-        <span>NODES SEARCHED</span>
+        <span>COMPARTMENTS SEARCHED</span>
         <b>{state.ship.searched.length}</b>
       </div>
       <div className="stat">
-        <span>THREATS KILLED</span>
+        <span>PUT DOWN</span>
         <b>{state.stats.threatsKilled}</b>
       </div>
       <div className="stat">
-        <span>TURNS SURVIVED</span>
+        <span>HOURS SURVIVED</span>
         <b>{r?.turn ?? state.turn}</b>
       </div>
       <div className="stat">
-        <span>CARDS INTACT</span>
+        <span>STILL YOURSELF</span>
         <b>{surviving}</b>
       </div>
       <div className="stat">
-        <span>CARRY</span>
+        <span>BLOOD</span>
         <b>
           {state.player.carry.map((c) => (c.id === 'infested' ? '█' : '▒')).join('')} ·{' '}
-          {r?.infested ?? 0} INFESTED
+          {r?.infested ?? 0} OF {state.player.carry.length} INFECTED
         </b>
       </div>
       <div className="stat">
@@ -98,7 +98,7 @@ export function EndingScreen({
           </button>
         ))}
       </div>
-      <p>Did any turn feel pointless?</p>
+      <p>Was there an hour that felt pointless?</p>
       <div className="row">
         <button className={pointless === true ? 'inverse' : ''} onClick={() => setPointless(true)}>
           yes
@@ -107,7 +107,7 @@ export function EndingScreen({
           no
         </button>
       </div>
-      <p>Did you understand why the run ended?</p>
+      <p>Did you understand what killed you?</p>
       <div className="row">
         <button className={understood === true ? 'inverse' : ''} onClick={() => setUnderstood(true)}>
           yes

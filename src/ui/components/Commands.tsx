@@ -1,7 +1,7 @@
 import { actionCost, cardIdOf, cardOf, describe, node } from '../../engine';
 import type { Action, GameState, NodeId, Uid } from '../../engine/types';
 
-type Group = 'MOVEMENT' | 'THIS NODE' | 'SYSTEMS' | 'CARDS' | 'TURN' | 'WOUND';
+type Group = 'MOVE' | 'HERE' | 'THE SHIP' | 'AT HAND' | 'THE HOUR' | 'HURT';
 
 function groupOf(a: Action): Group {
   switch (a.t) {
@@ -9,23 +9,23 @@ function groupOf(a: Action): Group {
     case 'creep':
     case 'ventEnter':
     case 'ventExit':
-      return 'MOVEMENT';
+      return 'MOVE';
     case 'listen':
     case 'search':
-      return 'THIS NODE';
+      return 'HERE';
     case 'play':
     case 'discard':
-      return 'CARDS';
+      return 'AT HAND';
     case 'burn':
-      return 'WOUND';
+      return 'HURT';
     case 'endTurn':
-      return 'TURN';
+      return 'THE HOUR';
     default:
-      return 'SYSTEMS';
+      return 'THE SHIP';
   }
 }
 
-const ORDER: Group[] = ['WOUND', 'THIS NODE', 'SYSTEMS', 'MOVEMENT', 'CARDS', 'TURN'];
+const ORDER: Group[] = ['HURT', 'HERE', 'THE SHIP', 'MOVE', 'AT HAND', 'THE HOUR'];
 
 function targetNode(a: Action): NodeId | undefined {
   if ('to' in a && typeof a.to === 'string') return a.to;
@@ -41,7 +41,7 @@ function uidOf(a: Action): Uid | undefined {
 export function costLabel(state: GameState, a: Action): string {
   const c = actionCost(state, a);
   const parts: string[] = [];
-  if (c.ap > 0) parts.push(`AP ${c.ap}`);
+  if (c.ap > 0) parts.push(`TIME ${c.ap}`);
   if (c.power > 0) parts.push(`PWR ${c.power}`);
   parts.push(`NOISE +${c.noise}`);
   return parts.join('  ');
@@ -79,14 +79,15 @@ export function Commands({
     <div className="commands" data-testid="commands">
       {state.phase === 'wound' ? (
         <div className="group-label alarm">
-          WOUND — BURN A CARD ({state.player.pendingWounds} OUTSTANDING)
+          IT HURT YOU. SOMETHING HAS TO GO
+          {state.player.pendingWounds > 1 ? ` (${state.player.pendingWounds} TIMES)` : ''}
         </div>
       ) : null}
       {selectedNode !== null && selectedNode !== state.player.node ? (
-        <div className="group-label">TARGET: {node(selectedNode).name}</div>
+        <div className="group-label">TOWARD {node(selectedNode).name}</div>
       ) : null}
       {selectedCard !== null ? (
-        <div className="group-label">CARD: {cardOf(selectedCard).name}</div>
+        <div className="group-label">{cardOf(selectedCard).name}</div>
       ) : null}
 
       {groups.map(({ g, items }) => (
@@ -106,7 +107,9 @@ export function Commands({
           ))}
         </div>
       ))}
-      {visible.length === 0 ? <div className="group-label">NO ACTIONS FOR THAT TARGET</div> : null}
+      {visible.length === 0 ? (
+        <div className="group-label">NOTHING YOU CAN DO IN THAT DIRECTION</div>
+      ) : null}
     </div>
   );
 }

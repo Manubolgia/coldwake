@@ -66,3 +66,50 @@ for threat information.
 No fades, no slides, no hover states, no ambient drift, no barrel distortion, no
 flicker or roll. The map does not animate. Cards do not deal themselves in. The
 palette is still six values and the corners are still square.
+
+
+## Voice
+
+The ship does not know it is a board game and never speaks like one. There is no
+bag, no token, no card, no deck, no node, no turn and no AP anywhere the player
+can read. The vocabulary maps like this, and the engine keeps its own names:
+
+| in the code | on the screen |
+|---|---|
+| bag, tokens | what is unresolved aboard — returns that are nothing, moving, heavy, inside the walls, singing |
+| a draw | something resolves out of the dark |
+| deck, hand, cards | your kit, what is at hand, the things you can still do |
+| burn | "you cannot do that any more" — a wound takes a capability, permanently |
+| discard | set aside |
+| AP | time |
+| turn | an hour, counted down against the orbit |
+| node | a compartment |
+
+`src/engine/voice.ts` composes the lines that need composing; the rest sit next
+to the rules that fire them. Two tests hold the line: one checks every written
+string that ships (card text, salvage logs, advisories, role blurbs), the other
+plays fifteen runs across every role and depth and checks every line the ship
+says during them. A Playwright test does the same against the rendered screen.
+
+## Feedback
+
+Every action reports its result, not just its name. Listening says what was
+heard rather than that you listened; walking says where you are and whether it
+cost you; playing something names it first and then says what it did. A test
+asserts that each action a player can take adds a legible line to the terminal,
+because "I said LISTEN and nothing came back" is the bug that made all of this
+necessary.
+
+## The advisory voice
+
+An optional narrator, on by default, off in one tap from the bay. Nineteen
+advisories live in `src/content/guidance.json`; each fires at most once a run,
+the first moment its condition is true — the arithmetic in the first hour, what
+a wound really cost you the first time one lands, what an empty weapon means,
+where the medbay comes in, and what is still worth doing once the shuttle is out
+of reach. They are written in the same voice as everything else and marked with
+`::` so they read as somebody explaining rather than the hull reporting.
+
+The conditions are code (`src/ui/guidance.ts`), the words are content. The
+evaluator is a pure function of the state and the set already said, so it is
+tested directly and cannot affect the engine, the replays or the balance.

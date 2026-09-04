@@ -1,5 +1,5 @@
 import { useEffect, useRef } from 'react';
-import type { LogLine } from '../../engine/types';
+import type { DisplayLine } from '../guidance';
 import { useTypedFeed } from '../hooks';
 
 /**
@@ -13,7 +13,7 @@ export function Terminal({
   instant,
   onComplete,
 }: {
-  lines: LogLine[];
+  lines: DisplayLine[];
   resolving: boolean;
   instant: boolean;
   onComplete: () => void;
@@ -44,11 +44,13 @@ export function Terminal({
     if (back > 3) return 'dim';
     return '';
   };
-  const tone = (line: LogLine, index: number): string => {
+  const tone = (line: DisplayLine, index: number): string => {
+    if (line.kind === 'guide') return age(index) === 'ghost' ? 'ghost' : 'guide';
     const faded = age(index);
     if (faded !== '') return faded;
     return line.kind === 'alarm' ? 'alarm' : line.kind === 'threat' ? '' : 'dim';
   };
+  const body = (line: DisplayLine): string => (line.kind === 'guide' ? `:: ${line.text}` : line.text);
 
   return (
     <div
@@ -63,12 +65,12 @@ export function Terminal({
     >
       {visible.map((l, i) => (
         <div key={first + i} className={tone(l, i)}>
-          {l.text}
+          {body(l)}
         </div>
       ))}
       {current ? (
-        <div className={current.kind === 'alarm' ? 'alarm' : current.kind === 'threat' ? '' : 'dim'}>
-          {current.text.slice(0, typed.chars)}
+        <div className={current.kind === 'guide' ? 'guide' : current.kind === 'alarm' ? 'alarm' : current.kind === 'threat' ? '' : 'dim'}>
+          {body(current).slice(0, typed.chars)}
           <span className="caret" />
         </div>
       ) : (

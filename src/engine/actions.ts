@@ -274,44 +274,44 @@ export function actionKey(a: Action): string {
 export function describe(a: Action): string {
   switch (a.t) {
     case 'move':
-      return `MOVE ${node(a.to).name}`;
+      return `WALK TO ${node(a.to).name}`;
     case 'creep':
-      return `CREEP ${node(a.to).name}`;
+      return `CREEP TO ${node(a.to).name}`;
     case 'listen':
-      return 'LISTEN';
+      return 'LISTEN AT THE BULKHEAD';
     case 'search':
-      return 'SEARCH';
+      return 'SEARCH THIS COMPARTMENT';
     case 'discard':
-      return `DISCARD ${cardOf(a.uid).name}`;
+      return `SET ASIDE ${cardOf(a.uid).name}`;
     case 'burn':
-      return `BURN ${cardOf(a.uid).name}`;
+      return `GIVE UP ${cardOf(a.uid).name}`;
     case 'play':
       return card(cardIdOf(a.uid)).name;
     case 'ventEnter':
-      return 'ENTER VENTS';
+      return 'INTO THE VENTS';
     case 'ventExit':
-      return `EXIT AT ${node(a.to).name}`;
+      return `COME OUT IN ${node(a.to).name}`;
     case 'repair':
-      return 'REPAIR REACTOR';
+      return 'REPAIR THE REACTOR';
     case 'seal':
-      return `SEAL ${node(a.edge[1]).name}`;
+      return `DROP THE BULKHEAD TO ${node(a.edge[1]).name}`;
     case 'purgeVents':
-      return 'PURGE VENTS';
+      return 'FLOOD THE VENTS';
     case 'carryScan':
-      return 'CARRY SCAN';
+      return 'READ YOUR BLOOD';
     case 'purgeBlood':
-      return 'PURGE BLOOD';
+      return 'FLUSH YOUR BLOOD';
     case 'recharge':
-      return `RECHARGE ${cardOf(a.target).name}`;
+      return `REFILL ${cardOf(a.target).name}`;
     case 'chargeShuttle':
-      return `CHARGE SHUTTLE ${a.n}`;
+      return `BANK ${a.n} INTO THE SHUTTLE`;
     case 'beacon':
-      return 'BEACON';
+      return 'BROADCAST';
     case 'armScuttle':
-      return 'ARM SCUTTLE';
+      return 'ARM THE REACTOR';
     case 'launch':
       return 'LAUNCH';
     case 'endTurn':
-      return 'END TURN';
+      return 'WAIT OUT THE HOUR';
   }
 }

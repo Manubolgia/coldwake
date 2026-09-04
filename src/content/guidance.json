@@ -1,0 +1,99 @@
+{
+  "advisories": [
+    {
+      "id": "opening",
+      "trigger": "always",
+      "text": "The shuttle will not lift on less than the power shown top right. The reactor makes two an hour and the pool it fills holds ten. Walk to the bay when the pool is full, bank it, walk away. Everything else you do is bought out of that arithmetic."
+    },
+    {
+      "id": "firstMove",
+      "trigger": "moved",
+      "text": "Walking is loud. Creeping costs you twice the time and makes no sound at all. Noise stays in the compartment you made it in and fades an hour at a time."
+    },
+    {
+      "id": "loudHere",
+      "trigger": "noiseHereNear",
+      "text": "This compartment is nearly loud enough to be heard from the hold. One more careless hour here and something comes to look."
+    },
+    {
+      "id": "threatSeen",
+      "trigger": "threatOnBoard",
+      "text": "Something is loose. It walks toward whatever it can hear, and when it cannot hear anything it walks toward you. You are faster than it: three moves an hour against its one."
+    },
+    {
+      "id": "threatNear",
+      "trigger": "threatWithinOne",
+      "text": "It is one compartment away. If it ends the hour where you are, it takes something from you. You can leave, you can drop a bulkhead in its face, or you can fight it — running is usually right."
+    },
+    {
+      "id": "firstWound",
+      "trigger": "wounded",
+      "text": "That is how you die here: not a wound that heals, but a thing you could do and now cannot, gone for the rest of the run. Panic fills the space it left. When nothing you can do is left, neither are you."
+    },
+    {
+      "id": "panicHeld",
+      "trigger": "panicInHand",
+      "text": "Panic occupies your hands and does nothing. Setting it aside costs you time but clears the space. Some of it is worse than useless — read what it does to you while you hold it."
+    },
+    {
+      "id": "firstSearch",
+      "trigger": "searched",
+      "text": "Every compartment holds two things worth finding, and searching is loud. Cells and stimulants are worth the noise. Some of what is aboard is not."
+    },
+    {
+      "id": "weaponEmpty",
+      "trigger": "weaponSpent",
+      "text": "A miss empties the weapon. It stays on your belt doing nothing until the armory refills it, which costs an hour, a unit of power and a good deal of noise. Decide whether it is worth the walk."
+    },
+    {
+      "id": "poolFull",
+      "trigger": "poolNearFull",
+      "text": "The pool is nearly full and it does not grow past ten — every hour you leave it there, the reactor makes power that goes nowhere. Get to the shuttle bay and bank it."
+    },
+    {
+      "id": "atShuttle",
+      "trigger": "atShuttleWithPower",
+      "text": "Bank everything you are carrying. It costs one hour however much you move, so move all of it."
+    },
+    {
+      "id": "bloodUnread",
+      "trigger": "bloodUnread",
+      "text": "You are carrying samples nobody has read. The medbay will read one, cheaply. It changes nothing about your body — but it changes which ending you are playing for, and that is worth an hour."
+    },
+    {
+      "id": "bloodInfested",
+      "trigger": "bloodInfestedKnown",
+      "text": "One confirmed. Two and the shuttle carries it to the relay with you, and that is the worst thing you can do with this run. The medbay can flush a sample you have not read, at the price of a wound. The bridge is the other answer."
+    },
+    {
+      "id": "reactorDamaged",
+      "trigger": "reactorDown",
+      "text": "Reactor output is down. Everything you are waiting for takes longer now. Repairing it costs an hour and makes noise in the compartment next to the hold, which is exactly where you do not want to be heard."
+    },
+    {
+      "id": "ventFirst",
+      "trigger": "inVents",
+      "text": "Nothing can see you in here and you can cross the ship in two hours. Coming out is the gamble: whatever is loose gets a chance to be waiting at the other end, and you cannot swing properly in a duct."
+    },
+    {
+      "id": "behind",
+      "trigger": "behindSchedule",
+      "text": "Count it: hours left times two, plus what is in the pool. If that will not reach the number top right, the shuttle is already gone and you are playing for something else."
+    },
+    {
+      "id": "cannotMakeIt",
+      "trigger": "shuttleUnreachable",
+      "text": "The shuttle is out of reach. Two things are still worth doing. The bridge will overload the reactor — it needs to be armed with hours to spare, and nothing leaves. Comms will broadcast, which is cheaper and means somebody else opens the hold."
+    },
+    {
+      "id": "shuttleReady",
+      "trigger": "shuttleReady",
+      "text": "It has enough. Get to the bay and go — every hour you spend aboard now is an hour something has to find you."
+    },
+    {
+      "id": "nearlyGone",
+      "trigger": "nearlyGone",
+      "text": "There is almost nothing left of what you could do. Avoid everything. Take the ending you can still reach."
+    }
+  ]
+}

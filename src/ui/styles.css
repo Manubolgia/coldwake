@@ -518,6 +518,12 @@ p {
   color: var(--alarm);
 }
 
+/* The advisory voice: brighter than the ship's own chatter, so it reads as
+   somebody explaining rather than the hull reporting. */
+.terminal .guide {
+  color: var(--phosphor);
+}
+
 .terminal div {
   white-space: pre-wrap;
   word-break: break-word;
