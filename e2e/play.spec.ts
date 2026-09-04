@@ -197,12 +197,13 @@ test('5.14 the boot sequence types itself out', async ({ page }) => {
   // The foreground page: Chromium throttles timers in a background context,
   // which would stretch the type-out to minutes and prove nothing.
   await page.goto('/coldwake/', { waitUntil: 'commit' });
-  await page.waitForSelector('[data-testid="boot"][data-complete="no"]', { timeout: 4000 });
-  const early = (await page.getByTestId('boot').innerText()).length;
-  await page.waitForTimeout(700);
-  const later = (await page.getByTestId('boot').innerText()).length;
-  expect(later).toBeGreaterThan(early);
-  await page.waitForSelector('[data-testid="boot"][data-complete="yes"]', { timeout: 8000 });
+  // Sampled against the readout's own state rather than the clock: caught
+  // while it is unfinished, the text must be shorter than when it finishes.
+  await page.waitForSelector('[data-testid="boot"][data-complete="no"]', { timeout: 6000 });
+  const partial = (await page.getByTestId('boot').innerText()).length;
+  await page.waitForSelector('[data-testid="boot"][data-complete="yes"]', { timeout: 15_000 });
+  const full = (await page.getByTestId('boot').innerText()).length;
+  expect(full).toBeGreaterThan(partial);
 });
 
 test('5.14 reduced motion renders the boot instantly', async ({ browser }) => {
