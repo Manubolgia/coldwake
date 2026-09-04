@@ -52,6 +52,8 @@ If a rule moves, this table moves with it, or the gate is lying.
 | 4.12 pilot | Launches on less power | `rules.test.ts › §4.12-4.13 › lets the pilot launch on less power` |
 | 4.13 depths | Every modifier applied | `rules.test.ts › §4.12-4.13 › applies each depth modifier` |
 | 5.3 panic | Cannot be played; taxes AP; TUNNEL VISION and COLD SWEAT | `cards.test.ts › panic cards` |
+| 5.3 panic | SHAKING costs −1 on a swing, and stacks with the vent ambush | `cards.test.ts › panic cards › costs a swing while SHAKING is held` |
+| 5.3 panic | The penalty is real: it turns kills into misses | `cards.test.ts › panic cards › turns swings that would have landed into misses` |
 | 7.1 determinism | A seed plus a log reproduces the state hash | `properties.test.ts › replays a log to an identical state hash` |
 | 7.3 purity | `reduce` never mutates its input | `rules.test.ts › §7 › never mutates the state passed to reduce` |
 | 7.4 log | Every action is logged | `rules.test.ts › §7 › logs every action for replay` |

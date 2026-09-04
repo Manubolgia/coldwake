@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
-import { CARDS, RULES, VENT_NODES, reduce, targetKind } from '../src/engine';
+import { CARDS, RULES, VENT_NODES, attackPenalty, reduce, targetKind } from '../src/engine';
 import type { Card, GameState, RoleId } from '../src/engine/types';
-import { at, fresh, put, spawn, withHand } from './helpers';
+import { at, fresh, handOnly, put, spawn, withHand } from './helpers';
 
 /** Build a position in which the card under test is legal to play. */
 function stage(c: Card): GameState {
@@ -186,5 +186,45 @@ describe('panic cards (§5.3)', () => {
     });
     const moved = reduce(s, { t: 'move', to: 'spine_a' });
     expect(moved.ship.noise.cryobay).toBe((RULES.basicActions.move?.noise ?? 2) + 1);
+  });
+
+  it('costs a swing while SHAKING is held, and stacks with the ambush', () => {
+    const clean = fresh('security');
+    expect(attackPenalty(clean)).toBe(0);
+
+    const shaking = put(clean, (x) => {
+      x.player.panicsGained += 1;
+      x.player.hand.push('panic_shaking@1001');
+    });
+    expect(attackPenalty(shaking)).toBe(RULES.shakingPenalty);
+
+    const ambushed = put(shaking, (x) => {
+      x.player.combatPenalty = RULES.ventAmbushPenalty;
+    });
+    expect(attackPenalty(ambushed)).toBe(RULES.shakingPenalty + RULES.ventAmbushPenalty);
+  });
+
+  it('turns swings that would have landed into misses', () => {
+    // The same swing at the same target, rolled over every die face, with and
+    // without SHAKING in hand. The penalty is real only if it costs kills.
+    const stage = (held: string[]): GameState =>
+      handOnly(spawn(at(fresh('security'), 'spine_b'), 'drifter', 'spine_b'), [
+        'service_pistol',
+        ...held,
+      ]);
+    const kills = (held: string[]): number => {
+      let n = 0;
+      for (let seed = 0; seed < 64; seed++) {
+        const s = put(stage(held), (x) => {
+          x.player.spent = [];
+          x.rng = (seed * 2654435761 + 1) >>> 0;
+        });
+        const uid = s.player.hand[0] as string;
+        const threat = s.threats[0]?.id as string;
+        if (reduce(s, { t: 'play', uid, threat }).threats.length === 0) n += 1;
+      }
+      return n;
+    };
+    expect(kills([])).toBeGreaterThan(kills(['panic_shaking']));
   });
 });

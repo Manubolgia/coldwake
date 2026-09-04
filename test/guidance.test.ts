@@ -61,6 +61,10 @@ describe('the advisory voice', () => {
     newAdvisories(s, fired);
     for (const a of ADVISORIES) expect(typeof a.text).toBe('string');
     expect(ADVISORIES.length).toBeGreaterThan(10);
+    // An advisory is read at speed in the middle of an hour. The first pass
+    // wrote paragraphs and they were the long pole in a bad hour, ahead of the
+    // ship's own alarms.
+    for (const a of ADVISORIES) expect(a.text.length).toBeLessThanOrEqual(240);
     expect(RULES.carry.carrierThreshold).toBe(2);
   });
 });

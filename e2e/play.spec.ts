@@ -195,6 +195,45 @@ test('nothing on screen mentions cards, decks or turns', async ({ page }) => {
   expect(after).not.toMatch(/\b(cards?|decks?|tokens?|nodes?|turns?|AP)\b/i);
 });
 
+test('the manual explains every symbol, on every page, in character', async ({ page }) => {
+  await bootToMenu(page);
+  await page.getByTestId('manual-open').click();
+  await expect(page.getByTestId('manual')).toBeVisible();
+
+  const pages = await page.locator('.tab').allInnerTexts();
+  expect(pages.length).toBeGreaterThanOrEqual(8);
+
+  const seen: string[] = [];
+  for (const name of pages) {
+    await page.locator(`.tab[data-page="${name}"]`).click();
+    await expect(page.getByTestId('manual-body')).toHaveAttribute('data-page', name);
+    const text = await page.getByTestId('manual-body').innerText();
+    // Every page says something; none of them says it like a rulebook.
+    expect(text.length).toBeGreaterThan(300);
+    expect(text).not.toMatch(/\b(cards?|decks?|tokens?|nodes?|bag|AP)\b/i);
+    seen.push(text);
+  }
+
+  // The screen page has to name every readout the player can be confused by.
+  const screen = seen[pages.indexOf('THE SCREEN')] ?? '';
+  for (const label of ['HOUR', 'POWER', 'SHUTTLE', 'REACTOR', 'STILL OUT THERE', 'BLOOD', 'KIT']) {
+    expect(screen).toContain(label);
+  }
+  // And it draws the map symbols rather than describing them in words.
+  await page.locator('.tab[data-page="THE SCREEN"]').click();
+  expect(await page.locator('[data-testid="manual-body"] svg.swatch').count()).toBeGreaterThan(3);
+
+  // The chooser stays reachable from the bottom of the longest page: it is a
+  // column flex item and collapsed to a row of empty bars the first time.
+  await page.locator('.modal').evaluate((el) => el.scrollTo(0, el.scrollHeight));
+  await expect(page.getByTestId('manual-tabs')).toBeInViewport();
+  const tab = await page.locator('.tab.on').boundingBox();
+  expect(tab?.height ?? 0).toBeGreaterThan(16);
+
+  await page.getByTestId('manual-close').click();
+  await expect(page.getByTestId('manual')).toHaveCount(0);
+});
+
 test('5.15 the CRT treatment can be switched off and the game still plays', async ({ page }) => {
   await bootToMenu(page);
   await page.getByTestId('crt-toggle').click();

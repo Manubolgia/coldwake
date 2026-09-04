@@ -22,6 +22,8 @@ export type ThreatDef = {
   id: ThreatType;
   name: string;
   glyph: string;
+  /** The single letter the schematic prints in the compartment. */
+  mark: string;
   hp: number;
   damage: number;
   speed: number;
@@ -90,6 +92,7 @@ export const RULES = rulesJson as unknown as {
     { node: string; ap: number; power: number; noise: number; turns?: number; fuseTurns?: number }
   >;
   ventAmbushPenalty: number;
+  shakingPenalty: number;
   score: {
     powerBanked: number;
     nodesSearched: number;

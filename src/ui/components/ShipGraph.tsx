@@ -32,7 +32,7 @@ export function ShipGraph({
   const threatsBy = new Map<string, string[]>();
   for (const t of state.threats) {
     const key = t.node;
-    threatsBy.set(key, [...(threatsBy.get(key) ?? []), threatDef(t.type).name[0] ?? '?']);
+    threatsBy.set(key, [...(threatsBy.get(key) ?? []), threatDef(t.type).mark]);
   }
   const ventCount = state.threats.filter((t) => t.node === 'vents').length;
 
@@ -148,5 +148,5 @@ export function ShipGraph({
 }
 
 export function threatLegend(): string {
-  return THREAT_TYPES.map((t) => `${threatDef(t).name[0]}=${threatDef(t).name}`).join(' ');
+  return THREAT_TYPES.map((t) => `${threatDef(t).mark}=${threatDef(t).name}`).join(' ');
 }

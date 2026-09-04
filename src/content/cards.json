@@ -697,7 +697,7 @@
       "ap": 1,
       "noise": 0,
       "burn": false,
-      "text": "Your hands will not hold still.",
+      "text": "While you hold it, your hands will not hold still. Everything you swing is harder to land.",
       "effect": {
         "op": "none"
       }

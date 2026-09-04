@@ -51,6 +51,16 @@ export function listenCost(state: GameState): number {
   return state.player.hand.some((u) => cardIdOf(u) === 'panic_tunnel') ? base + 1 : base;
 }
 
+/**
+ * Every penalty that applies to a swing: the vent ambush, and SHAKING while it
+ * is still in hand. Panic that only occupies a slot is not panic, it is a blank
+ * — each of the four now costs something you can feel while you hold it.
+ */
+export function attackPenalty(state: GameState): number {
+  const shaking = state.player.hand.some((u) => cardIdOf(u) === 'panic_shaking') ? RULES.shakingPenalty : 0;
+  return state.player.combatPenalty + shaking;
+}
+
 export function salvageLeft(state: GameState, id: NodeId): number {
   return state.ship.salvage[id]?.length ?? 0;
 }

@@ -7,7 +7,7 @@ import { rollD6 } from './rng';
 import { resolveRun } from './scoring';
 import { cloneState, drawUpToHandSize, noiseFloor, shuttleRequirement, turnLimit } from './state';
 import { drawCarry, killThreat, threatPhase, wound } from './threats';
-import { listenCost, playable, salvageLeft, systemAt } from './actions';
+import { attackPenalty, listenCost, playable, salvageLeft, systemAt } from './actions';
 import { arrival, chargeLine, foundLine, hourLine, lost, missLine, say, sweepReport, where } from './voice';
 import type { Action, EffectSpec, GameState, NodeId, Threat, Uid } from './types';
 
@@ -117,7 +117,8 @@ function applyEffect(state: GameState, effect: EffectSpec, ctx: Ctx): void {
       if (!t || t.node !== state.player.node) fail('no target here');
       const [roll, rng] = rollD6(state.rng);
       state.rng = rng;
-      const total = roll + effect.bonus + state.player.combatPenalty;
+      const penalty = attackPenalty(state);
+      const total = roll + effect.bonus + penalty;
       if (total >= t.hp) {
         killThreat(state, t.id);
       } else {
@@ -125,7 +126,7 @@ function applyEffect(state: GameState, effect: EffectSpec, ctx: Ctx): void {
         state.feed.push({
           turn: state.turn,
           kind: 'alarm',
-          text: missLine(state, roll, effect.bonus, t.hp),
+          text: missLine(state, roll, effect.bonus, penalty, t.hp),
         });
       }
       return;

@@ -138,10 +138,28 @@ asserts that each action a player can take adds a legible line to the terminal,
 because "I said LISTEN and nothing came back" is the bug that made all of this
 necessary.
 
+## The manual
+
+`OPERATIONS` is paged, not scrolled: eight pages behind a chooser that scrolls
+sideways — the run, the screen, an hour, what is aboard, being hurt, the ship,
+advice, deeper. It was one column before, and four screens of continuous text is
+a thing people close rather than read.
+
+One page is a legend of every symbol on the screen, and it draws them with the
+same class names the schematic uses — `node-box`, `player-ring`, `threat-block`,
+`edge sealed`, `node-noise hot` — so the explanation cannot drift out of step
+with the thing it explains. Change the colour of a threat block once and both
+move. The threat marks in it are read out of `threats.json` rather than typed,
+for the same reason.
+
+Anything working against a swing is named above the commands, before the swing,
+rather than turning up in the miss line afterward.
+
 ## The advisory voice
 
-An optional narrator, on by default, off in one tap from the bay. Nineteen
-advisories live in `src/content/guidance.json`; each fires at most once a run,
+An optional narrator, on by default, off in one tap from the bay. Twenty-two
+advisories live in `src/content/guidance.json`, each capped at 240 characters by
+a test; each fires at most once a run,
 the first moment its condition is true — the arithmetic in the first hour, what
 a wound really cost you the first time one lands, what an empty weapon means,
 where the medbay comes in, and what is still worth doing once the shuttle is out

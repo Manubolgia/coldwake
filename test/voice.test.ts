@@ -3,6 +3,9 @@ import { CARDS, SALVAGE, initialState, legalActions, reduce, roleDeck } from '..
 import { sweepReport } from '../src/engine/voice';
 import guidanceJson from '../src/content/guidance.json';
 import rolesJson from '../src/content/roles.json';
+import threatsJson from '../src/content/threats.json';
+import mapJson from '../src/content/map.json';
+import depthsJson from '../src/content/depths.json';
 import type { Action, Depth, GameState, RoleId } from '../src/engine/types';
 import { at, endTurn, fresh, put, spawn } from './helpers';
 
@@ -39,6 +42,14 @@ function playerFacingStrings(): { where: string; text: string }[] {
   for (const r of rolesJson.roles) {
     out.push({ where: `role ${r.id}`, text: r.strength }, { where: `role ${r.id}`, text: r.weakness });
   }
+  // The manual prints these verbatim, so they are as player-facing as any line
+  // the ship says. The first version of this list stopped at the cards, and the
+  // manual quietly told the reader about nodes and a bag for four releases.
+  for (const t of threatsJson.types) {
+    out.push({ where: `threat ${t.id}`, text: t.text }, { where: `threat ${t.id}`, text: t.name });
+  }
+  for (const n of mapJson.nodes) out.push({ where: `compartment ${n.id}`, text: n.name });
+  for (const d of depthsJson.depths) out.push({ where: `depth ${d.depth}`, text: d.label });
   return out;
 }
 

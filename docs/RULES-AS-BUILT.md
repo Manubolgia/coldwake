@@ -48,6 +48,30 @@ Noise 0–6; a node at 4 or more draws from the bag and resets to its floor.
 Purge blood does **not** draw a replacement sample — it is a real cure, paid for
 with a wound.
 
+### Panic
+
+A wound burns a card and shuffles one of four panic cards permanently into the
+kit. Every one of them costs something **while it is in hand**, and none of them
+can be played:
+
+| | While held |
+|---|---|
+| SHAKING | −1 on every attack roll |
+| TUNNEL VISION | Listening costs 2 AP instead of 1 |
+| COLD SWEAT | +1 noise on any action that makes noise |
+| BLACKOUT | +1 noise in the current node the moment it is drawn, then inert |
+
+Discarding a panic card costs 1 AP, does **not** draw a replacement, and does
+**not** remove the card — it returns on the next reshuffle. All it buys is the
+rest of this turn without the penalty, and the hand is discarded for free at end
+of turn anyway. Permanent removal is `removePanic` only: TRIAGE, FIELD DRESSING,
+STIMULANT AMPOULE, which burn it out of the deck.
+
+SHAKING had no effect at all until the fifth release: its text promised unsteady
+hands and the reducer never read it, so it was a blank slot pretending to be a
+penalty. `attackPenalty()` now sums it with the vent-ambush −2, and the miss line
+prints the whole sum including the penalty so a miss is never unaccountable.
+
 Arming the overload starts a **3-turn fuse**. Arm it later than that and the
 orbit closes first: the run is Lost. Committing to the scuttle is a decision
 made before you know you have failed, not after.
@@ -66,6 +90,10 @@ A blank goes back in and drags a contact out of the reserve with it.
 | Chorus | 5 | 2 | 1 | Noise +1 everywhere, every turn. Reaching the ore hold, it feeds 2 contacts into the bag. |
 
 Order: burrowers, drifters, contacts, chorus.
+
+Marks on the schematic: `C` contact, `D` drifter, `B` burrower, `S` chorus. A
+content test keeps them distinct — CONTACT and CHORUS both rendered as `C` up to
+and including the fourth release, and the map could not tell them apart.
 
 ## Depths
 

@@ -90,4 +90,18 @@ describe('content (gate 0.7)', () => {
     expect(bag).toBe(11);
     expect(MAP.nodes).toHaveLength(11);
   });
+
+  it('gives every threat a distinct single-letter mark', () => {
+    // The schematic has room for one character. CONTACT and CHORUS both began
+    // with C for four releases and the map could not tell them apart.
+    const marks = THREATS.types.map((t) => t.mark);
+    for (const m of marks) expect(m).toMatch(/^[A-Z]$/);
+    expect(new Set(marks).size).toBe(marks.length);
+  });
+
+  it('gives every compartment a distinct three-letter short name', () => {
+    const shorts = MAP.nodes.map((n) => n.short);
+    for (const s of shorts) expect(s).toMatch(/^[A-Z]{3}$/);
+    expect(new Set(shorts).size).toBe(shorts.length);
+  });
 });

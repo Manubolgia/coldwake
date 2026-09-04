@@ -98,8 +98,17 @@ export function killLine(state: GameState, type: ThreatType): string {
   return `>> ${line(state, 'kill', { thing: threatName(type) })}`;
 }
 
-export function missLine(state: GameState, roll: number, bonus: number, target: number): string {
-  return `>> ${line(state, 'miss', { roll: `${roll}+${bonus}`, target })}`;
+export function missLine(
+  state: GameState,
+  roll: number,
+  bonus: number,
+  penalty: number,
+  target: number,
+): string {
+  // The sum is shown the way it was actually worked out, penalty and all, so
+  // "4+2 against 3" never reads as a miss the player cannot account for.
+  const sum = `${roll}+${bonus}${penalty === 0 ? '' : penalty < 0 ? `\u2212${-penalty}` : `+${penalty}`}`;
+  return `>> ${line(state, 'miss', { roll: sum, target })}`;
 }
 
 export function foundLine(state: GameState, thing: string): string {

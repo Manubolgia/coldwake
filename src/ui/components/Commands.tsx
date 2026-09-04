@@ -1,4 +1,4 @@
-import { actionCost, cardIdOf, cardOf, describe, node } from '../../engine';
+import { actionCost, attackPenalty, cardIdOf, cardOf, describe, node } from '../../engine';
 import type { Action, GameState, NodeId, Uid } from '../../engine/types';
 
 type Group = 'MOVE' | 'HERE' | 'THE SHIP' | 'AT HAND' | 'THE HOUR' | 'HURT';
@@ -67,6 +67,7 @@ export function Commands({
     visible = actions.filter((a) => targetNode(a) === selectedNode);
   }
 
+  const penalty = attackPenalty(state);
   const groups = ORDER.map((g) => ({
     g,
     // Plays before discards: shedding a card is the fallback, not the offer.
@@ -88,6 +89,15 @@ export function Commands({
       ) : null}
       {selectedCard !== null ? (
         <div className="group-label">{cardOf(selectedCard).name}</div>
+      ) : null}
+      {/* A penalty the player is carrying should never be a surprise in the
+          miss line. Named where the swing is chosen, not after it fails. */}
+      {penalty < 0 &&
+      state.player.node !== 'vents' &&
+      state.threats.some((t) => t.node === state.player.node) ? (
+        <div className="group-label alarm" data-testid="swing-penalty">
+          {penalty} ON ANYTHING YOU SWING
+        </div>
       ) : null}
 
       {groups.map(({ g, items }) => (

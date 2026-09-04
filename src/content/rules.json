@@ -110,6 +110,7 @@
     }
   },
   "ventAmbushPenalty": -2,
+  "shakingPenalty": -1,
   "score": {
     "powerBanked": 2,
     "nodesSearched": 3,

@@ -2,6 +2,7 @@
   "types": [
     {
       "id": "contact",
+      "mark": "C",
       "name": "CONTACT",
       "glyph": "\u2593",
       "hp": 2,
@@ -9,10 +10,11 @@
       "speed": 1,
       "behaviour": "loudest",
       "order": 3,
-      "text": "Moves toward the loudest node. Attacks if co-located."
+      "text": "Walks toward whatever it can hear. If it gets to you, it swings."
     },
     {
       "id": "drifter",
+      "mark": "D",
       "name": "DRIFTER",
       "glyph": "\u2588",
       "hp": 3,
@@ -21,10 +23,11 @@
       "behaviour": "hunter",
       "hunterRange": 2,
       "order": 2,
-      "text": "Hunts the player within 2 nodes, else moves toward the loudest node."
+      "text": "Hunts you by ear from two compartments away. Further off, it just goes to the noise."
     },
     {
       "id": "burrower",
+      "mark": "B",
       "name": "BURROWER",
       "glyph": "\u2592",
       "hp": 2,
@@ -32,10 +35,11 @@
       "speed": 2,
       "behaviour": "burrow",
       "order": 1,
-      "text": "Uses the vents. Ignores seals. In REACTOR it degrades output instead of attacking."
+      "text": "Lives in the ducts, so a dropped bulkhead means nothing to it. In the REACTOR it chews the output instead of you."
     },
     {
       "id": "chorus",
+      "mark": "S",
       "name": "CHORUS",
       "glyph": "\u2591",
       "hp": 5,
@@ -43,7 +47,7 @@
       "speed": 1,
       "behaviour": "nest",
       "order": 4,
-      "text": "Moves toward ORE HOLD. Adds 1 noise everywhere each turn. On arrival, feeds the bag."
+      "text": "Makes for the ORE HOLD, singing, and the whole ship gets louder while it walks. When it gets home, more of them wake."
     }
   ],
   "bag": {

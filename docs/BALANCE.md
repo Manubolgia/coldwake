@@ -44,6 +44,23 @@ the loudest node" and which is already standing on it moves toward the player
 instead. Without this, threats spawned at the nest — which is the loudest node
 by default — piled up there and never left.
 
+**SHAKING costs a swing** (`rules.json › shakingPenalty: -1`). Not a tuning
+change but a repair: the card's text promised unsteady hands and the reducer
+never read it, so one panic in four was a blank slot with flavour on it and
+discarding it for 1 AP was strictly wasted time.
+
+Its balance cost is nil, and the way that was established is worth recording,
+because "the win rate did not move" is exactly what a change the harness cannot
+see also looks like. HeuristicBot swings 168 times across 1,500 runs at depths
+1/3/5 and holds SHAKING for 41 of them, so the harness does exercise it. Setting
+the penalty to −6 — every one of those 41 swings a guaranteed miss — moves depth
+3 by 0.4 points and depths 1 and 5 not at all. At the shipped −1 nothing moves.
+
+The finding underneath that is larger than the card: **combat barely touches the
+outcome**. A competent player fights 0.1 times a run and the ending is decided
+by arithmetic and routing. Worth knowing before anyone spends a tuning pass on
+weapon numbers.
+
 ## Current measurements
 
 HeuristicBot, 1,200–1,500 runs per depth, engineer, seed prefix `kell`:

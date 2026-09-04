@@ -48,7 +48,7 @@
     {
       "id": "panicHeld",
       "trigger": "panicInHand",
-      "text": "Panic occupies your hands and does nothing. Setting it aside costs you time but clears the space. Some of it is worse than useless \u2014 read what it does to you while you hold it."
+      "text": "Panic is weight, not a wound: each one costs you something while you hold it. Setting it aside stops that for the rest of the hour \u2014 it does not get rid of the thing. Only medicine does that."
     },
     {
       "id": "firstSearch",
@@ -93,7 +93,7 @@
     {
       "id": "behind",
       "trigger": "behindSchedule",
-      "text": "Count it: hours left times two, plus what is in the pool. If that will not reach the number top right, the shuttle is already gone and you are playing for something else."
+      "text": "Count it: hours left times two, plus what is in the pool. If that will not reach the number after SHUTTLE, the shuttle is already gone and you are playing for something else."
     },
     {
       "id": "cannotMakeIt",

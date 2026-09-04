@@ -85,7 +85,10 @@ from the game's, so `(gameSeed, botSeed)` reproduces a run exactly.
 every place the shipped values differ from the v0 numbers in the design
 document — with the reason. `docs/RULES-AS-BUILT.md` is the ruleset as shipped.
 `docs/INTERFACE.md` records how the interface moves, how the ship talks, and the
-advisory voice that teaches the game while you play it.
+advisory voice that teaches the game while you play it. `docs/VISUALS.md` is a
+study, not a plan: whether the terminal can carry ASCII plates, icons or
+animation without stopping being a terminal, and what each would cost. Nothing
+in it is implemented.
 
 ## Deploying
 
