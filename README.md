@@ -91,5 +91,28 @@ GitHub Actions builds and publishes `dist/` to Pages on every push to `main`.
 repository name, change it there first — that is the single most common Pages
 failure.
 
+Pages has to be switched on once, in the repository's Settings → Pages, with
+the source set to GitHub Actions. Until then the deploy job will fail on an
+otherwise green pipeline.
+
+## What is left
+
+The gates that can be automated are automated, and `npm run gate:mN` reports
+honestly rather than passing quietly. What remains needs a person and a phone:
+
+- **The deep end is not in band.** Depth 1 and depth 3 win rates are; depth 5 is
+  eight points high because the scuttle is a reliable consolation. The two ways
+  out — a fuse that lengthens with depth, or counting only a Clean Break as a
+  win — are set out in `docs/BALANCE.md`. The choice is the designer's.
+- **The card play-rate gates.** Twenty-three cards sit under the floor and six
+  over the ceiling; the analysis of which of those are content problems and
+  which are limits of a one-ply bot is in the same document.
+- **Milestone 7.** Twenty runs on the real phone, the protocol in Part 10 of the
+  design document. The end-of-run survey and the telemetry export exist for
+  exactly this; export the JSON from the menu and read it against the bot's
+  numbers.
+- **The device checks.** Install on the phone, aeroplane mode, a complete run
+  offline; the Lighthouse audit; thumb reach measured rather than eyeballed.
+
 MIT licensed. Fonts (Michroma, Share Tech Mono) are SIL OFL and self-hosted, so
 the game renders correctly offline on first launch.

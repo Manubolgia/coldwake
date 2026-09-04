@@ -54,11 +54,12 @@ export function Readout({ state }: { state: GameState }): React.ReactElement {
       <span className="dim">│</span>
       <span className="dim">CARRY</span>
       <span>
-        {carry.map((c, i) => (
+        {carry.slice(0, 6).map((c, i) => (
           <span key={i} className={c.revealed && c.id === 'infested' ? 'inverse-alarm' : ''}>
             {c.revealed ? (c.id === 'infested' ? '█' : '▒') : '?'}
           </span>
         ))}
+        {carry.length > 6 ? <span className="dim">+{carry.length - 6}</span> : null}
         {infested >= RULES.carry.carrierThreshold ? <span className="alarm"> CARRIER</span> : null}
       </span>
       <span className="dim">│</span>
