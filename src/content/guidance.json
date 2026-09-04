@@ -3,12 +3,12 @@
     {
       "id": "opening",
       "trigger": "always",
-      "text": "Read the top line. HOUR is how much of the window is left; POWER is what is in the pool; SHUTTLE is what you have banked against what it needs to lift. The reactor makes two an hour into a pool that only holds ten, so: fill the pool, walk to the shuttle bay, bank all of it, walk away. Three or four times, and you are off this ship."
+      "text": "Read the top line. HOUR is what is left of the window, POWER is what is in the pool, SHUTTLE is what you have banked against what it needs. Fill the pool, walk to the bay, bank all of it. Three or four times and you are off this ship."
     },
     {
       "id": "firstMove",
       "trigger": "moved",
-      "text": "Walking is loud. Creeping costs you twice the time and makes no sound at all. Noise stays in the compartment where you made it and fades an hour at a time \u2014 the number in the corner of each compartment is how loud it still is."
+      "text": "Walking is loud. Creeping costs twice the time and makes no sound. Noise stays where you made it and fades an hour at a time \u2014 the number in the corner of a compartment is how loud it still is."
     },
     {
       "id": "timeLeft",
@@ -18,7 +18,7 @@
     {
       "id": "sweepMeaning",
       "trigger": "listened",
-      "text": "What is unaccounted for is everything that could still come out of the dark at you. Most of it resolves to nothing \u2014 the hull, a pump, your own pulse. The rest is what you will meet if you keep making noise in the same place."
+      "text": "What is unaccounted for is everything that could still come out of the dark at you. Most of it is nothing \u2014 the hull, a pump, your own pulse. The rest you will meet if you keep making noise."
     },
     {
       "id": "salvageWeapon",
@@ -78,7 +78,7 @@
     {
       "id": "bloodInfested",
       "trigger": "bloodInfestedKnown",
-      "text": "One confirmed. Two and the shuttle carries it to the relay with you, and that is the worst thing you can do with this run. The medbay can flush a sample you have not read, at the price of a wound. The bridge is the other answer."
+      "text": "One confirmed. Two and the shuttle carries it to the relay with you. The medbay can flush a sample you have not read, at the price of a wound. The bridge is the other answer."
     },
     {
       "id": "reactorDamaged",
@@ -98,7 +98,7 @@
     {
       "id": "cannotMakeIt",
       "trigger": "shuttleUnreachable",
-      "text": "The shuttle is out of reach. Two things are still worth doing. The bridge will overload the reactor \u2014 it needs to be armed with hours to spare, and nothing leaves. Comms will broadcast, which is cheaper and means somebody else opens the hold."
+      "text": "The shuttle is out of reach. Two things are still worth doing: the bridge will overload the reactor, which needs hours to build and takes everything with it, or comms will broadcast, which is cheaper and makes it somebody else's problem."
     },
     {
       "id": "shuttleReady",

@@ -1,11 +1,17 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import type { DisplayLine } from '../guidance';
-import { useTypedFeed } from '../hooks';
+import { displayText, useTypedFeed } from '../hooks';
 
-/** How long the finished text stays up before the ship hands control back. */
+/**
+ * How long the finished text stays up before the ship hands control back. The
+ * pauses inside the writing do most of the dwelling now, so this is the last
+ * beat rather than the whole one — long enough to look up from the last line.
+ */
 function readingTime(lines: DisplayLine[], from: number): number {
+  const last = lines.at(-1);
+  const weight = last?.kind === 'alarm' ? 1400 : last?.kind === 'threat' ? 1100 : 700;
   const chars = lines.slice(from).reduce((n, l) => n + l.text.length, 0);
-  return Math.min(3200, Math.max(700, chars * 16));
+  return Math.min(2200, Math.max(weight, chars * 8));
 }
 
 /**
@@ -60,10 +66,13 @@ export function Terminal({
     return undefined;
   }, [typed.complete, typed.done, onComplete, instant, held, lines]);
 
+  // Scrolling forces a layout, so it happens once a line rather than once a
+  // character — at a character it made the typing render-bound rather than
+  // paced, and every measured beat was a lie.
   useEffect(() => {
     const el = scroller.current;
     if (el) el.scrollTop = el.scrollHeight;
-  }, [typed.done, typed.chars, resolving]);
+  }, [typed.done, resolving]);
 
   const press = useCallback(() => {
     pressedAt.current = Date.now();
@@ -95,7 +104,8 @@ export function Terminal({
     if (faded !== '') return faded;
     return line.kind === 'alarm' ? 'alarm' : line.kind === 'threat' ? '' : 'dim';
   };
-  const body = (line: DisplayLine): string => (line.kind === 'guide' ? `:: ${line.text}` : line.text);
+  const body = (line: DisplayLine, index: number): string =>
+    displayText(line, index > 0 ? lines[index - 1] : undefined);
 
   return (
     <div
@@ -114,7 +124,7 @@ export function Terminal({
     >
       {visible.map((l, i) => (
         <div key={first + i} className={tone(l, i)}>
-          {body(l)}
+          {body(l, first + i)}
         </div>
       ))}
       {current ? (
@@ -129,7 +139,7 @@ export function Terminal({
                   : 'dim'
           }
         >
-          {body(current).slice(0, typed.chars)}
+          {body(current, typed.done).slice(0, typed.chars)}
           <span className="caret" />
         </div>
       ) : (

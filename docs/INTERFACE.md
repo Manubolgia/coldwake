@@ -20,11 +20,26 @@ then holds, then types the ship's name one letter at a time and lets it sit for
 a beat. About 1.5 seconds of typing and 0.9 of hold, skippable by tapping,
 instant on every launch after the first.
 
-**2. The terminal.** Every line the ship has to say is written out at reading
-pace — about fifty characters a second, and slower for anything it is alarmed
-about, which also waits a beat before it starts. When the writing finishes, the
-last of it holds on screen long enough to be read (up to about three seconds,
-scaled to how much there is) before the ship hands control back.
+**2. The terminal.** Rhythm, not speed. A line is typed quickly; what makes it
+land is where it stops. Every kind of line has a beat — how long the cursor
+waits before it starts, how long it holds at a comma, how long at a full stop,
+and how long it sits when the line is done — and anything grave waits a visible
+`. . .` first, three slow dots while the ship decides how to tell you. Follow-up
+lines of the same kind skip the dots and shorten the pauses: the first blow
+lands slowly, the ones behind it tumble out. Three lines into an hour the drama
+is spent and the rest is read out like the list it is.
+
+In practice a quiet hour passes in about a second; an hour with something
+arriving in it takes five or six, and that difference is the whole point — you
+feel a bad hour before you can read it. When the writing stops the last of it
+holds on screen before control comes back.
+
+The reveal runs off a clock, not a chain of timers: each line gets a schedule of
+the millisecond at which every character appears, and a frame loop reads the
+clock against it. Typing therefore takes exactly as long as it is written to
+take, whatever the device costs to paint — the first version scrolled the log on
+every character, which forced a layout each time and made every measured beat a
+lie.
 
 **Tapping finishes the sentence; a second tap dismisses what is left. Holding
 the screen runs the whole thing at six times the speed and skips the hold.**
