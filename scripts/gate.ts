@@ -10,6 +10,7 @@ import {
   DEPTHS,
   ROLES,
   TOTAL_TOKENS,
+  depthDef,
   hashState,
   initialState,
   legalActions,
@@ -76,7 +77,11 @@ async function m0(): Promise<void> {
         const reserve = Object.values(s.reserve).reduce((x, y) => x + y, 0);
         if (bag + reserve + s.threats.length !== TOTAL_TOKENS) conserved = false;
         if (JSON.stringify(JSON.parse(JSON.stringify(s))) !== JSON.stringify(s)) roundTripped = false;
-        if (roleDeck(role).length !== 12) built = false;
+        // Read the deck size out of the content rather than pinning a number
+        // here: this check is that every role builds, not that decks are a
+        // particular length, and test/content.test.ts owns the latter.
+        if (roleDeck(role).length !== roleDeck(ALL_ROLES[0] as RoleId).length) built = false;
+        if (s.threats.length > depthDef(depth).boardCap) built = false;
       } catch {
         built = false;
       }
