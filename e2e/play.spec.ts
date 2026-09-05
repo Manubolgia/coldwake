@@ -1,4 +1,4 @@
-import { expect, test, type Page } from '@playwright/test';
+import { expect, test, type Browser, type Page } from '@playwright/test';
 
 type Debug = {
   state: {
@@ -52,50 +52,77 @@ async function startRun(
 
 const ENDINGS = ['escaped', 'carrier', 'overload', 'relay', 'specimen', 'killed', 'adrift'];
 
-/** Play the run out through the interface only. No engine calls. */
-async function playToEnding(page: Page, maxClicks = 900): Promise<string> {
+/** Prefer progress, fall back to ending the hour. `burn` first: a wound owed
+ *  is the only thing the interface will let you do, so it has to be paid. */
+const PRIORITY = ['burn', 'launch', 'upload', 'chargeShuttle', 'search', 'creep', 'endTurn'];
+
+/**
+ * Play the run out through the interface only. No engine calls.
+ *
+ * One round trip per click rather than ten: reading the status, the terminal's
+ * state and every command's action in a single evaluate. Three full runs at
+ * ~75 clicks each is 2,250 round trips the naive way, which is inside a CI
+ * runner's patience locally and outside it on a shared one.
+ */
+async function playToEnding(page: Page, maxClicks = 1200): Promise<string> {
   for (let i = 0; i < maxClicks; i++) {
-    const d = await debug(page);
-    if (d.state === null || d.state.status !== 'active') break;
-    // The terminal writes the turn out before handing the ship back. Tap
-    // through it; it also finishes on its own.
-    if (await isResolving(page)) {
+    const look = await page.evaluate((priority) => {
+      const w = window as unknown as { __coldwake?: { state: { status: string } | null } };
+      const status = w.__coldwake?.state?.status ?? null;
+      const resolving =
+        document.querySelector('[data-testid="terminal"]')?.getAttribute('data-resolving') === 'yes';
+      const actions = [...document.querySelectorAll('.commands .cmd')].map(
+        (el) => el.getAttribute('data-action') ?? '',
+      );
+      const want = priority.find((p) => actions.includes(p)) ?? actions[0] ?? null;
+      return { status, resolving, count: actions.length, want };
+    }, PRIORITY);
+
+    if (look.status === null || look.status !== 'active') break;
+    if (look.resolving) {
       await settle(page);
       continue;
     }
-    const buttons = page.locator('.commands .cmd');
-    const count = await buttons.count();
-    if (count === 0) throw new Error('no commands rendered while the run is active');
-    // Prefer progress, fall back to ending the turn.
-    const priority = ['launch', 'upload', 'chargeShuttle', 'burn', 'creep', 'search', 'endTurn'];
-    let clicked = false;
-    for (const want of priority) {
-      const candidate = page.locator(`.commands .cmd[data-action="${want}"]`).first();
-      if ((await candidate.count()) > 0) {
-        await candidate.click();
-        clicked = true;
-        break;
-      }
-    }
-    if (!clicked) await buttons.first().click();
+    if (look.count === 0) throw new Error('no commands rendered while the run is active');
+    await page.locator(`.commands .cmd[data-action="${look.want}"]`).first().click();
   }
-  await expect(page.getByTestId('ending')).toBeVisible({ timeout: 15_000 });
+  await expect(page.getByTestId('ending')).toBeVisible({ timeout: 20_000 });
   return (await page.getByTestId('ending').getAttribute('data-ending')) ?? '';
 }
 
-test('5.1 a full run plays to an ending through the interface alone', async ({ page }) => {
+/**
+ * A page that prints rather than types. The two tests that play whole runs are
+ * about whether the interface can reach an ending, not about the terminal's
+ * pacing — and waiting out fifteen hours of reading-pace prose three times over
+ * is what put this file outside a CI runner's patience. The typing itself has
+ * its own tests, above.
+ */
+async function instantPage(browser: Browser): Promise<Page> {
+  const context = await browser.newContext({ reducedMotion: 'reduce' });
+  return context.newPage();
+}
+
+test('5.1 a full run plays to an ending through the interface alone', async ({ browser }) => {
+  const page = await instantPage(browser);
   await startRun(page, 'e2e-clean', 1);
   const ending = await playToEnding(page);
   expect(ENDINGS).toContain(ending);
   await expect(page.getByTestId('score')).toBeVisible();
+  await page.context().close();
 });
 
-test('5.2 several seeds resolve into different endings', async ({ page }) => {
+test('5.2 several seeds resolve into different endings', async ({ browser }) => {
+  const page = await instantPage(browser);
   const endings = new Set<string>();
   // Depth 1 only: deeper runs are locked until one is cleared, which is the
-  // meta-progression working as designed.
-  for (const seed of ['seed-a', 'seed-b', 'seed-c']) {
-    await startRun(page, seed, 1);
+  // meta-progression working as designed. One objective each, so the three runs
+  // are actually chasing different parts of the ship.
+  for (const [seed, objective] of [
+    ['seed-a', 'run'],
+    ['seed-b', 'burn'],
+    ['seed-c', 'know'],
+  ] as const) {
+    await startRun(page, seed, 1, objective);
     endings.add(await playToEnding(page));
     await page.getByTestId('ending-continue').click();
   }
@@ -103,6 +130,7 @@ test('5.2 several seeds resolve into different endings', async ({ page }) => {
   for (const e of endings) {
     expect(ENDINGS).toContain(e);
   }
+  await page.context().close();
 });
 
 test('5.3 every legal action has a control in the interface', async ({ page }) => {
@@ -177,6 +205,18 @@ test('5.14 reduced motion prints instead of typing, and never takes the screen',
   await expect(page.getByTestId('terminal')).toHaveAttribute('data-complete', 'yes');
   await expect(page.getByTestId('commands')).toBeVisible();
   await context.close();
+});
+
+test('5.14 a run that resolves under reduced motion still shows its ending', async ({ browser }) => {
+  // Regression. The ending screen used to be handed over by the terminal's
+  // completion callback, which never fires when the terminal prints instantly:
+  // a resolved run sat on a dead board with no ending and no score.
+  const page = await instantPage(browser);
+  await startRun(page, 'reduced-ending', 1);
+  const ending = await playToEnding(page);
+  expect(ENDINGS).toContain(ending);
+  await expect(page.getByTestId('score')).toBeVisible();
+  await page.context().close();
 });
 
 test('the advisory voice explains itself, and can be switched off', async ({ page }) => {

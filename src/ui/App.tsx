@@ -146,11 +146,23 @@ export function App(): React.ReactElement {
     setResolving(false);
     heldState.current = null;
     turnStarted.current = Date.now();
-    if (pendingEnding !== null) {
-      setScreen('ending');
-      setPendingEnding(null);
-    }
-  }, [pendingEnding]);
+  }, []);
+
+  /**
+   * The ending screen goes up once the ship has finished saying what happened.
+   *
+   * This used to hang off the terminal's completion callback, which only fires
+   * when the writing finishes — and under `prefers-reduced-motion` the terminal
+   * prints instantly and never signals a completion at all. A run that resolved
+   * on a reduced-motion device therefore sat on a dead board for ever: no
+   * ending, no score, no way out. Waiting on `resolving` instead covers both
+   * paths, and keeps one owner for the transition.
+   */
+  useEffect(() => {
+    if (pendingEnding === null || resolving) return;
+    setScreen('ending');
+    setPendingEnding(null);
+  }, [pendingEnding, resolving]);
 
   const start = useCallback(
     (seed: string, role: RoleId, depth: Depth, objective: Objective) => {
