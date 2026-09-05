@@ -6,15 +6,15 @@ import {
   setInvariantChecking,
   actionKey,
 } from '../engine';
-import type { Action, Depth, GameState, NodeId, RoleId, Uid } from '../engine/types';
+import type { Action, Depth, GameState, NodeId, Objective, RoleId, Uid } from '../engine/types';
 import { Boot } from './components/Boot';
 import { Commands } from './components/Commands';
 import { EndingScreen } from './components/Ending';
 import { Hand } from './components/Hand';
 import { Manual } from './components/Manual';
 import { Menu } from './components/Menu';
-import { ShipGraph } from './components/ShipGraph';
-import { Readout, StatusStrip } from './components/Status';
+import { Forecast, ShipGraph } from './components/ShipGraph';
+import { Objectives, Readout, StatusStrip } from './components/Status';
 import { Terminal } from './components/Terminal';
 import { newAdvisories, type DisplayLine } from './guidance';
 import { useReducedMotion } from './hooks';
@@ -153,8 +153,8 @@ export function App(): React.ReactElement {
   }, [pendingEnding]);
 
   const start = useCallback(
-    (seed: string, role: RoleId, depth: Depth) => {
-      const fresh = initialState(seed, role, depth);
+    (seed: string, role: RoleId, depth: Depth, objective: Objective) => {
+      const fresh = initialState(seed, role, depth, objective);
       advised.current = new Set();
       setLines([
         ...fresh.feed,
@@ -296,6 +296,7 @@ export function App(): React.ReactElement {
           setScreen('menu');
         }}
       />
+      <Objectives state={shown} />
       <ShipGraph
         state={shown}
         selected={selectedNode}
@@ -304,6 +305,9 @@ export function App(): React.ReactElement {
           setSelectedNode(selectedNode === id ? null : id);
         }}
       />
+      {/* What the contacts you can see will do if you commit the hour. The
+          single change that makes a wound a mistake rather than an event. */}
+      <Forecast state={shown} />
       <Readout state={shown} />
       {resolving ? null : (
         <Commands

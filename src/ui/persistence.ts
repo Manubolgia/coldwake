@@ -94,10 +94,10 @@ export function applyUnlocks(meta: Meta, ending: Ending, depth: Depth, score: nu
   };
   const key = `${role}:${depth}`;
   next.best[key] = Math.max(next.best[key] ?? 0, score);
-  const won = ending === 'clean_break' || ending === 'scuttle';
+  const won = (['escaped', 'overload', 'relay', 'specimen', 'carrier'] as Ending[]).includes(ending);
   if (won && !next.roles.includes('medic')) next.roles.push('medic');
-  if (ending === 'clean_break' && !next.roles.includes('pilot')) next.roles.push('pilot');
-  if (ending !== 'lost') {
+  if (ending === 'escaped' && !next.roles.includes('pilot')) next.roles.push('pilot');
+  if (won) {
     const nextDepth = (depth + 1) as Depth;
     if (nextDepth <= 5 && !next.depths.includes(nextDepth)) next.depths.push(nextDepth);
   }

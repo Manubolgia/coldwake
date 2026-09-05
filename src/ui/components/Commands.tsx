@@ -1,4 +1,12 @@
-import { actionCost, attackPenalty, cardIdOf, cardOf, describe, node } from '../../engine';
+import {
+  actionCost,
+  attackPenalty,
+  cardIdOf,
+  cardOf,
+  consequence,
+  describe,
+  node,
+} from '../../engine';
 import type { Action, GameState, NodeId, Uid } from '../../engine/types';
 
 type Group = 'MOVE' | 'HERE' | 'THE SHIP' | 'AT HAND' | 'THE HOUR' | 'HURT';
@@ -41,9 +49,11 @@ function uidOf(a: Action): Uid | undefined {
 export function costLabel(state: GameState, a: Action): string {
   const c = actionCost(state, a);
   const parts: string[] = [];
-  if (c.ap > 0) parts.push(`TIME ${c.ap}`);
+  parts.push(c.ap > 0 ? `TIME ${c.ap}` : 'FREE');
   if (c.power > 0) parts.push(`PWR ${c.power}`);
-  parts.push(`NOISE +${c.noise}`);
+  // Noise is a distance as well as a number: it says how far away the sound
+  // reaches, which is the only thing the player actually needs from it.
+  parts.push(c.noise > 0 ? `HEARD ${c.noise} AWAY` : 'SILENT');
   return parts.join('  ');
 }
 
@@ -87,7 +97,7 @@ export function Commands({
             {state.player.pendingWounds > 1 ? ` (${state.player.pendingWounds} TIMES)` : ''}
           </div>
           <div className="group-label">
-            GONE FOR THE REST OF THE RUN. PANIC CANNOT PAY FOR THIS.
+            GONE FOR THE REST OF THE RUN. INFECTION CANNOT PAY FOR THIS.
           </div>
         </>
       ) : null}
@@ -120,6 +130,9 @@ export function Commands({
             >
               <span className="glow">{describe(a)}</span>
               <span className="cost">{costLabel(state, a)}</span>
+              {consequence(state, a) !== null ? (
+                <span className="why">{consequence(state, a)}</span>
+              ) : null}
             </button>
           ))}
         </div>
@@ -127,7 +140,7 @@ export function Commands({
       {visible.length === 0 ? (
         <div className="group-label">
           {state.phase === 'wound'
-            ? 'A WOUND CANNOT TAKE PANIC. CHOOSE SOMETHING YOU CAN STILL DO.'
+            ? 'A WOUND CANNOT TAKE INFECTION. CHOOSE SOMETHING YOU CAN STILL DO.'
             : 'NOTHING YOU CAN DO IN THAT DIRECTION'}
         </div>
       ) : null}

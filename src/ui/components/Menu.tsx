@@ -1,6 +1,6 @@
 import { useState } from 'react';
-import { DEPTHS, ROLES, depthDef, roleDef } from '../../engine';
-import type { Depth, RoleId } from '../../engine/types';
+import { DEPTHS, OBJECTIVES, ROLES, RULES, depthDef, endingHow, roleDef } from '../../engine';
+import type { Depth, Objective, RoleId } from '../../engine/types';
 import type { Meta } from '../persistence';
 import { dailySeed } from '../persistence';
 
@@ -16,7 +16,7 @@ export function Menu({
 }: {
   meta: Meta;
   hasSavedRun: boolean;
-  onStart: (seed: string, role: RoleId, depth: Depth) => void;
+  onStart: (seed: string, role: RoleId, depth: Depth, objective: Objective) => void;
   onResume: () => void;
   onExport: () => void;
   onToggleCrt: () => void;
@@ -26,6 +26,7 @@ export function Menu({
   const [role, setRole] = useState<RoleId>(meta.roles[0] ?? 'engineer');
   const [depth, setDepth] = useState<Depth>(meta.depths[meta.depths.length - 1] ?? 1);
   const [seed, setSeed] = useState('');
+  const [objective, setObjective] = useState<Objective>('run');
   const today = dailySeed();
   const dailyDone = meta.daily[today] !== undefined;
 
@@ -35,7 +36,7 @@ export function Menu({
       <div className="rule">{'─'.repeat(40)}</div>
       <p>
         You wake because your pod failed, not because the run ended. Eight others are open. The
-        orbit is decaying and the shuttle needs power you have not got.
+        orbit is decaying, and there are four things worth doing before it closes.
       </p>
 
       {hasSavedRun ? (
@@ -65,6 +66,32 @@ export function Menu({
           </button>
         );
       })}
+
+      {/* Declaring the objective is the whole of the fix for endings that were
+          assigned to the player after they died. You say what you came for, the
+          run tracks all four anyway, and the one you named is worth more. */}
+      <h2>What you came up here to do</h2>
+      {OBJECTIVES.map((o) => {
+        const def = RULES.objectives[o];
+        return (
+          <button
+            key={o}
+            className={`cmd${objective === o ? ' primary' : ''}`}
+            data-objective={o}
+            onClick={() => setObjective(o)}
+          >
+            <span className={objective === o ? 'glow' : ''}>
+              {def.name} — {def.node}
+            </span>
+            <span className="cost">{def.line}</span>
+            <span className="why">{endingHow(def.ending)}</span>
+          </button>
+        );
+      })}
+      <p className="dim">
+        All four stay open the whole run and all four are tracked on screen. Finishing a different
+        one is still a win — the one you name here is the one worth ×{RULES.declaredBonus}.
+      </p>
 
       <h2>How far down</h2>
       <div className="row">
@@ -110,7 +137,7 @@ export function Menu({
         <button
           className="cmd primary"
           data-testid="start"
-          onClick={() => onStart(seed.trim() || `run-${Date.now().toString(36)}`, role, depth)}
+          onClick={() => onStart(seed.trim() || `run-${Date.now().toString(36)}`, role, depth, objective)}
         >
           <span className="glow">WAKE</span>
         </button>
@@ -119,7 +146,7 @@ export function Menu({
         className="cmd"
         data-testid="daily"
         disabled={dailyDone || !meta.depths.includes(3)}
-        onClick={() => onStart(today, role, 3)}
+        onClick={() => onStart(today, role, 3, objective)}
       >
         <span>TODAY'S BELLWETHER</span>
         <span className="cost">

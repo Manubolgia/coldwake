@@ -3,112 +3,127 @@
     {
       "id": "opening",
       "trigger": "always",
-      "text": "Read the top line. HOUR is what is left of the window, POWER is what is in the pool, SHUTTLE is what you have banked against what it needs. Fill the pool, walk to the bay, bank all of it. Three or four times and you are off this ship."
+      "text": "Read the two strips at the top. The first is the hour, the power in the pool, and how much infection is in your deck. The second is the four things worth doing aboard, all four tracked, with a mark against the one you said you came up here for. Finish any of them and the run is a win."
+    },
+    {
+      "id": "objective",
+      "trigger": "always",
+      "text": "You do not have to stay on the route you declared. If the shuttle stops being reachable, the bridge, comms and the hold are all still open — and the trackers tell you where each of them stands without you having to work it out."
+    },
+    {
+      "id": "forecast",
+      "trigger": "threatOnBoard",
+      "text": "The line under the schematic is what the things you can see will do if you end the hour now. If it says something reaches you, it will, and it will cost you a capability. Move, seal, brace, or throw something loud somewhere else — all four are cheaper than the wound."
+    },
+    {
+      "id": "fog",
+      "trigger": "threatOnBoard",
+      "text": "You only see what is in this compartment or next door. A hollow mark in lower case is where you last saw something, not where it is. LISTEN reaches three compartments and tells you what each contact is doing."
     },
     {
       "id": "firstMove",
       "trigger": "moved",
-      "text": "Walking is loud. Creeping costs twice the time and makes no sound. Noise stays where you made it and fades an hour at a time — the number in the corner of a compartment is how loud it still is."
+      "text": "Walking is heard three compartments away. Creeping is heard one. That is the whole difference and it is the most important number in the game: a sound tells everything in range that you are HERE, and here is where they go."
+    },
+    {
+      "id": "losing",
+      "trigger": "threatWithinOne",
+      "text": "Nothing aboard knows where you are. It knows where the last noise was. Get out of the compartment quietly and it arrives, finds nothing, searches for an hour and gives up on you."
     },
     {
       "id": "timeLeft",
       "trigger": "spentTime",
-      "text": "The marks at the end of the top line are what is left of this hour. Everything costs at least one, and anything you do not spend is gone when the hour turns over."
+      "text": "The marks at the end of the top line are what is left of this hour. One card an hour is free to play or to set aside; everything after that costs time."
     },
     {
-      "id": "sweepMeaning",
-      "trigger": "listened",
-      "text": "What is unaccounted for is everything that could still come out of the dark at you. Most of it is nothing — the hull, a pump, your own pulse. The rest you will meet if you keep making noise."
+      "id": "handKeeps",
+      "trigger": "always",
+      "text": "Your hand stays with you between hours — nothing is thrown away at the end of the hour any more. Setting a card aside costs nothing once an hour and draws you a replacement, so a hand you cannot use is a hand you can turn over."
     },
     {
       "id": "salvageWeapon",
       "trigger": "carryingWeapon",
-      "text": "There is a weapon on your belt now. It rolls against whatever you point it at, and a miss empties it until the armory refills it. It is worth more as a threat you have not used yet than as one you have."
+      "text": "There is a weapon in your kit now. It rolls against whatever you point it at, and a miss empties it until the armory refills it. Combat is expensive and losing them is cheap: running is usually right."
     },
     {
       "id": "loudHere",
       "trigger": "noiseHereNear",
-      "text": "This compartment is nearly loud enough to be heard from the hold. One more careless hour here and something comes to look."
+      "text": "This compartment is one point from drawing something new out of the dark. Noise fades by one an hour, so an hour spent quietly here fixes it."
     },
     {
       "id": "threatSeen",
       "trigger": "threatOnBoard",
-      "text": "Something is loose. It walks toward whatever it can hear, and when it cannot hear anything it walks toward you. You are faster than it: three moves an hour against its one."
+      "text": "Something is loose. There is a hard cap on how many of them the ship will hold at once — when it is full, the pressure goes into the hold instead, and what is in the hold is worse than another STRAY."
     },
     {
-      "id": "threatNear",
-      "trigger": "threatWithinOne",
-      "text": "It is one compartment away. If it ends the hour where you are, it takes something from you. You can leave, you can drop a bulkhead in its face, or you can fight it — running is usually right."
+      "id": "hold",
+      "trigger": "hiveHalf",
+      "text": "The bar marked THE HOLD is how close the MOTHER is to standing up. Every hour fills it a little; noise in the ore hold fills it faster. When it is full she comes, she does not lose you, and nothing you are carrying can kill her. What you can do is cost her time."
+    },
+    {
+      "id": "mother",
+      "trigger": "motherAwake",
+      "text": "That is the MOTHER. Do not swing at it. A bulkhead in its face holds it an hour, flooding the vents from the bridge holds it two, and anything loud thrown into another compartment turns it around. Every one of those buys you the hours you still need."
     },
     {
       "id": "firstWound",
       "trigger": "wounded",
-      "text": "That is how you die here: not a wound that heals, but a thing you could do and now cannot, gone for the rest of the run. Panic can never be what you give up — it is what fills the space. When nothing you can do is left, neither are you."
+      "text": "A wound takes two things: a capability, gone for the rest of the run, and a card of infection into your own deck. The infection is not hidden — the count is on the top strip. When there is nothing left you can do, neither are you."
     },
     {
-      "id": "panicHeld",
-      "trigger": "panicInHand",
-      "text": "Panic is weight, not a wound: each one costs you something while you hold it. Setting it aside stops that for the rest of the hour — it does not get rid of the thing. Only medicine does that."
+      "id": "infectionHeld",
+      "trigger": "infectionInHand",
+      "text": "Infection in your hand costs you while you hold it, and it cannot be given up to a wound. Setting it aside stops it for the hour; only the MEDBAY takes it out of the deck for good, and that costs time and power but never a wound."
+    },
+    {
+      "id": "carrierClose",
+      "trigger": "infectionNearThreshold",
+      "text": "You are one short of the CARRIER line. Launching at or above it still gets you off the ship, at a worse weighting. Two hours in the medbay, or a different route entirely, are both still open."
     },
     {
       "id": "firstSearch",
       "trigger": "searched",
-      "text": "Every compartment holds two things worth finding, and searching is loud. Cells and stimulants are worth the noise. Some of what is aboard is not."
+      "text": "Every compartment holds two things and searching is heard two compartments away. Almost all the power in this run is in the ship rather than in the reactor: if you are not searching, you are not funding anything."
     },
     {
       "id": "weaponEmpty",
       "trigger": "weaponSpent",
-      "text": "A miss empties the weapon. It stays on your belt doing nothing until the armory refills it, which costs an hour, a unit of power and a good deal of noise. Decide whether it is worth the walk."
+      "text": "That weapon is empty until the ARMORY refills it, for one time and one power. A card in hand that cannot fire is a card you can set aside."
     },
     {
-      "id": "poolFull",
+      "id": "poolNearFull",
       "trigger": "poolNearFull",
-      "text": "The pool is nearly full and it does not grow past ten — every hour you leave it there, the reactor makes power that goes nowhere. Get to the shuttle bay and bank it."
+      "text": "The pool is nearly full and power over the cap is power thrown away. Spend it: into the shuttle, into a bulkhead, or into the medbay."
     },
     {
-      "id": "atShuttle",
+      "id": "atShuttleWithPower",
       "trigger": "atShuttleWithPower",
-      "text": "Bank everything you are carrying. It costs one hour however much you move, so move all of it."
+      "text": "Bank it. Power in the pool does nothing for the shuttle until it is in the shuttle, and the pool is not safe."
     },
     {
-      "id": "bloodUnread",
-      "trigger": "bloodAny",
-      "text": "Every wound puts a sample of your blood in the rack. Two infested ones aboard when the shuttle lifts and you are the CARRIER, whatever else went right. The medbay reads one cheaply, and reading tells you which ending you are playing for."
-    },
-    {
-      "id": "bloodInfested",
-      "trigger": "bloodInfestedKnown",
-      "text": "One confirmed. At two, lifting off delivers it to the relay with you. Read the rest and hope, flush an unread one in the medbay at the price of a wound, or take the bridge and make sure nothing leaves at all."
-    },
-    {
-      "id": "reactorDamaged",
+      "id": "reactorDown",
       "trigger": "reactorDown",
-      "text": "Reactor output is down. Everything you are waiting for takes longer now. Repairing it costs an hour and makes noise in the compartment next to the hold, which is exactly where you do not want to be heard."
+      "text": "The reactor is not at full output. Each repair is two time for one more power an hour, and it pays back every hour after that — the relay in particular cannot be held without it."
     },
     {
-      "id": "ventFirst",
+      "id": "inVents",
       "trigger": "inVents",
-      "text": "Nothing can see you in here and you can cross the ship in two hours. Coming out is the gamble: whatever is loose gets a chance to be waiting at the other end, and you cannot swing properly in a duct."
+      "text": "Nothing walks in the crawlspace. A CRAWLER does not walk, so it is the one thing that can follow you in. Coming out of a hatch is loud enough to draw, and you cannot swing properly on the way out."
     },
     {
-      "id": "behind",
-      "trigger": "behindSchedule",
-      "text": "Count it: hours left times two, plus what is in the pool. If that will not reach the number after SHUTTLE, the shuttle is already gone and you are playing for something else."
-    },
-    {
-      "id": "cannotMakeIt",
+      "id": "shuttleUnreachable",
       "trigger": "shuttleUnreachable",
-      "text": "The shuttle is out of reach. Two things are still worth doing: the bridge will overload the reactor, which needs hours to build and takes everything with it, or comms will broadcast, which is cheaper and makes it somebody else's problem."
+      "text": "The shuttle is out of reach on the hours left. That is not the run over: the overload on the bridge, the relay at comms and the specimen in the hold all end the run as a win, and the trackers say how far each one has to go."
     },
     {
       "id": "shuttleReady",
       "trigger": "shuttleReady",
-      "text": "It has enough. Get to the bay and go — every hour you spend aboard now is an hour something has to find you."
+      "text": "The shuttle has what it needs. Everything you do from here is a bet against the infection count and the hours left."
     },
     {
       "id": "nearlyGone",
       "trigger": "nearlyGone",
-      "text": "There is almost nothing left of what you could do. Avoid everything. Take the ending you can still reach."
+      "text": "Three things left you can still do. The next wound takes one of them. Finish something or get somewhere nothing can reach you."
     }
   ]
 }

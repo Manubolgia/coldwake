@@ -289,15 +289,16 @@ button:focus-visible,
 .readout {
   display: flex;
   align-items: center;
-  gap: var(--g1);
+  /* It wraps rather than scrolls: a number the player has to scroll sideways to
+     find is a number they will not read. */
+  flex-wrap: wrap;
+  gap: 0 var(--g1);
   padding: var(--g1);
   border-top: 1px solid var(--phos-dim);
   border-bottom: 1px solid var(--phos-dim);
   font-size: 12px;
+  line-height: 1.5;
   flex: 0 0 auto;
-  white-space: nowrap;
-  overflow-x: auto;
-  scrollbar-width: none;
 }
 
 .readout::-webkit-scrollbar {
@@ -328,7 +329,9 @@ button:focus-visible,
   display: flex;
   justify-content: space-between;
   align-items: center;
-  gap: var(--g1);
+  /* The consequence line drops under the name and the cost. */
+  flex-wrap: wrap;
+  gap: 2px var(--g1);
   width: 100%;
   border: 1px solid var(--phos-ghost);
   padding: var(--g1);
@@ -353,6 +356,93 @@ button:focus-visible,
 
 .cmd.primary {
   border-color: var(--phosphor);
+}
+
+/* A one-line statement of what the action is for, under the cost. Every rule
+   the player has to reason about gets a number on screen; this is where the
+   ones that used to live only in the manual ended up. */
+.cmd .why {
+  flex: 1 0 100%;
+  color: var(--phos-dim);
+  font-size: 10px;
+  line-height: 1.3;
+  white-space: normal;
+  text-align: left;
+}
+
+.cmd:active .why {
+  color: var(--void);
+}
+
+/* ── The four routes ──────────────────────────────────────────── */
+
+.objectives {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0 var(--g2);
+  padding: 2px var(--g1);
+  border-bottom: 1px solid var(--phos-ghost);
+  font-size: 10px;
+  color: var(--phos-dim);
+  letter-spacing: 0.02em;
+}
+
+.objectives .track {
+  white-space: nowrap;
+}
+
+.objectives .declared {
+  color: var(--phos-mid);
+}
+
+.objectives .ready {
+  color: var(--alarm);
+}
+
+/* ── What happens if you end the hour now ─────────────────────── */
+
+.forecast-line {
+  padding: 2px var(--g1);
+  font-size: 11px;
+  color: var(--phos-mid);
+  border-bottom: 1px solid var(--phos-ghost);
+  min-height: 15px;
+}
+
+.forecast-line.alarm {
+  color: var(--alarm);
+  background: var(--phos-ghost);
+}
+
+.graph .forecast line {
+  stroke: var(--phos-mid);
+  stroke-width: 0.5;
+  stroke-dasharray: 1.2 1;
+}
+
+.graph .forecast polygon {
+  fill: var(--phos-mid);
+}
+
+.graph .forecast.hits line {
+  stroke: var(--alarm);
+  stroke-width: 0.8;
+  stroke-dasharray: none;
+}
+
+.graph .forecast.hits polygon {
+  fill: var(--alarm);
+}
+
+/* Where you last saw it, not where it is. */
+.graph .stale {
+  opacity: 0.45;
+}
+
+.graph .threat-block.ghost {
+  fill: none;
+  stroke: var(--phos-mid);
+  stroke-width: 0.4;
 }
 
 /* ── Hand ─────────────────────────────────────────────────────── */

@@ -1,31 +1,23 @@
 import { useState } from 'react';
-import { RULES, endingReport, isPanic } from '../../engine';
+import { RULES, allProgress, endingReport, infectionThreshold, isInfection } from '../../engine';
 import type { GameState } from '../../engine/types';
 import { useReducedMotion, useTypedText } from '../hooks';
 
 const EPILOGUE: Record<string, string> = {
-  clean_break:
+  escaped:
     'The Bellwether goes on burning without you. Assay wants the ore manifest and not much else. You are asked twice whether anyone else got out, and both times the honest answer is no. You sleep with the lights on for a year and then you stop.',
   carrier:
     'The shuttle makes the relay on schedule. You pass the medical, because the medical is looking for injuries. Nine days later the station hold is nine degrees above ambient. Nobody ever connects it to you.',
-  scuttle:
-    'The reactor lets go at 04:12 ship time. Whatever came up out of 2481-Kell is a light, and then it is nothing. Assay files a total loss and pays out the crew at standard rates. It stays down there.',
-  beacon:
-    'The broadcast reaches the relay thirty-one hours after you stop. It carries your name, the ship position, and four minutes of the sound the vents make. Assay dispatches a recovery contractor, because the ore is worth the trip. Somebody else opens the hold.',
-  lost: 'The orbit closes and the Bellwether goes into the Kell primary at seven kilometres a second. It is quick, which is not the same as merciful. No signal leaves the ship. For thirty-one hours nobody notices.',
-};
-
-/**
- * Running out of things you can do is a real way to lose now, and it does not
- * read like running out of hours. The orbit closing is cold comfort written
- * for somebody who was still alive when it happened.
- */
-const DIED_ABOARD: Record<string, string> = {
-  lost: 'You stop somewhere between two compartments, out of everything, and the ship goes on without you. Nine hours later the orbit closes and takes the Bellwether into the Kell primary. Nothing leaves. Nobody is told.',
-  beacon:
-    'You stop before the orbit does. The broadcast you sent goes out anyway, thirty-one hours to the relay, carrying your name and the ship position. Assay dispatches a recovery contractor, because the ore is worth the trip. Somebody else opens the hold.',
-  scuttle:
-    'You do not live to hear it, but the reactor lets go on schedule. Whatever came up out of 2481-Kell is a light, and then it is nothing. Assay files a total loss and pays out the crew at standard rates. It stays down there.',
+  overload:
+    'The reactor lets go at 04:12 ship time, and you are awake for all of it. Whatever came up out of 2481-Kell is a light, and then it is nothing. Assay files a total loss and pays the crew at standard rates. It stays down there.',
+  relay:
+    'The recording runs the whole length of the watch: the hull note, the thing in the hold answering it, and your voice reading the ore assay numbers out loud so that nobody can pretend they did not know. Assay does not send a recovery contractor. Nobody opens that hold again.',
+  specimen:
+    'It goes up the wire in four minutes and it is on six stations inside a day. Somebody with a laboratory and no imagination names it after the ship. Every crew that meets one after you meets it already knowing what it does, and that is the whole of what you got out of the Bellwether.',
+  killed:
+    'You stop somewhere between two compartments, out of everything, and the ship goes on without you. The orbit closes on schedule and takes the Bellwether into the Kell primary. Nothing leaves. Nobody is told.',
+  adrift:
+    'The orbit closes and the Bellwether goes into the Kell primary at seven kilometres a second. It is quick, which is not the same as merciful. No signal leaves the ship. For thirty-one hours nobody notices.',
 };
 
 export function EndingScreen({
@@ -42,17 +34,16 @@ export function EndingScreen({
   const [understood, setUnderstood] = useState<boolean | null>(null);
   const [note, setNote] = useState('');
   const r = state.result;
-  const ending = r?.ending ?? 'lost';
+  const ending = r?.ending ?? 'adrift';
   const reduced = useReducedMotion();
-  const name = RULES.endings[ending].name;
+  const name = RULES.endings[ending].name ?? (ending === 'killed' ? 'KILLED' : 'ADRIFT');
   const report = endingReport(state);
-  const epilogue =
-    (r?.cause === 'deck' ? DIED_ABOARD[ending] : undefined) ?? EPILOGUE[ending] ?? '';
+  const epilogue = EPILOGUE[ending] ?? '';
   const typedName = useTypedText(name, reduced, 90);
   const named = typedName.length >= name.length;
-  const surviving = [...state.player.hand, ...state.player.deck, ...state.player.discard].filter(
-    (u) => !isPanic(u),
-  ).length;
+  const owned = [...state.player.hand, ...state.player.deck, ...state.player.discard];
+  const surviving = owned.filter((u) => !isInfection(u)).length;
+  const declared = RULES.objectives[state.objective];
 
   return (
     <div className="screen" data-testid="ending" data-ending={ending}>
@@ -88,7 +79,22 @@ export function EndingScreen({
       </div>
       <div className="stat">
         <span>ASSAY WEIGHTING</span>
-        <b>×{RULES.endings[ending].multiplier}</b>
+        <b>
+          ×{RULES.endings[ending].multiplier}
+          {r?.declared === true ? ` × ${RULES.declaredBonus} DECLARED` : ''}
+        </b>
+      </div>
+      <div className="stat note-row wide">
+        <span>YOU CAME UP HERE TO {declared.name}</span>
+        <b className="note">
+          {r?.declared === true
+            ? `And you did. That is what the ×${RULES.declaredBonus} is for.`
+            : `You finished something else. Every route counts; only the one you named carries the ×${RULES.declaredBonus}.`}
+        </b>
+      </div>
+      <div className="stat note-row wide">
+        <span>WHERE THE FOUR STOOD</span>
+        <b className="note">{allProgress(state).map((p) => p.label).join(' · ')}</b>
       </div>
       <div className="stat">
         <span>POWER INTO THE SHUTTLE</span>
@@ -103,6 +109,14 @@ export function EndingScreen({
         <b>{state.stats.threatsKilled}</b>
       </div>
       <div className="stat">
+        <span>SHAKEN OFF</span>
+        <b>{state.stats.threatsShaken}</b>
+      </div>
+      <div className="stat">
+        <span>CUT OUT OF YOU</span>
+        <b>{state.stats.cures}</b>
+      </div>
+      <div className="stat">
         <span>HOURS SURVIVED</span>
         <b>{r?.turn ?? state.turn}</b>
       </div>
@@ -111,18 +125,19 @@ export function EndingScreen({
         <b>{surviving}</b>
       </div>
       <div className="stat">
-        <span>BLOOD</span>
+        <span>INFECTION IN THE DECK</span>
         <b>
-          {state.player.carry.map((c) => (c.id === 'infested' ? '█' : '▒')).join('')} ·{' '}
-          {r?.infested ?? 0} OF {state.player.carry.length} INFECTED
+          {'█'.repeat(Math.min(r?.infection ?? 0, 12))} · {r?.infection ?? 0} of{' '}
+          {infectionThreshold(state.depth)}
         </b>
       </div>
       <div className="stat note-row wide">
-        <span>CARRIER AT {RULES.carry.carrierThreshold}</span>
+        <span>CARRIER AT {infectionThreshold(state.depth)}</span>
         <b className="note">
-          Every wound put one of these in the rack. Launching with{' '}
-          {RULES.carry.carrierThreshold} or more infested is the CARRIER ending, whatever else the
-          run did.
+          Every wound puts a named card in your own deck, and the count is on the strip from the
+          first one. Launching at {infectionThreshold(state.depth)} or more is the CARRIER; the
+          medbay cuts one out for {RULES.systemActions.cure?.ap ?? 2} time and{' '}
+          {RULES.systemActions.cure?.power ?? 2} power, with no wound attached.
         </b>
       </div>
       <div className="stat">

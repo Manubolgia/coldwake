@@ -1,4 +1,4 @@
-import { cardOf, isPanic, isSpent } from '../../engine';
+import { cardCost, cardOf, isInfection, isSpent } from '../../engine';
 import type { GameState, Uid } from '../../engine/types';
 
 export function Hand({
@@ -21,7 +21,7 @@ export function Hand({
         const classes = [
           'card',
           selected === uid ? 'selected' : '',
-          isPanic(uid) ? 'panic' : '',
+          isInfection(uid) ? 'panic' : '',
           spent ? 'spent' : '',
         ]
           .filter(Boolean)
@@ -36,7 +36,11 @@ export function Hand({
             <span className="name glow">{c.name}</span>
             <span className="body">{c.text}</span>
             <span className="foot">
-              TIME {c.ap} · NOISE {c.noise}
+              {isInfection(uid)
+                ? 'IN YOUR BLOOD · THE MEDBAY CUTS IT OUT'
+                : `${cardCost(state, uid) === 0 ? 'FREE THIS HOUR' : `TIME ${cardCost(state, uid)}`} · ${
+                    c.noise === 0 ? 'SILENT' : `HEARD ${c.noise} AWAY`
+                  }`}
               {c.burn ? ' · ONE USE' : ''}
               {spent ? ' · EMPTY' : ''}
             </span>
