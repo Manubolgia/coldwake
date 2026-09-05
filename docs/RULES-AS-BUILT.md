@@ -48,11 +48,30 @@ Noise 0–6; a node at 4 or more draws from the bag and resets to its floor.
 Purge blood does **not** draw a replacement sample — it is a real cure, paid for
 with a wound.
 
+### Wounds
+
+A wound does three things at once: it burns a card the player chooses out of
+hand, shuffles a panic card permanently into the kit, and draws one face-down
+CARRY sample.
+
+**The burn is restricted to non-panic cards.** `legalActions` offers only
+non-panic cards during the wound phase, `resolveBurn` rejects a panic uid, and
+a hand holding nothing but panic skips the choice entirely — `burnRandomOwned`
+takes a non-panic card from the deck, then the discard, then the hand. If a
+wound is owed and no non-panic card exists anywhere, the run resolves as a death
+there rather than the debt lapsing. An invariant asserts that the wound phase
+is never entered without something in hand that can pay for it.
+
+Until the seventh release the burn could be paid with the panic card the wound
+had just handed over, which made a wound cost nothing at all: 65% of burns in
+simulation were panic, and 1200 bot runs across every depth produced **zero**
+attrition deaths. A playtester reported it as "I discard all I have and I keep
+going infinitely", which was an accurate description of the rules as shipped.
+
 ### Panic
 
-A wound burns a card and shuffles one of four panic cards permanently into the
-kit. Every one of them costs something **while it is in hand**, and none of them
-can be played:
+Every panic card costs something **while it is in hand**, none can be played,
+and none can be given up to a wound:
 
 | | While held |
 |---|---|
@@ -82,18 +101,25 @@ Start: 5 blank, 3 contact, 2 drifter, 1 burrower.
 Reserve: 4 contact, 2 drifter, 1 chorus.
 A blank goes back in and drags a contact out of the reserve with it.
 
-| | HP | Damage | Speed | Behaviour |
-|---|---|---|---|---|
-| Contact | 2 | 1 | 1 | Moves to the loudest node. Standing on it already, it hunts you instead. |
-| Drifter | 3 | 2 | 1 | Hunts within 2 nodes, else the loudest node. |
-| Burrower | 2 | 1 | 2 | Uses the vents, ignores seals. In the reactor it degrades output instead of attacking. |
-| Chorus | 5 | 2 | 1 | Noise +1 everywhere, every turn. Reaching the ore hold, it feeds 2 contacts into the bag. |
+The four ids in the engine are `contact`, `drifter`, `burrower` and `chorus`;
+the four names a player ever sees are STRAY, HUNTER, CRAWLER and MOTHER.
+
+| Id | Player-facing | Mark | HP | Damage | Speed | Behaviour |
+|---|---|---|---|---|---|---|
+| contact | STRAY | `S` | 2 | 1 | 1 | Moves to the loudest node. Standing on it already, it hunts you instead. |
+| drifter | HUNTER | `H` | 3 | 2 | 1 | Hunts within 2 nodes, else the loudest node. |
+| burrower | CRAWLER | `C` | 2 | 1 | 2 | Uses the vents, ignores seals. In the reactor it degrades output instead of attacking. |
+| chorus | MOTHER | `M` | 5 | 2 | 1 | Noise +1 everywhere, every turn. Reaching the ore hold, it feeds 2 STRAYS into the bag. |
 
 Order: burrowers, drifters, contacts, chorus.
 
-Marks on the schematic: `C` contact, `D` drifter, `B` burrower, `S` chorus. A
-content test keeps them distinct — CONTACT and CHORUS both rendered as `C` up to
-and including the fourth release, and the map could not tell them apart.
+Every player-facing surface reads the same field. The mark is the name's first
+letter, checked by a content test; the listen report composes from `sign` and
+`signMany`, the readout counts with `name` and `namePlural`, and the manual
+prints `name` and `text`. Up to the sixth release the same creature was a
+CONTACT in the manual, a `C` on the schematic and "something moving" in a
+listen — three vocabularies for four creatures, which a playtester read as far
+more than four things being aboard.
 
 ## Depths
 
@@ -119,6 +145,12 @@ Checked in order at the moment the run resolves.
 3. **Scuttle** — the overload reached critical and you did not leave. ×1.2
 4. **Beacon** — broadcast, then died. ×0.6
 5. **Lost** — nothing armed, nothing broadcast. ×0.3
+
+Each ending carries a `verdict` (what it is, one clause) and a `how` (what
+reaches it, with `{threshold}` and `{fuse}` substituted) in `rules.json`, and
+`endingReport()` composes the run-specific "why this one, and what would have
+changed it" that the ending screen prints. The manual's ENDINGS page reads the
+same two fields, so the screen and the manual cannot drift apart.
 
 Score = banked power ×2 + nodes searched ×3 + threats killed ×4 + turns survived
 + surviving non-panic cards ×2 + salvaged logs, all multiplied by the ending.

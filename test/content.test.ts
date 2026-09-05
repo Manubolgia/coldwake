@@ -12,7 +12,8 @@ import {
   THREATS,
   roleDeck,
 } from '../src/engine/content';
-import type { RoleId } from '../src/engine/types';
+import { endingHow } from '../src/engine/scoring';
+import type { Ending, RoleId } from '../src/engine/types';
 
 const effectSchema: z.ZodType = z.lazy(() =>
   z.object({ op: z.string() }).catchall(z.unknown()).refine((e) => {
@@ -97,6 +98,29 @@ describe('content (gate 0.7)', () => {
     const marks = THREATS.types.map((t) => t.mark);
     for (const m of marks) expect(m).toMatch(/^[A-Z]$/);
     expect(new Set(marks).size).toBe(marks.length);
+  });
+
+  it('gives every threat one name, used everywhere it appears', () => {
+    // The playtest read the schematic's letters, the listen's descriptions and
+    // the manual's names as three different sets of creatures. They are one.
+    for (const t of THREATS.types) {
+      expect(t.name).toMatch(/^[A-Z]+$/);
+      expect(t.mark).toBe(t.name[0]);
+      expect(t.namePlural.startsWith(t.name)).toBe(true);
+      expect(t.sign.length).toBeGreaterThan(0);
+      expect(t.signMany.length).toBeGreaterThan(0);
+    }
+    expect(new Set(THREATS.types.map((t) => t.name)).size).toBe(THREATS.types.length);
+  });
+
+  it('says what every ending is and how it is reached', () => {
+    for (const key of Object.keys(RULES.endings) as Ending[]) {
+      const e = RULES.endings[key];
+      expect(e.verdict.length).toBeGreaterThan(10);
+      // The how line carries the shipped numbers, so no placeholder survives.
+      expect(endingHow(key)).not.toMatch(/[{}]/);
+      expect(endingHow(key).length).toBeGreaterThan(10);
+    }
   });
 
   it('gives every compartment a distinct three-letter short name', () => {

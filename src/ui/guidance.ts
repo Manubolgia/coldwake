@@ -32,7 +32,7 @@ const TRIGGERS: Record<string, (s: GameState) => boolean> = {
   weaponSpent: (s) => s.player.hand.some((u) => isSpent(s, u)) || s.player.spent.length > 0,
   poolNearFull: (s) => s.ship.power >= RULES.powerCap - 2 && s.ship.shuttleCharge === 0,
   atShuttleWithPower: (s) => s.player.node === MAP.escape && s.ship.power > 0,
-  bloodUnread: (s) => s.player.carry.filter((c) => !c.revealed).length >= 2,
+  bloodAny: (s) => s.player.carry.some((c) => !c.revealed),
   bloodInfestedKnown: (s) => s.player.carry.some((c) => c.revealed && c.id === 'infested'),
   reactorDown: (s) => s.ship.reactorOutput < RULES.reactorOutputMax,
   inVents: (s) => s.player.node === 'vents',

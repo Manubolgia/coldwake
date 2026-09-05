@@ -78,11 +78,18 @@ export function Commands({
 
   return (
     <div className="commands" data-testid="commands">
+      {/* A wound is paid in capability, never in panic: naming that here stops
+          the player learning it by finding their panic missing from the list. */}
       {state.phase === 'wound' ? (
-        <div className="group-label alarm">
-          IT HURT YOU. SOMETHING HAS TO GO
-          {state.player.pendingWounds > 1 ? ` (${state.player.pendingWounds} TIMES)` : ''}
-        </div>
+        <>
+          <div className="group-label alarm">
+            IT HURT YOU. GIVE UP SOMETHING YOU CAN STILL DO
+            {state.player.pendingWounds > 1 ? ` (${state.player.pendingWounds} TIMES)` : ''}
+          </div>
+          <div className="group-label">
+            GONE FOR THE REST OF THE RUN. PANIC CANNOT PAY FOR THIS.
+          </div>
+        </>
       ) : null}
       {selectedNode !== null && selectedNode !== state.player.node ? (
         <div className="group-label">TOWARD {node(selectedNode).name}</div>
@@ -118,7 +125,11 @@ export function Commands({
         </div>
       ))}
       {visible.length === 0 ? (
-        <div className="group-label">NOTHING YOU CAN DO IN THAT DIRECTION</div>
+        <div className="group-label">
+          {state.phase === 'wound'
+            ? 'A WOUND CANNOT TAKE PANIC. CHOOSE SOMETHING YOU CAN STILL DO.'
+            : 'NOTHING YOU CAN DO IN THAT DIRECTION'}
+        </div>
       ) : null}
     </div>
   );

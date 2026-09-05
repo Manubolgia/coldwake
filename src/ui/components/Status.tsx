@@ -1,5 +1,6 @@
 import { RULES, shuttleRequirement, turnLimit } from '../../engine';
-import type { GameState } from '../../engine/types';
+import { THREATS } from '../../engine/content';
+import type { GameState, TokenType } from '../../engine/types';
 import { tokensInBag } from '../../engine/noise';
 import { useFlash } from '../hooks';
 
@@ -64,28 +65,37 @@ export function Readout({ state }: { state: GameState }): React.ReactElement {
         <span className="dim">/HR</span>
       </span>
       <span className="dim">│</span>
+      {/* Two different numbers, and the player asked which was which: ABOARD is
+          what is on the schematic right now, STILL OUT THERE is what has not
+          shown itself — most of which turns out to be nothing. */}
+      <span className="dim">ABOARD</span>
+      <span className={state.threats.length > 0 ? 'alarm' : ''}>{state.threats.length}</span>
+      <span className="dim">│</span>
       <span className="dim">STILL OUT THERE</span>
       {known ? (
         <span className="glow" data-testid="bag-known">
           {(
             [
-              ['blank', 'NOTHING'],
-              ['contact', 'MOVING'],
-              ['drifter', 'HEAVY'],
-              ['burrower', 'IN THE DUCTS'],
-              ['chorus', 'SINGING'],
+              ['blank', 'NOTHING', 'NOTHING'],
+              ...THREATS.types.map((t) => [t.id, t.name, t.namePlural] as const),
             ] as const
           )
-            .filter(([t]) => (state.bag[t] ?? 0) > 0)
-            .map(([t, label]) => `${state.bag[t]} ${label}`)
+            .filter(([t]) => (state.bag[t as TokenType] ?? 0) > 0)
+            .map(([t, one, many]) => {
+              const n = state.bag[t as TokenType] ?? 0;
+              return `${n} ${n === 1 ? one : many}`;
+            })
             .join(' · ')}
         </span>
       ) : (
         <span>
           {'▓'.repeat(Math.min(total, 12))} <span className="dim">{total}</span>
+          <span className="dim"> MOSTLY NOTHING</span>
         </span>
       )}
       <span className="dim">│</span>
+      {/* The marks alone never said what the marks were for. The count against
+          the threshold is the whole CARRIER rule, printed where it is read. */}
       <span className="dim">BLOOD</span>
       <span>
         {carry.slice(0, 6).map((c, i) => (
@@ -94,7 +104,14 @@ export function Readout({ state }: { state: GameState }): React.ReactElement {
           </span>
         ))}
         {carry.length > 6 ? <span className="dim">+{carry.length - 6}</span> : null}
-        {infested >= RULES.carry.carrierThreshold ? <span className="alarm"> CARRIER</span> : null}
+        <span className={infested >= RULES.carry.carrierThreshold ? 'alarm' : 'dim'}>
+          {' '}
+          {infested}/{RULES.carry.carrierThreshold} INFECTED
+        </span>
+        {carry.length - revealed.length > 0 ? (
+          <span className="dim"> · {carry.length - revealed.length} UNREAD</span>
+        ) : null}
+        {infested >= RULES.carry.carrierThreshold ? <span className="alarm"> · CARRIER</span> : null}
       </span>
       <span className="dim">│</span>
       <span className="dim">

@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { RULES, isPanic } from '../../engine';
+import { RULES, endingReport, isPanic } from '../../engine';
 import type { GameState } from '../../engine/types';
 import { useReducedMotion, useTypedText } from '../hooks';
 
@@ -13,6 +13,19 @@ const EPILOGUE: Record<string, string> = {
   beacon:
     'The broadcast reaches the relay thirty-one hours after you stop. It carries your name, the ship position, and four minutes of the sound the vents make. Assay dispatches a recovery contractor, because the ore is worth the trip. Somebody else opens the hold.',
   lost: 'The orbit closes and the Bellwether goes into the Kell primary at seven kilometres a second. It is quick, which is not the same as merciful. No signal leaves the ship. For thirty-one hours nobody notices.',
+};
+
+/**
+ * Running out of things you can do is a real way to lose now, and it does not
+ * read like running out of hours. The orbit closing is cold comfort written
+ * for somebody who was still alive when it happened.
+ */
+const DIED_ABOARD: Record<string, string> = {
+  lost: 'You stop somewhere between two compartments, out of everything, and the ship goes on without you. Nine hours later the orbit closes and takes the Bellwether into the Kell primary. Nothing leaves. Nobody is told.',
+  beacon:
+    'You stop before the orbit does. The broadcast you sent goes out anyway, thirty-one hours to the relay, carrying your name and the ship position. Assay dispatches a recovery contractor, because the ore is worth the trip. Somebody else opens the hold.',
+  scuttle:
+    'You do not live to hear it, but the reactor lets go on schedule. Whatever came up out of 2481-Kell is a light, and then it is nothing. Assay files a total loss and pays out the crew at standard rates. It stays down there.',
 };
 
 export function EndingScreen({
@@ -32,6 +45,9 @@ export function EndingScreen({
   const ending = r?.ending ?? 'lost';
   const reduced = useReducedMotion();
   const name = RULES.endings[ending].name;
+  const report = endingReport(state);
+  const epilogue =
+    (r?.cause === 'deck' ? DIED_ABOARD[ending] : undefined) ?? EPILOGUE[ending] ?? '';
   const typedName = useTypedText(name, reduced, 90);
   const named = typedName.length >= name.length;
   const surviving = [...state.player.hand, ...state.player.deck, ...state.player.discard].filter(
@@ -46,7 +62,24 @@ export function EndingScreen({
         {named ? null : <span className="caret" />}
       </div>
       <div className="rule">{'─'.repeat(40)}</div>
-      {named ? <p className="epilogue">{EPILOGUE[ending]}</p> : null}
+      {named ? <p className="verdict">{report.verdict}</p> : null}
+      {named ? <p className="epilogue">{epilogue}</p> : null}
+
+      {/* The playtest kept answering "no" to whether the loss was understood.
+          An ending is a rule firing, so the screen says which one fired on
+          this run's numbers, and what the nearest other answer would have
+          been. */}
+      {named ? (
+        <>
+          <h2>Why this one</h2>
+          <p className="epilogue" data-testid="ending-why">
+            {report.why}
+          </p>
+          <p className="epilogue dim" data-testid="ending-instead">
+            {report.instead}
+          </p>
+        </>
+      ) : null}
 
       <h2>Assay report</h2>
       <div className="stat">
@@ -82,6 +115,14 @@ export function EndingScreen({
         <b>
           {state.player.carry.map((c) => (c.id === 'infested' ? '█' : '▒')).join('')} ·{' '}
           {r?.infested ?? 0} OF {state.player.carry.length} INFECTED
+        </b>
+      </div>
+      <div className="stat note-row wide">
+        <span>CARRIER AT {RULES.carry.carrierThreshold}</span>
+        <b className="note">
+          Every wound put one of these in the rack. Launching with{' '}
+          {RULES.carry.carrierThreshold} or more infested is the CARRIER ending, whatever else the
+          run did.
         </b>
       </div>
       <div className="stat">

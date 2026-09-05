@@ -45,6 +45,13 @@ export function assertInvariants(state: GameState): void {
     if (t.node !== 'vents' && !NODE_IDS.includes(t.node)) fail(`threat off map: ${t.node}`);
   }
   if (p.hand.length > RULES.handSize + 4) fail(`hand size ${p.hand.length}`);
+  // Nothing but a burn is legal while a wound is owed, and a wound can only
+  // take a capability — so a wound phase with no capability in hand is a run
+  // with no legal move and no ending.
+  if (state.status === 'active' && state.phase === 'wound') {
+    if (p.pendingWounds <= 0) fail('wound phase with nothing owed');
+    if (!p.hand.some((u) => !isPanic(u))) fail('wound phase with nothing left to give up');
+  }
   if (state.status !== 'active' && state.result === undefined) fail('resolved run without a result');
   if (isPanic('panic_shaking@1') !== true) fail('panic detection broken');
 }

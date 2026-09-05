@@ -1,7 +1,7 @@
 import { NODE_IDS, NODE_INDEX, THREAT_ORDER, THREATS, VENT_NODES, threatDef } from './content';
-import { addPanic, cardOf, nonPanicCount } from './deck';
+import { addPanic, cardOf, isPanic, nonPanicCount } from './deck';
 import { addNoise, NEST } from './noise';
-import { killLine, wardLine, woundLine } from './voice';
+import { killLine, sampleLine, wardLine, woundLine } from './voice';
 import { distance, loudestNode, stepToward } from './graph';
 import { nextInt } from './rng';
 import { resolveRun } from './scoring';
@@ -12,6 +12,11 @@ export function drawCarry(state: GameState, n = 1): void {
     const c = state.carryDeck.shift();
     if (c === undefined) return;
     state.player.carry.push({ id: c, revealed: false });
+    state.feed.push({
+      turn: state.turn,
+      kind: 'alarm',
+      text: sampleLine(state, state.player.carry.length, state.player.carry.filter((x) => !x.revealed).length),
+    });
   }
 }
 
@@ -19,15 +24,20 @@ export function infestedCount(state: GameState): number {
   return state.player.carry.filter((c) => c.id === 'infested').length;
 }
 
-function burnRandomOwned(state: GameState): Uid | undefined {
-  const piles: ('deck' | 'discard')[] = ['deck', 'discard'];
+/**
+ * A wound with nothing to choose from takes a capability at random. Panic is
+ * never eligible: it is the weight a wound leaves behind, not a thing a wound
+ * can take away, and letting it pay made wounds cost nothing at all (§4.8).
+ */
+export function burnRandomOwned(state: GameState): Uid | undefined {
+  const piles: ('deck' | 'discard' | 'hand')[] = ['deck', 'discard', 'hand'];
   for (const pile of piles) {
     const list = state.player[pile];
-    const indices = list.map((_, i) => i);
+    const indices = list.map((_, i) => i).filter((i) => !isPanic(list[i] as Uid));
     if (indices.length === 0) continue;
     const [pick, rng] = nextInt(state.rng, indices.length);
     state.rng = rng;
-    const [uid] = list.splice(pick, 1);
+    const [uid] = list.splice(indices[pick] as number, 1);
     if (uid !== undefined) state.player.burned.push(uid);
     return uid;
   }
@@ -35,9 +45,11 @@ function burnRandomOwned(state: GameState): Uid | undefined {
 }
 
 /**
- * §4.8. One wound: burn a card, gain a panic, draw a face-down CARRY card.
- * The burn is a choice, so it is queued and the player owes it before anything
- * else happens.
+ * §4.8. One wound: give up a capability, gain a panic, draw a face-down blood
+ * sample. The choice is the player's whenever there is one to make, so it is
+ * queued and owed before anything else happens — but panic is not a capability
+ * and cannot be offered up, so a hand of nothing but panic has no choice in it
+ * and the ship takes something from the kit instead.
  */
 export function wound(state: GameState, count: number, source: string, drawsCarry = true): void {
   if (count > 0 && state.player.wardsThisTurn === 0 && nonPanicCount(state) > 0) {
@@ -62,7 +74,7 @@ export function wound(state: GameState, count: number, source: string, drawsCarr
     state.stats.wounds += 1;
     addPanic(state);
     if (drawsCarry) drawCarry(state, 1);
-    if (state.player.hand.length > 0) {
+    if (state.player.hand.some((u) => !isPanic(u))) {
       state.player.pendingWounds += 1;
       state.phase = 'wound';
     } else {
@@ -73,7 +85,7 @@ export function wound(state: GameState, count: number, source: string, drawsCarr
         text:
           taken === undefined
             ? '>> Something goes.'
-            : `>> ${cardOf(taken).name} — you cannot do that any more.`,
+            : `>> Nothing in your hands was any use. ${cardOf(taken).name} — you cannot do that any more.`,
       });
     }
   }

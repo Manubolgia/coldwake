@@ -1,4 +1,4 @@
-import { TOTAL_TOKENS, initialState, legalActions, reduce, threatDef } from '../src/engine';
+import { TOTAL_TOKENS, initialState, isPanic, legalActions, reduce, threatDef } from '../src/engine';
 import type {
   Action,
   Depth,
@@ -93,6 +93,23 @@ export function handOnly(state: GameState, cardIds: string[]): GameState {
     s.player.hand = taken;
     s.player.deck = [];
     s.player.discard = [];
+  });
+}
+
+/**
+ * A hand of exactly `real` capabilities and `panic` fresh panic cards, with
+ * everything else pushed back into the kit. Conservation-safe: the panic is
+ * counted the way the reducer counts it.
+ */
+export function handMix(state: GameState, real: number, panic: number): GameState {
+  return put(state, (s) => {
+    const kept = s.player.hand.filter((u) => !isPanic(u)).slice(0, real);
+    s.player.deck.push(...s.player.hand.filter((u) => !kept.includes(u)));
+    s.player.hand = kept;
+    for (let i = 0; i < panic; i++) {
+      s.player.panicsGained += 1;
+      s.player.hand.push(`panic_shaking@${1000 + s.player.panicsGained}`);
+    }
   });
 }
 

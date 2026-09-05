@@ -8,7 +8,7 @@
     {
       "id": "firstMove",
       "trigger": "moved",
-      "text": "Walking is loud. Creeping costs twice the time and makes no sound. Noise stays where you made it and fades an hour at a time \u2014 the number in the corner of a compartment is how loud it still is."
+      "text": "Walking is loud. Creeping costs twice the time and makes no sound. Noise stays where you made it and fades an hour at a time — the number in the corner of a compartment is how loud it still is."
     },
     {
       "id": "timeLeft",
@@ -18,7 +18,7 @@
     {
       "id": "sweepMeaning",
       "trigger": "listened",
-      "text": "What is unaccounted for is everything that could still come out of the dark at you. Most of it is nothing \u2014 the hull, a pump, your own pulse. The rest you will meet if you keep making noise."
+      "text": "What is unaccounted for is everything that could still come out of the dark at you. Most of it is nothing — the hull, a pump, your own pulse. The rest you will meet if you keep making noise."
     },
     {
       "id": "salvageWeapon",
@@ -38,17 +38,17 @@
     {
       "id": "threatNear",
       "trigger": "threatWithinOne",
-      "text": "It is one compartment away. If it ends the hour where you are, it takes something from you. You can leave, you can drop a bulkhead in its face, or you can fight it \u2014 running is usually right."
+      "text": "It is one compartment away. If it ends the hour where you are, it takes something from you. You can leave, you can drop a bulkhead in its face, or you can fight it — running is usually right."
     },
     {
       "id": "firstWound",
       "trigger": "wounded",
-      "text": "That is how you die here: not a wound that heals, but a thing you could do and now cannot, gone for the rest of the run. Panic fills the space it left. When nothing you can do is left, neither are you."
+      "text": "That is how you die here: not a wound that heals, but a thing you could do and now cannot, gone for the rest of the run. Panic can never be what you give up — it is what fills the space. When nothing you can do is left, neither are you."
     },
     {
       "id": "panicHeld",
       "trigger": "panicInHand",
-      "text": "Panic is weight, not a wound: each one costs you something while you hold it. Setting it aside stops that for the rest of the hour \u2014 it does not get rid of the thing. Only medicine does that."
+      "text": "Panic is weight, not a wound: each one costs you something while you hold it. Setting it aside stops that for the rest of the hour — it does not get rid of the thing. Only medicine does that."
     },
     {
       "id": "firstSearch",
@@ -63,7 +63,7 @@
     {
       "id": "poolFull",
       "trigger": "poolNearFull",
-      "text": "The pool is nearly full and it does not grow past ten \u2014 every hour you leave it there, the reactor makes power that goes nowhere. Get to the shuttle bay and bank it."
+      "text": "The pool is nearly full and it does not grow past ten — every hour you leave it there, the reactor makes power that goes nowhere. Get to the shuttle bay and bank it."
     },
     {
       "id": "atShuttle",
@@ -72,13 +72,13 @@
     },
     {
       "id": "bloodUnread",
-      "trigger": "bloodUnread",
-      "text": "You are carrying samples nobody has read. The medbay will read one, cheaply. It changes nothing about your body \u2014 but it changes which ending you are playing for, and that is worth an hour."
+      "trigger": "bloodAny",
+      "text": "Every wound puts a sample of your blood in the rack. Two infested ones aboard when the shuttle lifts and you are the CARRIER, whatever else went right. The medbay reads one cheaply, and reading tells you which ending you are playing for."
     },
     {
       "id": "bloodInfested",
       "trigger": "bloodInfestedKnown",
-      "text": "One confirmed. Two and the shuttle carries it to the relay with you. The medbay can flush a sample you have not read, at the price of a wound. The bridge is the other answer."
+      "text": "One confirmed. At two, lifting off delivers it to the relay with you. Read the rest and hope, flush an unread one in the medbay at the price of a wound, or take the bridge and make sure nothing leaves at all."
     },
     {
       "id": "reactorDamaged",
@@ -103,7 +103,7 @@
     {
       "id": "shuttleReady",
       "trigger": "shuttleReady",
-      "text": "It has enough. Get to the bay and go \u2014 every hour you spend aboard now is an hour something has to find you."
+      "text": "It has enough. Get to the bay and go — every hour you spend aboard now is an hour something has to find you."
     },
     {
       "id": "nearlyGone",

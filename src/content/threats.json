@@ -2,52 +2,64 @@
   "types": [
     {
       "id": "contact",
-      "mark": "C",
-      "name": "CONTACT",
-      "glyph": "\u2593",
+      "mark": "S",
+      "name": "STRAY",
+      "namePlural": "STRAYS",
+      "glyph": "▓",
       "hp": 2,
       "damage": 1,
       "speed": 1,
       "behaviour": "loudest",
       "order": 3,
-      "text": "Walks toward whatever it can hear. If it gets to you, it swings."
+      "text": "The common one. It walks toward whatever it can hear, so it arrives where the noise was, not where you are. If it gets to you, it swings once.",
+      "sign": "sounds like a STRAY",
+      "signMany": "sound like STRAYS"
     },
     {
       "id": "drifter",
-      "mark": "D",
-      "name": "DRIFTER",
-      "glyph": "\u2588",
+      "mark": "H",
+      "name": "HUNTER",
+      "namePlural": "HUNTERS",
+      "glyph": "█",
       "hp": 3,
       "damage": 2,
       "speed": 1,
       "behaviour": "hunter",
       "hunterRange": 2,
       "order": 2,
-      "text": "Hunts you by ear from two compartments away. Further off, it just goes to the noise."
+      "text": "Bigger, and it wants you specifically. Inside two compartments it comes straight at you; further off it settles for the noise. It hits twice as hard as a STRAY and takes one more to put down.",
+      "sign": "sounds like a HUNTER",
+      "signMany": "sound like HUNTERS"
     },
     {
       "id": "burrower",
-      "mark": "B",
-      "name": "BURROWER",
-      "glyph": "\u2592",
+      "mark": "C",
+      "name": "CRAWLER",
+      "namePlural": "CRAWLERS",
+      "glyph": "▒",
       "hp": 2,
       "damage": 1,
       "speed": 2,
       "behaviour": "burrow",
       "order": 1,
-      "text": "Lives in the ducts, so a dropped bulkhead means nothing to it. In the REACTOR it chews the output instead of you."
+      "text": "Lives in the ducts, so a dropped bulkhead means nothing to it and it moves two compartments at a time. In the REACTOR it chews the output instead of you.",
+      "sign": "is moving inside the walls",
+      "signMany": "are moving inside the walls"
     },
     {
       "id": "chorus",
-      "mark": "S",
-      "name": "CHORUS",
-      "glyph": "\u2591",
+      "mark": "M",
+      "name": "MOTHER",
+      "namePlural": "MOTHERS",
+      "glyph": "░",
       "hp": 5,
       "damage": 2,
       "speed": 1,
       "behaviour": "nest",
       "order": 4,
-      "text": "Makes for the ORE HOLD, singing, and the whole ship gets louder while it walks. When it gets home, more of them wake."
+      "text": "One aboard, at most. It walks to the ORE HOLD singing, and the whole ship gets louder while it walks. When it gets home, more of them wake. Five to put down, so do not try.",
+      "sign": "is singing",
+      "signMany": "is singing"
     }
   ],
   "bag": {

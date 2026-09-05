@@ -612,6 +612,22 @@ p {
   text-transform: none;
 }
 
+.epilogue.dim {
+  color: var(--phos-dim);
+}
+
+/* The one line that says what the ending is, before the prose that dramatises
+   it. Sits directly under the name, at the weight of a headline. */
+.verdict {
+  color: var(--phosphor);
+  font-size: 15px;
+  line-height: 1.4;
+  text-transform: none;
+  border-left: 2px solid var(--phos-dim);
+  padding-left: 10px;
+  margin: 10px 0;
+}
+
 
 /* The manual is paged. The chooser scrolls sideways rather than wrapping to
    four lines and pushing the text it introduces off the screen, and it sticks

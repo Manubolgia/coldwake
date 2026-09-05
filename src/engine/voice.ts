@@ -52,14 +52,17 @@ export function cardName(uid: Uid): string {
   return cardOf(uid).name;
 }
 
-/** What a return turns out to be, in words a person can act on. */
-const SIGNATURE: Record<TokenType, { one: string; many: string }> = {
-  blank: { one: 'is nothing at all', many: 'are nothing at all' },
-  contact: { one: 'is something moving', many: 'are things moving' },
-  drifter: { one: 'is something heavy', many: 'are heavy things' },
-  burrower: { one: 'is something in the ducts', many: 'are things in the ducts' },
-  chorus: { one: 'is something singing', many: 'is something singing' },
-};
+/**
+ * What a return turns out to be, in words a person can act on — and in the
+ * same four names the schematic prints and the manual explains. A listen that
+ * said "something heavy" while the map said D and the manual said DRIFTER was
+ * three vocabularies for one creature, and read as three creatures.
+ */
+function signature(type: TokenType, many: boolean): string {
+  if (type === 'blank') return many ? 'are nothing at all' : 'is nothing at all';
+  const def = threatDef(type);
+  return many ? def.signMany : def.sign;
+}
 
 /**
  * The result of a listen, written as a sentence rather than a tally: how much
@@ -70,7 +73,7 @@ export function sweepReport(state: GameState): string {
   for (const t of TOKEN_TYPES) {
     const n = state.bag[t] ?? 0;
     if (n === 0) continue;
-    const word = n === 1 ? SIGNATURE[t].one : SIGNATURE[t].many;
+    const word = signature(t, n > 1);
     parts.push(`${n} ${word}`);
   }
   if (parts.length === 0) return `>> ${line(state, 'sweepNothing')}`;
@@ -121,6 +124,33 @@ export function chargeLine(state: GameState, n: number, total: number, need: num
 
 export function wardLine(state: GameState): string {
   return `>> ${line(state, 'ward')}`;
+}
+
+/**
+ * A sample arriving in the rack. Every wound puts one there, and until this
+ * line existed it was the only thing in the game that happened silently — the
+ * CARRIER ending is built out of these and nothing announced them.
+ */
+export function sampleLine(state: GameState, total: number, unread: number): string {
+  return `>> ${line(state, 'sample', { total, unread })}`;
+}
+
+/**
+ * What a reading means for the ending, said at the moment of the reading. The
+ * threshold is the whole of the CARRIER rule, so it is never left implicit.
+ */
+export function bloodLine(infested: boolean, known: number, threshold: number): string {
+  if (!infested) return '>> The sample reads clean. That one, anyway.';
+  if (known >= threshold) {
+    return (
+      `>> Infested. That is ${known} confirmed, and ${threshold} is the number: ` +
+      'lift off now and you carry it to the relay yourself. The medbay can still flush what you have not read.'
+    );
+  }
+  return (
+    `>> Infested. It is already in you. ${known} confirmed of the ${threshold} ` +
+    'that would make the shuttle a delivery rather than an escape.'
+  );
 }
 
 /** Losing a capability to a wound. Never "burn", never "card". */

@@ -86,10 +86,18 @@ async function m0(): Promise<void> {
   record('0.6', 'state round-trips through JSON', roundTripped);
   record('0.8', 'token conservation at setup', conserved);
 
-  const stripComments = (src: string): string =>
-    src.replace(/\/\*[\s\S]*?\*\//g, '').replace(/\/\/.*$/gm, '');
+  // Comments and string literals both go: the engine composes the prose the
+  // ship speaks, and "the orbit closed" is not a DOM reference however much
+  // "the window closed" looks like one to a regular expression.
+  const stripNonCode = (src: string): string =>
+    src
+      .replace(/\/\*[\s\S]*?\*\//g, '')
+      .replace(/\/\/.*$/gm, '')
+      .replace(/`(?:\\.|[^`\\])*`/g, '``')
+      .replace(/'(?:\\.|[^'\\\n])*'/g, "''")
+      .replace(/"(?:\\.|[^"\\\n])*"/g, '""');
   const dom = readdirSync('src/engine')
-    .map((f) => stripComments(readFileSync(join('src/engine', f), 'utf8')))
+    .map((f) => stripNonCode(readFileSync(join('src/engine', f), 'utf8')))
     .some((src) => /\b(document|window|Math\.random|Date\.now)\b/.test(src));
   record('0.9', 'engine has no DOM, Math.random or Date.now', !dom);
   record('0.7', 'content validates (see test/content.test.ts)', sh('npx', ['vitest', 'run', 'test/content.test.ts']).ok);

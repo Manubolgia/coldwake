@@ -184,15 +184,21 @@ test('the advisory voice explains itself, and can be switched off', async ({ pag
   await expect(page.getByTestId('guidance-toggle')).toContainText('OFF');
 });
 
+// The same list voice.test.ts checks the written strings against, and for the
+// same reason it carries an exception: a ship has deck plates, and the narrator
+// is allowed to mention them. Without the guard this test failed or passed on
+// which hour opener the narrator happened to draw.
+const BOARD_GAME_WORDS = /\b(cards?|tokens?|nodes?|turns?|AP)\b|\bdecks?\b(?![ -]plate)/i;
+
 test('nothing on screen mentions cards, decks or turns', async ({ page }) => {
   await startRun(page, 'immersion', 1);
   await settle(page);
   const shown = (await page.locator('#root').innerText()).replace(/COLDWAKE/g, '');
-  expect(shown).not.toMatch(/\b(cards?|decks?|tokens?|nodes?|turns?|AP)\b/i);
+  expect(shown).not.toMatch(BOARD_GAME_WORDS);
   await page.locator('.commands .cmd[data-action="endTurn"]').first().click();
   await settle(page);
   const after = (await page.locator('#root').innerText()).replace(/COLDWAKE/g, '');
-  expect(after).not.toMatch(/\b(cards?|decks?|tokens?|nodes?|turns?|AP)\b/i);
+  expect(after).not.toMatch(BOARD_GAME_WORDS);
 });
 
 test('the manual explains every symbol, on every page, in character', async ({ page }) => {
@@ -210,13 +216,22 @@ test('the manual explains every symbol, on every page, in character', async ({ p
     const text = await page.getByTestId('manual-body').innerText();
     // Every page says something; none of them says it like a rulebook.
     expect(text.length).toBeGreaterThan(300);
-    expect(text).not.toMatch(/\b(cards?|decks?|tokens?|nodes?|bag|AP)\b/i);
+    expect(text).not.toMatch(/\b(cards?|tokens?|nodes?|bag|AP)\b|\bdecks?\b(?![ -]plate)/i);
     seen.push(text);
   }
 
   // The screen page has to name every readout the player can be confused by.
   const screen = seen[pages.indexOf('THE SCREEN')] ?? '';
-  for (const label of ['HOUR', 'POWER', 'SHUTTLE', 'REACTOR', 'STILL OUT THERE', 'BLOOD', 'KIT']) {
+  for (const label of [
+    'HOUR',
+    'POWER',
+    'SHUTTLE',
+    'REACTOR',
+    'ABOARD',
+    'STILL OUT THERE',
+    'BLOOD',
+    'KIT',
+  ]) {
     expect(screen).toContain(label);
   }
   // And it draws the map symbols rather than describing them in words.

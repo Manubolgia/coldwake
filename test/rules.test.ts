@@ -13,7 +13,19 @@ import {
   turnLimit,
 } from '../src/engine';
 import type { Action, Depth, GameState, RoleId } from '../src/engine/types';
-import { at, endTurn, fresh, handOnly, has, playCard, put, setTokens, spawn, withHand } from './helpers';
+import {
+  at,
+  endTurn,
+  fresh,
+  handMix,
+  handOnly,
+  has,
+  playCard,
+  put,
+  setTokens,
+  spawn,
+  withHand,
+} from './helpers';
 
 const ROLES: RoleId[] = ['engineer', 'security', 'medic', 'surveyor', 'pilot'];
 const DEPTH_LIST: Depth[] = [1, 2, 3, 4, 5];
@@ -111,6 +123,47 @@ describe('§4.3 your deck', () => {
     expect(s.player.hand.length).toBeLessThan(before + RULES.handSize);
     const allCards = [...s.player.hand, ...s.player.deck, ...s.player.discard];
     expect(allCards.some((u) => isPanic(u))).toBe(true);
+  });
+
+  it('never lets panic pay for a wound', () => {
+    // The playtest report that started this: the wound offered every card in
+    // hand, the wound had just added a panic, and so a run could absorb wounds
+    // for ever without losing anything. 65% of wounds were paid this way.
+    let s = handMix(spawn(at(fresh(), 'spine_a'), 'contact', 'spine_a'), 1, 1);
+    s = put(s, (x) => {
+      x.ship.noise.spine_a = 3;
+    });
+    s = reduce(s, { t: 'endTurn' });
+    expect(s.phase).toBe('wound');
+    const offered = legalActions(s);
+    expect(offered.length).toBeGreaterThan(0);
+    expect(offered.every((a) => a.t === 'burn' && !isPanic(a.uid))).toBe(true);
+    expect(() => reduce(s, { t: 'burn', uid: s.player.hand.find((u) => isPanic(u)) as string })).toThrow();
+  });
+
+  it('takes from the kit when a wound lands on a hand of nothing but panic', () => {
+    let s = handMix(spawn(at(fresh(), 'spine_a'), 'contact', 'spine_a'), 0, 1);
+    s = put(s, (x) => {
+      x.ship.noise.spine_a = 3;
+    });
+    const before = s.player.burned.length;
+    s = reduce(s, { t: 'endTurn' });
+    // No choice to make, so no wound phase — and something real is gone anyway.
+    expect(s.phase).toBe('action');
+    expect(s.player.burned.length).toBeGreaterThan(before);
+    expect(s.player.burned.every((u) => !isPanic(u))).toBe(true);
+  });
+
+  it('shrinks what you can still do with every wound', () => {
+    let s = spawn(at(fresh(), 'spine_a'), 'drifter', 'spine_a');
+    const before = [...s.player.hand, ...s.player.deck, ...s.player.discard].filter(
+      (u) => !isPanic(u),
+    ).length;
+    s = endTurn(s);
+    const after = [...s.player.hand, ...s.player.deck, ...s.player.discard].filter(
+      (u) => !isPanic(u),
+    ).length;
+    expect(after).toBe(before - s.stats.wounds);
   });
 
   it('reshuffles the discard when the deck runs out', () => {
@@ -413,6 +466,29 @@ describe('§4.10 CARRY', () => {
     let wounded = spawn(at(fresh(), 'spine_a'), 'drifter', 'spine_a');
     wounded = endTurn(wounded);
     expect(wounded.player.carry.length).toBeGreaterThan(1);
+  });
+
+  it('says out loud that a wound put a sample in the rack', () => {
+    let s = spawn(at(fresh(), 'spine_a'), 'contact', 'spine_a');
+    s = put(s, (x) => {
+      x.ship.noise.spine_a = 3;
+      x.feed = [];
+    });
+    s = endTurn(s);
+    expect(s.player.carry.length).toBeGreaterThan(1);
+    expect(s.feed.some((l) => /sample/i.test(l.text))).toBe(true);
+  });
+
+  it('names the carrier threshold when a reading comes back infested', () => {
+    const s = put(at(fresh(), 'medbay'), (x) => {
+      x.ship.power = 5;
+      x.player.carry = [{ id: 'infested', revealed: false }];
+      x.feed = [];
+    });
+    const scanned = reduce(s, { t: 'carryScan', index: 0 });
+    const said = scanned.feed.map((l) => l.text).join(' ');
+    expect(said).toMatch(/infested/i);
+    expect(said).toContain(String(RULES.carry.carrierThreshold));
   });
 
   it('reveals one card per scan', () => {

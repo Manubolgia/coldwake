@@ -1,5 +1,6 @@
 import { useState } from 'react';
-import { DEPTHS, MAP, ROLES, RULES, depthDef, threatDef } from '../../engine';
+import { DEPTHS, MAP, ROLES, RULES, depthDef, endingHow, threatDef } from '../../engine';
+import type { Ending } from '../../engine/types';
 import { THREATS } from '../../engine/content';
 
 /**
@@ -17,6 +18,8 @@ const PAGES = [
   'AN HOUR',
   'ABOARD',
   'HURT',
+  'BLOOD',
+  'ENDINGS',
   'THE SHIP',
   'ADVICE',
   'DEEPER',
@@ -67,6 +70,13 @@ function Box({ cls = '', label }: { cls?: string; label: string }): React.ReactE
   );
 }
 
+/** What a system action costs, in the one format every page prints it in. */
+function cost(key: string): string {
+  const d = RULES.systemActions[key];
+  if (!d) return '';
+  return `${d.ap} time${d.power > 0 ? ` · ${d.power} power` : ''} · +${d.noise} noise`;
+}
+
 function Legend({ term, children }: { term: React.ReactNode; children: React.ReactNode }): React.ReactElement {
   return (
     <div className="legend">
@@ -107,11 +117,16 @@ function TheRun(): React.ReactElement {
       </p>
 
       <h2>Ways it ends</h2>
-      <Row term="CLEAN BREAK">Lift with the power banked and clean blood. The best of it.</Row>
-      <Row term="CARRIER">Lift infected. You reach the relay and so does it.</Row>
-      <Row term="SCUTTLE">Arm the reactor in time and stay aboard. Nothing leaves.</Row>
-      <Row term="BEACON">Broadcast, and die anyway. Somebody else opens the hold.</Row>
-      <Row term="LOST">Everything else. The orbit closes, or you run out of things you can do.</Row>
+      <p>
+        Five, and you are always playing for one of them. Two need you off the ship, two need
+        something to leave in your place, and the fifth is what is left. ENDINGS has each one, what
+        it means, and exactly what you have to do to get it.
+      </p>
+      {(Object.keys(RULES.endings) as Ending[]).map((e) => (
+        <Row key={e} term={RULES.endings[e].name}>
+          {RULES.endings[e].verdict}
+        </Row>
+      ))}
     </>
   );
 }
@@ -137,16 +152,23 @@ function TheScreen(): React.ReactElement {
 
       <h2>The second line</h2>
       <Legend term={<b>REACTOR 2/HR</b>}>
-        Power made each hour. A burrower in the reactor chews this down; the repair puts it back.
+        Power made each hour. A CRAWLER in the reactor chews this down; the repair puts it back.
       </Legend>
-      <Legend term={<b>STILL OUT THERE ▓▓▓▓▓ 5</b>}>
-        How much is aboard that has not shown itself yet — <em>including the returns that turn out
-        to be nothing</em>. The blocks are the count, not five monsters. Listening replaces it with
-        the breakdown for that hour: how many are nothing, moving, heavy, in the ducts, singing.
+      <Legend term={<b>ABOARD 2</b>}>
+        How many are on the schematic right now, standing in a compartment you could walk into.
+        This is the number that can hurt you this hour.
       </Legend>
-      <Legend term={<b>BLOOD ? ▒ █</b>}>
-        One mark per sample you are carrying. <b>?</b> unread, <b>▒</b> read and clean, <b>█</b>{' '}
-        read and infected. CARRIER appears when you are holding enough infected ones to matter.
+      <Legend term={<b>STILL OUT THERE ▓▓▓▓▓ 5 MOSTLY NOTHING</b>}>
+        A different number: how much has not shown itself yet, <em>counting everything that turns
+        out to be nothing at all</em>. Five blocks is not five of them — at the start of a run most
+        of it is the hull. Listening for an hour replaces the blocks with the real breakdown, in the
+        same four names the schematic uses.
+      </Legend>
+      <Legend term={<b>BLOOD ? ▒ █ 1/{RULES.carry.carrierThreshold} INFECTED · 2 UNREAD</b>}>
+        One mark per sample of your blood in the rack. <b>?</b> unread, <b>▒</b> read and clean,{' '}
+        <b>█</b> read and infected. The fraction is how many infected ones you have confirmed
+        against the {RULES.carry.carrierThreshold} that would make lifting off a CARRIER ending. Every
+        wound adds a mark. See BLOOD.
       </Legend>
       <Legend term={<b>KIT 9 · LOST 3</b>}>
         Things you can still do, and things a wound has taken from you for good.
@@ -196,14 +218,15 @@ function TheScreen(): React.ReactElement {
             <Box label="ARM" />
             <rect x={12.4} y={6.5} width={3} height={3} className="threat-block" />
             <text x={12.8} y={8.9} className="node-threat">
-              D
+              H
             </text>
           </Swatch>
         }
       >
-        Something is standing there.{' '}
-        {THREATS.types.map((t) => `${t.mark} ${t.name.toLowerCase()}`).join(', ')}. Up to three are
-        shown. The block fills when it is in the compartment with you.
+        Something is standing there, and the letter is which of the four:{' '}
+        {THREATS.types.map((t) => `${t.mark} for ${t.name}`).join(', ')}. There are only those four
+        kinds, however many are aboard. Up to three are shown. The block fills when it is in the
+        compartment with you.
       </Legend>
       <Legend
         term={
@@ -292,6 +315,11 @@ function Aboard(): React.ReactElement {
   return (
     <>
       <h2>What is aboard</h2>
+      <p>
+        Four kinds, and only four, at every depth. A run puts more of them aboard as it goes on,
+        never a new kind. These are the names the schematic prints, the names a listen reports and
+        the names the ship says out loud — the same word every time.
+      </p>
       {THREATS.types.map((t) => (
         <div className="stat note-row" key={t.id}>
           <span>
@@ -319,7 +347,7 @@ function Aboard(): React.ReactElement {
         {vents.join(', ')} open into the ducts. Silent, and they cross the whole ship in two hours,
         which is faster than walking it. Coming out is a gamble: whatever is loose gets a chance to
         be waiting for you, and you cannot swing properly in a duct — {RULES.ventAmbushPenalty} on
-        anything you try. Burrowers live in there.
+        anything you try. CRAWLERS live in there.
       </p>
             <p>
         The bridge can flood the ducts and kill everything in them, which some hours is nothing at
@@ -335,8 +363,20 @@ function Hurt(): React.ReactElement {
       <h2>Being hurt</h2>
       <p>
         There is no health here and nothing heals. Every wound takes one thing you could do and
-        takes it <em>for the rest of the run</em> — you choose which — and puts panic in the space
-        it left. When nothing you can still do is left, neither are you.
+        takes it <em>for the rest of the run</em> — you choose which — puts panic in the space it
+        left, and draws a sample of your blood into the rack. When nothing you can still do is
+        left, neither are you.
+      </p>
+      <p>
+        <b>Panic can never be the thing you give up.</b> The ship only offers you things you could
+        still have used, so the list at a wound is shorter than what is in your hands, and every
+        wound genuinely costs you. Hold nothing but panic when one lands and it takes something out
+        of your kit at random instead.
+      </p>
+      <p>
+        So wounds compound in three directions at once: the kit gets smaller, the panic in it gets
+        thicker, and the rack fills up. Count what you have left. Twelve things is a run; four is an
+        ending you had better choose soon.
       </p>
 
       <h2>Panic</h2>
@@ -370,18 +410,117 @@ function Hurt(): React.ReactElement {
         The only thing that removes panic for good is medicine: TRIAGE, FIELD DRESSING, a stimulant
         found aboard. Those burn it out of your kit permanently.
       </p>
+    </>
+  );
+}
 
-      <h2>Your blood</h2>
+function Blood(): React.ReactElement {
+  const t = RULES.carry.carrierThreshold;
+  return (
+    <>
+      <h2>What the rack is</h2>
       <p>
-        You woke with one sample already in the rack and every wound adds another, all of them
-        unread. The medbay reads one at a time, cheaply. Leave with {RULES.carry.carrierThreshold}{' '}
-        infected samples aboard and you carry it to the relay — the run looks won and is not.
+        You woke with one sample of your own blood already in the rack. Every wound after that
+        draws another, and they all go in unread — the <b>?</b> marks after BLOOD on the second
+        line. Nothing about them touches your body, your kit or your hours. They do exactly one
+        thing, and only at the very end.
+      </p>
+
+      <h2>The one rule</h2>
+      <p>
+        When the shuttle lifts, every sample is read. <b>{t} or more infested and you are the
+        CARRIER</b> instead of a CLEAN BREAK: you got off, and so did it. Fewer than {t} and you got
+        off clean. That is the whole mechanism. It is not damage, it is not a timer, and it cannot
+        kill you aboard.
       </p>
       <p>
-        Reading is how you find out which ending you are playing for, and the earlier you find out
-        the more you can do about it. Flushing throws a sample away unread at the price of a wound:
-        a real cure, expensively. If you learn you are carrying and cannot flush it, the bridge is
-        the honest answer.
+        Which means the rack is really a question about the <em>ending</em> you are working toward,
+        being decided quietly by the hits you take on the way. Take no wounds and it never comes up.
+        Take six and it is most of the run.
+      </p>
+
+      <h2>Reading, in the medbay</h2>
+      <Row wide term="READ ONE">
+        {cost('carryScan')}. Turns one <b>?</b> into <b>▒</b> clean or <b>█</b> infected, for good.
+        It changes nothing about your blood — it tells you which ending you are already playing for,
+        while there are still hours left to do something about it.
+      </Row>
+      <Row wide term="FLUSH ONE">
+        {cost('purgeBlood')}, <em>and a wound</em>. Throws one unread sample away and does not
+        replace it. The only cure there is, and it costs you a capability to take it — so it is
+        worth it when you already know the rest of the rack is bad, and a waste when you do not.
+      </Row>
+      <p>
+        You can only read or flush a sample you have not read yet. A confirmed infected one is
+        yours to keep.
+      </p>
+
+      <h2>What to actually do</h2>
+      <Row wide term="READ EARLY">
+        The medbay is cheap and the news is only useful while you can act on it. Finding out at hour
+        sixteen that you are carrying is finding out too late.
+      </Row>
+      <Row wide term="ONE INFECTED IS A WARNING">
+        At {t - 1} confirmed you are one bad hour from the CARRIER ending. Stop taking hits, or flush
+        an unread one before the count gets there.
+      </Row>
+      <Row wide term={`AT ${t} CONFIRMED, CHANGE THE ENDING`}>
+        Lifting off now is a delivery. The bridge is the honest answer: arm the overload, stay, and
+        let nothing leave. SCUTTLE scores better than CARRIER and is the truthful version of the
+        same hour.
+      </Row>
+    </>
+  );
+}
+
+function Endings(): React.ReactElement {
+  return (
+    <>
+      <h2>Five endings</h2>
+      <p>
+        Every run reaches exactly one. Which one is decided by three things only: whether you got
+        off the ship, what was in your blood if you did, and what you left running if you did not.
+      </p>
+      {(Object.keys(RULES.endings) as Ending[]).map((e) => (
+        <div className="stat note-row wide" key={e}>
+          <span>
+            {RULES.endings[e].name} · ×{RULES.endings[e].multiplier}
+          </span>
+          <b className="note">
+            {RULES.endings[e].verdict} <em>{endingHow(e)}</em>
+          </b>
+        </div>
+      ))}
+
+      <h2>The order they are checked in</h2>
+      <p>
+        This is what decides a run that does not end at the shuttle, and it is worth knowing before
+        the last hour rather than after it.
+      </p>
+      <Row wide term="1 · DID YOU LAUNCH?">
+        Then it is CLEAN BREAK or CARRIER, and your blood picks which. Nothing else is considered.
+      </Row>
+      <Row wide term="2 · IS THE OVERLOAD RUNNING?">
+        Armed, and enough hours have passed for it to reach critical: SCUTTLE, whether the window
+        closed on you or something finished you. Armed too late to go off counts for nothing.
+      </Row>
+      <Row wide term="3 · DID YOU BROADCAST?">BEACON. The record gets out; you do not.</Row>
+      <Row wide term="4 · OTHERWISE">LOST.</Row>
+      <p>
+        So SCUTTLE and BEACON are things you set up <em>hours earlier</em> and then die into. Neither
+        can be chosen in the hour it is needed — the overload takes{' '}
+        {RULES.systemActions.armScuttle?.fuseTurns ?? 3} hours to build and the whole pool, and the
+        broadcast is the loudest thing on the ship. Decide which one you are holding in reserve at
+        about the halfway mark.
+      </p>
+
+      <h2>The score</h2>
+      <p>
+        Everything you did is added up — power banked, compartments searched, things put down, hours
+        survived, what you still had at the end — and then multiplied by the ending. That multiplier
+        is the whole reason the endings are ranked: a huge run that ends CARRIER (×
+        {RULES.endings.carrier.multiplier}) scores under a modest one that ends CLEAN BREAK (×
+        {RULES.endings.clean_break.multiplier}).
       </p>
     </>
   );
@@ -389,11 +528,6 @@ function Hurt(): React.ReactElement {
 
 function TheShip(): React.ReactElement {
   const sys = RULES.systemActions;
-  const cost = (key: string): string => {
-    const d = sys[key];
-    if (!d) return '';
-    return `${d.ap} time${d.power > 0 ? ` · ${d.power} power` : ''} · +${d.noise} noise`;
-  };
   return (
     <>
       <h2>What each compartment is for</h2>
@@ -418,7 +552,7 @@ function TheShip(): React.ReactElement {
         <span>ANY SPINE · drop a bulkhead</span>
         <b className="note">
           {cost('seal')}, holds {sys.seal?.turns ?? 3} hours. A wall between you and something. You
-          cannot cross it either, and burrowers do not care.
+          cannot cross it either, and CRAWLERS do not care.
         </b>
       </div>
       <div className="stat note-row wide">
@@ -483,7 +617,8 @@ function Advice(): React.ReactElement {
         A miss empties the weapon. Do not open a fight you cannot finish or walk away from.
       </Row>
       <Row wide term="6 · READ YOUR BLOOD EARLY">
-        Finding out at hour sixteen that you are carrying is finding out too late to do anything.
+        The rack decides which of the two launch endings you get, and nothing else. Finding out at
+        hour sixteen that you are carrying is finding out too late to do anything.
       </Row>
       <Row wide term="7 · THE VENTS ARE A SHORTCUT, NOT A HIDING PLACE">
         Silent and fast, but you come out blind and you cannot fight in there.
@@ -493,8 +628,8 @@ function Advice(): React.ReactElement {
         hours and made noise twice.
       </Row>
       <Row wide term="9 · WOUNDS COMPOUND">
-        The first costs you a capability. The second costs you a capability and deals you a worse
-        hand for the rest of the run.
+        The first costs you a capability, thickens your kit with panic, and puts a sample in the
+        rack. The second does all three again, out of a smaller kit. Panic cannot pay for either.
       </Row>
       <Row wide term="10 · DECIDE THE ENDING EARLY">
         The reactor takes three hours to arm and the whole pool. By the time scuttling is obviously
@@ -550,6 +685,8 @@ const RENDER: Record<Page, () => React.ReactElement> = {
   'AN HOUR': AnHour,
   ABOARD: Aboard,
   HURT: Hurt,
+  BLOOD: Blood,
+  ENDINGS: Endings,
   'THE SHIP': TheShip,
   ADVICE: Advice,
   DEEPER: Deeper,

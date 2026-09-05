@@ -1,14 +1,14 @@
 import { MAP, RULES, SALVAGE, VENT_NODES, card, node, threatDef } from './content';
-import { cardOf, drawOne, isPanic, makeUid, removeFromHand, removePanic } from './deck';
+import { cardOf, drawOne, isPanic, makeUid, nonPanicCount, removeFromHand, removePanic } from './deck';
 import { neighbours } from './graph';
 import { assertInvariants } from './invariants';
 import { addNoise, bagDraw, decayNoise, makeNoise, noisePhase } from './noise';
 import { rollD6 } from './rng';
 import { resolveRun } from './scoring';
 import { cloneState, drawUpToHandSize, noiseFloor, shuttleRequirement, turnLimit } from './state';
-import { drawCarry, killThreat, threatPhase, wound } from './threats';
+import { burnRandomOwned, drawCarry, killThreat, threatPhase, wound } from './threats';
 import { attackPenalty, listenCost, playable, salvageLeft, systemAt } from './actions';
-import { arrival, chargeLine, foundLine, hourLine, lost, missLine, say, sweepReport, where } from './voice';
+import { arrival, bloodLine, chargeLine, foundLine, hourLine, lost, missLine, say, sweepReport, where } from './voice';
 import type { Action, EffectSpec, GameState, NodeId, Threat, Uid } from './types';
 
 export class IllegalActionError extends Error {}
@@ -318,15 +318,28 @@ function endTurn(state: GameState): void {
 }
 
 function resolveBurn(state: GameState, uid: Uid): void {
+  if (isPanic(uid)) fail('panic is not a capability; a wound cannot take it');
   if (!removeFromHand(state, uid)) fail('that card is not in hand');
   state.player.burned.push(uid);
   state.player.pendingWounds -= 1;
   state.feed.push({ turn: state.turn, kind: 'alarm', text: lost(uid) });
-  // A wound with nothing left in hand takes a card at random instead.
-  while (state.player.pendingWounds > 0 && state.player.hand.length === 0) {
-    const pile = state.player.deck.length > 0 ? state.player.deck : state.player.discard;
-    const taken = pile.shift();
-    if (taken !== undefined) state.player.burned.push(taken);
+  // A further wound with nothing left worth choosing between takes one at
+  // random, from the kit rather than from the panic the wounds have left —
+  // and when the kit holds nothing you could still do, the run is over here
+  // rather than leaving a debt that quietly lapses.
+  while (state.player.pendingWounds > 0 && !state.player.hand.some((u) => !isPanic(u))) {
+    if (nonPanicCount(state) === 0) {
+      state.player.pendingWounds = 0;
+      state.feed.push({
+        turn: state.turn,
+        kind: 'alarm',
+        text: '>> It wants one more thing from you and there is nothing left to give up.',
+      });
+      resolveRun(state, 'death');
+      return;
+    }
+    const taken = burnRandomOwned(state);
+    if (taken !== undefined) state.feed.push({ turn: state.turn, kind: 'alarm', text: lost(taken) });
     state.player.pendingWounds -= 1;
   }
   if (state.player.pendingWounds === 0) {
@@ -408,10 +421,11 @@ function systemAction(state: GameState, action: Action): void {
       if (!c || c.revealed) fail('nothing to scan there');
       c.revealed = true;
       state.stats.scans += 1;
+      const known = state.player.carry.filter((x) => x.revealed && x.id === 'infested').length;
       state.feed.push({
         turn: state.turn,
         kind: c.id === 'infested' ? 'alarm' : 'sys',
-        text: `>> The sample reads ${c.id === 'infested' ? 'infested. It is already in you' : 'clean. That one, anyway'}.`,
+        text: bloodLine(c.id === 'infested', known, RULES.carry.carrierThreshold),
       });
       return;
     }
@@ -419,7 +433,13 @@ function systemAction(state: GameState, action: Action): void {
       const c = state.player.carry[action.index];
       if (!c || c.revealed) fail('that sample is already read');
       state.player.carry.splice(action.index, 1);
-      state.feed.push({ turn: state.turn, kind: 'player', text: '>> The line runs red, and then clear.' });
+      state.feed.push({
+        turn: state.turn,
+        kind: 'player',
+        text:
+          '>> The line runs red, and then clear. That sample is gone unread and does not come back — ' +
+          `${state.player.carry.length} left aboard. It costs you, the way everything here costs you.`,
+      });
       wound(state, 1, 'PURGE', false);
       return;
     }

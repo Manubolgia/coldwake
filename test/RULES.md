@@ -15,6 +15,9 @@ If a rule moves, this table moves with it, or the gate is lying.
 | 4.2 turn | The orbit closes at the turn limit | `rules.test.ts › §4.2 › ends the run at the turn limit` |
 | 4.3 deck | Twelve cards per role | `rules.test.ts › §4.3 › gives every role twelve cards` |
 | 4.3 burn | A wound burns a card and shuffles in a panic | `rules.test.ts › §4.3 › burns a card and gains a panic` |
+| 4.3 burn | Panic can never pay for a wound | `rules.test.ts › §4.3 › never lets panic pay for a wound` |
+| 4.3 burn | A hand of nothing but panic loses a card from the kit | `rules.test.ts › §4.3 › takes from the kit when a wound lands on a hand of nothing but panic` |
+| 4.3 burn | Every wound costs one real capability | `rules.test.ts › §4.3 › shrinks what you can still do with every wound` |
 | 4.3 deck | The discard reshuffles when the deck runs out | `rules.test.ts › §4.3 › reshuffles the discard` |
 | 4.3 burn | Burned cards never come back | `rules.test.ts › §4.3 › never returns a burned card` |
 | 4.4 move | 1 AP, 2 noise | `rules.test.ts › §4.4 › charges the printed AP and noise` |
@@ -42,12 +45,16 @@ If a rule moves, this table moves with it, or the gate is lying.
 | 4.8 order | Burrowers, drifters, contacts, chorus | `rules.test.ts › §4.8 › activates burrowers before drifters` |
 | 4.9 combat | d6 + bonus, meet or beat; a miss spends the weapon | `rules.test.ts › §4.9 › kills on meet-or-beat`, `can miss with a weak weapon` |
 | 4.10 CARRY | Face down at setup, one more per wound | `rules.test.ts › §4.10 › starts face down` |
+| 4.10 CARRY | A wound says out loud that it added a sample | `rules.test.ts › §4.10 › says out loud that a wound put a sample in the rack` |
+| 4.10 CARRY | An infested reading names the carrier threshold | `rules.test.ts › §4.10 › names the carrier threshold` |
 | 4.10 CARRY | A scan reveals one | `rules.test.ts › §4.10 › reveals one card per scan` |
 | 4.10 CARRY | A purge costs a wound | `rules.test.ts › §4.10 › purges an unrevealed sample` |
 | 4.10 CARRY | The odds match the hypergeometric value (gate 1.15) | `rules.test.ts › §4.10 › matches the hypergeometric odds` |
 | 4.11 endings | All five, with their multipliers | `rules.test.ts › §4.11` (one test per ending) |
 | 4.11 score | The documented formula | `rules.test.ts › §4.11 › scores the documented formula` |
 | 4.11 death | Death exactly when no non-panic card remains (gate 1.14) | `rules.test.ts › §4.11 › kills the player only when no non-panic card remains` |
+| 4.11 endings | Every ending accounts for itself on the run's own numbers | `voice.test.ts › every ending says why it happened` |
+| 4.11 endings | Each carries a verdict and a placeholder-free how | `content.test.ts › says what every ending is and how it is reached` |
 | 4.12 roles | Five decks, twelve cards, all playable (gate 1.11) | `cards.test.ts › every card is playable and does something` |
 | 4.12 pilot | Launches on less power | `rules.test.ts › §4.12-4.13 › lets the pilot launch on less power` |
 | 4.13 depths | Every modifier applied | `rules.test.ts › §4.12-4.13 › applies each depth modifier` |

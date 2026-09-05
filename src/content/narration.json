@@ -58,7 +58,7 @@
     "Whatever made that sound is not making it now."
   ],
   "blankWorse": [
-    "Nothing there \u2014 and the ship gets a little worse anyway. Something else woke up.",
+    "Nothing there — and the ship gets a little worse anyway. Something else woke up.",
     "Nothing. But the count of what is unaccounted for just went up.",
     "Empty. The dark is not: there is one more thing in it now.",
     "Nothing there. Somewhere else, something opens its eyes."
@@ -81,7 +81,7 @@
     "That is the end of {thing}. There is more of it than you expected."
   ],
   "miss": [
-    "You miss. {roll} against {target}. The weapon is empty \u2014 the armory can refill it.",
+    "You miss. {roll} against {target}. The weapon is empty — the armory can refill it.",
     "Wide. {roll} against {target}, and now there is nothing left in it.",
     "It moves and you do not hit it. {roll} against {target}. Empty."
   ],
@@ -104,5 +104,11 @@
   "sweepNothing": [
     "Nothing left unaccounted for. That is worse than it sounds.",
     "The hull is quiet all the way through. Everything that was out there has already found somewhere to be."
+  ],
+  "sample": [
+    "It opened you up, and the rack takes a reading off the blood. {total} samples aboard now, {unread} of them unread.",
+    "Whatever is on its claws is in you now. The rack logs it: {total} samples aboard, {unread} unread.",
+    "You bleed, and the ship files it. {total} samples aboard, {unread} nobody has read.",
+    "That is skin broken. The rack draws another one off you — {total} aboard, {unread} unread."
   ]
 }

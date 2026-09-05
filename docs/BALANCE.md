@@ -23,6 +23,7 @@ preference.
 | Scuttle cost | 5 power | 10 power, on a 3-turn fuse | At 5 it was a free consolation prize taken on the turn the shuttle became unreachable. At 8 it is a real fork: the power you arm with is power you cannot bank. |
 | CARRY scan | 2 AP, 2 power | 1 AP, 1 power | At the original cost no bot ever scanned, at any depth — pillar 3 failing in the measurement. At 1/1 the scan rate is 32–44%, inside the 20–80% band the playtest protocol asks for. |
 | Purge blood | wound draws a replacement CARRY card | wound draws no card | As written, purging swapped one unknown card for another and was strictly a trap. It is now a genuine, expensive cure: one fewer sample at the price of a burn and a panic. |
+| What a wound may burn | any card in hand | any **non-panic** card in hand | The wound had just shuffled a panic in, so the wound could be paid with the panic it caused. Measured: 65% of all burns were panic, and **1,200 bot runs across every depth produced zero attrition deaths**. A playtester wrote "I discard all I have and I keep going infinitely", which was the rules working as written. See below. |
 | Beacon | 4 power | 3 power | So that broadcasting stays reachable in the runs where arming the reactor is not. |
 | Scuttle timing | arm it any time | a 3-turn fuse | Arming was a free consolation taken on the exact turn the shuttle became unreachable, which put a hard floor under the win rate at every depth. A fuse makes it a commitment: arm it before you know you have failed, or the orbit closes first. Depth 3 moved from 49.6% into band at 43.8% on this change alone. |
 
@@ -65,81 +66,117 @@ weapon numbers.
 
 HeuristicBot, 1,200–1,500 runs per depth, engineer, seed prefix `kell`:
 
-| Depth | Win rate (clean + scuttle) | Clean break | Carrier | Scuttle | Lost | Median turn | Wounds | Scan rate |
-|---|---|---|---|---|---|---|---|---|
-| 1 | 58.9% | 58% | 35% | 1% | 6% | 15 | 6.4 | 38% |
-| 2 | 56.7% | 55% | 37% | 2% | 6% | 15 | 7.0 | 40% |
-| 3 | 43.8% | 34% | 29% | 10% | 27% | 16 | 7.6 | 35% |
-| 4 | 37.5% | 23% | 39% | 15% | 23% | 15 | 8.8 | 41% |
-| 5 | 33.3% | 15% | 34% | 19% | 32% | 15 | 9.1 | 30% |
+3,000 runs per depth.
 
-Depth 1 (55–65%) and depth 3 (35–45%) are inside their bands, difficulty falls
-monotonically, the median resolution turn sits at 15–16 against a 12–17 target,
-and under 1% of runs resolve before turn 8.
+| Depth | Win rate (clean + scuttle) | Clean break | Carrier | Scuttle | Lost + beacon | Median turn | Wounds | Scan rate |
+|---|---|---|---|---|---|---|---|---|
+| 1 | 58.7% | 58% | 20% | 1% | 22% | 14 | 5.5 | 38% |
+| 2 | 55.4% | 54% | 21% | 1% | 24% | 14 | 5.9 | 41% |
+| 3 | 38.6% | 35% | 20% | 4% | 41% | 14 | 6.1 | 33% |
+| 4 | 30.5% | 22% | 28% | 8% | 41% | 14 | 6.8 | 39% |
+| 5 | 24.3% | 15% | 27% | 9% | 49% | 12 | 7.5 | 26% |
+
+**All five depths are inside their bands for the first time**, difficulty falls
+monotonically, the median resolution turn sits at 12–14 against a 12–17 target,
+and 0.2% of runs or fewer resolve before turn 8. The depth 5 overshoot that this
+document has carried since the fuse pass is gone; see the section below for why,
+because the cause is not a number anyone tuned.
 
 **Skill gap, the most important number in the project:** at depth 3,
-HeuristicBot 53.0% against RandomBot 3.7% — **49.3 points**, comfortably above
-the 35-point floor. Decisions matter.
+HeuristicBot 38.6% against RandomBot 0.2% — **38.4 points**, above the 35-point
+floor. Decisions matter, and they now matter more sharply: random play used to
+survive to a timeout, and now it runs out of things it can do.
 
-**Bot ordering (gate 2.4):** heuristic 53.0% > greedy 7.8% > random 3.7% at
+**Bot ordering (gate 2.4):** heuristic 38.6% > greedy 5.9% > random 0.2% at
 depth 3, with non-overlapping intervals.
 
-**Ceiling gap (gate 3.6):** SearchBot 60.7% against HeuristicBot 53.0% at depth
-3 — 7.7 points, just under the 10–20 band. The two-ply search is close enough to
-the one-ply strategy that the remaining headroom is small; widening the search
-shortlist is the lever if this needs to grow.
+**Ceiling gap (gate 3.6):** SearchBot 59.8% against HeuristicBot 38.6% at depth
+3 — **21.2 points**, just over the 10–20 band, having been 7.7 points under it
+before the wound change. Wounds now compound, and looking two ply ahead to avoid
+one is worth much more than it was. Narrowing the search shortlist is the lever
+if this needs to come back down.
 
 ## What is still outside its band
 
 Reported rather than hidden. The tuning loop is built and cheap — these are the
 next numbers to reach for, not defects in the harness.
 
-| Gate | Target | Measured | Reading |
-|---|---|---|---|
-| 3.3 depth 5 win rate | 15–25% | 33.3% | High. Clean Break alone is 15%, exactly on band; the gap is the scuttle. |
-| 3.6 ceiling gap | 10–20 points | 7.7 points | SearchBot is close to HeuristicBot. Widening the search shortlist is the lever. |
-| 3.9 loss cause spread | none over 40% | Carrier is roughly half of all losses at depth 3+ | The CARRY ladder pulled this down from 80%; it wants one more pass. |
-| 3.11 ending spread | each ≥5% somewhere | Beacon stays under 1% | Broadcasting is dominated by arming the reactor whenever the bridge is reachable, and the bridge nearly always is. |
+`npm run gate:m3` goes from 13 red checks to 12, and the composition is what
+matters more than the count:
+
+| Gate | Target | Before | After | Reading |
+|---|---|---|---|---|
+| 3.3 depth 5 win rate | 15–25% | 33.1% ✗ | 23.2% ✓ | Fixed, without a tuning knob. See below. |
+| 3.9 largest loss cause, depth 3 | ≤40% | 53.9% ✗ | 39.9% ✓ | Fixed. Losses now split three ways rather than being one system. |
+| 3.9 largest loss cause, depths 1/2/4/5 | ≤40% | 86% / 84% / 51% / 61% | 47% / 51% / 43% / 45% | Still red, roughly half as red. Depth 1 is now carrier-led at 47%; the rest are led by running out of things to do. |
+| 3.6 ceiling gap | 10–20 points | inside | 22.2 points ✗ | Newly red, and by two points. Wounds compound now, so looking two ply ahead to dodge one is worth much more than it was. Narrowing the search shortlist is the lever. |
+| 3.7 top action share | ≤25% | 27–30% | 28–31% | Unchanged, and unrelated: it is the free-movement cards, covered under Cards below. |
+| 3.11 ending spread | each ≥5% somewhere | Beacon under 1% | Beacon under 1% | Unchanged. Broadcasting is dominated by arming the reactor whenever the bridge is reachable, and the bridge nearly always is. |
 
 **The structural finding, and what was done about it.** The design document
 counts Clean Break *and* Scuttle as wins. Arming the reactor was available to
 any run that reached the bridge with power, which put a hard floor under the win
 rate at every depth: the deep bands were unreachable while the scuttle stayed a
-free late fallback. The fix was a design one — the 3-turn fuse above — and it
-brought depth 3 into band. Depth 5 is still 8 points high because a 19% scuttle
-rate sits under a 15% clean break. Measured on Clean Break alone the ladder is
-58% / 34% / 15% against targets of 55–65 / 35–45 / 15–25: three for three. The
-remaining question is whether Scuttle should count as a win at all, or whether
-the fuse should lengthen with depth. That is a call for the designer, not the
-harness, so it is written up rather than decided here.
+free late fallback. The first fix was a design one — the 3-turn fuse above — and
+it brought depth 3 into band while leaving depth 5 eight points high.
+
+**What closed the deep end was not a number.** Depth 5 sat at 34.8% against a
+15–25% band, and the previous entry in this table proposed lengthening the fuse
+with depth or dropping Scuttle from the win definition. Neither was needed. The
+real cause was that a wound could be paid with the panic card the wound itself
+had just handed over, so the attrition rule — the one the manual calls "how you
+die here" — had never once fired:
+
+| | Before | After |
+|---|---|---|
+| Burns paid with panic | 65% | 0% |
+| Runs ending in death by attrition (d1 / d3 / d5) | 0% / 0% / 0% | 18% / 27% / 40% |
+| Depth 5 win rate | 34.8% (band 15–25) | 24.3% |
+| Depths inside their win band | 4 of 5 | 5 of 5 |
+
+(3,000 runs a depth, seed prefix `band`. `gate:m3` on its own seeds and run
+count reads the same move as 33.1% → 23.2%.)
+
+Deep runs took the most wounds and were therefore the runs the missing rule was
+subsidising most, which is why the fix lands hardest exactly where the ladder
+was flattest. Wound counts fell slightly (6.4 → 5.5 at depth 1) because a run
+that is genuinely being worn down ends sooner. Nothing was retuned to compensate
+and nothing needed to be: every band above is the shipped content unchanged.
 
 ## Roles
 
-Every role, 800 runs per depth, HeuristicBot. The band is the engineer's rate
-±7 points, per gate 4.1.
+Every role, 1,500 runs per depth, HeuristicBot. The band is the engineer's rate
+±7 points, per gate 4.1. Re-measured after the wound change, which moved every
+role: attrition falls hardest on the decks that spend cards to survive.
 
 | Role | Depth 1 | Depth 3 | Depth 5 |
 |---|---|---|---|
-| Engineer | 60.9% | 40.9% | 32.6% |
-| Security | 66.9% | 40.8% | 26.8% |
-| Medic | 69.7% | 36.4% | 29.8% |
-| Surveyor | 64.9% | 39.8% | 24.3% |
-| Pilot | 66.9% | 42.6% | 30.7% |
+| Engineer | 56.9% | 37.5% | 24.1% |
+| Security | 63.8% | 31.9% | 19.0% |
+| Medic | 60.3% | 31.3% | 19.9% |
+| Surveyor | 63.2% | 33.5% | 18.2% |
+| Pilot | 63.9% | 42.5% | 25.1% |
 
-Security, surveyor and engineer sit on top of one another at depth 3, which is
-the shape gate 4.1 is asking for. Two roles are outside it at depth 1:
+**All fifteen role checks pass for the first time** (`npm run gate:m4`, 4.1).
+Nothing in any deck was touched to achieve it; the roles converged because the
+loss they were being measured against changed.
 
-**The medic**, at 72.9%, is strong for a reason worth stating plainly: at depth
-1 the Carrier ending accounts for roughly 85% of all losses, and the medic is
-the role that reads and discards its own blood. Its edge is a symptom of the
-CARRY imbalance below, not of its cards, and shrinking that imbalance is the fix
-— which is why the medic's deck has not been nerfed to hide it.
+**The medic** has come back to the pack — 69.7% to 60.3% at depth 1 — for the
+reason the previous pass predicted rather than for a nerf. Its edge was never
+its cards; it was that the Carrier ending was ~85% of all losses at depth 1 and
+the medic is the role that reads and discards its own blood. With running out of
+things to do now a real way to lose, Carrier is 47% of depth-1 losses and the
+medic's speciality covers less of the loss table.
 
-**The pilot** was 74.5% before this pass and is 66.9% after it — inside the
-band. The discount is down from five power to two, its two shuttle cards bank
-three less between them, and its filler is genuinely weaker: Course Correct
-banks one power rather than two and Nerve draws one card rather than two. The
-design document calls the pilot "weakest deck otherwise", and it now is.
+**Security and the surveyor** sit at the top of the depth-1 band (+6.9 and +6.3
+against the engineer, inside ±7 but on the edge) and the bottom of the depth-3
+one (−5.6 and −4.0). Worth watching rather than acting on.
+
+**The pilot** was 74.5% two passes ago and is 63.9% now. Its discount is two
+power rather than five, its two shuttle cards bank three less between them, and
+its filler is genuinely weaker: Course Correct banks one power rather than two
+and Nerve draws one card rather than two. It is nonetheless the strongest role
+at every depth, because banking early is what survives a run that gets shorter.
 
 ## Cards
 

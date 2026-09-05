@@ -1,5 +1,5 @@
 import { ALL_EDGES, MAP, NODE_IDS, RULES, VENT_NODES, card, node } from './content';
-import { cardIdOf, cardOf, isSpent } from './deck';
+import { cardIdOf, cardOf, isPanic, isSpent } from './deck';
 import { neighbours } from './graph';
 import { shuttleRequirement } from './state';
 import type { Action, Card, EffectSpec, GameState, NodeId, Uid } from './types';
@@ -108,8 +108,11 @@ export function legalActions(state: GameState): Action[] {
   const out: Action[] = [];
   const p = state.player;
 
+  // A wound takes something you could have done with it. Panic is what the
+  // wound leaves behind, so it is never on the table here — otherwise the
+  // wound the panic paid for cost nothing at all.
   if (state.phase === 'wound') {
-    for (const uid of p.hand) out.push({ t: 'burn', uid });
+    for (const uid of p.hand) if (!isPanic(uid)) out.push({ t: 'burn', uid });
     return out;
   }
 

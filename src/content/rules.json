@@ -121,23 +121,33 @@
   "endings": {
     "clean_break": {
       "name": "CLEAN BREAK",
-      "multiplier": 1.5
+      "multiplier": 1.5,
+      "verdict": "You are off the ship and nothing came with you.",
+      "how": "Reach the shuttle bay with the power banked and fewer than {threshold} infested samples aboard, and launch."
     },
     "carrier": {
       "name": "CARRIER",
-      "multiplier": 0.8
+      "multiplier": 0.8,
+      "verdict": "You are off the ship. So is it.",
+      "how": "Launch holding {threshold} or more infested samples. The run looks won and is not."
     },
     "scuttle": {
       "name": "SCUTTLE",
-      "multiplier": 1.2
+      "multiplier": 1.2,
+      "verdict": "You stayed aboard and made sure nothing else left either.",
+      "how": "Arm the overload on the bridge and still be aboard when it reaches critical, {fuse} hours later."
     },
     "beacon": {
       "name": "BEACON",
-      "multiplier": 0.6
+      "multiplier": 0.6,
+      "verdict": "You did not get off, but the warning did — and so will whoever answers it.",
+      "how": "Broadcast from comms, then die or run out of window with no overload armed."
     },
     "lost": {
       "name": "LOST",
-      "multiplier": 0.3
+      "multiplier": 0.3,
+      "verdict": "You did not get off, and nothing left the ship to say what happened.",
+      "how": "Everything else: the window closes, or something takes the last thing you could still do."
     }
   }
 }

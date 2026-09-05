@@ -106,17 +106,19 @@ otherwise green pipeline.
 The gates that can be automated are automated, and `npm run gate:mN` reports
 honestly rather than passing quietly. What remains needs a person and a phone:
 
-- **The deep end is not in band.** Depth 1 and depth 3 win rates are; depth 5 is
-  eight points high because the scuttle is a reliable consolation. The two ways
-  out — a fuse that lengthens with depth, or counting only a Clean Break as a
-  win — are set out in `docs/BALANCE.md`. The choice is the designer's.
+- **The ceiling gap.** SearchBot is now 21.2 points above HeuristicBot at depth
+  3, just over the 10–20 band, having been 7.7 points *under* it before wounds
+  started to compound. Narrowing the search shortlist is the lever;
+  `docs/BALANCE.md` has the measurement.
 - **The card play-rate gates.** Twenty-three cards sit under the floor and six
   over the ceiling; the analysis of which of those are content problems and
   which are limits of a one-ply bot is in the same document.
 - **Milestone 7.** Twenty runs on the real phone, the protocol in Part 10 of the
   design document. The end-of-run survey and the telemetry export exist for
   exactly this; export the JSON from the menu and read it against the bot's
-  numbers.
+  numbers. The first session's export is what found the wound rule that let a
+  run absorb damage for ever — a thing 1,200 clean bot runs had reported as a
+  0% death rate without anyone reading it as a bug.
 - **The device checks.** Install on the phone, aeroplane mode, a complete run
   offline; the Lighthouse audit; thumb reach measured rather than eyeballed.
 

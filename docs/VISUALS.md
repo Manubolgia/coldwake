@@ -105,7 +105,7 @@ name and its stat line, in the same character grid as the real thing will use:
 
 ```
 +--------------------+
-|      DRIFTER       |
+|       HUNTER       |
 |   3 TO KILL / 2    |
 |    [ PLATE TBD ]   |
 +--------------------+
@@ -245,7 +245,7 @@ honest so far.
 
 Not a technical one. **Do the things aboard survive being seen?**
 
-Right now a DRIFTER is `D` in a box, a count in the readout, and a sentence
+Right now a HUNTER is `H` in a box, a count in the readout, and a sentence
 about hunting you by ear. It is frightening in the way a sonar contact is
 frightening. A picture of it — even a good one — answers a question the game is
 currently better for not answering, and the answer is permanent.

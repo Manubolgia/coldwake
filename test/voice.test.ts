@@ -1,12 +1,23 @@
 import { describe, expect, it } from 'vitest';
-import { CARDS, SALVAGE, initialState, legalActions, reduce, roleDeck } from '../src/engine';
+import {
+  CARDS,
+  RULES,
+  SALVAGE,
+  endingReport,
+  initialState,
+  legalActions,
+  reduce,
+  resolveRun,
+  roleDeck,
+  shuttleRequirement,
+} from '../src/engine';
 import { sweepReport } from '../src/engine/voice';
 import guidanceJson from '../src/content/guidance.json';
 import rolesJson from '../src/content/roles.json';
 import threatsJson from '../src/content/threats.json';
 import mapJson from '../src/content/map.json';
 import depthsJson from '../src/content/depths.json';
-import type { Action, Depth, GameState, RoleId } from '../src/engine/types';
+import type { Action, Depth, Ending, GameState, RoleId } from '../src/engine/types';
 import { at, endTurn, fresh, put, spawn } from './helpers';
 
 /**
@@ -76,6 +87,64 @@ describe('the ship never breaks character', () => {
     const offenders = [...seen].filter((t) => breaksCharacter(t));
     expect(offenders).toEqual([]);
     expect(seen.size).toBeGreaterThan(30);
+  });
+});
+
+describe('every ending says why it happened', () => {
+  it('names the rule that fired, on this run\'s numbers, for all five', () => {
+    // The playtest survey kept answering "no" to whether the loss was
+    // understood. Each of the five now has to account for itself.
+    const cases: { ending: Ending; state: GameState }[] = [
+      {
+        ending: 'clean_break',
+        state: put(at(fresh(), 'shuttle_bay'), (s) => {
+          s.ship.shuttleCharge = shuttleRequirement(s.role, s.depth);
+          s.player.carry = [{ id: 'clean', revealed: false }];
+        }),
+      },
+      {
+        ending: 'carrier',
+        state: put(at(fresh(), 'shuttle_bay'), (s) => {
+          s.ship.shuttleCharge = shuttleRequirement(s.role, s.depth);
+          s.player.carry = Array.from({ length: RULES.carry.carrierThreshold }, () => ({
+            id: 'infested' as const,
+            revealed: false,
+          }));
+        }),
+      },
+    ];
+    for (const c of cases) {
+      const done = reduce(c.state, { t: 'launch' });
+      expect(done.status).toBe(c.ending);
+      const report = endingReport(done);
+      expect(report.verdict.length).toBeGreaterThan(10);
+      expect(report.why.length).toBeGreaterThan(20);
+      expect(report.instead.length).toBeGreaterThan(20);
+      expect(breaksCharacter([report.verdict, report.why, report.instead].join(' '))).toBe(false);
+    }
+
+    // The three that resolve without a launch differ only in what was left
+    // running, which is exactly the thing the report has to say out loud.
+    const armed = put(fresh(), (s) => {
+      s.ship.scuttleArmed = true;
+      s.ship.scuttleArmedTurn = 1;
+      s.turn = 12;
+    });
+    const broadcast = put(fresh(), (s) => {
+      s.ship.beaconSent = true;
+    });
+    const nothing = fresh();
+    for (const [state, ending] of [
+      [armed, 'scuttle'],
+      [broadcast, 'beacon'],
+      [nothing, 'lost'],
+    ] as const) {
+      const done = put(state, (s) => resolveRun(s, 'timeout'));
+      expect(done.status).toBe(ending);
+      const report = endingReport(done);
+      expect(report.why).toMatch(/orbit closed|took the last/i);
+      expect(breaksCharacter([report.verdict, report.why, report.instead].join(' '))).toBe(false);
+    }
   });
 });
 

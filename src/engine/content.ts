@@ -24,6 +24,8 @@ export type ThreatDef = {
   glyph: string;
   /** The single letter the schematic prints in the compartment. */
   mark: string;
+  /** The plural, for anything that counts them. */
+  namePlural: string;
   hp: number;
   damage: number;
   speed: number;
@@ -31,6 +33,11 @@ export type ThreatDef = {
   hunterRange?: number;
   order: number;
   text: string;
+  /** How a listen reports one of these, and more than one. The listen, the
+   *  schematic and the manual all read off this one entry, so a player only
+   *  ever learns four names rather than four names and four descriptions. */
+  sign: string;
+  signMany: string;
 };
 
 export type RoleDef = {
@@ -100,7 +107,17 @@ export const RULES = rulesJson as unknown as {
     turnsSurvived: number;
     survivingCards: number;
   };
-  endings: Record<Ending, { name: string; multiplier: number }>;
+  endings: Record<
+    Ending,
+    {
+      name: string;
+      multiplier: number;
+      /** What the ending means, in one clause. */
+      verdict: string;
+      /** What you have to do to reach it. `{threshold}` and `{fuse}` fill in. */
+      how: string;
+    }
+  >;
 };
 
 export const DEPTHS = depthsJson.depths as unknown as DepthDef[];

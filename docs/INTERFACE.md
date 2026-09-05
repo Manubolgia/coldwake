@@ -50,7 +50,7 @@ outrun by it. A new player reads; a veteran holds their thumb down.
 the commands and the hand stand down and the terminal takes their space until it
 has finished. The map, the status strip and the bag readout hold the state the
 player last saw, so the readout catches up to the text rather than spoiling it:
-you read `CONTACT IN ORE-HOLD` and then watch it appear. Older output does not
+you read `STRAY IN ORE-HOLD` and then watch it appear. Older output does not
 scroll away, it burns in — the further back a line is, the dimmer it sits, until
 it is part of the chrome.
 
