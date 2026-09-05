@@ -28,6 +28,9 @@ export type RunResult = {
   infection: number;
   shaken: number;
   listens: number;
+  cardsDrawn: number;
+  cardsPlayed: number;
+  moves: number;
   banked: number;
   actions: string[];
   route: string[];
@@ -36,6 +39,15 @@ export type RunResult = {
   /** best-minus-third action value at each decision, when sampled. */
   gaps: number[];
 };
+
+/**
+ * Runs rotate through the four objectives. A batch that only ever declares RUN
+ * measures one quarter of the game and reports it as the whole.
+ */
+export const OBJECTIVE_ROTATION: Objective[] = ['run', 'burn', 'call', 'know'];
+export function objectiveFor(i: number): Objective {
+  return OBJECTIVE_ROTATION[i % OBJECTIVE_ROTATION.length] as Objective;
+}
 
 const GUARD = 4000;
 
@@ -47,6 +59,11 @@ export function runOne(cfg: RunConfig): RunResult {
   const actions: string[] = [];
   const route: string[] = [state.player.node];
   const drawn = new Set<string>();
+  // Every card that newly arrives in hand, and every act of moving — whether it
+  // came from your legs or from a card.
+  let drawnCount = state.player.hand.length;
+  let handWas = state.player.hand.slice();
+  let moves = 0;
   const played: string[] = [];
   const gaps: number[] = [];
   for (const uid of state.player.hand) drawn.add(cardIdOf(uid));
@@ -73,8 +90,15 @@ export function runOne(cfg: RunConfig): RunResult {
     if (action.t === 'play') played.push(cardIdOf(action.uid));
     const before = state.player.node;
     state = reduce(state, action as Action);
-    for (const uid of state.player.hand) drawn.add(cardIdOf(uid));
-    if (state.player.node !== before) route.push(state.player.node);
+    for (const uid of state.player.hand) {
+      drawn.add(cardIdOf(uid));
+      if (!handWas.includes(uid)) drawnCount += 1;
+    }
+    handWas = state.player.hand.slice();
+    if (state.player.node !== before) {
+      route.push(state.player.node);
+      if (state.player.node !== 'vents' && before !== 'vents') moves += 1;
+    }
   }
 
   if (state.status === 'active') throw new Error('run did not terminate');
@@ -91,6 +115,9 @@ export function runOne(cfg: RunConfig): RunResult {
     killed: state.stats.threatsKilled,
     searched: state.ship.searched.length,
     cures: state.stats.cures,
+    cardsDrawn: drawnCount,
+    cardsPlayed: state.stats.cardsPlayed,
+    moves,
     infection: r.infection,
     shaken: state.stats.threatsShaken,
     listens: state.stats.listens,

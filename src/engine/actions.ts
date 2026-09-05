@@ -386,16 +386,16 @@ export function consequence(state: GameState, a: Action): string | null {
       return 'The next thing that reaches you this hour does not land.';
     case 'discard':
       return state.player.freeCardUsed
-        ? 'Out of hand, back into the deck. It will come round again.'
-        : 'Free this hour: out of hand, back into the deck, and something else comes.';
+        ? 'Out of hand and back into your kit. It will come round again.'
+        : 'Free this hour: out of hand, back into your kit, and something else comes to hand.';
     case 'seal':
       return `Shut for ${RULES.systemActions.seal?.turns ?? 3} hours. A CRAWLER ignores it; the MOTHER takes an hour to break it.`;
     case 'purgeVents':
       return 'Kills every CRAWLER in the ducts and holds the MOTHER there two hours.';
     case 'cure':
-      return 'One infection card leaves your deck for good.';
+      return 'One infection leaves your kit for good. No wound, no roll.';
     case 'beacon':
-      return `Then hold comms ${relayHold(state.depth)} hours, ${RULES.systemActions.beacon?.drain ?? 1} power an hour, with nothing else in the room.`;
+      return `Then sit at the set for ${relayHold(state.depth)} hours at ${RULES.systemActions.beacon?.drain ?? 1} power an hour. The watch only runs while you are in COMMS.`;
     case 'takeSpecimen':
       return 'It calls to everything aboard for as long as you carry it.';
     case 'upload':

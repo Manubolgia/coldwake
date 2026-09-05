@@ -5,6 +5,8 @@ import {
   actionCost,
   actionKey,
   assertInvariants,
+  boardCap,
+  consequence,
   describe as describeAction,
   legalActions,
   listenCost,
@@ -14,43 +16,49 @@ import {
 } from '../src/engine';
 import { bagDraw, tokensInBag, tokensInReserve } from '../src/engine/noise';
 import type { Action, GameState } from '../src/engine/types';
-import { at, endTurn, fresh, handOnly, put, setTokens, spawn, withHand } from './helpers';
+import { at, clearBoard, endTurn, fresh, handOnly, put, setTokens, spawn, withHand } from './helpers';
 
 /** One state per action type, so the cost and label paths are all exercised. */
 function everyActionType(): { state: GameState; action: Action }[] {
   const base = put(fresh('security'), (s) => {
     s.ship.power = RULES.powerCap;
+    s.player.infectionsGained += 1;
+    s.player.deck.push('inf_fever@1001');
   });
   const spine = at(base, 'spine_b');
-  const withThreat = spawn(at(base, 'spine_a'), 'contact', 'spine_a');
+  const withThreat = spawn(at(base, 'spine_a'), 'contact', 'spine_a', 'spine_a');
   const shuttle = put(at(base, 'shuttle_bay'), (s) => {
     s.ship.shuttleCharge = shuttleRequirement('security', 1);
   });
   const vents = reduce(at(base, 'medbay'), { t: 'ventEnter' });
   const armory = put(at(base, 'armory'), (s) => {
-    s.player.spent = [s.player.deck.find((u) => u.startsWith('service_pistol@')) ?? 'x@1'];
+    s.player.spent = [s.player.deck.find((u) => u.startsWith('sidearm@')) ?? 'x@1'];
   });
+  const specimen = reduce(at(base, 'ore_hold'), { t: 'takeSpecimen' });
+  const suppress = withHand(base, ['suppress']);
   return [
     { state: base, action: { t: 'move', to: 'spine_a' } },
     { state: base, action: { t: 'creep', to: 'spine_a' } },
     { state: base, action: { t: 'listen' } },
     { state: base, action: { t: 'search' } },
+    { state: base, action: { t: 'brace' } },
     { state: base, action: { t: 'discard', uid: base.player.hand[0] as string } },
-    { state: withHand(base, ['advance']), action: { t: 'play', uid: 'advance@1', to: 'spine_a' } },
+    { state: suppress, action: { t: 'play', uid: suppress.player.hand[0] as string } },
     { state: at(base, 'medbay'), action: { t: 'ventEnter' } },
     { state: vents, action: { t: 'ventExit', to: 'bridge' } },
     { state: at(base, 'reactor'), action: { t: 'repair' } },
     { state: spine, action: { t: 'seal', edge: ['spine_b', 'reactor'] } },
     { state: at(base, 'bridge'), action: { t: 'purgeVents' } },
-    { state: at(base, 'medbay'), action: { t: 'carryScan', index: 0 } },
-    { state: at(base, 'medbay'), action: { t: 'purgeBlood', index: 0 } },
+    { state: at(base, 'medbay'), action: { t: 'cure' } },
     { state: armory, action: { t: 'recharge', target: armory.player.spent[0] as string } },
     { state: at(base, 'shuttle_bay'), action: { t: 'chargeShuttle', n: 3 } },
     { state: at(base, 'comms'), action: { t: 'beacon' } },
+    { state: at(base, 'ore_hold'), action: { t: 'takeSpecimen' } },
+    { state: at(specimen, 'comms'), action: { t: 'upload' } },
     { state: at(base, 'bridge'), action: { t: 'armScuttle' } },
     { state: shuttle, action: { t: 'launch' } },
     { state: withThreat, action: { t: 'endTurn' } },
-    { state: handOnly(base, ['panic_shaking']), action: { t: 'burn', uid: 'panic_shaking@1001' } },
+    { state: handOnly(base, ['bypass']), action: { t: 'burn', uid: 'bypass@1' } },
   ];
 }
 
@@ -58,23 +66,55 @@ describe('the action surface the interface consumes', () => {
   it('prices and labels every action type', () => {
     for (const { state, action } of everyActionType()) {
       const cost = actionCost(state, action);
-      expect(cost.ap).toBeGreaterThanOrEqual(0);
-      expect(cost.power).toBeGreaterThanOrEqual(0);
-      expect(cost.noise).toBeGreaterThanOrEqual(0);
-      expect(describeAction(action).length).toBeGreaterThan(0);
-      expect(actionKey(action).length).toBeGreaterThan(0);
+      expect(cost.ap, action.t).toBeGreaterThanOrEqual(0);
+      expect(cost.power, action.t).toBeGreaterThanOrEqual(0);
+      expect(cost.noise, action.t).toBeGreaterThanOrEqual(0);
+      expect(describeAction(action).length, action.t).toBeGreaterThan(0);
+      expect(actionKey(action).length, action.t).toBeGreaterThan(0);
     }
   });
 
-  it('adds the panic surcharge to the noise it discloses', () => {
+  /**
+   * Every rule the player must reason about gets a number on screen. The old
+   * game left the seal duration, the fuse length and the carrier threshold in
+   * prose, and the manual was where a player went to find them.
+   */
+  it('states the consequence of every action that has one the cost line cannot carry', () => {
+    const carries: Action['t'][] = [
+      'move',
+      'creep',
+      'listen',
+      'brace',
+      'seal',
+      'purgeVents',
+      'cure',
+      'beacon',
+      'takeSpecimen',
+      'upload',
+      'armScuttle',
+      'launch',
+    ];
+    for (const { state, action } of everyActionType()) {
+      if (!carries.includes(action.t)) continue;
+      const line = consequence(state, action);
+      expect(line, action.t).not.toBe(null);
+      expect((line ?? '').length, action.t).toBeGreaterThan(20);
+    }
+  });
+
+  it('adds the infection surcharge to the noise it discloses', () => {
     const sweaty = put(fresh(), (s) => {
-      s.player.panicsGained += 1;
-      s.player.hand.push('panic_sweat@1001');
+      s.player.infectionsGained += 1;
+      s.player.hand.push('inf_sweat@1001');
     });
     expect(actionCost(sweaty, { t: 'move', to: 'spine_a' }).noise).toBe(
-      (RULES.basicActions.move?.noise ?? 2) + 1,
+      (RULES.basicActions.move?.noise ?? 3) + 1,
     );
-    expect(listenCost(sweaty)).toBe(RULES.basicActions.listen?.ap ?? 1);
+    const tunnelled = put(fresh(), (s) => {
+      s.player.infectionsGained += 1;
+      s.player.hand.push('inf_tunnel@1001');
+    });
+    expect(listenCost(tunnelled)).toBe((RULES.basicActions.listen?.ap ?? 1) + 1);
   });
 
   it('names the target every card needs', () => {
@@ -82,11 +122,14 @@ describe('the action surface the interface consumes', () => {
     expect(targetKind({ op: 'sealEdge', turns: 3, anywhere: true })).toBe('edge');
     expect(targetKind({ op: 'sealEdge', turns: 3, anywhere: false })).toBe('edgeHere');
     expect(targetKind({ op: 'attack', bonus: 1 })).toBe('threat');
-    expect(targetKind({ op: 'addNoise', scope: 'target', n: 3 })).toBe('other');
+    expect(targetKind({ op: 'lure', n: 3 })).toBe('anyNode');
+    expect(targetKind({ op: 'addNoise', scope: 'target', n: 3 })).toBe('anyNode');
     expect(targetKind({ op: 'addNoise', scope: 'here', n: 3 })).toBe(null);
     expect(targetKind({ op: 'ventJump' })).toBe('vent');
     expect(targetKind({ op: 'recharge' })).toBe('spent');
-    expect(targetKind({ op: 'sequence', steps: [{ op: 'draw', n: 1 }, { op: 'move', silent: true }] })).toBe('node');
+    expect(
+      targetKind({ op: 'sequence', steps: [{ op: 'draw', n: 1 }, { op: 'move', silent: true }] }),
+    ).toBe('node');
     expect(targetKind({ op: 'gainPower', n: 1 })).toBe(null);
   });
 
@@ -94,29 +137,50 @@ describe('the action surface the interface consumes', () => {
     const broke = put(fresh(), (s) => {
       s.player.ap = 0;
       s.ship.power = 0;
+      s.player.freeCardUsed = true;
     });
     for (const a of legalActions(broke)) {
-      expect(actionCost(broke, a).ap).toBeLessThanOrEqual(0);
+      expect(actionCost(broke, a).ap, a.t).toBeLessThanOrEqual(0);
     }
+  });
+
+  it('offers the free card slot even with no time left', () => {
+    const broke = put(fresh(), (s) => {
+      s.player.ap = 0;
+      s.ship.power = 0;
+    });
+    expect(legalActions(broke).some((a) => a.t === 'discard')).toBe(true);
   });
 });
 
 describe('invariants catch tampering', () => {
   it('rejects a state that loses a token', () => {
-    const bad = put(fresh(), (s) => {
-      s.bag.contact -= 1;
-    });
-    expect(() => assertInvariants(bad)).toThrow(InvariantError);
+    expect(() =>
+      assertInvariants(
+        put(fresh(), (s) => {
+          s.bag.contact -= 1;
+        }),
+      ),
+    ).toThrow(InvariantError);
   });
 
   it('rejects a state that loses a card', () => {
-    const bad = put(fresh(), (s) => {
-      s.player.deck.pop();
-    });
-    expect(() => assertInvariants(bad)).toThrow(InvariantError);
+    expect(() =>
+      assertInvariants(
+        put(fresh(), (s) => {
+          s.player.deck.pop();
+        }),
+      ),
+    ).toThrow(InvariantError);
   });
 
-  it('rejects out-of-bounds power and noise', () => {
+  it('rejects a board over its cap', () => {
+    let s = clearBoard(fresh('engineer', 1));
+    for (let i = 0; i < boardCap(1) + 1; i++) s = spawn(s, 'contact', 'cryobay');
+    expect(() => assertInvariants(s)).toThrow(InvariantError);
+  });
+
+  it('rejects out-of-bounds power and noise, and threats off the map', () => {
     expect(() =>
       assertInvariants(
         put(fresh(), (s) => {
@@ -133,8 +197,19 @@ describe('invariants catch tampering', () => {
     ).toThrow();
     expect(() =>
       assertInvariants(
-        put(fresh(), (s) => {
-          s.threats.push({ id: 'q', type: 'contact', node: 'nowhere', hp: 2 });
+        put(clearBoard(fresh()), (s) => {
+          s.threats.push({
+            id: 'q',
+            type: 'contact',
+            node: 'nowhere',
+            hp: 2,
+            target: null,
+            stance: 'wandering',
+            cold: 0,
+            stalled: 0,
+            seenNode: null,
+            seenTurn: -1,
+          });
           s.bag.contact -= 1;
         }),
       ),
@@ -143,30 +218,33 @@ describe('invariants catch tampering', () => {
 });
 
 describe('the bag under pressure', () => {
-  it('places a contact from the reserve when the bag runs dry', () => {
-    const empty = setTokens(fresh(), {}, { contact: 18 });
-    const drawn = { ...empty };
-    const result = bagDraw(drawn, 'spine_a');
-    expect(result).toBe('contact');
-    expect(drawn.threats).toHaveLength(1);
+  it('escalates instead of spawning when the board is full', () => {
+    let s = clearBoard(fresh('engineer', 1));
+    for (let i = 0; i < boardCap(1); i++) s = spawn(s, 'contact', 'cryobay');
+    const drawn = structuredClone(s);
+    expect(bagDraw(drawn, 'spine_a')).toBe('capped');
+    expect(drawn.threats.filter((t) => t.type !== 'mother').length).toBe(boardCap(1));
   });
 
-  it('reactivates every threat when both the bag and the reserve are dry', () => {
-    // An empty bag with no contacts left to draft in.
-    let s = fresh();
-    for (let i = 0; i < 3; i++) s = spawn(s, 'contact', 'spine_c');
-    s = setTokens(s, {}, { blank: 15 });
-    const drawn = { ...s };
-    expect(bagDraw(drawn, 'spine_a')).toBe('empty');
-    expect(tokensInBag(drawn)).toBe(0);
-    expect(tokensInReserve(drawn)).toBeGreaterThan(0);
+  it('wakes the hold when there is nothing left to promote', () => {
+    let s = clearBoard(fresh('engineer', 1));
+    for (let i = 0; i < boardCap(1); i++) s = spawn(s, 'drifter', 'cryobay');
+    const drawn = structuredClone(s);
+    const before = drawn.ship.hive;
+    bagDraw(drawn, 'spine_a');
+    expect(drawn.ship.hive).toBeGreaterThan(before);
   });
 
-  it('escalates through the whole reserve over a long, loud run', () => {
+  it('drafts out of the reserve when the bag runs dry', () => {
+    const empty = setTokens(clearBoard(fresh()), {}, { contact: 18 });
+    const drawn = structuredClone(empty);
+    bagDraw(drawn, 'spine_a');
+    expect(tokensInBag(drawn) + tokensInReserve(drawn)).toBeLessThanOrEqual(18);
+  });
+
+  it('draws when a compartment gets loud enough, over a long run', () => {
     let s = at(fresh(), 'ore_hold');
-    for (let i = 0; i < 6 && s.status === 'active'; i++) {
-      s = endTurn(s);
-    }
+    for (let i = 0; i < 6 && s.status === 'active'; i++) s = endTurn(s);
     expect(s.stats.bagDraws).toBeGreaterThan(0);
   });
 });

@@ -3,7 +3,7 @@
     {
       "id": "opening",
       "trigger": "always",
-      "text": "Read the two strips at the top. The first is the hour, the power in the pool, and how much infection is in your deck. The second is the four things worth doing aboard, all four tracked, with a mark against the one you said you came up here for. Finish any of them and the run is a win."
+      "text": "Read the two strips at the top. The first is the hour, the power in the pool, and how much infection is in your kit. The second is the four things worth doing aboard, all four tracked, with a mark against the one you said you came up here for. Finish any of them and the run is a win."
     },
     {
       "id": "objective",
@@ -33,12 +33,12 @@
     {
       "id": "timeLeft",
       "trigger": "spentTime",
-      "text": "The marks at the end of the top line are what is left of this hour. One card an hour is free to play or to set aside; everything after that costs time."
+      "text": "The marks at the end of the top line are what is left of this hour. One thing from your hand each hour is free to play or to set aside; everything after that costs time."
     },
     {
       "id": "handKeeps",
       "trigger": "always",
-      "text": "Your hand stays with you between hours — nothing is thrown away at the end of the hour any more. Setting a card aside costs nothing once an hour and draws you a replacement, so a hand you cannot use is a hand you can turn over."
+      "text": "Your hand stays with you between hours — nothing is thrown away at the end of one. Setting something aside costs nothing once an hour and draws you a replacement, so a hand you cannot use is a hand you can clear out."
     },
     {
       "id": "salvageWeapon",
@@ -63,17 +63,17 @@
     {
       "id": "mother",
       "trigger": "motherAwake",
-      "text": "That is the MOTHER. Do not swing at it. A bulkhead in its face holds it an hour, flooding the vents from the bridge holds it two, and anything loud thrown into another compartment turns it around. Every one of those buys you the hours you still need."
+      "text": "That is the MOTHER. Do not swing at it. A bulkhead in its face holds it an hour, flooding the vents from the bridge holds it two, and anything loud thrown into another compartment sends it the wrong way. Every one of those buys you hours you still need."
     },
     {
       "id": "firstWound",
       "trigger": "wounded",
-      "text": "A wound takes two things: a capability, gone for the rest of the run, and a card of infection into your own deck. The infection is not hidden — the count is on the top strip. When there is nothing left you can do, neither are you."
+      "text": "A wound takes two things: something you could do, gone for the rest of the run, and one more infection into your own kit. The infection is not hidden — the count is on the top strip. When there is nothing left you can do, neither are you."
     },
     {
       "id": "infectionHeld",
       "trigger": "infectionInHand",
-      "text": "Infection in your hand costs you while you hold it, and it cannot be given up to a wound. Setting it aside stops it for the hour; only the MEDBAY takes it out of the deck for good, and that costs time and power but never a wound."
+      "text": "Infection in your hand costs you while you hold it, and it cannot be given up to a wound. Setting it aside stops it for the hour; only the MEDBAY takes it out of your kit for good, and that costs time and power but never a wound."
     },
     {
       "id": "carrierClose",
@@ -88,7 +88,7 @@
     {
       "id": "weaponEmpty",
       "trigger": "weaponSpent",
-      "text": "That weapon is empty until the ARMORY refills it, for one time and one power. A card in hand that cannot fire is a card you can set aside."
+      "text": "That weapon is empty until the ARMORY refills it, for one time and one power. Something in your hand that cannot fire is something you can set aside."
     },
     {
       "id": "poolNearFull",

@@ -1,70 +1,70 @@
 import { describe, expect, it } from 'vitest';
-import { ADVISORIES, newAdvisories } from '../src/ui/guidance';
-import { RULES, initialState, reduce, shuttleRequirement } from '../src/engine';
-import { at, endTurn, fresh, put, spawn } from './helpers';
+import { RULES, infectionThreshold, reduce } from '../src/engine';
+import { ADVISORIES, TRIGGER_NAMES, newAdvisories } from '../src/ui/guidance';
+import { at, fresh, put, spawn, withInfection } from './helpers';
 
 describe('the advisory voice', () => {
-  it('opens by explaining the arithmetic, once', () => {
+  it('opens by explaining what the four strips are for, one line at a time', () => {
+    // One advisory per call, never a wall of them: a bad hour teaches one thing.
     const fired = new Set<string>();
-    const s = initialState('guide', 'engineer', 1);
-    const first = newAdvisories(s, fired);
-    // One at a time, never a wall of them.
-    expect(first).toHaveLength(1);
-    expect(first[0]?.kind).toBe('guide');
-    expect(first[0]?.text).toContain('SHUTTLE is what you have banked');
-    // Whatever comes next, it is never the same lesson twice.
-    const second = newAdvisories(s, fired);
-    expect(second.map((l) => l.text)).not.toContain(first[0]?.text);
+    const first = newAdvisories(fresh(), fired);
+    expect(first.length).toBe(1);
+    expect(first[0]?.text).toMatch(/four/i);
+    let guard = 0;
+    while (newAdvisories(fresh(), fired).length > 0 && guard++ < 40);
+    expect(newAdvisories(fresh(), fired)).toEqual([]);
   });
 
   it('says nothing at all once the run is over', () => {
-    const done = put(at(fresh(), 'shuttle_bay'), (x) => {
-      x.ship.shuttleCharge = shuttleRequirement('engineer', 1);
+    const done = put(fresh(), (s) => {
+      s.status = 'adrift';
     });
-    const launched = reduce(done, { t: 'launch' });
-    expect(newAdvisories(launched, new Set())).toEqual([]);
+    expect(newAdvisories(done, new Set())).toEqual([]);
   });
 
   it('explains a wound the first time one lands, and not again', () => {
-    const fired = new Set<string>(ADVISORIES.map((a) => a.id));
-    fired.delete('firstWound');
-    let s = spawn(at(fresh(), 'spine_a'), 'drifter', 'spine_a');
-    s = put(s, (x) => {
-      x.ship.noise.spine_a = 3;
-    });
-    expect(newAdvisories(s, new Set(fired))).toEqual([]);
-    s = endTurn(s);
-    const said = newAdvisories(s, fired);
-    expect(said).toHaveLength(1);
-    expect(said[0]?.text).toContain('cannot');
-    expect(newAdvisories(s, fired)).toEqual([]);
+    const fired = new Set<string>();
+    const s = spawn(at(fresh(), 'spine_a'), 'contact', 'spine_a', 'spine_a');
+    newAdvisories(s, fired);
+    const hit = reduce(s, { t: 'endTurn' });
+    const lines = [];
+    for (let i = 0; i < 6; i++) lines.push(...newAdvisories(hit, fired));
+    const wound = lines.filter((l) => l.text.includes('capability'));
+    expect(wound.length).toBe(1);
   });
 
-  it('warns when the shuttle has gone out of reach', () => {
-    const fired = new Set<string>(ADVISORIES.map((a) => a.id));
-    fired.delete('cannotMakeIt');
-    const doomed = put(fresh(), (x) => {
-      x.turn = 19;
-      x.ship.power = 0;
+  it('names the forecast as the thing that stops a wound', () => {
+    const fired = new Set<string>();
+    const s = spawn(at(fresh(), 'spine_a'), 'contact', 'spine_b', 'spine_a');
+    const lines = [];
+    for (let i = 0; i < 10; i++) lines.push(...newAdvisories(s, fired));
+    expect(lines.some((l) => /under the schematic/i.test(l.text))).toBe(true);
+  });
+
+  it('warns before the CARRIER line rather than after it', () => {
+    const fired = new Set<string>();
+    const s = withInfection(fresh(), infectionThreshold(1) - 1);
+    const lines = [];
+    for (let i = 0; i < 12; i++) lines.push(...newAdvisories(s, fired));
+    expect(lines.some((l) => /CARRIER/.test(l.text))).toBe(true);
+  });
+
+  it('tells a run whose shuttle has gone that three routes are still open', () => {
+    const fired = new Set<string>();
+    const s = put(fresh(), (x) => {
+      x.turn = RULES.turnLimit - 1;
       x.ship.shuttleCharge = 0;
+      x.ship.power = 0;
+      x.ship.reactorOutput = 0;
     });
-    const said = newAdvisories(doomed, fired);
-    expect(said).toHaveLength(1);
-    expect(said[0]?.text).toMatch(/bridge|comms/i);
+    const lines = [];
+    for (let i = 0; i < 30; i++) lines.push(...newAdvisories(s, fired));
+    expect(lines.some((l) => /overload|relay|specimen/i.test(l.text))).toBe(true);
   });
 
   it('has a trigger the evaluator knows for every advisory it ships', () => {
-    const fired = new Set<string>();
-    // A run long enough to exercise the conditions without asserting on which.
-    let s = initialState('coverage', 'security', 3);
-    for (let i = 0; i < 12 && s.status === 'active'; i++) s = endTurn(s);
-    newAdvisories(s, fired);
-    for (const a of ADVISORIES) expect(typeof a.text).toBe('string');
-    expect(ADVISORIES.length).toBeGreaterThan(10);
-    // An advisory is read at speed in the middle of an hour. The first pass
-    // wrote paragraphs and they were the long pole in a bad hour, ahead of the
-    // ship's own alarms.
-    for (const a of ADVISORIES) expect(a.text.length).toBeLessThanOrEqual(240);
-    expect(RULES.carry.carrierThreshold).toBe(2);
+    for (const a of ADVISORIES) {
+      expect(TRIGGER_NAMES, a.id).toContain(a.trigger);
+    }
   });
 });

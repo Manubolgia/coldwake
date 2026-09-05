@@ -112,7 +112,7 @@
     "upload": {
       "node": "comms",
       "ap": 2,
-      "power": 2,
+      "power": 8,
       "noise": 3
     },
     "armScuttle": {
@@ -164,8 +164,8 @@
       "name": "CALL",
       "ending": "relay",
       "node": "COMMS",
-      "line": "Broadcast what happened here and hold the transmitter until it lands.",
-      "how": "Broadcast from comms, then hold it {hold} hours. It drains {drain} power an hour and it dies if anything gets into comms, so you will need the reactor up and the bulkheads down.",
+      "line": "Broadcast what happened here and stay at the set until it lands.",
+      "how": "Broadcast from comms, then sit at the set for {hold} hours. It drains {drain} power an hour and the watch only runs while you are in the room, so you will need the reactor up and a way to survive standing still next door to the nest.",
       "track": "RELAY"
     },
     "know": {
@@ -204,7 +204,7 @@
       "objective": "call",
       "multiplier": 1.0,
       "verdict": "Somebody a long way from here knows exactly what is on this ship, and will not come looking.",
-      "how": "Broadcast from comms and hold the transmitter for {hold} straight hours."
+      "how": "Broadcast from comms and hold the set there for {hold} straight hours."
     },
     "specimen": {
       "name": "SPECIMEN",

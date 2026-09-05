@@ -23,7 +23,7 @@ export type DisplayLine = { turn: number; kind: LogLine['kind'] | 'guide'; text:
  * true, so the guidance teaches the game at the moment the game asks the
  * question rather than in a wall of text beforehand.
  */
-const TRIGGERS: Record<string, (s: GameState) => boolean> = {
+export const TRIGGERS: Record<string, (s: GameState) => boolean> = {
   always: () => true,
   moved: (s) => s.player.node !== MAP.start,
   spentTime: (s) => s.player.ap < RULES.apPerTurn,
@@ -72,3 +72,6 @@ export function newAdvisories(state: GameState, fired: Set<string>): DisplayLine
   }
   return [];
 }
+
+/** Every condition the advisories may name. The content test reads this. */
+export const TRIGGER_NAMES: string[] = Object.keys(TRIGGERS);

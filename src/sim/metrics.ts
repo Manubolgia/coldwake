@@ -11,6 +11,13 @@ export type Accumulator = {
   actionTotal: number;
   cardDrawn: Record<string, number>;
   cardPlayed: Record<string, number>;
+  /** Which route finished each win, and which routes were declared. */
+  declaredWins: number;
+  declaredRuns: Record<string, number>;
+  winsByObjective: Record<string, number>;
+  cardsDrawn: number;
+  cardsPlayed: number;
+  moves: number;
   routes: Record<string, number>;
   gapSamples: number;
   gapUnderThreshold: number;
@@ -45,6 +52,12 @@ export function emptyAccumulator(): Accumulator {
     actionTotal: 0,
     cardDrawn: {},
     cardPlayed: {},
+    declaredWins: 0,
+    declaredRuns: {},
+    winsByObjective: {},
+    cardsDrawn: 0,
+    cardsPlayed: 0,
+    moves: 0,
     routes: {},
     gapSamples: 0,
     gapUnderThreshold: 0,
@@ -93,6 +106,14 @@ export function accumulate(acc: Accumulator, r: RunResult): void {
   acc.sums.wounds += r.wounds;
   acc.sums.killed += r.killed;
   acc.sums.searched += r.searched;
+  bump(acc.declaredRuns, r.objective);
+  if (WIN_ENDINGS.includes(r.ending)) {
+    bump(acc.winsByObjective, r.objective);
+    if (r.declared) acc.declaredWins += 1;
+  }
+  acc.cardsDrawn += r.cardsDrawn;
+  acc.cardsPlayed += r.cardsPlayed;
+  acc.moves += r.moves;
   acc.sums.cures += r.cures;
   acc.sums.infection += r.infection;
   acc.sums.shaken += r.shaken;
@@ -115,6 +136,12 @@ export function merge(into: Accumulator, from: Accumulator): Accumulator {
   into.actionTotal += from.actionTotal;
   mergeMap(into.cardDrawn, from.cardDrawn);
   mergeMap(into.cardPlayed, from.cardPlayed);
+  mergeMap(into.declaredRuns, from.declaredRuns);
+  mergeMap(into.winsByObjective, from.winsByObjective);
+  into.declaredWins += from.declaredWins;
+  into.cardsDrawn += from.cardsDrawn;
+  into.cardsPlayed += from.cardsPlayed;
+  into.moves += from.moves;
   mergeMap(into.routes, from.routes);
   into.gapSamples += from.gapSamples;
   into.gapUnderThreshold += from.gapUnderThreshold;
@@ -153,6 +180,13 @@ export type Summary = {
   deadCards: string[];
   autoIncludeCards: string[];
   cardPlayRates: Record<string, number>;
+  /** Share of wins finished by each route. Every one of the four should register. */
+  winSplit: Record<string, number>;
+  /** Share of wins that finished the route the run declared at wake. */
+  declaredWinRate: number;
+  /** Cards played over cards drawn. The old game measured 12%. */
+  cardPlayRate: number;
+  movesPerRun: number;
   means: {
     score: number;
     turn: number;
@@ -206,6 +240,14 @@ export function summarise(acc: Accumulator): Summary {
     entropyOkRate: acc.gapSamples === 0 ? 0 : acc.gapUnderThreshold / acc.gapSamples,
     meanGap: acc.gapSamples === 0 ? 0 : acc.gapSum / acc.gapSamples,
     scanRate: acc.scanRuns / runs,
+    // The headline numbers of the rework: is every route worth taking, and are
+    // the cards you draw cards you get to play?
+    winSplit: Object.fromEntries(
+      Object.entries(acc.winsByObjective).map(([o, n]) => [o, acc.wins === 0 ? 0 : n / acc.wins]),
+    ),
+    declaredWinRate: acc.wins === 0 ? 0 : acc.declaredWins / acc.wins,
+    cardPlayRate: acc.cardsDrawn === 0 ? 0 : acc.cardsPlayed / acc.cardsDrawn,
+    movesPerRun: acc.moves / runs,
     deadCards: Object.entries(cardPlayRates)
       .filter(([, rate]) => rate <= 0.25)
       .map(([id]) => id),

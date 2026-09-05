@@ -237,7 +237,7 @@ export function objectiveNode(state: GameState): NodeId {
         }
         return 'comms';
       }
-      if (state.ship.reactorOutput < RULES.reactorOutputMax && state.ship.power > 3) return 'reactor';
+      // Broadcast. Now sit on it: the watch only runs while you are at the set.
       return 'comms';
     }
     case 'know':
@@ -358,7 +358,7 @@ export function evaluateStrategic(state: GameState): number {
     v += state.ship.relayHeld * 16;
     // The transmitter eats power every hour and dies if the pool runs dry.
     if (state.ship.beaconSent) v += Math.min(state.ship.power, 4) * 3;
-    if (state.ship.beaconSent && state.player.node === 'comms') v += 6;
+    if (state.ship.beaconSent && state.player.node === 'comms') v += 22;
   }
   if (route === 'know' && state.player.carryingSpecimen) v += 40;
   return v;

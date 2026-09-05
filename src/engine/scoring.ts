@@ -149,7 +149,7 @@ export function endingReport(state: GameState): EndingReport {
         verdict: RULES.endings.escaped.verdict,
         why:
           `You launched on hour ${r?.turn ?? state.turn} with ${state.ship.shuttleCharge} banked and ` +
-          `${infection} infection in the deck — under the ${threshold} that makes the shuttle a delivery.`,
+          `${infection} infection in your kit — under the ${threshold} that makes the shuttle a delivery.`,
         instead:
           r?.declared === true
             ? `Declared and delivered, so the run carries the ${bonus}× for finishing what you set out to do.`
@@ -203,7 +203,7 @@ export function endingReport(state: GameState): EndingReport {
         verdict: RULES.endings.killed.verdict,
         why:
           `${state.stats.wounds} wounds, and each one took a capability for good. ` +
-          `The last one had nothing left to take. ${infection} infection was in the deck by then.`,
+          `The last one had nothing left to take. ${infection} infection was in your kit by then.`,
         instead:
           'Every wound in this game is telegraphed the hour before it lands: the forecast under the ' +
           'schematic names what is about to reach you. Bracing, sealing, luring or simply walking away ' +

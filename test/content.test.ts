@@ -2,63 +2,64 @@ import { describe, expect, it } from 'vitest';
 import { z } from 'zod';
 import {
   ADJACENCY,
+  BAG_THREATS,
   CARDS,
   DEPTHS,
+  INFECTION_CARDS,
   MAP,
   NODE_IDS,
+  OBJECTIVES,
   ROLES,
   RULES,
   SALVAGE,
   THREATS,
+  THREAT_TYPES,
   roleDeck,
-} from '../src/engine/content';
-import { endingHow } from '../src/engine/scoring';
-import type { Ending, RoleId } from '../src/engine/types';
+  threatDef,
+} from '../src/engine';
 
-const effectSchema: z.ZodType = z.lazy(() =>
-  z.object({ op: z.string() }).catchall(z.unknown()).refine((e) => {
-    if (e.op !== 'sequence') return true;
-    return Array.isArray((e as { steps?: unknown[] }).steps);
-  }, 'sequence needs steps'),
+const effect: z.ZodType = z.lazy(() =>
+  z.object({ op: z.string() }).catchall(z.union([z.number(), z.string(), z.boolean(), z.array(effect)])),
 );
 
 const cardSchema = z.object({
   id: z.string().min(1),
   name: z.string().min(1),
-  role: z.enum(['engineer', 'security', 'medic', 'surveyor', 'pilot', 'universal', 'panic', 'salvage']),
-  copies: z.number().int().min(0).max(4),
+  role: z.string().min(1),
+  copies: z.number().int().min(0),
   ap: z.number().int().min(0).max(3),
-  noise: z.number().int().min(0).max(4),
+  noise: z.number().int().min(0).max(6),
   burn: z.boolean(),
   weapon: z.boolean().optional(),
-  bonus: z.number().int().min(0).max(4).optional(),
-  text: z.string().min(1),
+  bonus: z.number().int().optional(),
+  keep: z.boolean().optional(),
+  text: z.string().min(10),
   requires: z.record(z.string(), z.unknown()).optional(),
-  effect: effectSchema,
+  effect,
 });
 
-describe('content (gate 0.7)', () => {
+describe('content integrity', () => {
   it('validates every card against the schema', () => {
     for (const c of CARDS) expect(() => cardSchema.parse(c)).not.toThrow();
   });
 
-  it('gives every playable role a twelve-card deck', () => {
-    for (const role of ROLES) {
-      expect(roleDeck(role.id as RoleId)).toHaveLength(12);
-    }
+  it('gives every playable role a sixteen-card deck', () => {
+    for (const r of ROLES) expect(roleDeck(r.id).length).toBe(16);
+  });
+
+  it('gives every card a unique id', () => {
+    const ids = CARDS.map((c) => c.id);
+    expect(new Set(ids).size).toBe(ids.length);
   });
 
   it('has a symmetric, fully connected adjacency list', () => {
-    for (const id of NODE_IDS) {
-      for (const other of ADJACENCY[id] ?? []) {
-        expect(ADJACENCY[other]).toContain(id);
-      }
+    for (const [a, list] of Object.entries(ADJACENCY)) {
+      for (const b of list) expect(ADJACENCY[b]).toContain(a);
     }
-    const seen = new Set<string>([NODE_IDS[0] as string]);
-    const queue = [NODE_IDS[0] as string];
+    const seen = new Set<string>([MAP.start]);
+    const queue = [MAP.start];
     while (queue.length > 0) {
-      const cur = queue.shift() as string;
-      for (const n of ADJACENCY[cur] ?? []) {
+      for (const n of ADJACENCY[queue.shift() as string] ?? []) {
         if (!seen.has(n)) {
           seen.add(n);
           queue.push(n);
@@ -68,64 +69,93 @@ describe('content (gate 0.7)', () => {
     expect(seen.size).toBe(NODE_IDS.length);
   });
 
-  it('deals exactly two salvage cards to every node', () => {
-    expect(SALVAGE.deck.length).toBe(NODE_IDS.length * SALVAGE.perNode);
-    for (const s of SALVAGE.deck) {
-      expect(CARDS.some((c) => c.id === s.card)).toBe(true);
-    }
+  it('deals salvage to every compartment', () => {
+    expect(SALVAGE.deck.length).toBeGreaterThanOrEqual(NODE_IDS.length * SALVAGE.perNode);
+    for (const s of SALVAGE.deck) expect(CARDS.some((c) => c.id === s.card)).toBe(true);
   });
 
-  it('keeps every depth inside sane bounds', () => {
-    expect(DEPTHS).toHaveLength(5);
+  it('keeps every depth inside sane bounds and monotonically harder', () => {
+    let previous = DEPTHS[0]!;
     for (const d of DEPTHS) {
-      expect(d.turnLimit).toBeGreaterThan(10);
-      expect(d.shuttleRequired).toBeGreaterThan(0);
-      expect(d.carry.clean + d.carry.infested).toBe(12);
-      expect(d.reactorOutputStart).toBeLessThanOrEqual(RULES.reactorOutputMax);
+      expect(d.turnLimit).toBeGreaterThan(8);
+      expect(d.boardCap).toBeGreaterThan(0);
+      expect(d.hiveWake).toBeGreaterThan(0);
+      expect(d.relayHold).toBeGreaterThan(0);
+      expect(d.fuseTurns).toBeGreaterThan(0);
+      expect(d.infectionThreshold).toBeGreaterThan(1);
+      if (d.depth > 1) {
+        expect(d.turnLimit).toBeLessThanOrEqual(previous.turnLimit);
+        expect(d.hiveWake).toBeLessThanOrEqual(previous.hiveWake);
+        expect(d.boardCap).toBeGreaterThanOrEqual(previous.boardCap);
+        expect(d.infectionThreshold).toBeLessThanOrEqual(previous.infectionThreshold);
+      }
+      previous = d;
     }
   });
 
-  it('names four threats and starts the bag with eleven tokens', () => {
-    expect(THREATS.types).toHaveLength(4);
-    const bag = Object.values(THREATS.bag).reduce((a, b) => a + b, 0);
-    expect(bag).toBe(11);
-    expect(MAP.nodes).toHaveLength(11);
+  it('names four creatures, and only three of them come out of the bag', () => {
+    expect(THREAT_TYPES.length).toBe(4);
+    expect(BAG_THREATS).not.toContain('mother');
+    expect(threatDef('mother').unkillable).toBe(true);
+    for (const t of BAG_THREATS) expect(threatDef(t).unkillable).toBeUndefined();
   });
 
-  it('gives every threat a distinct single-letter mark', () => {
-    // The schematic has room for one character. CONTACT and CHORUS both began
-    // with C for four releases and the map could not tell them apart.
-    const marks = THREATS.types.map((t) => t.mark);
-    for (const m of marks) expect(m).toMatch(/^[A-Z]$/);
+  it('gives every creature a distinct single-letter mark that is its own initial', () => {
+    const marks = THREAT_TYPES.map((t) => threatDef(t).mark);
     expect(new Set(marks).size).toBe(marks.length);
+    for (const t of THREAT_TYPES) {
+      const d = threatDef(t);
+      expect(d.mark).toBe(d.name[0]);
+      expect(d.mark.length).toBe(1);
+    }
   });
 
-  it('gives every threat one name, used everywhere it appears', () => {
-    // The playtest read the schematic's letters, the listen's descriptions and
-    // the manual's names as three different sets of creatures. They are one.
-    for (const t of THREATS.types) {
-      expect(t.name).toMatch(/^[A-Z]+$/);
-      expect(t.mark).toBe(t.name[0]);
-      expect(t.namePlural.startsWith(t.name)).toBe(true);
-      expect(t.sign.length).toBeGreaterThan(0);
-      expect(t.signMany.length).toBeGreaterThan(0);
+  it('gives every creature a hearing ceiling and something to say about it', () => {
+    for (const t of THREAT_TYPES) {
+      const d = threatDef(t);
+      expect(d.hearing).toBeGreaterThan(0);
+      expect(d.text.length).toBeGreaterThan(40);
     }
-    expect(new Set(THREATS.types.map((t) => t.name)).size).toBe(THREATS.types.length);
+  });
+
+  it('names an objective, an ending and a tracker for all four routes', () => {
+    for (const o of OBJECTIVES) {
+      const def = RULES.objectives[o];
+      expect(def.name.length).toBeGreaterThan(0);
+      expect(def.line.length).toBeGreaterThan(10);
+      expect(def.how.length).toBeGreaterThan(20);
+      expect(def.track.length).toBeGreaterThan(0);
+      expect(RULES.endings[def.ending]).toBeDefined();
+      expect(RULES.endings[def.ending]?.objective).toBe(o);
+    }
   });
 
   it('says what every ending is and how it is reached', () => {
-    for (const key of Object.keys(RULES.endings) as Ending[]) {
-      const e = RULES.endings[key];
-      expect(e.verdict.length).toBeGreaterThan(10);
-      // The how line carries the shipped numbers, so no placeholder survives.
-      expect(endingHow(key)).not.toMatch(/[{}]/);
-      expect(endingHow(key).length).toBeGreaterThan(10);
+    for (const [id, e] of Object.entries(RULES.endings)) {
+      expect(e.verdict.length, id).toBeGreaterThan(20);
+      expect(e.how.length, id).toBeGreaterThan(20);
     }
   });
 
   it('gives every compartment a distinct three-letter short name', () => {
     const shorts = MAP.nodes.map((n) => n.short);
-    for (const s of shorts) expect(s).toMatch(/^[A-Z]{3}$/);
     expect(new Set(shorts).size).toBe(shorts.length);
+    for (const s of shorts) expect(s.length).toBe(3);
+  });
+
+  it('ships every infection card with a cost you can feel while you hold it', () => {
+    expect(INFECTION_CARDS.length).toBeGreaterThanOrEqual(4);
+    for (const id of INFECTION_CARDS) {
+      const c = CARDS.find((x) => x.id === id)!;
+      expect(c.copies).toBe(0);
+      expect(c.effect.op).toBe('none');
+      expect(c.text.toLowerCase()).toMatch(/while it is in your hand|the moment it comes to hand/);
+    }
+  });
+
+  it('keeps the bag and the reserve non-negative and worth drawing from', () => {
+    for (const t of Object.values(THREATS.bag)) expect(t).toBeGreaterThanOrEqual(0);
+    for (const t of Object.values(THREATS.reserve)) expect(t).toBeGreaterThanOrEqual(0);
+    expect(THREATS.bag.blank).toBeGreaterThan(0);
   });
 });

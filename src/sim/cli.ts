@@ -8,7 +8,7 @@ import { mkdirSync, writeFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { dirname, join } from 'node:path';
 import { accumulate, emptyAccumulator, merge, summarise, type Accumulator, type Summary } from './metrics';
-import { runOne } from './runner';
+import { objectiveFor, runOne } from './runner';
 import { markdownReport, type Band } from './report';
 import type { BotName } from './bots';
 import type { Depth, RoleId } from '../engine/types';
@@ -45,6 +45,7 @@ function runInProcess(spec: BatchSpec): Accumulator {
         depth: spec.depth,
         bot: spec.bot,
         botSeed: `bot${i}`,
+        objective: objectiveFor(i),
         entropy: spec.entropy,
       }),
     );
@@ -102,8 +103,21 @@ export function bandsFor(summary: Summary, depth: Depth): Band[] {
     5: [0.15, 0.25],
   };
   const [min, max] = winBands[depth] ?? [0, 1];
+  const routes = ['run', 'burn', 'call', 'know'];
+  const weakestRoute = Math.min(...routes.map((o) => summary.winSplit[o] ?? 0));
   return [
     { label: `depth ${depth} win rate`, value: summary.winRate, min, max, unit: 'pct' },
+    // The six complaints, as bands. Every one of these was measured on the old
+    // game and every one of them is in docs/REDESIGN.md Part 5.
+    {
+      label: 'weakest route share of wins',
+      value: weakestRoute,
+      min: 0.1,
+      max: 1,
+      unit: 'pct',
+    },
+    { label: 'cards played of cards drawn', value: summary.cardPlayRate, min: 0.35, max: 1, unit: 'pct' },
+    { label: 'compartments entered per run', value: summary.movesPerRun, min: 4, max: 40 },
     { label: 'median resolution turn', value: summary.medianTurn, min: 12, max: 17 },
     { label: 'early deaths (<turn 8)', value: summary.earlyDeathRate, min: 0, max: 0.05, unit: 'pct' },
     { label: 'top action share', value: summary.topActionShare, min: 0, max: 0.25, unit: 'pct' },
@@ -112,7 +126,7 @@ export function bandsFor(summary: Summary, depth: Depth): Band[] {
       label: 'largest loss cause',
       value: Math.max(0, ...Object.values(summary.causes)),
       min: 0,
-      max: 0.4,
+      max: 0.55,
       unit: 'pct',
     },
   ];

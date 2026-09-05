@@ -26,7 +26,7 @@ export function markdownReport(
   out.push('');
 
   out.push('## Endings', '');
-  const endingKeys = ['clean_break', 'carrier', 'scuttle', 'beacon', 'lost'];
+  const endingKeys = ['escaped', 'carrier', 'overload', 'relay', 'specimen', 'killed', 'adrift'];
   out.push(`| config | ${endingKeys.join(' | ')} |`);
   out.push(`|---|${endingKeys.map(() => '---').join('|')}|`);
   for (const r of rows) {
@@ -35,7 +35,7 @@ export function markdownReport(
   out.push('');
 
   out.push('## Loss causes (share of losses)', '');
-  const causeKeys = ['deck', 'timeout', 'carrier'];
+  const causeKeys = ['attrition', 'timeout', 'objective'];
   out.push(`| config | ${causeKeys.join(' | ')} |`);
   out.push(`|---|${causeKeys.map(() => '---').join('|')}|`);
   for (const r of rows) {
@@ -43,13 +43,28 @@ export function markdownReport(
   }
   out.push('');
 
+  // Which route actually finished each win. A game with four ways to win that
+  // measures one of them is a game with one way to win and three decorations.
+  out.push('## Wins by route', '');
+  out.push('| config | RUN | BURN | CALL | KNOW | declared |');
+  out.push('|---|---|---|---|---|---|');
+  for (const r of rows) {
+    const w = r.summary.winSplit;
+    out.push(
+      `| ${r.label} | ${pct(w.run ?? 0)} | ${pct(w.burn ?? 0)} | ${pct(w.call ?? 0)} | ${pct(w.know ?? 0)} | ${pct(r.summary.declaredWinRate)} |`,
+    );
+  }
+  out.push('');
+
   out.push('## Shape', '');
-  out.push('| config | early deaths (<8) | top action | share | dominant route | scan rate | mean wounds | mean kills |');
-  out.push('|---|---|---|---|---|---|---|---|');
+  out.push(
+    '| config | early deaths (<8) | top action | share | dominant route | cards played/drawn | moves | mean wounds | mean kills | mean shaken |',
+  );
+  out.push('|---|---|---|---|---|---|---|---|---|---|');
   for (const r of rows) {
     const s = r.summary;
     out.push(
-      `| ${r.label} | ${pct(s.earlyDeathRate)} | ${s.topAction} | ${pct(s.topActionShare)} | ${pct(s.dominantRouteShare)} | ${pct(s.scanRate)} | ${s.means.wounds.toFixed(2)} | ${s.means.killed.toFixed(2)} |`,
+      `| ${r.label} | ${pct(s.earlyDeathRate)} | ${s.topAction} | ${pct(s.topActionShare)} | ${pct(s.dominantRouteShare)} | ${pct(s.cardPlayRate)} | ${s.movesPerRun.toFixed(1)} | ${s.means.wounds.toFixed(2)} | ${s.means.killed.toFixed(2)} | ${s.means.shaken.toFixed(2)} |`,
     );
   }
   out.push('');

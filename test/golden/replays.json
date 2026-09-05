@@ -3,6 +3,7 @@
   "seed": "golden-0",
   "role": "engineer",
   "depth": 1,
+  "objective": "run",
   "bot": "random",
   "actions": [
    {
@@ -10,22 +11,21 @@
     "uid": "load_shed@1"
    },
    {
-    "t": "listen"
-   },
-   {
     "t": "discard",
-    "uid": "hardline@1"
-   },
-   {
-    "t": "endTurn"
+    "uid": "field_repair@1"
    },
    {
     "t": "play",
-    "uid": "override@1",
-    "edge": [
-     "spine_c",
-     "shuttle_bay"
-    ]
+    "uid": "scrap_charge@2",
+    "to": "spine_c"
+   },
+   {
+    "t": "discard",
+    "uid": "bypass@2"
+   },
+   {
+    "t": "discard",
+    "uid": "cutting_torch@1"
    },
    {
     "t": "endTurn"
@@ -35,86 +35,86 @@
     "to": "spine_a"
    },
    {
+    "t": "brace"
+   },
+   {
+    "t": "play",
+    "uid": "scrap_charge@1",
+    "to": "bridge"
+   },
+   {
+    "t": "creep",
+    "to": "cryobay"
+   },
+   {
+    "t": "seal",
+    "edge": [
+     "cryobay",
+     "spine_a"
+    ]
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "brace"
+   },
+   {
+    "t": "play",
+    "uid": "override@1",
+    "edge": [
+     "spine_b",
+     "reactor"
+    ]
+   },
+   {
+    "t": "discard",
+    "uid": "slag_door@1"
+   },
+   {
+    "t": "play",
+    "uid": "brace@1"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "discard",
+    "uid": "reroute@1"
+   },
+   {
     "t": "listen"
    },
    {
     "t": "play",
-    "uid": "reroute@1",
-    "to": "medbay"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "carryScan",
-    "index": 0
-   },
-   {
-    "t": "discard",
-    "uid": "cutting_torch@1"
-   },
-   {
-    "t": "move",
-    "to": "armory"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "discard",
-    "uid": "cutting_torch@1"
-   },
-   {
-    "t": "play",
-    "uid": "reroute@2",
-    "to": "ore_hold"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "burn",
-    "uid": "brace@2"
-   },
-   {
-    "t": "burn",
-    "uid": "load_shed@1"
-   },
-   {
-    "t": "ventEnter"
-   },
-   {
-    "t": "ventExit",
-    "to": "shuttle_bay"
-   },
-   {
-    "t": "play",
-    "uid": "reroute@1",
-    "to": "spine_c"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "creep",
-    "to": "spine_b"
-   },
-   {
-    "t": "discard",
     "uid": "bypass@1"
    },
    {
-    "t": "endTurn"
+    "t": "search"
+   },
+   {
+    "t": "discard",
+    "uid": "brace@2"
    },
    {
     "t": "endTurn"
    },
    {
-    "t": "burn",
-    "uid": "field_repair@1"
+    "t": "endTurn"
+   },
+   {
+    "t": "listen"
+   },
+   {
+    "t": "play",
+    "uid": "hardline@1"
+   },
+   {
+    "t": "discard",
+    "uid": "circuit_map@1"
+   },
+   {
+    "t": "endTurn"
    },
    {
     "t": "burn",
@@ -122,414 +122,233 @@
    },
    {
     "t": "burn",
-    "uid": "bypass@1"
+    "uid": "brace@2"
    },
    {
-    "t": "burn",
-    "uid": "bypass@2"
+    "t": "play",
+    "uid": "scrap_charge@2",
+    "to": "bridge"
+   },
+   {
+    "t": "play",
+    "uid": "scrap_charge@1",
+    "to": "shuttle_bay"
+   },
+   {
+    "t": "play",
+    "uid": "circuit_map@1"
+   },
+   {
+    "t": "discard",
+    "uid": "inf_fever@1001"
    },
    {
     "t": "seal",
     "edge": [
-     "spine_b",
+     "cryobay",
+     "spine_a"
+    ]
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "burn",
+    "uid": "reroute@1"
+   },
+   {
+    "t": "burn",
+    "uid": "reroute@2"
+   },
+   {
+    "t": "play",
+    "uid": "hardline@1"
+   },
+   {
+    "t": "brace"
+   },
+   {
+    "t": "discard",
+    "uid": "cutting_torch@1"
+   },
+   {
+    "t": "discard",
+    "uid": "load_shed@1"
+   },
+   {
+    "t": "discard",
+    "uid": "slag_door@1"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "burn",
+    "uid": "brace@1"
+   },
+   {
+    "t": "search"
+   },
+   {
+    "t": "discard",
+    "uid": "bypass@1"
+   },
+   {
+    "t": "discard",
+    "uid": "bypass@2"
+   },
+   {
+    "t": "discard",
+    "uid": "field_repair@1"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "discard",
+    "uid": "inf_fever@1002"
+   },
+   {
+    "t": "seal",
+    "edge": [
+     "cryobay",
+     "spine_a"
+    ]
+   },
+   {
+    "t": "listen"
+   },
+   {
+    "t": "discard",
+    "uid": "inf_tunnel@1006"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "discard",
+    "uid": "inf_blackout@1005"
+   },
+   {
+    "t": "brace"
+   },
+   {
+    "t": "discard",
+    "uid": "inf_tremor@1007"
+   },
+   {
+    "t": "discard",
+    "uid": "inf_tremor@1003"
+   },
+   {
+    "t": "discard",
+    "uid": "inf_tremor@1003"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "burn",
+    "uid": "circuit_map@1"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "burn",
+    "uid": "load_shed@1"
+   },
+   {
+    "t": "discard",
+    "uid": "inf_sweat@1009"
+   },
+   {
+    "t": "discard",
+    "uid": "hardline@1"
+   },
+   {
+    "t": "seal",
+    "edge": [
+     "cryobay",
      "spine_a"
     ]
    },
    {
     "t": "discard",
-    "uid": "brace@1"
+    "uid": "inf_tremor@1007"
    },
    {
-    "t": "seal",
-    "edge": [
-     "spine_b",
-     "spine_c"
-    ]
+    "t": "discard",
+    "uid": "inf_tunnel@1006"
    },
    {
     "t": "endTurn"
    },
    {
-    "t": "burn",
-    "uid": "reroute@2"
+    "t": "discard",
+    "uid": "inf_tremor@1004"
    },
    {
     "t": "discard",
-    "uid": "panic_sweat@1009"
+    "uid": "inf_tunnel@1008"
    },
    {
     "t": "discard",
-    "uid": "panic_shaking@1008"
+    "uid": "inf_fever@1001"
    },
    {
-    "t": "search"
+    "t": "discard",
+    "uid": "inf_fever@1002"
+   },
+   {
+    "t": "brace"
+   },
+   {
+    "t": "endTurn"
    },
    {
     "t": "endTurn"
    }
   ],
-  "ending": "lost",
-  "score": 4,
-  "hash": "01ee673d13d526bd"
+  "ending": "killed",
+  "score": 21,
+  "hash": "176f5809c5853bc0"
  },
  {
   "seed": "golden-1",
   "role": "security",
   "depth": 2,
+  "objective": "burn",
   "bot": "greedy",
   "actions": [
    {
-    "t": "listen"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "listen"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "listen"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "listen"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "listen"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "listen"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "listen"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "listen"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "listen"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "listen"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "listen"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "listen"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "listen"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "listen"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "listen"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "listen"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "listen"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "listen"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "listen"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "listen"
-   },
-   {
-    "t": "endTurn"
-   }
-  ],
-  "ending": "lost",
-  "score": 13,
-  "hash": "b85f1e7669a60dcf"
- },
- {
-  "seed": "golden-2",
-  "role": "medic",
-  "depth": 3,
-  "bot": "heuristic",
-  "actions": [
-   {
-    "t": "search"
-   },
-   {
-    "t": "play",
-    "uid": "diagnostic@1"
-   },
-   {
-    "t": "search"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "play",
-    "uid": "careful_step@1",
-    "to": "spine_a"
-   },
-   {
-    "t": "listen"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "listen"
-   },
-   {
-    "t": "creep",
-    "to": "spine_b"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "play",
-    "uid": "careful_step@1",
-    "to": "spine_c"
-   },
-   {
-    "t": "creep",
-    "to": "shuttle_bay"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "chargeShuttle",
-    "n": 10
-   },
-   {
-    "t": "search"
-   },
-   {
-    "t": "search"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "burn",
-    "uid": "stimulant@1"
-   },
-   {
-    "t": "burn",
-    "uid": "steady@1"
-   },
-   {
-    "t": "chargeShuttle",
-    "n": 9
-   },
-   {
-    "t": "ventEnter"
-   },
-   {
-    "t": "ventExit",
-    "to": "medbay"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "play",
-    "uid": "steady@2"
-   },
-   {
-    "t": "play",
-    "uid": "triage@1"
-   },
-   {
-    "t": "listen"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "burn",
-    "uid": "diagnostic@1"
-   },
-   {
-    "t": "ventEnter"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "endTurn"
-   }
-  ],
-  "ending": "lost",
-  "score": 24,
-  "hash": "3d72c8949a5f8f03"
- },
- {
-  "seed": "golden-3",
-  "role": "surveyor",
-  "depth": 4,
-  "bot": "random",
-  "actions": [
-   {
-    "t": "move",
-    "to": "spine_a"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "play",
-    "uid": "flare@1",
-    "to": "ore_hold"
-   },
-   {
-    "t": "discard",
-    "uid": "steady_nerves@1"
-   },
-   {
-    "t": "move",
-    "to": "cryobay"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "play",
-    "uid": "sweep@1"
-   },
-   {
-    "t": "play",
-    "uid": "quick_step@2",
-    "to": "spine_a"
-   },
-   {
-    "t": "seal",
-    "edge": [
-     "spine_a",
-     "medbay"
-    ]
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "play",
-    "uid": "flare@1",
-    "to": "spine_b"
-   },
-   {
     "t": "search"
    },
    {
     "t": "discard",
-    "uid": "sweep@2"
-   },
-   {
-    "t": "endTurn"
+    "uid": "shotgun@1"
    },
    {
     "t": "play",
-    "uid": "rappel@1",
-    "to": "medbay"
+    "uid": "hold_line@1"
    },
    {
-    "t": "ventEnter"
+    "t": "creep",
+    "to": "spine_a"
    },
    {
     "t": "endTurn"
    },
    {
-    "t": "ventExit",
-    "to": "ore_hold"
+    "t": "discard",
+    "uid": "push@1"
    },
    {
-    "t": "move",
-    "to": "comms"
+    "t": "discard",
+    "uid": "breach_charge@1"
+   },
+   {
+    "t": "search"
    },
    {
     "t": "play",
@@ -540,2133 +359,23 @@
    },
    {
     "t": "discard",
-    "uid": "cutting_bar@1"
-   },
-   {
-    "t": "beacon"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "burn",
-    "uid": "steady_nerves@1"
-   },
-   {
-    "t": "burn",
-    "uid": "vent_crawl@2"
-   },
-   {
-    "t": "burn",
-    "uid": "sweep@2"
-   },
-   {
-    "t": "burn",
-    "uid": "flare@1"
-   },
-   {
-    "t": "creep",
-    "to": "ore_hold"
-   },
-   {
-    "t": "play",
-    "uid": "quick_step@1",
-    "to": "comms"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "burn",
-    "uid": "mapping_kit@1"
-   },
-   {
-    "t": "burn",
-    "uid": "quick_step@2"
-   },
-   {
-    "t": "search"
-   },
-   {
-    "t": "move",
-    "to": "bridge"
-   },
-   {
-    "t": "ventEnter"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "discard",
-    "uid": "panic_sweat@1004"
-   },
-   {
-    "t": "discard",
-    "uid": "panic_shaking@1005"
-   },
-   {
-    "t": "ventExit",
-    "to": "shuttle_bay"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "burn",
-    "uid": "sweep@1"
-   },
-   {
-    "t": "burn",
-    "uid": "cutting_bar@1"
-   }
-  ],
-  "ending": "beacon",
-  "score": 18,
-  "hash": "fe4104ef0ff9fae0"
- },
- {
-  "seed": "golden-4",
-  "role": "pilot",
-  "depth": 5,
-  "bot": "greedy",
-  "actions": [
-   {
-    "t": "play",
-    "uid": "course_correct@1"
-   },
-   {
-    "t": "listen"
-   },
-   {
-    "t": "play",
-    "uid": "hand_off@1",
-    "to": "spine_a"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "search"
-   },
-   {
-    "t": "play",
-    "uid": "checklist@1"
-   },
-   {
-    "t": "play",
-    "uid": "course_correct@2"
-   },
-   {
-    "t": "listen"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "burn",
-    "uid": "docking_clamp@1"
-   },
-   {
-    "t": "play",
-    "uid": "hand_off@1",
-    "to": "cryobay"
-   },
-   {
-    "t": "listen"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "burn",
-    "uid": "nerve@1"
-   },
-   {
-    "t": "play",
-    "uid": "hand_off@2",
-    "to": "spine_a"
-   },
-   {
-    "t": "creep",
-    "to": "medbay"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "burn",
-    "uid": "punch_it@1"
-   },
-   {
-    "t": "ventEnter"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "burn",
     "uid": "sidearm@1"
    },
    {
-    "t": "endTurn"
-   },
-   {
-    "t": "burn",
-    "uid": "checklist@1"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "burn",
-    "uid": "course_correct@2"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "burn",
-    "uid": "hand_off@1"
-   },
-   {
-    "t": "ventExit",
-    "to": "shuttle_bay"
-   },
-   {
-    "t": "chargeShuttle",
-    "n": 10
-   },
-   {
     "t": "play",
-    "uid": "course_correct@1"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "ventEnter"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "burn",
-    "uid": "flight_jacket@1"
-   },
-   {
-    "t": "ventExit",
-    "to": "medbay"
-   },
-   {
-    "t": "carryScan",
-    "index": 0
-   },
-   {
-    "t": "carryScan",
-    "index": 1
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "purgeBlood",
-    "index": 2
-   }
-  ],
-  "ending": "lost",
-  "score": 11,
-  "hash": "12d3e2900b7919f1"
- },
- {
-  "seed": "golden-5",
-  "role": "engineer",
-  "depth": 1,
-  "bot": "heuristic",
-  "actions": [
-   {
-    "t": "play",
-    "uid": "bypass@1"
-   },
-   {
-    "t": "play",
-    "uid": "reroute@2",
-    "to": "spine_a"
-   },
-   {
-    "t": "move",
-    "to": "spine_b"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "play",
-    "uid": "bypass@2"
-   },
-   {
-    "t": "play",
-    "uid": "reroute@1",
-    "to": "spine_c"
-   },
-   {
-    "t": "search"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "play",
-    "uid": "reroute@2",
-    "to": "shuttle_bay"
-   },
-   {
-    "t": "chargeShuttle",
-    "n": 10
-   },
-   {
-    "t": "listen"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "play",
-    "uid": "bypass@2"
-   },
-   {
-    "t": "chargeShuttle",
-    "n": 4
-   },
-   {
-    "t": "listen"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "play",
-    "uid": "bypass@1"
-   },
-   {
-    "t": "chargeShuttle",
-    "n": 4
-   },
-   {
-    "t": "play",
-    "uid": "bypass@2"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "chargeShuttle",
-    "n": 4
-   },
-   {
-    "t": "listen"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "burn",
-    "uid": "reroute@1"
-   },
-   {
-    "t": "burn",
-    "uid": "steady_hands@1"
-   },
-   {
-    "t": "ventEnter"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "ventExit",
-    "to": "shuttle_bay"
-   },
-   {
-    "t": "chargeShuttle",
-    "n": 6
-   },
-   {
-    "t": "play",
-    "uid": "bypass@2"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "chargeShuttle",
-    "n": 4
-   },
-   {
-    "t": "play",
-    "uid": "bypass@1"
-   },
-   {
-    "t": "chargeShuttle",
-    "n": 2
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "burn",
-    "uid": "brace@2"
-   },
-   {
-    "t": "burn",
-    "uid": "brace@1"
-   },
-   {
-    "t": "launch"
-   }
-  ],
-  "ending": "carrier",
-  "score": 78,
-  "hash": "f0cae75132d22796"
- },
- {
-  "seed": "golden-6",
-  "role": "security",
-  "depth": 2,
-  "bot": "random",
-  "actions": [
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "play",
-    "uid": "field_dressing@1"
-   },
-   {
-    "t": "discard",
-    "uid": "hold_the_line@2"
-   },
-   {
-    "t": "discard",
     "uid": "adrenaline@1"
    },
    {
-    "t": "endTurn"
-   },
-   {
-    "t": "listen"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "move",
-    "to": "spine_a"
-   },
-   {
-    "t": "move",
-    "to": "medbay"
-   },
-   {
-    "t": "discard",
-    "uid": "hold_the_line@2"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "creep",
-    "to": "armory"
-   },
-   {
     "t": "play",
-    "uid": "door_charge@1",
-    "edge": [
-     "armory",
-     "ore_hold"
-    ]
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "burn",
-    "uid": "service_pistol@2"
-   },
-   {
-    "t": "burn",
-    "uid": "service_pistol@1"
-   },
-   {
-    "t": "move",
-    "to": "medbay"
-   },
-   {
-    "t": "purgeBlood",
-    "index": 0
-   },
-   {
-    "t": "burn",
-    "uid": "field_dressing@1"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "burn",
-    "uid": "advance@1"
-   },
-   {
-    "t": "burn",
-    "uid": "breaching_gun@1"
-   },
-   {
-    "t": "creep",
-    "to": "armory"
-   },
-   {
-    "t": "discard",
-    "uid": "adrenaline@1"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "burn",
-    "uid": "suppress@2"
-   },
-   {
-    "t": "discard",
-    "uid": "panic_blackout@1003"
-   },
-   {
-    "t": "creep",
-    "to": "medbay"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "discard",
-    "uid": "panic_sweat@1011"
-   },
-   {
-    "t": "creep",
-    "to": "armory"
-   },
-   {
-    "t": "endTurn"
-   }
-  ],
-  "ending": "lost",
-  "score": 3,
-  "hash": "dab5c6dfeb22216d"
- },
- {
-  "seed": "golden-7",
-  "role": "medic",
-  "depth": 3,
-  "bot": "greedy",
-  "actions": [
-   {
-    "t": "search"
-   },
-   {
-    "t": "play",
-    "uid": "diagnostic@2"
-   },
-   {
-    "t": "listen"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "play",
-    "uid": "careful_step@1",
-    "to": "spine_a"
-   },
-   {
-    "t": "listen"
-   },
-   {
-    "t": "search"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "play",
-    "uid": "careful_step@1",
-    "to": "cryobay"
-   },
-   {
-    "t": "listen"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "listen"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "burn",
-    "uid": "diagnostic@2"
-   },
-   {
-    "t": "burn",
-    "uid": "antiseptic@1"
-   },
-   {
-    "t": "creep",
-    "to": "spine_a"
-   },
-   {
-    "t": "play",
-    "uid": "steady@1"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "burn",
-    "uid": "salv_sidearm@4"
-   },
-   {
-    "t": "creep",
-    "to": "spine_b"
-   },
-   {
-    "t": "move",
-    "to": "spine_c"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "creep",
-    "to": "shuttle_bay"
-   },
-   {
-    "t": "chargeShuttle",
-    "n": 10
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "chargeShuttle",
-    "n": 2
-   },
-   {
-    "t": "ventEnter"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "burn",
-    "uid": "quarantine@1"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "burn",
-    "uid": "sample@1"
-   },
-   {
-    "t": "ventExit",
-    "to": "shuttle_bay"
-   },
-   {
-    "t": "chargeShuttle",
-    "n": 6
-   },
-   {
-    "t": "play",
-    "uid": "triage@2"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "burn",
-    "uid": "stimulant@1"
-   },
-   {
-    "t": "ventEnter"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "burn",
-    "uid": "diagnostic@1"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "burn",
-    "uid": "triage@1"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "burn",
-    "uid": "triage@2"
-   },
-   {
-    "t": "ventExit",
-    "to": "shuttle_bay"
-   },
-   {
-    "t": "chargeShuttle",
-    "n": 8
-   },
-   {
-    "t": "search"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "burn",
-    "uid": "steady@2"
-   },
-   {
-    "t": "ventEnter"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "burn",
-    "uid": "scalpel@1"
-   },
-   {
-    "t": "ventExit",
-    "to": "bridge"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "burn",
-    "uid": "steady@1"
-   },
-   {
-    "t": "ventEnter"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "burn",
-    "uid": "careful_step@1"
-   }
-  ],
-  "ending": "lost",
-  "score": 24,
-  "hash": "7897f7eead06a37f"
- },
- {
-  "seed": "golden-8",
-  "role": "surveyor",
-  "depth": 4,
-  "bot": "heuristic",
-  "actions": [
-   {
-    "t": "play",
-    "uid": "quick_step@2",
-    "to": "spine_a"
-   },
-   {
-    "t": "play",
-    "uid": "sweep@1"
-   },
-   {
-    "t": "listen"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "play",
-    "uid": "rappel@1",
-    "to": "shuttle_bay"
-   },
-   {
-    "t": "search"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "chargeShuttle",
-    "n": 7
-   },
-   {
-    "t": "listen"
-   },
-   {
-    "t": "play",
-    "uid": "sweep@1"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "chargeShuttle",
-    "n": 2
-   },
-   {
-    "t": "listen"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "chargeShuttle",
-    "n": 2
-   },
-   {
-    "t": "listen"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "chargeShuttle",
-    "n": 2
-   },
-   {
-    "t": "listen"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "chargeShuttle",
-    "n": 2
-   },
-   {
-    "t": "listen"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "chargeShuttle",
-    "n": 2
-   },
-   {
-    "t": "listen"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "chargeShuttle",
-    "n": 2
-   },
-   {
-    "t": "listen"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "chargeShuttle",
-    "n": 2
-   },
-   {
-    "t": "listen"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "chargeShuttle",
-    "n": 2
-   },
-   {
-    "t": "listen"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "chargeShuttle",
-    "n": 2
-   },
-   {
-    "t": "listen"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "chargeShuttle",
-    "n": 2
-   },
-   {
-    "t": "listen"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "chargeShuttle",
-    "n": 2
-   },
-   {
-    "t": "listen"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "chargeShuttle",
-    "n": 2
-   },
-   {
-    "t": "launch"
-   }
-  ],
-  "ending": "clean_break",
-  "score": 168,
-  "hash": "f7d97d4c7eb8d963"
- },
- {
-  "seed": "golden-9",
-  "role": "pilot",
-  "depth": 5,
-  "bot": "random",
-  "actions": [
-   {
-    "t": "listen"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "discard",
-    "uid": "nerve@2"
-   },
-   {
-    "t": "play",
-    "uid": "course_correct@1"
-   },
-   {
-    "t": "listen"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "discard",
-    "uid": "hand_off@1"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "listen"
-   },
-   {
-    "t": "discard",
-    "uid": "checklist@1"
-   },
-   {
-    "t": "play",
-    "uid": "nerve@2"
-   },
-   {
-    "t": "move",
-    "to": "spine_a"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "creep",
-    "to": "cryobay"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "discard",
-    "uid": "checklist@1"
-   },
-   {
-    "t": "discard",
-    "uid": "sidearm@1"
-   },
-   {
-    "t": "listen"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "discard",
-    "uid": "hand_off@2"
-   },
-   {
-    "t": "creep",
-    "to": "spine_a"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "play",
-    "uid": "bail@1",
-    "to": "medbay"
-   },
-   {
-    "t": "play",
-    "uid": "checklist@1"
-   },
-   {
-    "t": "discard",
-    "uid": "course_correct@2"
-   },
-   {
-    "t": "carryScan",
-    "index": 0
-   },
-   {
-    "t": "play",
-    "uid": "nerve@1"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "burn",
-    "uid": "nerve@2"
-   },
-   {
-    "t": "search"
-   },
-   {
-    "t": "play",
-    "uid": "course_correct@2"
-   },
-   {
-    "t": "search"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "burn",
-    "uid": "hand_off@1"
-   },
-   {
-    "t": "burn",
-    "uid": "sidearm@1"
-   },
-   {
-    "t": "burn",
-    "uid": "punch_it@1"
-   },
-   {
-    "t": "move",
-    "to": "armory"
-   },
-   {
-    "t": "play",
-    "uid": "nerve@1"
-   },
-   {
-    "t": "discard",
-    "uid": "panic_blackout@1004"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "burn",
-    "uid": "hand_off@2"
-   },
-   {
-    "t": "burn",
-    "uid": "checklist@1"
-   },
-   {
-    "t": "burn",
-    "uid": "docking_clamp@1"
-   },
-   {
-    "t": "discard",
-    "uid": "panic_sweat@1008"
-   },
-   {
-    "t": "move",
-    "to": "ore_hold"
-   },
-   {
-    "t": "discard",
-    "uid": "panic_blackout@1005"
-   },
-   {
-    "t": "endTurn"
-   }
-  ],
-  "ending": "lost",
-  "score": 4,
-  "hash": "50c211e826c4b9ee"
- },
- {
-  "seed": "golden-10",
-  "role": "engineer",
-  "depth": 1,
-  "bot": "greedy",
-  "actions": [
-   {
-    "t": "listen"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "play",
-    "uid": "bypass@2"
-   },
-   {
-    "t": "play",
-    "uid": "bypass@1"
-   },
-   {
-    "t": "listen"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "listen"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "listen"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "listen"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "listen"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "listen"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "listen"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "listen"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "listen"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "listen"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "listen"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "listen"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "listen"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "listen"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "listen"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "listen"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "listen"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "listen"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "listen"
-   },
-   {
-    "t": "endTurn"
-   }
-  ],
-  "ending": "lost",
-  "score": 13,
-  "hash": "08b12d6aee169a3f"
- },
- {
-  "seed": "golden-11",
-  "role": "security",
-  "depth": 2,
-  "bot": "heuristic",
-  "actions": [
-   {
-    "t": "creep",
-    "to": "spine_a"
-   },
-   {
-    "t": "listen"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "listen"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "listen"
-   },
-   {
-    "t": "creep",
-    "to": "spine_b"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "creep",
-    "to": "spine_c"
-   },
-   {
-    "t": "listen"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "play",
-    "uid": "advance@1",
-    "to": "shuttle_bay"
-   },
-   {
-    "t": "chargeShuttle",
-    "n": 8
-   },
-   {
-    "t": "listen"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "chargeShuttle",
-    "n": 2
-   },
-   {
-    "t": "listen"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "chargeShuttle",
-    "n": 2
-   },
-   {
-    "t": "listen"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "chargeShuttle",
-    "n": 2
-   },
-   {
-    "t": "listen"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "chargeShuttle",
-    "n": 2
-   },
-   {
-    "t": "listen"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "chargeShuttle",
-    "n": 2
-   },
-   {
-    "t": "listen"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "chargeShuttle",
-    "n": 2
-   },
-   {
-    "t": "listen"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "chargeShuttle",
-    "n": 2
-   },
-   {
-    "t": "listen"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "chargeShuttle",
-    "n": 2
-   },
-   {
-    "t": "listen"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "chargeShuttle",
-    "n": 2
-   },
-   {
-    "t": "listen"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "chargeShuttle",
-    "n": 2
-   },
-   {
-    "t": "listen"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "chargeShuttle",
-    "n": 2
-   },
-   {
-    "t": "listen"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "chargeShuttle",
-    "n": 2
-   },
-   {
-    "t": "listen"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "chargeShuttle",
-    "n": 2
-   },
-   {
-    "t": "launch"
-   }
-  ],
-  "ending": "clean_break",
-  "score": 165,
-  "hash": "fa82f72d1880c380"
- },
- {
-  "seed": "golden-12",
-  "role": "medic",
-  "depth": 3,
-  "bot": "random",
-  "actions": [
-   {
-    "t": "play",
-    "uid": "triage@2"
-   },
-   {
-    "t": "discard",
-    "uid": "steady@2"
-   },
-   {
-    "t": "play",
-    "uid": "diagnostic@2"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "listen"
-   },
-   {
-    "t": "discard",
-    "uid": "diagnostic@1"
-   },
-   {
-    "t": "play",
-    "uid": "stimulant@1"
-   },
-   {
-    "t": "discard",
-    "uid": "antiseptic@1"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "search"
-   },
-   {
-    "t": "discard",
-    "uid": "scalpel@1"
-   },
-   {
-    "t": "discard",
-    "uid": "stimulant@1"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "play",
-    "uid": "diagnostic@2"
-   },
-   {
-    "t": "play",
-    "uid": "steady@2"
-   },
-   {
-    "t": "discard",
-    "uid": "careful_step@1"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "play",
-    "uid": "diagnostic@1"
-   },
-   {
-    "t": "listen"
-   },
-   {
-    "t": "search"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "listen"
-   },
-   {
-    "t": "discard",
-    "uid": "triage@2"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "burn",
-    "uid": "diagnostic@2"
-   },
-   {
-    "t": "burn",
-    "uid": "steady@1"
-   },
-   {
-    "t": "creep",
-    "to": "spine_a"
-   },
-   {
-    "t": "discard",
-    "uid": "panic_blackout@1001"
-   },
-   {
-    "t": "play",
-    "uid": "stimulant@1"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "burn",
-    "uid": "quarantine@1"
-   },
-   {
-    "t": "burn",
-    "uid": "careful_step@1"
-   },
-   {
-    "t": "play",
-    "uid": "antiseptic@1"
-   },
-   {
-    "t": "seal",
-    "edge": [
-     "spine_a",
-     "medbay"
-    ]
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "burn",
-    "uid": "scalpel@1"
-   },
-   {
-    "t": "burn",
-    "uid": "diagnostic@1"
-   },
-   {
-    "t": "discard",
-    "uid": "panic_sweat@1004"
-   },
-   {
-    "t": "seal",
-    "edge": [
-     "spine_a",
-     "spine_b"
-    ]
-   },
-   {
-    "t": "discard",
-    "uid": "triage@1"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "burn",
-    "uid": "sample@1"
-   },
-   {
-    "t": "listen"
-   },
-   {
-    "t": "discard",
-    "uid": "panic_sweat@1008"
-   },
-   {
-    "t": "discard",
-    "uid": "stimulant@1"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "burn",
-    "uid": "triage@2"
-   },
-   {
-    "t": "discard",
-    "uid": "panic_blackout@1010"
-   },
-   {
-    "t": "move",
-    "to": "medbay"
-   },
-   {
-    "t": "carryScan",
-    "index": 7
-   },
-   {
-    "t": "endTurn"
-   }
-  ],
-  "ending": "lost",
-  "score": 6,
-  "hash": "4831f655b85744f9"
- },
- {
-  "seed": "golden-13",
-  "role": "surveyor",
-  "depth": 4,
-  "bot": "greedy",
-  "actions": [
-   {
-    "t": "play",
-    "uid": "sweep@2"
-   },
-   {
-    "t": "search"
-   },
-   {
-    "t": "listen"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "play",
-    "uid": "rappel@1",
-    "to": "shuttle_bay"
-   },
-   {
-    "t": "chargeShuttle",
-    "n": 9
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "chargeShuttle",
-    "n": 2
-   },
-   {
-    "t": "listen"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "chargeShuttle",
-    "n": 2
-   },
-   {
-    "t": "play",
-    "uid": "sweep@2"
-   },
-   {
-    "t": "listen"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "chargeShuttle",
-    "n": 2
-   },
-   {
-    "t": "listen"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "chargeShuttle",
-    "n": 2
-   },
-   {
-    "t": "listen"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "chargeShuttle",
-    "n": 2
-   },
-   {
-    "t": "listen"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "chargeShuttle",
-    "n": 2
-   },
-   {
-    "t": "listen"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "chargeShuttle",
-    "n": 2
-   },
-   {
-    "t": "listen"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "chargeShuttle",
-    "n": 2
-   },
-   {
-    "t": "listen"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "chargeShuttle",
-    "n": 2
-   },
-   {
-    "t": "listen"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "chargeShuttle",
-    "n": 2
-   },
-   {
-    "t": "listen"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "chargeShuttle",
-    "n": 2
-   },
-   {
-    "t": "launch"
-   }
-  ],
-  "ending": "clean_break",
-  "score": 162,
-  "hash": "3b1fd7d2d10ebc1f"
- },
- {
-  "seed": "golden-14",
-  "role": "pilot",
-  "depth": 5,
-  "bot": "heuristic",
-  "actions": [
-   {
-    "t": "play",
-    "uid": "checklist@1"
-   },
-   {
-    "t": "play",
-    "uid": "hand_off@1",
-    "to": "spine_a"
-   },
-   {
-    "t": "search"
-   },
-   {
-    "t": "play",
-    "uid": "course_correct@2"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "listen"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "play",
-    "uid": "hand_off@1",
-    "to": "cryobay"
-   },
-   {
-    "t": "play",
-    "uid": "course_correct@1"
-   },
-   {
-    "t": "listen"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "play",
-    "uid": "flight_jacket@1"
-   },
-   {
-    "t": "listen"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "burn",
-    "uid": "hand_off@2"
-   },
-   {
-    "t": "burn",
-    "uid": "nerve@1"
-   },
-   {
-    "t": "burn",
-    "uid": "punch_it@1"
-   },
-   {
-    "t": "creep",
-    "to": "spine_a"
-   },
-   {
-    "t": "move",
-    "to": "medbay"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "ventEnter"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "ventExit",
-    "to": "bridge"
-   },
-   {
-    "t": "listen"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "armScuttle"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "burn",
-    "uid": "course_correct@2"
-   },
-   {
-    "t": "burn",
-    "uid": "nerve@2"
-   },
-   {
-    "t": "burn",
-    "uid": "flight_jacket@1"
-   },
-   {
-    "t": "burn",
-    "uid": "bail@1"
-   },
-   {
-    "t": "ventEnter"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "endTurn"
-   }
-  ],
-  "ending": "scuttle",
-  "score": 24,
-  "hash": "d940563ef7959739"
- },
- {
-  "seed": "golden-15",
-  "role": "engineer",
-  "depth": 1,
-  "bot": "random",
-  "actions": [
-   {
-    "t": "discard",
-    "uid": "steady_hands@1"
-   },
-   {
-    "t": "discard",
-    "uid": "field_repair@1"
-   },
-   {
-    "t": "listen"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "play",
-    "uid": "override@1",
-    "edge": [
-     "medbay",
-     "armory"
-    ]
-   },
-   {
-    "t": "discard",
-    "uid": "brace@2"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "listen"
-   },
-   {
-    "t": "discard",
-    "uid": "reroute@2"
-   },
-   {
-    "t": "move",
-    "to": "spine_a"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "creep",
-    "to": "cryobay"
-   },
-   {
-    "t": "play",
-    "uid": "brace@2"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "play",
-    "uid": "bypass@1"
-   },
-   {
-    "t": "discard",
-    "uid": "field_repair@1"
-   },
-   {
-    "t": "move",
-    "to": "spine_a"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "burn",
-    "uid": "hardline@1"
-   },
-   {
-    "t": "creep",
-    "to": "medbay"
-   },
-   {
-    "t": "discard",
-    "uid": "cutting_torch@1"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "discard",
-    "uid": "bypass@2"
-   },
-   {
-    "t": "creep",
-    "to": "armory"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "discard",
-    "uid": "panic_shaking@1001"
-   },
-   {
-    "t": "discard",
-    "uid": "steady_hands@1"
-   },
-   {
-    "t": "search"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "burn",
-    "uid": "field_repair@1"
-   },
-   {
-    "t": "burn",
-    "uid": "bypass@1"
-   },
-   {
-    "t": "creep",
-    "to": "medbay"
-   },
-   {
-    "t": "play",
-    "uid": "brace@2"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "burn",
-    "uid": "reroute@1"
-   },
-   {
-    "t": "creep",
-    "to": "armory"
-   },
-   {
-    "t": "play",
-    "uid": "steady_hands@1"
-   },
-   {
-    "t": "discard",
-    "uid": "brace@1"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "burn",
-    "uid": "load_shed@1"
-   },
-   {
-    "t": "burn",
-    "uid": "cutting_torch@1"
-   },
-   {
-    "t": "discard",
-    "uid": "panic_sweat@1005"
-   },
-   {
-    "t": "discard",
-    "uid": "brace@2"
-   },
-   {
-    "t": "discard",
-    "uid": "panic_sweat@1003"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "burn",
-    "uid": "brace@1"
-   },
-   {
-    "t": "discard",
-    "uid": "panic_shaking@1001"
-   },
-   {
-    "t": "creep",
+    "uid": "flashbang@2",
     "to": "ore_hold"
    },
    {
     "t": "endTurn"
-   }
-  ],
-  "ending": "lost",
-  "score": 5,
-  "hash": "849295dd4dae64c8"
- },
- {
-  "seed": "golden-16",
-  "role": "security",
-  "depth": 2,
-  "bot": "greedy",
-  "actions": [
-   {
-    "t": "listen"
    },
    {
-    "t": "endTurn"
+    "t": "discard",
+    "uid": "inf_fever@1001"
    },
    {
     "t": "listen"
@@ -2708,125 +417,14 @@
     "t": "listen"
    },
    {
-    "t": "endTurn"
-   },
-   {
-    "t": "listen"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "listen"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "listen"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "listen"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "listen"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "listen"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "listen"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "listen"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "listen"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "listen"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "listen"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "listen"
-   },
-   {
-    "t": "endTurn"
-   }
-  ],
-  "ending": "lost",
-  "score": 13,
-  "hash": "a0f698e7ded7bdf2"
- },
- {
-  "seed": "golden-17",
-  "role": "medic",
-  "depth": 3,
-  "bot": "heuristic",
-  "actions": [
-   {
-    "t": "play",
-    "uid": "antiseptic@1"
-   },
-   {
-    "t": "move",
-    "to": "spine_a"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "search"
-   },
-   {
-    "t": "listen"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "play",
-    "uid": "careful_step@1",
+    "t": "creep",
     "to": "cryobay"
    },
    {
-    "t": "listen"
-   },
-   {
     "t": "endTurn"
    },
    {
-    "t": "play",
-    "uid": "quarantine@1",
+    "t": "seal",
     "edge": [
      "cryobay",
      "spine_a"
@@ -2839,829 +437,54 @@
     "t": "endTurn"
    },
    {
-    "t": "burn",
-    "uid": "stimulant@1"
-   },
-   {
-    "t": "play",
-    "uid": "diagnostic@1"
-   },
-   {
-    "t": "play",
-    "uid": "steady@1"
-   },
-   {
-    "t": "play",
-    "uid": "triage@1"
-   },
-   {
     "t": "endTurn"
-   },
-   {
-    "t": "play",
-    "uid": "steady@2"
-   },
-   {
-    "t": "listen"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "creep",
-    "to": "spine_a"
-   },
-   {
-    "t": "play",
-    "uid": "steady@2"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "play",
-    "uid": "careful_step@1",
-    "to": "cryobay"
-   },
-   {
-    "t": "play",
-    "uid": "steady@1"
-   },
-   {
-    "t": "play",
-    "uid": "steady@2"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "play",
-    "uid": "steady@1"
-   },
-   {
-    "t": "listen"
    },
    {
     "t": "endTurn"
    },
    {
     "t": "burn",
-    "uid": "scalpel@1"
+    "uid": "door_charge@1"
    },
    {
     "t": "burn",
-    "uid": "triage@2"
+    "uid": "push@2"
    },
    {
-    "t": "burn",
-    "uid": "triage@1"
-   },
-   {
-    "t": "burn",
-    "uid": "sample@1"
-   },
-   {
-    "t": "play",
-    "uid": "careful_step@1",
-    "to": "spine_a"
-   },
-   {
-    "t": "creep",
-    "to": "spine_b"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "burn",
-    "uid": "diagnostic@1"
-   },
-   {
-    "t": "creep",
-    "to": "spine_c"
-   },
-   {
-    "t": "move",
-    "to": "bridge"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "burn",
-    "uid": "steady@2"
-   },
-   {
-    "t": "armScuttle"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "burn",
-    "uid": "diagnostic@2"
-   },
-   {
-    "t": "ventEnter"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "burn",
-    "uid": "careful_step@1"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "burn",
-    "uid": "steady@1"
-   },
-   {
-    "t": "ventExit",
-    "to": "bridge"
-   },
-   {
-    "t": "listen"
-   },
-   {
-    "t": "endTurn"
-   }
-  ],
-  "ending": "scuttle",
-  "score": 22,
-  "hash": "b7ea75d5b866fd81"
- },
- {
-  "seed": "golden-18",
-  "role": "surveyor",
-  "depth": 4,
-  "bot": "random",
-  "actions": [
-   {
-    "t": "discard",
-    "uid": "scavenge@1"
+    "t": "brace"
    },
    {
     "t": "discard",
-    "uid": "quick_step@1"
+    "uid": "inf_sweat@1003"
    },
    {
     "t": "play",
-    "uid": "mapping_kit@1"
+    "uid": "hold_line@2"
    },
    {
     "t": "endTurn"
+   },
+   {
+    "t": "brace"
    },
    {
     "t": "discard",
-    "uid": "vent_crawl@2"
+    "uid": "inf_fever@1002"
    },
    {
     "t": "play",
-    "uid": "flare@1",
-    "to": "reactor"
-   },
-   {
-    "t": "play",
-    "uid": "sweep@2"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "move",
-    "to": "spine_a"
-   },
-   {
-    "t": "play",
-    "uid": "flare@1",
-    "to": "comms"
-   },
-   {
-    "t": "search"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "creep",
-    "to": "spine_b"
-   },
-   {
-    "t": "discard",
-    "uid": "quick_step@2"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "play",
-    "uid": "sweep@1"
-   },
-   {
-    "t": "play",
-    "uid": "quick_step@1",
-    "to": "spine_a"
-   },
-   {
-    "t": "search"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "play",
-    "uid": "flare@1",
-    "to": "reactor"
-   },
-   {
-    "t": "creep",
-    "to": "cryobay"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "creep",
-    "to": "spine_a"
-   },
-   {
-    "t": "discard",
-    "uid": "steady_nerves@1"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "seal",
-    "edge": [
-     "spine_a",
-     "cryobay"
-    ]
-   },
-   {
-    "t": "play",
-    "uid": "flare@1",
-    "to": "spine_b"
-   },
-   {
-    "t": "listen"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "seal",
-    "edge": [
-     "spine_a",
-     "spine_b"
-    ]
-   },
-   {
-    "t": "discard",
-    "uid": "quick_step@1"
-   },
-   {
-    "t": "move",
-    "to": "medbay"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "purgeBlood",
-    "index": 0
-   },
-   {
-    "t": "burn",
-    "uid": "flare@1"
-   },
-   {
-    "t": "play",
-    "uid": "mapping_kit@1"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "play",
-    "uid": "rappel@1",
-    "to": "shuttle_bay"
-   },
-   {
-    "t": "discard",
-    "uid": "sweep@1"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "chargeShuttle",
-    "n": 7
-   },
-   {
-    "t": "ventEnter"
-   },
-   {
-    "t": "discard",
-    "uid": "cutting_bar@1"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "discard",
-    "uid": "cutting_bar@1"
-   },
-   {
-    "t": "discard",
-    "uid": "mapping_kit@1"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "discard",
-    "uid": "salv_sidearm@5"
-   },
-   {
-    "t": "discard",
-    "uid": "vent_crawl@2"
-   },
-   {
-    "t": "ventExit",
-    "to": "medbay"
-   },
-   {
-    "t": "burn",
-    "uid": "sweep@1"
+    "uid": "flashbang@1",
+    "to": "ore_hold"
    },
    {
     "t": "endTurn"
    },
    {
     "t": "burn",
-    "uid": "quick_step@2"
+    "uid": "sidearm@2"
    },
    {
-    "t": "burn",
-    "uid": "steady_nerves@1"
-   },
-   {
-    "t": "play",
-    "uid": "mapping_kit@1"
-   },
-   {
-    "t": "purgeBlood",
-    "index": 3
-   },
-   {
-    "t": "burn",
-    "uid": "quick_step@1"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "burn",
-    "uid": "sweep@2"
-   },
-   {
-    "t": "purgeBlood",
-    "index": 1
-   },
-   {
-    "t": "endTurn"
-   }
-  ],
-  "ending": "lost",
-  "score": 14,
-  "hash": "6dd3ba9ca6353199"
- },
- {
-  "seed": "golden-19",
-  "role": "pilot",
-  "depth": 5,
-  "bot": "greedy",
-  "actions": [
-   {
-    "t": "play",
-    "uid": "course_correct@1"
-   },
-   {
-    "t": "listen"
-   },
-   {
-    "t": "play",
-    "uid": "hand_off@2",
-    "to": "spine_a"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "search"
-   },
-   {
-    "t": "search"
-   },
-   {
-    "t": "play",
-    "uid": "checklist@1"
-   },
-   {
-    "t": "listen"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "burn",
-    "uid": "sidearm@1"
-   },
-   {
-    "t": "creep",
-    "to": "cryobay"
-   },
-   {
-    "t": "play",
-    "uid": "flight_jacket@1"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "play",
-    "uid": "hand_off@1",
-    "to": "spine_a"
-   },
-   {
-    "t": "creep",
-    "to": "medbay"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "burn",
-    "uid": "nerve@1"
-   },
-   {
-    "t": "ventEnter"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "burn",
-    "uid": "docking_clamp@1"
-   },
-   {
-    "t": "ventExit",
-    "to": "shuttle_bay"
-   },
-   {
-    "t": "chargeShuttle",
-    "n": 10
-   },
-   {
-    "t": "play",
-    "uid": "course_correct@1"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "burn",
-    "uid": "flight_jacket@1"
-   },
-   {
-    "t": "ventEnter"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "burn",
-    "uid": "bail@1"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "burn",
-    "uid": "hand_off@2"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "burn",
-    "uid": "nerve@2"
-   },
-   {
-    "t": "ventExit",
-    "to": "shuttle_bay"
-   },
-   {
-    "t": "chargeShuttle",
-    "n": 9
-   },
-   {
-    "t": "play",
-    "uid": "course_correct@2"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "burn",
-    "uid": "hand_off@1"
-   },
-   {
-    "t": "ventEnter"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "ventExit",
-    "to": "bridge"
-   },
-   {
-    "t": "search"
-   },
-   {
-    "t": "play",
-    "uid": "course_correct@2"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "ventEnter"
-   },
-   {
-    "t": "endTurn"
-   }
-  ],
-  "ending": "lost",
-  "score": 17,
-  "hash": "dd16a8617f22db20"
- },
- {
-  "seed": "golden-20",
-  "role": "engineer",
-  "depth": 1,
-  "bot": "heuristic",
-  "actions": [
-   {
-    "t": "play",
-    "uid": "reroute@2",
-    "to": "spine_a"
-   },
-   {
-    "t": "creep",
-    "to": "spine_b"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "play",
-    "uid": "reroute@1",
-    "to": "spine_c"
-   },
-   {
-    "t": "search"
-   },
-   {
-    "t": "play",
-    "uid": "bypass@1"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "creep",
-    "to": "shuttle_bay"
-   },
-   {
-    "t": "chargeShuttle",
-    "n": 9
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "chargeShuttle",
-    "n": 2
-   },
-   {
-    "t": "play",
-    "uid": "brace@2"
-   },
-   {
-    "t": "listen"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "play",
-    "uid": "bypass@1"
-   },
-   {
-    "t": "chargeShuttle",
-    "n": 4
-   },
-   {
-    "t": "play",
-    "uid": "bypass@2"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "chargeShuttle",
-    "n": 4
-   },
-   {
-    "t": "ventEnter"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "ventExit",
-    "to": "shuttle_bay"
-   },
-   {
-    "t": "chargeShuttle",
-    "n": 6
-   },
-   {
-    "t": "play",
-    "uid": "bypass@2"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "burn",
-    "uid": "brace@2"
-   },
-   {
-    "t": "ventEnter"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "ventExit",
-    "to": "shuttle_bay"
-   },
-   {
-    "t": "chargeShuttle",
-    "n": 6
-   },
-   {
-    "t": "play",
-    "uid": "bypass@1"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "burn",
-    "uid": "cutting_torch@1"
-   },
-   {
-    "t": "ventEnter"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "ventExit",
-    "to": "shuttle_bay"
-   },
-   {
-    "t": "chargeShuttle",
-    "n": 3
-   },
-   {
-    "t": "launch"
-   }
-  ],
-  "ending": "clean_break",
-  "score": 156,
-  "hash": "237dedf4614006e8"
- },
- {
-  "seed": "golden-21",
-  "role": "security",
-  "depth": 2,
-  "bot": "random",
-  "actions": [
-   {
-    "t": "creep",
-    "to": "spine_a"
-   },
-   {
-    "t": "move",
-    "to": "spine_b"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "discard",
-    "uid": "hold_the_line@2"
-   },
-   {
-    "t": "creep",
-    "to": "spine_a"
-   },
-   {
-    "t": "play",
-    "uid": "adrenaline@1"
-   },
-   {
-    "t": "play",
-    "uid": "advance@1",
-    "to": "cryobay"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "play",
-    "uid": "advance@1",
-    "to": "spine_a"
-   },
-   {
-    "t": "discard",
-    "uid": "breaching_gun@1"
-   },
-   {
-    "t": "listen"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "burn",
-    "uid": "suppress@1"
-   },
-   {
-    "t": "burn",
-    "uid": "last_stand@1"
-   },
-   {
-    "t": "discard",
-    "uid": "adrenaline@1"
-   },
-   {
-    "t": "discard",
-    "uid": "service_pistol@2"
-   },
-   {
-    "t": "discard",
-    "uid": "panic_blackout@1001"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "burn",
-    "uid": "field_dressing@1"
-   },
-   {
-    "t": "burn",
-    "uid": "hold_the_line@2"
-   },
-   {
-    "t": "play",
-    "uid": "hold_the_line@1"
-   },
-   {
-    "t": "listen"
-   },
-   {
-    "t": "discard",
-    "uid": "panic_shaking@1004"
+    "t": "brace"
    },
    {
     "t": "endTurn"
@@ -3671,82 +494,68 @@
     "uid": "suppress@2"
    },
    {
+    "t": "brace"
+   },
+   {
     "t": "discard",
-    "uid": "panic_blackout@1002"
+    "uid": "inf_tunnel@1004"
    },
    {
-    "t": "seal",
-    "edge": [
-     "spine_a",
-     "spine_b"
-    ]
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "burn",
-    "uid": "service_pistol@1"
-   },
-   {
-    "t": "burn",
-    "uid": "service_pistol@2"
-   },
-   {
-    "t": "play",
-    "uid": "door_charge@1",
-    "edge": [
-     "spine_a",
-     "medbay"
-    ]
-   },
-   {
-    "t": "search"
+    "t": "discard",
+    "uid": "inf_sweat@1003"
    },
    {
     "t": "play",
     "uid": "adrenaline@1"
    },
    {
-    "t": "search"
-   },
-   {
-    "t": "seal",
-    "edge": [
-     "spine_a",
-     "cryobay"
-    ]
+    "t": "play",
+    "uid": "flashbang@2",
+    "to": "ore_hold"
    },
    {
     "t": "endTurn"
    },
    {
     "t": "burn",
-    "uid": "hold_the_line@1"
-   },
-   {
-    "t": "discard",
-    "uid": "panic_sweat@1008"
-   },
-   {
-    "t": "listen"
-   },
-   {
-    "t": "endTurn"
+    "uid": "last_stand@1"
    }
   ],
-  "ending": "lost",
-  "score": 5,
-  "hash": "4ffdbdc594fa2bcf"
+  "ending": "adrift",
+  "score": 49,
+  "hash": "fb9bc0ed6083b743"
  },
  {
-  "seed": "golden-22",
+  "seed": "golden-2",
   "role": "medic",
   "depth": 3,
-  "bot": "greedy",
+  "objective": "call",
+  "bot": "heuristic",
   "actions": [
    {
-    "t": "listen"
+    "t": "search"
+   },
+   {
+    "t": "play",
+    "uid": "steady@2"
+   },
+   {
+    "t": "play",
+    "uid": "steady@3"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "search"
+   },
+   {
+    "t": "creep",
+    "to": "spine_a"
+   },
+   {
+    "t": "play",
+    "uid": "vitals@2"
    },
    {
     "t": "endTurn"
@@ -3755,131 +564,30 @@
     "t": "listen"
    },
    {
+    "t": "search"
+   },
+   {
+    "t": "creep",
+    "to": "spine_b"
+   },
+   {
+    "t": "creep",
+    "to": "spine_c"
+   },
+   {
     "t": "endTurn"
+   },
+   {
+    "t": "listen"
    },
    {
     "t": "play",
     "uid": "antiseptic@1"
    },
    {
-    "t": "listen"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "listen"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "listen"
-   },
-   {
     "t": "play",
-    "uid": "careful_step@1",
-    "to": "spine_a"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "listen"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "listen"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "listen"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "listen"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "listen"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "listen"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "listen"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "listen"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "listen"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "listen"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "listen"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "listen"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "listen"
-   },
-   {
-    "t": "endTurn"
-   }
-  ],
-  "ending": "lost",
-  "score": 12,
-  "hash": "994c1f43d7c9963f"
- },
- {
-  "seed": "golden-23",
-  "role": "surveyor",
-  "depth": 4,
-  "bot": "heuristic",
-  "actions": [
-   {
-    "t": "play",
-    "uid": "quick_step@2",
-    "to": "spine_a"
-   },
-   {
-    "t": "listen"
+    "uid": "quiet_step@1",
+    "to": "bridge"
    },
    {
     "t": "search"
@@ -3888,269 +596,64 @@
     "t": "endTurn"
    },
    {
-    "t": "listen"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "play",
-    "uid": "rappel@1",
-    "to": "shuttle_bay"
-   },
-   {
-    "t": "chargeShuttle",
-    "n": 4
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "chargeShuttle",
-    "n": 2
-   },
-   {
-    "t": "listen"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "burn",
-    "uid": "quick_step@1"
-   },
-   {
-    "t": "play",
-    "uid": "cutting_bar@1",
-    "threat": "t2"
-   },
-   {
-    "t": "chargeShuttle",
-    "n": 2
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "chargeShuttle",
-    "n": 2
-   },
-   {
-    "t": "play",
-    "uid": "steady_nerves@1"
-   },
-   {
-    "t": "listen"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "chargeShuttle",
-    "n": 2
-   },
-   {
-    "t": "listen"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "chargeShuttle",
-    "n": 2
-   },
-   {
-    "t": "listen"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "chargeShuttle",
-    "n": 2
-   },
-   {
-    "t": "listen"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "chargeShuttle",
-    "n": 2
-   },
-   {
-    "t": "listen"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "chargeShuttle",
-    "n": 2
-   },
-   {
-    "t": "listen"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "chargeShuttle",
-    "n": 2
-   },
-   {
-    "t": "listen"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "chargeShuttle",
-    "n": 2
-   },
-   {
-    "t": "listen"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "chargeShuttle",
-    "n": 2
-   },
-   {
-    "t": "listen"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "burn",
-    "uid": "sweep@2"
-   },
-   {
-    "t": "play",
-    "uid": "salv_sidearm@5",
-    "threat": "t5"
-   },
-   {
-    "t": "chargeShuttle",
-    "n": 2
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "chargeShuttle",
-    "n": 2
-   },
-   {
-    "t": "listen"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "chargeShuttle",
-    "n": 1
-   },
-   {
-    "t": "launch"
-   }
-  ],
-  "ending": "clean_break",
-  "score": 165,
-  "hash": "9c0c5d4c597c39c8"
- },
- {
-  "seed": "golden-24",
-  "role": "pilot",
-  "depth": 5,
-  "bot": "random",
-  "actions": [
-   {
-    "t": "play",
-    "uid": "flight_jacket@1"
-   },
-   {
-    "t": "creep",
-    "to": "spine_a"
-   },
-   {
-    "t": "play",
-    "uid": "checklist@1"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "listen"
-   },
-   {
     "t": "seal",
     "edge": [
-     "spine_a",
-     "spine_b"
+     "bridge",
+     "comms"
     ]
    },
    {
-    "t": "discard",
-    "uid": "punch_it@1"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "burn",
-    "uid": "bail@1"
-   },
-   {
-    "t": "move",
-    "to": "medbay"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "burn",
-    "uid": "nerve@2"
-   },
-   {
-    "t": "burn",
-    "uid": "nerve@1"
+    "t": "listen"
    },
    {
     "t": "play",
-    "uid": "hand_off@1",
-    "to": "armory"
-   },
-   {
-    "t": "creep",
-    "to": "medbay"
+    "uid": "triage@2"
    },
    {
     "t": "endTurn"
    },
    {
-    "t": "burn",
-    "uid": "flight_jacket@1"
+    "t": "listen"
    },
    {
-    "t": "burn",
-    "uid": "course_correct@1"
+    "t": "play",
+    "uid": "field_dressing@1"
    },
    {
-    "t": "burn",
-    "uid": "course_correct@2"
+    "t": "play",
+    "uid": "field_dressing@2"
    },
    {
-    "t": "purgeBlood",
-    "index": 2
+    "t": "endTurn"
    },
    {
-    "t": "burn",
-    "uid": "checklist@1"
+    "t": "play",
+    "uid": "vitals@1"
+   },
+   {
+    "t": "discard",
+    "uid": "scalpel@1"
+   },
+   {
+    "t": "play",
+    "uid": "triage@1"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "play",
+    "uid": "morphine@1"
+   },
+   {
+    "t": "listen"
+   },
+   {
+    "t": "play",
+    "uid": "steady@1"
+   },
+   {
+    "t": "endTurn"
    },
    {
     "t": "ventEnter"
@@ -4160,19 +663,1152 @@
    },
    {
     "t": "burn",
-    "uid": "sidearm@1"
+    "uid": "quiet_step@2"
    },
    {
-    "t": "discard",
-    "uid": "panic_tunnel@1002"
+    "t": "ventExit",
+    "to": "medbay"
+   },
+   {
+    "t": "play",
+    "uid": "antiseptic@1"
+   },
+   {
+    "t": "play",
+    "uid": "vitals@2"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "play",
+    "uid": "vitals@1"
+   },
+   {
+    "t": "play",
+    "uid": "field_dressing@1"
+   },
+   {
+    "t": "ventEnter"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "ventExit",
+    "to": "shuttle_bay"
+   },
+   {
+    "t": "chargeShuttle",
+    "n": 19
+   },
+   {
+    "t": "listen"
+   },
+   {
+    "t": "search"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "ventEnter"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "burn",
+    "uid": "triage@1"
    },
    {
     "t": "ventExit",
     "to": "bridge"
    },
    {
+    "t": "play",
+    "uid": "sedative@1"
+   },
+   {
+    "t": "listen"
+   },
+   {
+    "t": "play",
+    "uid": "field_dressing@2"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "ventEnter"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "burn",
+    "uid": "steady@2"
+   },
+   {
+    "t": "ventExit",
+    "to": "shuttle_bay"
+   },
+   {
+    "t": "play",
+    "uid": "triage@2"
+   },
+   {
+    "t": "chargeShuttle",
+    "n": 4
+   },
+   {
+    "t": "listen"
+   },
+   {
+    "t": "brace"
+   },
+   {
+    "t": "endTurn"
+   }
+  ],
+  "ending": "adrift",
+  "score": 95,
+  "hash": "a2e6ef5ef7a7c300"
+ },
+ {
+  "seed": "golden-3",
+  "role": "surveyor",
+  "depth": 4,
+  "objective": "know",
+  "bot": "random",
+  "actions": [
+   {
     "t": "move",
+    "to": "spine_a"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "play",
+    "uid": "duct_map@1"
+   },
+   {
+    "t": "discard",
+    "uid": "rappel@1"
+   },
+   {
+    "t": "move",
+    "to": "cryobay"
+   },
+   {
+    "t": "search"
+   },
+   {
+    "t": "play",
+    "uid": "duct_map@2"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "seal",
+    "edge": [
+     "cryobay",
+     "spine_a"
+    ]
+   },
+   {
+    "t": "discard",
+    "uid": "hand_off@2"
+   },
+   {
+    "t": "discard",
+    "uid": "careful_step@1"
+   },
+   {
+    "t": "discard",
+    "uid": "marker_flare@1"
+   },
+   {
+    "t": "play",
+    "uid": "marker_flare@2",
+    "to": "spine_b"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "discard",
+    "uid": "still@1"
+   },
+   {
+    "t": "discard",
+    "uid": "careful_step@3"
+   },
+   {
+    "t": "discard",
+    "uid": "hand_off@1"
+   },
+   {
+    "t": "discard",
+    "uid": "sprint@1"
+   },
+   {
+    "t": "listen"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "search"
+   },
+   {
+    "t": "discard",
+    "uid": "cache@1"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "discard",
+    "uid": "hand_off@1"
+   },
+   {
+    "t": "play",
+    "uid": "marker_flare@1",
+    "to": "reactor"
+   },
+   {
+    "t": "discard",
+    "uid": "careful_step@2"
+   },
+   {
+    "t": "discard",
+    "uid": "pry_bar@1"
+   },
+   {
+    "t": "play",
+    "uid": "rappel@1",
+    "to": "bridge"
+   },
+   {
+    "t": "play",
+    "uid": "hand_off@2"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "play",
+    "uid": "marker_flare@2",
     "to": "comms"
+   },
+   {
+    "t": "move",
+    "to": "spine_c"
+   },
+   {
+    "t": "listen"
+   },
+   {
+    "t": "discard",
+    "uid": "cache@2"
+   },
+   {
+    "t": "move",
+    "to": "shuttle_bay"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "burn",
+    "uid": "careful_step@3"
+   },
+   {
+    "t": "burn",
+    "uid": "careful_step@1"
+   },
+   {
+    "t": "burn",
+    "uid": "sprint@1"
+   },
+   {
+    "t": "burn",
+    "uid": "wedge@1"
+   },
+   {
+    "t": "chargeShuttle",
+    "n": 1
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "burn",
+    "uid": "duct_map@2"
+   },
+   {
+    "t": "burn",
+    "uid": "still@1"
+   },
+   {
+    "t": "chargeShuttle",
+    "n": 6
+   },
+   {
+    "t": "search"
+   },
+   {
+    "t": "discard",
+    "uid": "inf_tunnel@1004"
+   },
+   {
+    "t": "discard",
+    "uid": "inf_blackout@1005"
+   },
+   {
+    "t": "move",
+    "to": "spine_c"
+   },
+   {
+    "t": "endTurn"
+   }
+  ],
+  "ending": "killed",
+  "score": 26,
+  "hash": "570a4ef164d79438"
+ },
+ {
+  "seed": "golden-4",
+  "role": "pilot",
+  "depth": 5,
+  "objective": "run",
+  "bot": "greedy",
+  "actions": [
+   {
+    "t": "play",
+    "uid": "deadstick@1"
+   },
+   {
+    "t": "play",
+    "uid": "boost@1"
+   },
+   {
+    "t": "play",
+    "uid": "trim@1",
+    "to": "spine_a"
+   },
+   {
+    "t": "listen"
+   },
+   {
+    "t": "search"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "search"
+   },
+   {
+    "t": "listen"
+   },
+   {
+    "t": "play",
+    "uid": "trim@2",
+    "to": "spine_b"
+   },
+   {
+    "t": "play",
+    "uid": "nerve@1"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "seal",
+    "edge": [
+     "spine_b",
+     "reactor"
+    ]
+   },
+   {
+    "t": "search"
+   },
+   {
+    "t": "search"
+   },
+   {
+    "t": "creep",
+    "to": "spine_c"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "listen"
+   },
+   {
+    "t": "discard",
+    "uid": "stick@1"
+   },
+   {
+    "t": "play",
+    "uid": "harness@1"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "creep",
+    "to": "shuttle_bay"
+   },
+   {
+    "t": "chargeShuttle",
+    "n": 12
+   },
+   {
+    "t": "play",
+    "uid": "signal_check@2"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "listen"
+   },
+   {
+    "t": "play",
+    "uid": "harness@2"
+   },
+   {
+    "t": "play",
+    "uid": "course_correct@2"
+   },
+   {
+    "t": "play",
+    "uid": "preflight@1"
+   },
+   {
+    "t": "ventEnter"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "ventExit",
+    "to": "medbay"
+   },
+   {
+    "t": "burn",
+    "uid": "mayday@1"
+   },
+   {
+    "t": "play",
+    "uid": "signal_check@1"
+   },
+   {
+    "t": "brace"
+   },
+   {
+    "t": "search"
+   },
+   {
+    "t": "play",
+    "uid": "preflight@2"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "burn",
+    "uid": "course_correct@1"
+   },
+   {
+    "t": "ventEnter"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "burn",
+    "uid": "nerve@2"
+   },
+   {
+    "t": "ventExit",
+    "to": "shuttle_bay"
+   },
+   {
+    "t": "play",
+    "uid": "signal_check@2"
+   },
+   {
+    "t": "brace"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "burn",
+    "uid": "course_correct@2"
+   },
+   {
+    "t": "ventEnter"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "burn",
+    "uid": "stick@1"
+   },
+   {
+    "t": "ventExit",
+    "to": "bridge"
+   },
+   {
+    "t": "listen"
+   },
+   {
+    "t": "play",
+    "uid": "trim@1",
+    "to": "comms"
+   },
+   {
+    "t": "listen"
+   },
+   {
+    "t": "play",
+    "uid": "salv_flare@11",
+    "to": "ore_hold"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "play",
+    "uid": "harness@1"
+   },
+   {
+    "t": "listen"
+   },
+   {
+    "t": "seal",
+    "edge": [
+     "comms",
+     "ore_hold"
+    ]
+   },
+   {
+    "t": "seal",
+    "edge": [
+     "comms",
+     "bridge"
+    ]
+   },
+   {
+    "t": "search"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "search"
+   },
+   {
+    "t": "listen"
+   },
+   {
+    "t": "brace"
+   },
+   {
+    "t": "discard",
+    "uid": "inf_fever@1001"
+   },
+   {
+    "t": "play",
+    "uid": "preflight@2"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "play",
+    "uid": "signal_check@1"
+   },
+   {
+    "t": "brace"
+   },
+   {
+    "t": "play",
+    "uid": "preflight@1"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "burn",
+    "uid": "trim@2"
+   }
+  ],
+  "ending": "adrift",
+  "score": 84,
+  "hash": "d699734623bf819a"
+ },
+ {
+  "seed": "golden-5",
+  "role": "engineer",
+  "depth": 1,
+  "objective": "burn",
+  "bot": "heuristic",
+  "actions": [
+   {
+    "t": "search"
+   },
+   {
+    "t": "play",
+    "uid": "bypass@1"
+   },
+   {
+    "t": "play",
+    "uid": "reroute@1",
+    "to": "spine_a"
+   },
+   {
+    "t": "search"
+   },
+   {
+    "t": "search"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "creep",
+    "to": "spine_b"
+   },
+   {
+    "t": "search"
+   },
+   {
+    "t": "creep",
+    "to": "spine_c"
+   },
+   {
+    "t": "search"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "creep",
+    "to": "bridge"
+   },
+   {
+    "t": "armScuttle"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "seal",
+    "edge": [
+     "bridge",
+     "comms"
+    ]
+   },
+   {
+    "t": "listen"
+   },
+   {
+    "t": "discard",
+    "uid": "cutting_torch@1"
+   },
+   {
+    "t": "play",
+    "uid": "steady_hands@1"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "play",
+    "uid": "load_shed@1"
+   },
+   {
+    "t": "play",
+    "uid": "circuit_map@1"
+   },
+   {
+    "t": "play",
+    "uid": "brace@1"
+   },
+   {
+    "t": "search"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "seal",
+    "edge": [
+     "bridge",
+     "spine_c"
+    ]
+   },
+   {
+    "t": "discard",
+    "uid": "inf_sweat@1001"
+   },
+   {
+    "t": "play",
+    "uid": "bypass@2"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "listen"
+   },
+   {
+    "t": "play",
+    "uid": "scrap_charge@2",
+    "to": "ore_hold"
+   },
+   {
+    "t": "play",
+    "uid": "scrap_charge@1",
+    "to": "ore_hold"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "listen"
+   },
+   {
+    "t": "play",
+    "uid": "brace@2"
+   },
+   {
+    "t": "play",
+    "uid": "hardline@1"
+   },
+   {
+    "t": "ventEnter"
+   },
+   {
+    "t": "endTurn"
+   }
+  ],
+  "ending": "overload",
+  "score": 74,
+  "hash": "38f9f0ef96fb2663"
+ },
+ {
+  "seed": "golden-6",
+  "role": "security",
+  "depth": 2,
+  "objective": "call",
+  "bot": "random",
+  "actions": [
+   {
+    "t": "play",
+    "uid": "last_stand@1"
+   },
+   {
+    "t": "play",
+    "uid": "flashbang@1",
+    "to": "armory"
+   },
+   {
+    "t": "search"
+   },
+   {
+    "t": "discard",
+    "uid": "suppress@1"
+   },
+   {
+    "t": "seal",
+    "edge": [
+     "cryobay",
+     "spine_a"
+    ]
+   },
+   {
+    "t": "play",
+    "uid": "adrenaline@1"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "listen"
+   },
+   {
+    "t": "brace"
+   },
+   {
+    "t": "discard",
+    "uid": "flashbang@2"
+   },
+   {
+    "t": "play",
+    "uid": "hold_line@2"
+   },
+   {
+    "t": "search"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "play",
+    "uid": "sweep@1"
+   },
+   {
+    "t": "discard",
+    "uid": "door_charge@1"
+   },
+   {
+    "t": "move",
+    "to": "spine_a"
+   },
+   {
+    "t": "seal",
+    "edge": [
+     "spine_a",
+     "spine_b"
+    ]
+   },
+   {
+    "t": "move",
+    "to": "cryobay"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "burn",
+    "uid": "shotgun@1"
+   },
+   {
+    "t": "burn",
+    "uid": "breach_charge@1"
+   },
+   {
+    "t": "listen"
+   },
+   {
+    "t": "discard",
+    "uid": "inf_tunnel@1001"
+   },
+   {
+    "t": "play",
+    "uid": "suppress@2",
+    "threat": "t3"
+   },
+   {
+    "t": "discard",
+    "uid": "hold_line@1"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "burn",
+    "uid": "sidearm@2"
+   },
+   {
+    "t": "discard",
+    "uid": "push@2"
+   },
+   {
+    "t": "discard",
+    "uid": "sidearm@1"
+   },
+   {
+    "t": "listen"
+   },
+   {
+    "t": "discard",
+    "uid": "inf_tunnel@1003"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "burn",
+    "uid": "push@2"
+   },
+   {
+    "t": "burn",
+    "uid": "push@1"
+   },
+   {
+    "t": "burn",
+    "uid": "flashbang@2"
+   },
+   {
+    "t": "burn",
+    "uid": "hold_line@2"
+   },
+   {
+    "t": "discard",
+    "uid": "inf_tremor@1005"
+   },
+   {
+    "t": "discard",
+    "uid": "inf_fever@1002"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "burn",
+    "uid": "sweep@1"
+   },
+   {
+    "t": "burn",
+    "uid": "hold_line@1"
+   },
+   {
+    "t": "seal",
+    "edge": [
+     "cryobay",
+     "spine_a"
+    ]
+   },
+   {
+    "t": "discard",
+    "uid": "inf_blackout@1007"
+   },
+   {
+    "t": "brace"
+   },
+   {
+    "t": "discard",
+    "uid": "inf_blackout@1004"
+   },
+   {
+    "t": "discard",
+    "uid": "inf_tremor@1010"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "burn",
+    "uid": "door_charge@1"
+   }
+  ],
+  "ending": "killed",
+  "score": 17,
+  "hash": "66c1dbfa607002db"
+ },
+ {
+  "seed": "golden-7",
+  "role": "medic",
+  "depth": 3,
+  "objective": "know",
+  "bot": "greedy",
+  "actions": [
+   {
+    "t": "play",
+    "uid": "steady@2"
+   },
+   {
+    "t": "play",
+    "uid": "steady@3"
+   },
+   {
+    "t": "search"
+   },
+   {
+    "t": "search"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "burn",
+    "uid": "triage@2"
+   },
+   {
+    "t": "burn",
+    "uid": "field_dressing@2"
+   },
+   {
+    "t": "play",
+    "uid": "morphine@1"
+   },
+   {
+    "t": "play",
+    "uid": "antiseptic@1"
+   },
+   {
+    "t": "play",
+    "uid": "quiet_step@2",
+    "to": "spine_a"
+   },
+   {
+    "t": "play",
+    "uid": "sedative@1"
+   },
+   {
+    "t": "play",
+    "uid": "vitals@1"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "play",
+    "uid": "field_dressing@1"
+   },
+   {
+    "t": "play",
+    "uid": "quiet_step@1",
+    "to": "spine_b"
+   },
+   {
+    "t": "creep",
+    "to": "spine_c"
+   },
+   {
+    "t": "play",
+    "uid": "vitals@2"
+   },
+   {
+    "t": "creep",
+    "to": "shuttle_bay"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "chargeShuttle",
+    "n": 6
+   },
+   {
+    "t": "play",
+    "uid": "steady@1"
+   },
+   {
+    "t": "play",
+    "uid": "steady@2"
+   },
+   {
+    "t": "search"
+   },
+   {
+    "t": "play",
+    "uid": "steady@3"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "play",
+    "uid": "vitals@1"
+   },
+   {
+    "t": "discard",
+    "uid": "scalpel@1"
+   },
+   {
+    "t": "play",
+    "uid": "antiseptic@1"
+   },
+   {
+    "t": "play",
+    "uid": "steady@2"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "play",
+    "uid": "vitals@2"
+   },
+   {
+    "t": "chargeShuttle",
+    "n": 2
+   },
+   {
+    "t": "play",
+    "uid": "quiet_step@1",
+    "to": "spine_c"
+   },
+   {
+    "t": "play",
+    "uid": "vitals@1"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "burn",
+    "uid": "blood_work@1"
+   },
+   {
+    "t": "burn",
+    "uid": "triage@1"
+   },
+   {
+    "t": "burn",
+    "uid": "quiet_step@2"
+   },
+   {
+    "t": "burn",
+    "uid": "field_dressing@1"
+   },
+   {
+    "t": "creep",
+    "to": "shuttle_bay"
+   },
+   {
+    "t": "ventEnter"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "ventExit",
+    "to": "medbay"
+   },
+   {
+    "t": "search"
+   },
+   {
+    "t": "search"
+   },
+   {
+    "t": "listen"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "creep",
+    "to": "armory"
+   },
+   {
+    "t": "search"
+   },
+   {
+    "t": "search"
+   },
+   {
+    "t": "listen"
    },
    {
     "t": "endTurn"
@@ -4182,59 +1818,596 @@
     "to": "ore_hold"
    },
    {
-    "t": "move",
-    "to": "reactor"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "burn",
-    "uid": "hand_off@1"
-   },
-   {
-    "t": "burn",
-    "uid": "docking_clamp@1"
-   },
-   {
-    "t": "move",
-    "to": "spine_b"
-   },
-   {
-    "t": "discard",
-    "uid": "panic_shaking@1012"
-   },
-   {
-    "t": "discard",
-    "uid": "panic_blackout@1001"
-   },
-   {
-    "t": "endTurn"
-   }
-  ],
-  "ending": "lost",
-  "score": 2,
-  "hash": "d494e90dbab4964a"
- },
- {
-  "seed": "golden-25",
-  "role": "engineer",
-  "depth": 1,
-  "bot": "greedy",
-  "actions": [
-   {
     "t": "search"
    },
    {
     "t": "listen"
    },
    {
-    "t": "play",
-    "uid": "reroute@1",
-    "to": "spine_a"
+    "t": "ventEnter"
    },
    {
     "t": "endTurn"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "ventExit",
+    "to": "bridge"
+   },
+   {
+    "t": "listen"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "burn",
+    "uid": "steady@1"
+   },
+   {
+    "t": "burn",
+    "uid": "steady@3"
+   },
+   {
+    "t": "ventEnter"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "endTurn"
+   }
+  ],
+  "ending": "adrift",
+  "score": 75,
+  "hash": "bbdeabbb307f68ac"
+ },
+ {
+  "seed": "golden-8",
+  "role": "surveyor",
+  "depth": 4,
+  "objective": "run",
+  "bot": "heuristic",
+  "actions": [
+   {
+    "t": "play",
+    "uid": "rappel@1",
+    "to": "shuttle_bay"
+   },
+   {
+    "t": "play",
+    "uid": "cache@2"
+   },
+   {
+    "t": "play",
+    "uid": "hand_off@1"
+   },
+   {
+    "t": "play",
+    "uid": "still@1"
+   },
+   {
+    "t": "play",
+    "uid": "marker_flare@2",
+    "to": "ore_hold"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "discard",
+    "uid": "pry_bar@1"
+   },
+   {
+    "t": "play",
+    "uid": "hand_off@2"
+   },
+   {
+    "t": "chargeShuttle",
+    "n": 1
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "chargeShuttle",
+    "n": 1
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "play",
+    "uid": "careful_step@3",
+    "to": "spine_c"
+   },
+   {
+    "t": "listen"
+   },
+   {
+    "t": "play",
+    "uid": "cache@1"
+   },
+   {
+    "t": "search"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "listen"
+   },
+   {
+    "t": "play",
+    "uid": "careful_step@2",
+    "to": "bridge"
+   },
+   {
+    "t": "play",
+    "uid": "careful_step@1",
+    "to": "comms"
+   },
+   {
+    "t": "beacon"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "burn",
+    "uid": "sprint@1"
+   },
+   {
+    "t": "burn",
+    "uid": "wedge@1"
+   },
+   {
+    "t": "burn",
+    "uid": "marker_flare@1"
+   },
+   {
+    "t": "seal",
+    "edge": [
+     "comms",
+     "ore_hold"
+    ]
+   },
+   {
+    "t": "brace"
+   },
+   {
+    "t": "search"
+   },
+   {
+    "t": "search"
+   },
+   {
+    "t": "play",
+    "uid": "duct_map@1"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "burn",
+    "uid": "duct_map@2"
+   },
+   {
+    "t": "brace"
+   },
+   {
+    "t": "seal",
+    "edge": [
+     "comms",
+     "bridge"
+    ]
+   },
+   {
+    "t": "listen"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "burn",
+    "uid": "careful_step@1"
+   },
+   {
+    "t": "brace"
+   },
+   {
+    "t": "listen"
+   },
+   {
+    "t": "discard",
+    "uid": "inf_sweat@1002"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "burn",
+    "uid": "marker_flare@2"
+   },
+   {
+    "t": "burn",
+    "uid": "duct_map@1"
+   },
+   {
+    "t": "play",
+    "uid": "salv_kit@13"
+   },
+   {
+    "t": "brace"
+   },
+   {
+    "t": "seal",
+    "edge": [
+     "comms",
+     "ore_hold"
+    ]
+   },
+   {
+    "t": "listen"
+   },
+   {
+    "t": "endTurn"
+   }
+  ],
+  "ending": "relay",
+  "score": 42,
+  "hash": "69ed1de8f7cded0b"
+ },
+ {
+  "seed": "golden-9",
+  "role": "pilot",
+  "depth": 5,
+  "objective": "burn",
+  "bot": "random",
+  "actions": [
+   {
+    "t": "listen"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "discard",
+    "uid": "course_correct@1"
+   },
+   {
+    "t": "seal",
+    "edge": [
+     "cryobay",
+     "spine_a"
+    ]
+   },
+   {
+    "t": "brace"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "discard",
+    "uid": "preflight@2"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "brace"
+   },
+   {
+    "t": "discard",
+    "uid": "stick@1"
+   },
+   {
+    "t": "play",
+    "uid": "signal_check@1"
+   },
+   {
+    "t": "listen"
+   },
+   {
+    "t": "discard",
+    "uid": "deadstick@1"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "seal",
+    "edge": [
+     "cryobay",
+     "spine_a"
+    ]
+   },
+   {
+    "t": "discard",
+    "uid": "nerve@2"
+   },
+   {
+    "t": "play",
+    "uid": "mayday@1",
+    "to": "reactor"
+   },
+   {
+    "t": "search"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "discard",
+    "uid": "signal_check@2"
+   },
+   {
+    "t": "search"
+   },
+   {
+    "t": "brace"
+   },
+   {
+    "t": "play",
+    "uid": "harness@2"
+   },
+   {
+    "t": "discard",
+    "uid": "trim@2"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "play",
+    "uid": "nerve@1"
+   },
+   {
+    "t": "brace"
+   },
+   {
+    "t": "play",
+    "uid": "harness@1"
+   },
+   {
+    "t": "discard",
+    "uid": "trim@1"
+   },
+   {
+    "t": "discard",
+    "uid": "preflight@1"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "brace"
+   },
+   {
+    "t": "move",
+    "to": "spine_a"
+   },
+   {
+    "t": "move",
+    "to": "spine_b"
+   },
+   {
+    "t": "creep",
+    "to": "reactor"
+   },
+   {
+    "t": "play",
+    "uid": "course_correct@2"
+   },
+   {
+    "t": "play",
+    "uid": "nerve@1"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "burn",
+    "uid": "trim@1"
+   },
+   {
+    "t": "burn",
+    "uid": "preflight@2"
+   },
+   {
+    "t": "burn",
+    "uid": "boost@1"
+   },
+   {
+    "t": "burn",
+    "uid": "trim@2"
+   },
+   {
+    "t": "creep",
+    "to": "ore_hold"
+   },
+   {
+    "t": "play",
+    "uid": "harness@2"
+   },
+   {
+    "t": "creep",
+    "to": "reactor"
+   },
+   {
+    "t": "play",
+    "uid": "harness@1"
+   },
+   {
+    "t": "creep",
+    "to": "ore_hold"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "burn",
+    "uid": "signal_check@2"
+   },
+   {
+    "t": "burn",
+    "uid": "course_correct@1"
+   },
+   {
+    "t": "creep",
+    "to": "comms"
+   },
+   {
+    "t": "seal",
+    "edge": [
+     "comms",
+     "ore_hold"
+    ]
+   },
+   {
+    "t": "beacon"
+   },
+   {
+    "t": "discard",
+    "uid": "inf_tremor@1003"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "discard",
+    "uid": "inf_tunnel@1010"
+   },
+   {
+    "t": "discard",
+    "uid": "inf_tunnel@1009"
+   },
+   {
+    "t": "move",
+    "to": "bridge"
+   },
+   {
+    "t": "move",
+    "to": "comms"
+   },
+   {
+    "t": "move",
+    "to": "bridge"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "creep",
+    "to": "comms"
+   },
+   {
+    "t": "discard",
+    "uid": "inf_blackout@1006"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "move",
+    "to": "bridge"
+   },
+   {
+    "t": "discard",
+    "uid": "inf_tunnel@1008"
+   },
+   {
+    "t": "discard",
+    "uid": "inf_tremor@1007"
+   },
+   {
+    "t": "discard",
+    "uid": "inf_sweat@1004"
+   },
+   {
+    "t": "ventEnter"
+   },
+   {
+    "t": "endTurn"
+   }
+  ],
+  "ending": "killed",
+  "score": 27,
+  "hash": "985c3787cfba5cd0"
+ },
+ {
+  "seed": "golden-10",
+  "role": "engineer",
+  "depth": 1,
+  "objective": "call",
+  "bot": "greedy",
+  "actions": [
+   {
+    "t": "search"
+   },
+   {
+    "t": "play",
+    "uid": "bypass@1"
+   },
+   {
+    "t": "discard",
+    "uid": "cutting_torch@1"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "play",
+    "uid": "brace@2"
+   },
+   {
+    "t": "play",
+    "uid": "scrap_charge@1",
+    "to": "shuttle_bay"
+   },
+   {
+    "t": "creep",
+    "to": "spine_a"
+   },
+   {
+    "t": "search"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "search"
+   },
+   {
+    "t": "play",
+    "uid": "load_shed@1"
+   },
+   {
+    "t": "listen"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "play",
+    "uid": "circuit_map@1"
+   },
+   {
+    "t": "play",
+    "uid": "brace@1"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "discard",
+    "uid": "inf_blackout@1001"
    },
    {
     "t": "play",
@@ -4247,8 +2420,7 @@
     "t": "endTurn"
    },
    {
-    "t": "burn",
-    "uid": "field_repair@1"
+    "t": "listen"
    },
    {
     "t": "play",
@@ -4263,8 +2435,19 @@
     "t": "endTurn"
    },
    {
-    "t": "burn",
-    "uid": "bypass@1"
+    "t": "listen"
+   },
+   {
+    "t": "play",
+    "uid": "scrap_charge@2",
+    "to": "armory"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "play",
+    "uid": "hardline@1"
    },
    {
     "t": "play",
@@ -4273,7 +2456,33 @@
    },
    {
     "t": "chargeShuttle",
-    "n": 10
+    "n": 20
+   },
+   {
+    "t": "search"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "play",
+    "uid": "hardline@1"
+   },
+   {
+    "t": "chargeShuttle",
+    "n": 5
+   },
+   {
+    "t": "play",
+    "uid": "steady_hands@1"
+   },
+   {
+    "t": "play",
+    "uid": "bypass@1"
+   },
+   {
+    "t": "play",
+    "uid": "bypass@2"
    },
    {
     "t": "ventEnter"
@@ -4282,29 +2491,73 @@
     "t": "endTurn"
    },
    {
-    "t": "burn",
-    "uid": "steady_hands@1"
+    "t": "endTurn"
    },
    {
     "t": "endTurn"
    },
    {
-    "t": "burn",
-    "uid": "cutting_torch@1"
+    "t": "ventExit",
+    "to": "bridge"
+   },
+   {
+    "t": "play",
+    "uid": "reroute@1",
+    "to": "spine_c"
+   },
+   {
+    "t": "listen"
    },
    {
     "t": "endTurn"
    },
    {
-    "t": "burn",
-    "uid": "brace@2"
+    "t": "listen"
+   },
+   {
+    "t": "creep",
+    "to": "bridge"
+   },
+   {
+    "t": "discard",
+    "uid": "inf_blackout@1001"
    },
    {
     "t": "endTurn"
    },
    {
-    "t": "burn",
-    "uid": "hardline@1"
+    "t": "seal",
+    "edge": [
+     "bridge",
+     "comms"
+    ]
+   },
+   {
+    "t": "listen"
+   },
+   {
+    "t": "brace"
+   },
+   {
+    "t": "search"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "seal",
+    "edge": [
+     "bridge",
+     "spine_c"
+    ]
+   },
+   {
+    "t": "listen"
+   },
+   {
+    "t": "play",
+    "uid": "scrap_charge@1",
+    "to": "cryobay"
    },
    {
     "t": "endTurn"
@@ -4314,96 +2567,55 @@
     "uid": "override@1"
    },
    {
-    "t": "endTurn"
-   },
-   {
     "t": "burn",
-    "uid": "reroute@1"
-   },
-   {
-    "t": "ventExit",
-    "to": "shuttle_bay"
-   },
-   {
-    "t": "chargeShuttle",
-    "n": 10
-   },
-   {
-    "t": "listen"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "burn",
-    "uid": "brace@1"
+    "uid": "slag_door@1"
    },
    {
     "t": "ventEnter"
    },
    {
-    "t": "endTurn"
-   },
-   {
-    "t": "burn",
-    "uid": "load_shed@1"
-   },
-   {
     "t": "ventExit",
     "to": "shuttle_bay"
+   },
+   {
+    "t": "seal",
+    "edge": [
+     "shuttle_bay",
+     "spine_c"
+    ]
    },
    {
     "t": "chargeShuttle",
-    "n": 4
-   },
-   {
-    "t": "play",
-    "uid": "bypass@2"
+    "n": 3
    },
    {
     "t": "endTurn"
    },
    {
-    "t": "burn",
-    "uid": "reroute@2"
-   },
-   {
-    "t": "ventEnter"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "burn",
-    "uid": "bypass@2"
-   },
-   {
-    "t": "ventExit",
-    "to": "shuttle_bay"
+    "t": "launch"
    }
   ],
-  "ending": "lost",
-  "score": 20,
-  "hash": "5cda372e12cce325"
+  "ending": "escaped",
+  "score": 123,
+  "hash": "cdf90b4675510e48"
  },
  {
-  "seed": "golden-26",
+  "seed": "golden-11",
   "role": "security",
   "depth": 2,
+  "objective": "know",
   "bot": "heuristic",
   "actions": [
    {
     "t": "search"
    },
    {
+    "t": "discard",
+    "uid": "suppress@2"
+   },
+   {
     "t": "creep",
     "to": "spine_a"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "listen"
    },
    {
     "t": "search"
@@ -4412,30 +2624,69 @@
     "t": "endTurn"
    },
    {
+    "t": "creep",
+    "to": "spine_b"
+   },
+   {
+    "t": "search"
+   },
+   {
+    "t": "creep",
+    "to": "spine_c"
+   },
+   {
+    "t": "search"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "creep",
+    "to": "bridge"
+   },
+   {
+    "t": "listen"
+   },
+   {
+    "t": "search"
+   },
+   {
+    "t": "play",
+    "uid": "hold_line@2"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
     "t": "listen"
    },
    {
     "t": "play",
-    "uid": "advance@1",
+    "uid": "hold_line@1"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "listen"
+   },
+   {
+    "t": "discard",
+    "uid": "shotgun@1"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "play",
+    "uid": "flashbang@1",
     "to": "cryobay"
    },
    {
     "t": "endTurn"
    },
    {
-    "t": "listen"
-   },
-   {
-    "t": "play",
-    "uid": "hold_the_line@2"
-   },
-   {
     "t": "endTurn"
-   },
-   {
-    "t": "play",
-    "uid": "service_pistol@1",
-    "threat": "t2"
    },
    {
     "t": "listen"
@@ -4451,16 +2702,1526 @@
    },
    {
     "t": "burn",
-    "uid": "service_pistol@2"
+    "uid": "push@1"
+   },
+   {
+    "t": "burn",
+    "uid": "sidearm@1"
+   },
+   {
+    "t": "ventEnter"
+   },
+   {
+    "t": "ventExit",
+    "to": "medbay"
+   },
+   {
+    "t": "cure"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "seal",
+    "edge": [
+     "medbay",
+     "armory"
+    ]
+   },
+   {
+    "t": "listen"
+   },
+   {
+    "t": "search"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "listen"
+   },
+   {
+    "t": "cure"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "seal",
+    "edge": [
+     "medbay",
+     "spine_a"
+    ]
    },
    {
     "t": "play",
-    "uid": "advance@1",
+    "uid": "sweep@1"
+   },
+   {
+    "t": "play",
+    "uid": "flashbang@2",
+    "to": "shuttle_bay"
+   },
+   {
+    "t": "ventEnter"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "ventExit",
+    "to": "ore_hold"
+   },
+   {
+    "t": "takeSpecimen"
+   },
+   {
+    "t": "search"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "creep",
+    "to": "comms"
+   },
+   {
+    "t": "upload"
+   }
+  ],
+  "ending": "specimen",
+  "score": 108,
+  "hash": "20df3a4f51aa36d1"
+ },
+ {
+  "seed": "golden-12",
+  "role": "medic",
+  "depth": 3,
+  "objective": "run",
+  "bot": "random",
+  "actions": [
+   {
+    "t": "play",
+    "uid": "triage@2"
+   },
+   {
+    "t": "discard",
+    "uid": "morphine@1"
+   },
+   {
+    "t": "play",
+    "uid": "sedative@1"
+   },
+   {
+    "t": "play",
+    "uid": "steady@1"
+   },
+   {
+    "t": "creep",
     "to": "spine_a"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "play",
+    "uid": "quiet_step@2",
+    "to": "cryobay"
+   },
+   {
+    "t": "discard",
+    "uid": "field_dressing@2"
+   },
+   {
+    "t": "discard",
+    "uid": "steady@2"
+   },
+   {
+    "t": "search"
+   },
+   {
+    "t": "discard",
+    "uid": "scalpel@1"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "creep",
+    "to": "spine_a"
+   },
+   {
+    "t": "play",
+    "uid": "field_dressing@1"
+   },
+   {
+    "t": "seal",
+    "edge": [
+     "spine_a",
+     "cryobay"
+    ]
+   },
+   {
+    "t": "discard",
+    "uid": "quiet_step@1"
+   },
+   {
+    "t": "move",
+    "to": "medbay"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "listen"
+   },
+   {
+    "t": "brace"
+   },
+   {
+    "t": "discard",
+    "uid": "vitals@2"
+   },
+   {
+    "t": "creep",
+    "to": "armory"
+   },
+   {
+    "t": "search"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "burn",
+    "uid": "blood_work@1"
+   },
+   {
+    "t": "burn",
+    "uid": "vitals@1"
+   },
+   {
+    "t": "move",
+    "to": "ore_hold"
+   },
+   {
+    "t": "search"
+   },
+   {
+    "t": "discard",
+    "uid": "antiseptic@1"
+   },
+   {
+    "t": "creep",
+    "to": "comms"
+   },
+   {
+    "t": "play",
+    "uid": "steady@3"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "play",
+    "uid": "morphine@1"
+   },
+   {
+    "t": "seal",
+    "edge": [
+     "comms",
+     "ore_hold"
+    ]
+   },
+   {
+    "t": "move",
+    "to": "bridge"
+   },
+   {
+    "t": "purgeVents"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "burn",
+    "uid": "steady@2"
+   },
+   {
+    "t": "seal",
+    "edge": [
+     "bridge",
+     "comms"
+    ]
+   },
+   {
+    "t": "discard",
+    "uid": "inf_tunnel@1002"
+   },
+   {
+    "t": "seal",
+    "edge": [
+     "bridge",
+     "spine_c"
+    ]
+   },
+   {
+    "t": "listen"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "burn",
+    "uid": "antiseptic@1"
+   },
+   {
+    "t": "burn",
+    "uid": "triage@1"
+   },
+   {
+    "t": "burn",
+    "uid": "quiet_step@1"
+   },
+   {
+    "t": "discard",
+    "uid": "steady@1"
+   },
+   {
+    "t": "discard",
+    "uid": "quiet_step@2"
+   },
+   {
+    "t": "search"
+   },
+   {
+    "t": "play",
+    "uid": "vitals@2"
+   },
+   {
+    "t": "play",
+    "uid": "field_dressing@1"
+   },
+   {
+    "t": "discard",
+    "uid": "inf_tunnel@1001"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "burn",
+    "uid": "field_dressing@2"
+   },
+   {
+    "t": "brace"
+   },
+   {
+    "t": "discard",
+    "uid": "inf_blackout@1003"
+   },
+   {
+    "t": "discard",
+    "uid": "inf_blackout@1007"
+   },
+   {
+    "t": "play",
+    "uid": "scalpel@1",
+    "threat": "t3"
+   },
+   {
+    "t": "discard",
+    "uid": "inf_tunnel@1006"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "listen"
+   },
+   {
+    "t": "discard",
+    "uid": "inf_tunnel@1004"
+   },
+   {
+    "t": "discard",
+    "uid": "inf_tunnel@1006"
+   },
+   {
+    "t": "play",
+    "uid": "vitals@2"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "endTurn"
+   }
+  ],
+  "ending": "killed",
+  "score": 25,
+  "hash": "e1457ef67cf9b15b"
+ },
+ {
+  "seed": "golden-13",
+  "role": "surveyor",
+  "depth": 4,
+  "objective": "burn",
+  "bot": "greedy",
+  "actions": [
+   {
+    "t": "play",
+    "uid": "cache@2"
+   },
+   {
+    "t": "play",
+    "uid": "hand_off@1"
+   },
+   {
+    "t": "play",
+    "uid": "hand_off@2"
+   },
+   {
+    "t": "play",
+    "uid": "rappel@1",
+    "to": "shuttle_bay"
+   },
+   {
+    "t": "search"
+   },
+   {
+    "t": "chargeShuttle",
+    "n": 7
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "play",
+    "uid": "duct_map@1"
+   },
+   {
+    "t": "discard",
+    "uid": "pry_bar@1"
+   },
+   {
+    "t": "play",
+    "uid": "careful_step@3",
+    "to": "spine_c"
+   },
+   {
+    "t": "search"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "search"
+   },
+   {
+    "t": "play",
+    "uid": "still@1"
+   },
+   {
+    "t": "play",
+    "uid": "duct_map@2"
+   },
+   {
+    "t": "play",
+    "uid": "careful_step@1",
+    "to": "shuttle_bay"
+   },
+   {
+    "t": "chargeShuttle",
+    "n": 5
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "discard",
+    "uid": "inf_fever@1001"
+   },
+   {
+    "t": "chargeShuttle",
+    "n": 1
+   },
+   {
+    "t": "play",
+    "uid": "careful_step@2",
+    "to": "spine_c"
+   },
+   {
+    "t": "listen"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "discard",
+    "uid": "cache@1"
+   },
+   {
+    "t": "listen"
+   },
+   {
+    "t": "play",
+    "uid": "careful_step@2",
+    "to": "shuttle_bay"
+   },
+   {
+    "t": "play",
+    "uid": "marker_flare@2",
+    "to": "ore_hold"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "chargeShuttle",
+    "n": 2
+   },
+   {
+    "t": "play",
+    "uid": "still@1"
+   },
+   {
+    "t": "play",
+    "uid": "cache@2"
+   },
+   {
+    "t": "play",
+    "uid": "marker_flare@1",
+    "to": "ore_hold"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "play",
+    "uid": "hand_off@1"
+   },
+   {
+    "t": "play",
+    "uid": "duct_map@2"
+   },
+   {
+    "t": "chargeShuttle",
+    "n": 1
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "play",
+    "uid": "wedge@1",
+    "edge": [
+     "shuttle_bay",
+     "spine_c"
+    ]
+   },
+   {
+    "t": "listen"
+   },
+   {
+    "t": "chargeShuttle",
+    "n": 1
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "discard",
+    "uid": "cache@1"
+   },
+   {
+    "t": "discard",
+    "uid": "pry_bar@1"
+   },
+   {
+    "t": "play",
+    "uid": "duct_map@1"
+   },
+   {
+    "t": "play",
+    "uid": "hand_off@2"
+   },
+   {
+    "t": "discard",
+    "uid": "inf_fever@1001"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "seal",
+    "edge": [
+     "shuttle_bay",
+     "spine_c"
+    ]
+   },
+   {
+    "t": "play",
+    "uid": "duct_map@1"
+   },
+   {
+    "t": "discard",
+    "uid": "salv_sidearm@8"
+   },
+   {
+    "t": "chargeShuttle",
+    "n": 1
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "burn",
+    "uid": "sprint@1"
+   },
+   {
+    "t": "burn",
+    "uid": "careful_step@1"
+   },
+   {
+    "t": "ventEnter"
+   },
+   {
+    "t": "ventExit",
+    "to": "bridge"
+   },
+   {
+    "t": "play",
+    "uid": "careful_step@3",
+    "to": "spine_c"
+   },
+   {
+    "t": "play",
+    "uid": "duct_map@2"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "listen"
    },
    {
     "t": "creep",
     "to": "spine_b"
+   },
+   {
+    "t": "play",
+    "uid": "cache@1"
+   },
+   {
+    "t": "play",
+    "uid": "still@1"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "creep",
+    "to": "spine_a"
+   },
+   {
+    "t": "creep",
+    "to": "cryobay"
+   },
+   {
+    "t": "play",
+    "uid": "cache@2"
+   },
+   {
+    "t": "play",
+    "uid": "hand_off@1"
+   },
+   {
+    "t": "discard",
+    "uid": "salv_sidearm@9"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "listen"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "play",
+    "uid": "wedge@1",
+    "edge": [
+     "cryobay",
+     "spine_a"
+    ]
+   },
+   {
+    "t": "listen"
+   },
+   {
+    "t": "play",
+    "uid": "marker_flare@2",
+    "to": "ore_hold"
+   },
+   {
+    "t": "play",
+    "uid": "marker_flare@1",
+    "to": "ore_hold"
+   },
+   {
+    "t": "endTurn"
+   }
+  ],
+  "ending": "adrift",
+  "score": 88,
+  "hash": "c1834298759280a9"
+ },
+ {
+  "seed": "golden-14",
+  "role": "pilot",
+  "depth": 5,
+  "objective": "call",
+  "bot": "heuristic",
+  "actions": [
+   {
+    "t": "play",
+    "uid": "deadstick@1"
+   },
+   {
+    "t": "search"
+   },
+   {
+    "t": "play",
+    "uid": "course_correct@2"
+   },
+   {
+    "t": "play",
+    "uid": "harness@2"
+   },
+   {
+    "t": "play",
+    "uid": "signal_check@1"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "play",
+    "uid": "trim@2",
+    "to": "spine_a"
+   },
+   {
+    "t": "search"
+   },
+   {
+    "t": "play",
+    "uid": "boost@1"
+   },
+   {
+    "t": "play",
+    "uid": "signal_check@2"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "creep",
+    "to": "spine_b"
+   },
+   {
+    "t": "play",
+    "uid": "preflight@2"
+   },
+   {
+    "t": "creep",
+    "to": "spine_c"
+   },
+   {
+    "t": "search"
+   },
+   {
+    "t": "play",
+    "uid": "nerve@2"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "play",
+    "uid": "trim@1",
+    "to": "bridge"
+   },
+   {
+    "t": "play",
+    "uid": "preflight@1"
+   },
+   {
+    "t": "discard",
+    "uid": "stick@1"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "listen"
+   },
+   {
+    "t": "discard",
+    "uid": "inf_tunnel@1001"
+   },
+   {
+    "t": "play",
+    "uid": "nerve@1"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "seal",
+    "edge": [
+     "bridge",
+     "comms"
+    ]
+   },
+   {
+    "t": "play",
+    "uid": "signal_check@1"
+   },
+   {
+    "t": "play",
+    "uid": "course_correct@1"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "listen"
+   },
+   {
+    "t": "play",
+    "uid": "course_correct@2"
+   },
+   {
+    "t": "play",
+    "uid": "harness@1"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "listen"
+   },
+   {
+    "t": "discard",
+    "uid": "stick@1"
+   },
+   {
+    "t": "play",
+    "uid": "harness@2"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "armScuttle"
+   },
+   {
+    "t": "ventEnter"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "burn",
+    "uid": "trim@2"
+   },
+   {
+    "t": "burn",
+    "uid": "trim@1"
+   },
+   {
+    "t": "ventExit",
+    "to": "medbay"
+   },
+   {
+    "t": "play",
+    "uid": "signal_check@2"
+   },
+   {
+    "t": "play",
+    "uid": "preflight@2"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "ventEnter"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "burn",
+    "uid": "preflight@1"
+   },
+   {
+    "t": "burn",
+    "uid": "mayday@1"
+   },
+   {
+    "t": "ventExit",
+    "to": "shuttle_bay"
+   },
+   {
+    "t": "listen"
+   },
+   {
+    "t": "search"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "burn",
+    "uid": "nerve@2"
+   },
+   {
+    "t": "ventEnter"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "ventExit",
+    "to": "medbay"
+   },
+   {
+    "t": "listen"
+   },
+   {
+    "t": "endTurn"
+   }
+  ],
+  "ending": "adrift",
+  "score": 53,
+  "hash": "0a7883f8e08e649a"
+ },
+ {
+  "seed": "golden-15",
+  "role": "engineer",
+  "depth": 1,
+  "objective": "know",
+  "bot": "random",
+  "actions": [
+   {
+    "t": "discard",
+    "uid": "slag_door@1"
+   },
+   {
+    "t": "discard",
+    "uid": "hardline@1"
+   },
+   {
+    "t": "discard",
+    "uid": "circuit_map@1"
+   },
+   {
+    "t": "play",
+    "uid": "scrap_charge@2",
+    "to": "shuttle_bay"
+   },
+   {
+    "t": "discard",
+    "uid": "cutting_torch@1"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "seal",
+    "edge": [
+     "cryobay",
+     "spine_a"
+    ]
+   },
+   {
+    "t": "brace"
+   },
+   {
+    "t": "discard",
+    "uid": "field_repair@1"
+   },
+   {
+    "t": "listen"
+   },
+   {
+    "t": "search"
+   },
+   {
+    "t": "play",
+    "uid": "steady_hands@1"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "play",
+    "uid": "scrap_charge@1",
+    "to": "armory"
+   },
+   {
+    "t": "play",
+    "uid": "load_shed@1"
+   },
+   {
+    "t": "discard",
+    "uid": "reroute@2"
+   },
+   {
+    "t": "listen"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "discard",
+    "uid": "reroute@1"
+   },
+   {
+    "t": "discard",
+    "uid": "bypass@2"
+   },
+   {
+    "t": "play",
+    "uid": "override@1",
+    "edge": [
+     "spine_a",
+     "medbay"
+    ]
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "play",
+    "uid": "brace@1"
+   },
+   {
+    "t": "discard",
+    "uid": "brace@2"
+   },
+   {
+    "t": "discard",
+    "uid": "steady_hands@1"
+   },
+   {
+    "t": "play",
+    "uid": "scrap_charge@2",
+    "to": "spine_b"
+   },
+   {
+    "t": "discard",
+    "uid": "field_repair@1"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "discard",
+    "uid": "bypass@2"
+   },
+   {
+    "t": "discard",
+    "uid": "bypass@1"
+   },
+   {
+    "t": "play",
+    "uid": "scrap_charge@1",
+    "to": "medbay"
+   },
+   {
+    "t": "listen"
+   },
+   {
+    "t": "discard",
+    "uid": "reroute@1"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "listen"
+   },
+   {
+    "t": "play",
+    "uid": "slag_door@1"
+   },
+   {
+    "t": "discard",
+    "uid": "salv_kit@12"
+   },
+   {
+    "t": "discard",
+    "uid": "hardline@1"
+   },
+   {
+    "t": "brace"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "discard",
+    "uid": "reroute@1"
+   },
+   {
+    "t": "discard",
+    "uid": "bypass@2"
+   },
+   {
+    "t": "play",
+    "uid": "circuit_map@1"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "discard",
+    "uid": "cutting_torch@1"
+   },
+   {
+    "t": "play",
+    "uid": "brace@1"
+   },
+   {
+    "t": "discard",
+    "uid": "reroute@2"
+   },
+   {
+    "t": "play",
+    "uid": "brace@2"
+   },
+   {
+    "t": "play",
+    "uid": "steady_hands@1"
+   },
+   {
+    "t": "listen"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "discard",
+    "uid": "hardline@1"
+   },
+   {
+    "t": "play",
+    "uid": "scrap_charge@2",
+    "to": "shuttle_bay"
+   },
+   {
+    "t": "play",
+    "uid": "scrap_charge@1",
+    "to": "medbay"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "play",
+    "uid": "bypass@1"
+   },
+   {
+    "t": "play",
+    "uid": "salv_kit@12"
+   },
+   {
+    "t": "discard",
+    "uid": "brace@2"
+   },
+   {
+    "t": "brace"
+   },
+   {
+    "t": "seal",
+    "edge": [
+     "cryobay",
+     "spine_a"
+    ]
+   },
+   {
+    "t": "play",
+    "uid": "steady_hands@1"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "play",
+    "uid": "scrap_charge@2",
+    "to": "spine_a"
+   },
+   {
+    "t": "play",
+    "uid": "scrap_charge@1",
+    "to": "armory"
+   },
+   {
+    "t": "discard",
+    "uid": "cutting_torch@1"
+   },
+   {
+    "t": "search"
+   },
+   {
+    "t": "brace"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "discard",
+    "uid": "bypass@2"
+   },
+   {
+    "t": "play",
+    "uid": "circuit_map@1"
+   },
+   {
+    "t": "brace"
+   },
+   {
+    "t": "discard",
+    "uid": "field_repair@1"
+   },
+   {
+    "t": "listen"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "play",
+    "uid": "brace@1"
+   },
+   {
+    "t": "play",
+    "uid": "reroute@1",
+    "to": "spine_a"
+   },
+   {
+    "t": "creep",
+    "to": "cryobay"
+   },
+   {
+    "t": "seal",
+    "edge": [
+     "cryobay",
+     "spine_a"
+    ]
+   },
+   {
+    "t": "discard",
+    "uid": "reroute@2"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "discard",
+    "uid": "hardline@1"
+   },
+   {
+    "t": "play",
+    "uid": "scrap_charge@1",
+    "to": "comms"
+   },
+   {
+    "t": "discard",
+    "uid": "bypass@2"
+   },
+   {
+    "t": "discard",
+    "uid": "circuit_map@1"
+   },
+   {
+    "t": "play",
+    "uid": "bypass@1"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "burn",
+    "uid": "cutting_torch@1"
+   },
+   {
+    "t": "burn",
+    "uid": "steady_hands@1"
+   },
+   {
+    "t": "burn",
+    "uid": "salv_kit@12"
+   },
+   {
+    "t": "brace"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "discard",
+    "uid": "inf_tremor@1003"
+   },
+   {
+    "t": "play",
+    "uid": "scrap_charge@2",
+    "to": "spine_b"
+   },
+   {
+    "t": "brace"
+   },
+   {
+    "t": "creep",
+    "to": "spine_a"
+   },
+   {
+    "t": "move",
+    "to": "cryobay"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "burn",
+    "uid": "brace@2"
+   },
+   {
+    "t": "burn",
+    "uid": "field_repair@1"
+   }
+  ],
+  "ending": "adrift",
+  "score": 42,
+  "hash": "98e047fd82be15ea"
+ },
+ {
+  "seed": "golden-16",
+  "role": "security",
+  "depth": 2,
+  "objective": "run",
+  "bot": "greedy",
+  "actions": [
+   {
+    "t": "search"
+   },
+   {
+    "t": "search"
+   },
+   {
+    "t": "discard",
+    "uid": "suppress@1"
+   },
+   {
+    "t": "discard",
+    "uid": "shotgun@1"
+   },
+   {
+    "t": "play",
+    "uid": "adrenaline@1"
+   },
+   {
+    "t": "discard",
+    "uid": "push@1"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "play",
+    "uid": "hold_line@1"
+   },
+   {
+    "t": "play",
+    "uid": "hold_line@2"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "listen"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "brace"
+   },
+   {
+    "t": "listen"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "seal",
+    "edge": [
+     "cryobay",
+     "spine_a"
+    ]
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "burn",
+    "uid": "door_charge@1"
+   },
+   {
+    "t": "burn",
+    "uid": "breach_charge@1"
+   },
+   {
+    "t": "brace"
+   },
+   {
+    "t": "play",
+    "uid": "flashbang@2",
+    "to": "ore_hold"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "brace"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "burn",
+    "uid": "last_stand@1"
+   },
+   {
+    "t": "brace"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "burn",
+    "uid": "sidearm@2"
+   },
+   {
+    "t": "brace"
+   },
+   {
+    "t": "discard",
+    "uid": "inf_tremor@1002"
+   },
+   {
+    "t": "play",
+    "uid": "sweep@1"
+   },
+   {
+    "t": "play",
+    "uid": "push@2",
+    "threat": "t4"
+   },
+   {
+    "t": "seal",
+    "edge": [
+     "cryobay",
+     "spine_a"
+    ]
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "burn",
+    "uid": "suppress@2"
+   },
+   {
+    "t": "brace"
+   },
+   {
+    "t": "play",
+    "uid": "flashbang@1",
+    "to": "ore_hold"
+   },
+   {
+    "t": "endTurn"
+   }
+  ],
+  "ending": "adrift",
+  "score": 45,
+  "hash": "c3d23b697601e6e1"
+ },
+ {
+  "seed": "golden-17",
+  "role": "medic",
+  "depth": 3,
+  "objective": "burn",
+  "bot": "heuristic",
+  "actions": [
+   {
+    "t": "play",
+    "uid": "steady@2"
+   },
+   {
+    "t": "play",
+    "uid": "steady@3"
+   },
+   {
+    "t": "play",
+    "uid": "steady@1"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "play",
+    "uid": "quiet_step@1",
+    "to": "spine_a"
+   },
+   {
+    "t": "search"
+   },
+   {
+    "t": "play",
+    "uid": "quiet_step@2",
+    "to": "spine_b"
+   },
+   {
+    "t": "search"
    },
    {
     "t": "endTurn"
@@ -4470,6 +4231,47 @@
     "to": "spine_c"
    },
    {
+    "t": "creep",
+    "to": "bridge"
+   },
+   {
+    "t": "search"
+   },
+   {
+    "t": "search"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "seal",
+    "edge": [
+     "bridge",
+     "comms"
+    ]
+   },
+   {
+    "t": "play",
+    "uid": "vitals@1"
+   },
+   {
+    "t": "play",
+    "uid": "vitals@2"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "seal",
+    "edge": [
+     "bridge",
+     "spine_c"
+    ]
+   },
+   {
+    "t": "listen"
+   },
+   {
     "t": "play",
     "uid": "field_dressing@1"
    },
@@ -4477,42 +4279,128 @@
     "t": "endTurn"
    },
    {
-    "t": "creep",
-    "to": "shuttle_bay"
+    "t": "listen"
    },
    {
-    "t": "chargeShuttle",
-    "n": 10
+    "t": "play",
+    "uid": "triage@1"
+   },
+   {
+    "t": "play",
+    "uid": "triage@2"
    },
    {
     "t": "endTurn"
+   },
+   {
+    "t": "play",
+    "uid": "morphine@1"
+   },
+   {
+    "t": "discard",
+    "uid": "scalpel@1"
+   },
+   {
+    "t": "listen"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "seal",
+    "edge": [
+     "bridge",
+     "comms"
+    ]
+   },
+   {
+    "t": "listen"
+   },
+   {
+    "t": "play",
+    "uid": "field_dressing@2"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "seal",
+    "edge": [
+     "bridge",
+     "spine_c"
+    ]
+   },
+   {
+    "t": "play",
+    "uid": "vitals@2"
+   },
+   {
+    "t": "discard",
+    "uid": "salv_sidearm@9"
+   },
+   {
+    "t": "play",
+    "uid": "steady@1"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "play",
+    "uid": "vitals@1"
+   },
+   {
+    "t": "play",
+    "uid": "antiseptic@1"
+   },
+   {
+    "t": "play",
+    "uid": "triage@2"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "armScuttle"
+   },
+   {
+    "t": "brace"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "ventEnter"
+   },
+   {
+    "t": "ventExit",
+    "to": "medbay"
+   },
+   {
+    "t": "listen"
    },
    {
     "t": "search"
    },
    {
-    "t": "chargeShuttle",
-    "n": 5
+    "t": "endTurn"
+   },
+   {
+    "t": "seal",
+    "edge": [
+     "medbay",
+     "spine_a"
+    ]
    },
    {
     "t": "listen"
    },
    {
-    "t": "endTurn"
+    "t": "search"
    },
    {
-    "t": "chargeShuttle",
-    "n": 2
-   },
-   {
-    "t": "listen"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "chargeShuttle",
-    "n": 2
+    "t": "play",
+    "uid": "blood_work@1"
    },
    {
     "t": "ventEnter"
@@ -4521,13 +4409,36 @@
     "t": "endTurn"
    },
    {
-    "t": "endTurn"
+    "t": "burn",
+    "uid": "quiet_step@2"
+   },
+   {
+    "t": "ventExit",
+    "to": "medbay"
+   },
+   {
+    "t": "play",
+    "uid": "triage@1"
+   },
+   {
+    "t": "listen"
+   },
+   {
+    "t": "play",
+    "uid": "steady@3"
    },
    {
     "t": "endTurn"
    },
    {
+    "t": "ventEnter"
+   },
+   {
     "t": "endTurn"
+   },
+   {
+    "t": "burn",
+    "uid": "steady@2"
    },
    {
     "t": "ventExit",
@@ -4538,73 +4449,61 @@
     "n": 8
    },
    {
-    "t": "listen"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "chargeShuttle",
-    "n": 2
+    "t": "play",
+    "uid": "sedative@1"
    },
    {
     "t": "listen"
    },
    {
     "t": "endTurn"
-   },
-   {
-    "t": "chargeShuttle",
-    "n": 2
-   },
-   {
-    "t": "listen"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "chargeShuttle",
-    "n": 2
-   },
-   {
-    "t": "listen"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "chargeShuttle",
-    "n": 1
-   },
-   {
-    "t": "launch"
    }
   ],
-  "ending": "clean_break",
-  "score": 188,
-  "hash": "8fe3ca99aa1204d6"
+  "ending": "adrift",
+  "score": 71,
+  "hash": "fcd6cd48b77d26ec"
  },
  {
-  "seed": "golden-27",
-  "role": "medic",
-  "depth": 3,
+  "seed": "golden-18",
+  "role": "surveyor",
+  "depth": 4,
+  "objective": "call",
   "bot": "random",
   "actions": [
    {
     "t": "play",
-    "uid": "stimulant@1"
-   },
-   {
-    "t": "creep",
-    "to": "spine_a"
+    "uid": "marker_flare@1",
+    "to": "spine_c"
    },
    {
     "t": "discard",
-    "uid": "steady@1"
+    "uid": "still@1"
+   },
+   {
+    "t": "play",
+    "uid": "duct_map@1"
+   },
+   {
+    "t": "play",
+    "uid": "hand_off@2"
+   },
+   {
+    "t": "search"
+   },
+   {
+    "t": "discard",
+    "uid": "cache@1"
    },
    {
     "t": "endTurn"
+   },
+   {
+    "t": "discard",
+    "uid": "marker_flare@2"
+   },
+   {
+    "t": "move",
+    "to": "spine_a"
    },
    {
     "t": "seal",
@@ -4614,6 +4513,369 @@
     ]
    },
    {
+    "t": "brace"
+   },
+   {
+    "t": "seal",
+    "edge": [
+     "spine_a",
+     "medbay"
+    ]
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "play",
+    "uid": "careful_step@2",
+    "to": "spine_b"
+   },
+   {
+    "t": "search"
+   },
+   {
+    "t": "play",
+    "uid": "rappel@1",
+    "to": "bridge"
+   },
+   {
+    "t": "play",
+    "uid": "duct_map@2"
+   },
+   {
+    "t": "listen"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "play",
+    "uid": "wedge@1",
+    "edge": [
+     "bridge",
+     "spine_c"
+    ]
+   },
+   {
+    "t": "listen"
+   },
+   {
+    "t": "creep",
+    "to": "comms"
+   },
+   {
+    "t": "move",
+    "to": "ore_hold"
+   },
+   {
+    "t": "listen"
+   },
+   {
+    "t": "play",
+    "uid": "hand_off@1"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "burn",
+    "uid": "cache@2"
+   },
+   {
+    "t": "burn",
+    "uid": "pry_bar@1"
+   },
+   {
+    "t": "burn",
+    "uid": "careful_step@3"
+   },
+   {
+    "t": "burn",
+    "uid": "sprint@1"
+   },
+   {
+    "t": "burn",
+    "uid": "careful_step@1"
+   },
+   {
+    "t": "move",
+    "to": "reactor"
+   },
+   {
+    "t": "move",
+    "to": "ore_hold"
+   },
+   {
+    "t": "takeSpecimen"
+   },
+   {
+    "t": "discard",
+    "uid": "inf_sweat@1005"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "move",
+    "to": "reactor"
+   },
+   {
+    "t": "discard",
+    "uid": "inf_fever@1006"
+   },
+   {
+    "t": "creep",
+    "to": "ore_hold"
+   },
+   {
+    "t": "creep",
+    "to": "comms"
+   },
+   {
+    "t": "seal",
+    "edge": [
+     "comms",
+     "bridge"
+    ]
+   },
+   {
+    "t": "endTurn"
+   }
+  ],
+  "ending": "killed",
+  "score": 11,
+  "hash": "1953993179e8c318"
+ },
+ {
+  "seed": "golden-19",
+  "role": "pilot",
+  "depth": 5,
+  "objective": "know",
+  "bot": "greedy",
+  "actions": [
+   {
+    "t": "search"
+   },
+   {
+    "t": "play",
+    "uid": "preflight@1"
+   },
+   {
+    "t": "play",
+    "uid": "course_correct@2"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "burn",
+    "uid": "signal_check@2"
+   },
+   {
+    "t": "play",
+    "uid": "stick@1",
+    "threat": "t3"
+   },
+   {
+    "t": "play",
+    "uid": "preflight@2"
+   },
+   {
+    "t": "play",
+    "uid": "trim@2",
+    "to": "spine_a"
+   },
+   {
+    "t": "listen"
+   },
+   {
+    "t": "search"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "listen"
+   },
+   {
+    "t": "play",
+    "uid": "boost@1"
+   },
+   {
+    "t": "play",
+    "uid": "trim@1",
+    "to": "spine_b"
+   },
+   {
+    "t": "play",
+    "uid": "nerve@2"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "seal",
+    "edge": [
+     "spine_b",
+     "reactor"
+    ]
+   },
+   {
+    "t": "search"
+   },
+   {
+    "t": "search"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "burn",
+    "uid": "mayday@1"
+   },
+   {
+    "t": "burn",
+    "uid": "harness@2"
+   },
+   {
+    "t": "burn",
+    "uid": "harness@1"
+   },
+   {
+    "t": "brace"
+   },
+   {
+    "t": "move",
+    "to": "spine_c"
+   },
+   {
+    "t": "seal",
+    "edge": [
+     "spine_c",
+     "spine_b"
+    ]
+   },
+   {
+    "t": "search"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "burn",
+    "uid": "nerve@1"
+   },
+   {
+    "t": "move",
+    "to": "shuttle_bay"
+   },
+   {
+    "t": "ventEnter"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "ventExit",
+    "to": "bridge"
+   },
+   {
+    "t": "listen"
+   },
+   {
+    "t": "brace"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "ventEnter"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "ventExit",
+    "to": "medbay"
+   },
+   {
+    "t": "cure"
+   },
+   {
+    "t": "search"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "ventEnter"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "ventExit",
+    "to": "ore_hold"
+   },
+   {
+    "t": "listen"
+   },
+   {
+    "t": "endTurn"
+   }
+  ],
+  "ending": "adrift",
+  "score": 59,
+  "hash": "178606aeb3e8e278"
+ },
+ {
+  "seed": "golden-20",
+  "role": "engineer",
+  "depth": 1,
+  "objective": "run",
+  "bot": "heuristic",
+  "actions": [
+   {
+    "t": "play",
+    "uid": "bypass@2"
+   },
+   {
+    "t": "play",
+    "uid": "circuit_map@1"
+   },
+   {
+    "t": "play",
+    "uid": "scrap_charge@1",
+    "to": "shuttle_bay"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "play",
+    "uid": "bypass@1"
+   },
+   {
+    "t": "play",
+    "uid": "reroute@2",
+    "to": "spine_a"
+   },
+   {
+    "t": "search"
+   },
+   {
+    "t": "search"
+   },
+   {
     "t": "creep",
     "to": "spine_b"
    },
@@ -4621,17 +4883,1686 @@
     "t": "endTurn"
    },
    {
-    "t": "seal",
+    "t": "play",
+    "uid": "steady_hands@1"
+   },
+   {
+    "t": "discard",
+    "uid": "cutting_torch@1"
+   },
+   {
+    "t": "play",
+    "uid": "brace@1"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "creep",
+    "to": "spine_c"
+   },
+   {
+    "t": "search"
+   },
+   {
+    "t": "creep",
+    "to": "shuttle_bay"
+   },
+   {
+    "t": "chargeShuttle",
+    "n": 13
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "search"
+   },
+   {
+    "t": "play",
+    "uid": "override@1",
     "edge": [
      "spine_b",
-     "spine_a"
+     "spine_c"
     ]
+   },
+   {
+    "t": "play",
+    "uid": "load_shed@1"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "play",
+    "uid": "hardline@1"
+   },
+   {
+    "t": "chargeShuttle",
+    "n": 5
+   },
+   {
+    "t": "listen"
+   },
+   {
+    "t": "play",
+    "uid": "brace@2"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "chargeShuttle",
+    "n": 2
+   },
+   {
+    "t": "play",
+    "uid": "salv_kit@12"
+   },
+   {
+    "t": "play",
+    "uid": "scrap_charge@2",
+    "to": "ore_hold"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "play",
+    "uid": "bypass@1"
+   },
+   {
+    "t": "chargeShuttle",
+    "n": 3
+   },
+   {
+    "t": "play",
+    "uid": "steady_hands@1"
+   },
+   {
+    "t": "discard",
+    "uid": "cutting_torch@1"
+   },
+   {
+    "t": "play",
+    "uid": "hardline@1"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "chargeShuttle",
+    "n": 4
+   },
+   {
+    "t": "play",
+    "uid": "circuit_map@1"
+   },
+   {
+    "t": "play",
+    "uid": "brace@2"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "play",
+    "uid": "bypass@2"
+   },
+   {
+    "t": "listen"
+   },
+   {
+    "t": "chargeShuttle",
+    "n": 1
+   },
+   {
+    "t": "launch"
+   }
+  ],
+  "ending": "escaped",
+  "score": 141,
+  "hash": "a6761e13bf0eaee2"
+ },
+ {
+  "seed": "golden-21",
+  "role": "security",
+  "depth": 2,
+  "objective": "burn",
+  "bot": "random",
+  "actions": [
+   {
+    "t": "listen"
+   },
+   {
+    "t": "search"
+   },
+   {
+    "t": "play",
+    "uid": "flashbang@2",
+    "to": "comms"
+   },
+   {
+    "t": "brace"
+   },
+   {
+    "t": "creep",
+    "to": "spine_a"
+   },
+   {
+    "t": "play",
+    "uid": "adrenaline@1"
+   },
+   {
+    "t": "creep",
+    "to": "medbay"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "play",
+    "uid": "door_charge@1",
+    "edge": [
+     "medbay",
+     "armory"
+    ]
+   },
+   {
+    "t": "discard",
+    "uid": "sidearm@2"
+   },
+   {
+    "t": "search"
+   },
+   {
+    "t": "discard",
+    "uid": "push@1"
+   },
+   {
+    "t": "discard",
+    "uid": "last_stand@1"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "burn",
+    "uid": "hold_line@1"
+   },
+   {
+    "t": "burn",
+    "uid": "push@2"
+   },
+   {
+    "t": "discard",
+    "uid": "hold_line@2"
+   },
+   {
+    "t": "play",
+    "uid": "suppress@1",
+    "threat": "t2"
+   },
+   {
+    "t": "play",
+    "uid": "flashbang@1",
+    "to": "armory"
+   },
+   {
+    "t": "play",
+    "uid": "suppress@2",
+    "threat": "t2"
+   },
+   {
+    "t": "ventEnter"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "burn",
+    "uid": "breach_charge@1"
+   },
+   {
+    "t": "discard",
+    "uid": "sidearm@1"
+   },
+   {
+    "t": "discard",
+    "uid": "sweep@1"
+   },
+   {
+    "t": "discard",
+    "uid": "inf_fever@1001"
+   },
+   {
+    "t": "discard",
+    "uid": "sidearm@1"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "burn",
+    "uid": "shotgun@1"
+   },
+   {
+    "t": "ventExit",
+    "to": "ore_hold"
+   },
+   {
+    "t": "play",
+    "uid": "flashbang@1",
+    "to": "bridge"
+   },
+   {
+    "t": "creep",
+    "to": "comms"
+   },
+   {
+    "t": "discard",
+    "uid": "push@1"
+   },
+   {
+    "t": "listen"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "burn",
+    "uid": "suppress@2"
+   },
+   {
+    "t": "burn",
+    "uid": "sidearm@2"
+   },
+   {
+    "t": "play",
+    "uid": "flashbang@2",
+    "to": "armory"
+   },
+   {
+    "t": "move",
+    "to": "bridge"
+   },
+   {
+    "t": "ventEnter"
+   },
+   {
+    "t": "discard",
+    "uid": "inf_sweat@1004"
+   },
+   {
+    "t": "ventExit",
+    "to": "medbay"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "burn",
+    "uid": "sweep@1"
+   },
+   {
+    "t": "burn",
+    "uid": "hold_line@2"
+   },
+   {
+    "t": "listen"
+   },
+   {
+    "t": "listen"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "burn",
+    "uid": "adrenaline@1"
+   },
+   {
+    "t": "burn",
+    "uid": "salv_kit@13"
+   },
+   {
+    "t": "brace"
+   },
+   {
+    "t": "move",
+    "to": "spine_a"
+   },
+   {
+    "t": "listen"
    },
    {
     "t": "listen"
    },
    {
     "t": "discard",
+    "uid": "inf_fever@1010"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "burn",
+    "uid": "last_stand@1"
+   },
+   {
+    "t": "move",
+    "to": "cryobay"
+   },
+   {
+    "t": "move",
+    "to": "spine_a"
+   },
+   {
+    "t": "discard",
+    "uid": "inf_fever@1002"
+   },
+   {
+    "t": "seal",
+    "edge": [
+     "spine_a",
+     "medbay"
+    ]
+   },
+   {
+    "t": "creep",
+    "to": "cryobay"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "discard",
+    "uid": "inf_sweat@1007"
+   },
+   {
+    "t": "discard",
+    "uid": "inf_tremor@1013"
+   },
+   {
+    "t": "discard",
+    "uid": "inf_tunnel@1005"
+   },
+   {
+    "t": "discard",
+    "uid": "inf_tremor@1003"
+   },
+   {
+    "t": "creep",
+    "to": "spine_a"
+   },
+   {
+    "t": "endTurn"
+   }
+  ],
+  "ending": "killed",
+  "score": 21,
+  "hash": "4b59b61201a8b343"
+ },
+ {
+  "seed": "golden-22",
+  "role": "medic",
+  "depth": 3,
+  "objective": "call",
+  "bot": "greedy",
+  "actions": [
+   {
+    "t": "search"
+   },
+   {
+    "t": "play",
+    "uid": "triage@1"
+   },
+   {
+    "t": "play",
+    "uid": "steady@2"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "play",
+    "uid": "quiet_step@2",
+    "to": "spine_a"
+   },
+   {
+    "t": "search"
+   },
+   {
+    "t": "search"
+   },
+   {
+    "t": "play",
+    "uid": "quiet_step@1",
+    "to": "spine_b"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "play",
+    "uid": "steady@3"
+   },
+   {
+    "t": "play",
+    "uid": "steady@1"
+   },
+   {
+    "t": "play",
+    "uid": "vitals@1"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "listen"
+   },
+   {
+    "t": "discard",
+    "uid": "scalpel@1"
+   },
+   {
+    "t": "play",
+    "uid": "field_dressing@2"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "listen"
+   },
+   {
+    "t": "play",
+    "uid": "field_dressing@1"
+   },
+   {
+    "t": "creep",
+    "to": "spine_c"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "listen"
+   },
+   {
+    "t": "play",
+    "uid": "antiseptic@1"
+   },
+   {
+    "t": "play",
+    "uid": "triage@2"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "play",
+    "uid": "vitals@2"
+   },
+   {
+    "t": "play",
+    "uid": "quiet_step@2",
+    "to": "shuttle_bay"
+   },
+   {
+    "t": "chargeShuttle",
+    "n": 13
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "listen"
+   },
+   {
+    "t": "search"
+   },
+   {
+    "t": "play",
+    "uid": "steady@3"
+   },
+   {
+    "t": "play",
+    "uid": "steady@2"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "listen"
+   },
+   {
+    "t": "chargeShuttle",
+    "n": 2
+   },
+   {
+    "t": "discard",
+    "uid": "scalpel@1"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "burn",
+    "uid": "blood_work@1"
+   },
+   {
+    "t": "burn",
+    "uid": "morphine@1"
+   },
+   {
+    "t": "ventEnter"
+   },
+   {
+    "t": "ventExit",
+    "to": "medbay"
+   },
+   {
+    "t": "play",
+    "uid": "sedative@1"
+   },
+   {
+    "t": "play",
+    "uid": "field_dressing@1"
+   },
+   {
+    "t": "search"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "seal",
+    "edge": [
+     "medbay",
+     "spine_a"
+    ]
+   },
+   {
+    "t": "play",
+    "uid": "steady@1"
+   },
+   {
+    "t": "play",
+    "uid": "vitals@1"
+   },
+   {
+    "t": "play",
+    "uid": "antiseptic@1"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "listen"
+   },
+   {
+    "t": "play",
+    "uid": "triage@2"
+   },
+   {
+    "t": "play",
+    "uid": "field_dressing@2"
+   },
+   {
+    "t": "play",
+    "uid": "triage@1"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "listen"
+   },
+   {
+    "t": "play",
+    "uid": "steady@3"
+   },
+   {
+    "t": "play",
+    "uid": "steady@1"
+   },
+   {
+    "t": "discard",
+    "uid": "scalpel@1"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "play",
+    "uid": "vitals@1"
+   },
+   {
+    "t": "play",
+    "uid": "quiet_step@1",
+    "to": "spine_a"
+   },
+   {
+    "t": "play",
+    "uid": "triage@2"
+   },
+   {
+    "t": "play",
+    "uid": "field_dressing@2"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "seal",
+    "edge": [
+     "spine_a",
+     "spine_b"
+    ]
+   },
+   {
+    "t": "listen"
+   },
+   {
+    "t": "play",
+    "uid": "steady@2"
+   },
+   {
+    "t": "play",
+    "uid": "quiet_step@2",
+    "to": "cryobay"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "play",
+    "uid": "vitals@2"
+   },
+   {
+    "t": "play",
+    "uid": "field_dressing@1"
+   },
+   {
+    "t": "play",
+    "uid": "triage@1"
+   },
+   {
+    "t": "play",
+    "uid": "salv_flare@11",
+    "to": "comms"
+   },
+   {
+    "t": "endTurn"
+   }
+  ],
+  "ending": "adrift",
+  "score": 92,
+  "hash": "92c41ad9827e346d"
+ },
+ {
+  "seed": "golden-23",
+  "role": "surveyor",
+  "depth": 4,
+  "objective": "know",
+  "bot": "heuristic",
+  "actions": [
+   {
+    "t": "play",
+    "uid": "cache@2"
+   },
+   {
+    "t": "play",
+    "uid": "careful_step@2",
+    "to": "spine_a"
+   },
+   {
+    "t": "search"
+   },
+   {
+    "t": "play",
+    "uid": "still@1"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "play",
+    "uid": "careful_step@3",
+    "to": "spine_b"
+   },
+   {
+    "t": "play",
+    "uid": "cache@1"
+   },
+   {
+    "t": "listen"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "play",
+    "uid": "rappel@1",
+    "to": "medbay"
+   },
+   {
+    "t": "search"
+   },
+   {
+    "t": "search"
+   },
+   {
+    "t": "play",
+    "uid": "duct_map@2"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "burn",
+    "uid": "marker_flare@1"
+   },
+   {
+    "t": "play",
+    "uid": "careful_step@1",
+    "to": "armory"
+   },
+   {
+    "t": "play",
+    "uid": "wedge@1",
+    "edge": [
+     "armory",
+     "medbay"
+    ]
+   },
+   {
+    "t": "search"
+   },
+   {
+    "t": "play",
+    "uid": "duct_map@1"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "burn",
+    "uid": "marker_flare@2"
+   },
+   {
+    "t": "brace"
+   },
+   {
+    "t": "play",
+    "uid": "hand_off@2"
+   },
+   {
+    "t": "play",
+    "uid": "hand_off@1"
+   },
+   {
+    "t": "play",
+    "uid": "cache@1"
+   },
+   {
+    "t": "play",
+    "uid": "pry_bar@1",
+    "threat": "t2"
+   },
+   {
+    "t": "play",
+    "uid": "sprint@1"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "play",
+    "uid": "salv_kit@12"
+   },
+   {
+    "t": "discard",
+    "uid": "cache@2"
+   },
+   {
+    "t": "listen"
+   },
+   {
+    "t": "play",
+    "uid": "salv_flare@11",
+    "to": "shuttle_bay"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "play",
+    "uid": "wedge@1",
+    "edge": [
+     "armory",
+     "ore_hold"
+    ]
+   },
+   {
+    "t": "play",
+    "uid": "duct_map@2"
+   },
+   {
+    "t": "play",
+    "uid": "still@1"
+   },
+   {
+    "t": "play",
+    "uid": "careful_step@1",
+    "to": "medbay"
+   },
+   {
+    "t": "play",
+    "uid": "salv_flare@10",
+    "to": "shuttle_bay"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "play",
+    "uid": "duct_map@1"
+   },
+   {
+    "t": "play",
+    "uid": "hand_off@1"
+   },
+   {
+    "t": "discard",
+    "uid": "pry_bar@1"
+   },
+   {
+    "t": "play",
+    "uid": "hand_off@2"
+   },
+   {
+    "t": "discard",
+    "uid": "cache@1"
+   },
+   {
+    "t": "play",
+    "uid": "salv_kit@12"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "play",
+    "uid": "still@1"
+   },
+   {
+    "t": "listen"
+   },
+   {
+    "t": "play",
+    "uid": "careful_step@2",
+    "to": "armory"
+   },
+   {
+    "t": "play",
+    "uid": "careful_step@3",
+    "to": "ore_hold"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "takeSpecimen"
+   },
+   {
+    "t": "creep",
+    "to": "comms"
+   },
+   {
+    "t": "play",
+    "uid": "wedge@1",
+    "edge": [
+     "comms",
+     "ore_hold"
+    ]
+   },
+   {
+    "t": "play",
+    "uid": "cache@2"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "upload"
+   }
+  ],
+  "ending": "specimen",
+  "score": 104,
+  "hash": "c3158309175c9906"
+ },
+ {
+  "seed": "golden-24",
+  "role": "pilot",
+  "depth": 5,
+  "objective": "run",
+  "bot": "random",
+  "actions": [
+   {
+    "t": "play",
+    "uid": "trim@2",
+    "to": "spine_a"
+   },
+   {
+    "t": "move",
+    "to": "medbay"
+   },
+   {
+    "t": "discard",
+    "uid": "boost@1"
+   },
+   {
+    "t": "ventEnter"
+   },
+   {
+    "t": "ventExit",
+    "to": "bridge"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "discard",
+    "uid": "stick@1"
+   },
+   {
+    "t": "search"
+   },
+   {
+    "t": "creep",
+    "to": "comms"
+   },
+   {
+    "t": "creep",
+    "to": "bridge"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "burn",
+    "uid": "preflight@2"
+   },
+   {
+    "t": "burn",
+    "uid": "signal_check@1"
+   },
+   {
+    "t": "discard",
+    "uid": "signal_check@2"
+   },
+   {
+    "t": "creep",
+    "to": "comms"
+   },
+   {
+    "t": "discard",
+    "uid": "nerve@1"
+   },
+   {
+    "t": "seal",
+    "edge": [
+     "comms",
+     "ore_hold"
+    ]
+   },
+   {
+    "t": "play",
+    "uid": "nerve@2"
+   },
+   {
+    "t": "search"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "burn",
+    "uid": "course_correct@2"
+   },
+   {
+    "t": "burn",
+    "uid": "preflight@1"
+   },
+   {
+    "t": "burn",
+    "uid": "deadstick@1"
+   },
+   {
+    "t": "burn",
+    "uid": "course_correct@1"
+   },
+   {
+    "t": "play",
+    "uid": "mayday@1",
+    "to": "medbay"
+   },
+   {
+    "t": "search"
+   },
+   {
+    "t": "creep",
+    "to": "bridge"
+   },
+   {
+    "t": "discard",
+    "uid": "inf_tunnel@1002"
+   },
+   {
+    "t": "creep",
+    "to": "comms"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "burn",
+    "uid": "harness@1"
+   },
+   {
+    "t": "discard",
+    "uid": "inf_sweat@1010"
+   },
+   {
+    "t": "discard",
+    "uid": "inf_fever@1004"
+   },
+   {
+    "t": "move",
+    "to": "bridge"
+   },
+   {
+    "t": "discard",
+    "uid": "inf_tunnel@1008"
+   },
+   {
+    "t": "discard",
+    "uid": "inf_blackout@1005"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "search"
+   },
+   {
+    "t": "seal",
+    "edge": [
+     "bridge",
+     "spine_c"
+    ]
+   },
+   {
+    "t": "discard",
+    "uid": "inf_fever@1001"
+   },
+   {
+    "t": "discard",
+    "uid": "inf_sweat@1011"
+   },
+   {
+    "t": "move",
+    "to": "comms"
+   },
+   {
+    "t": "discard",
+    "uid": "inf_tremor@1003"
+   },
+   {
+    "t": "endTurn"
+   }
+  ],
+  "ending": "killed",
+  "score": 16,
+  "hash": "7ce1f5e0d5322c53"
+ },
+ {
+  "seed": "golden-25",
+  "role": "engineer",
+  "depth": 1,
+  "objective": "burn",
+  "bot": "greedy",
+  "actions": [
+   {
+    "t": "play",
+    "uid": "bypass@1"
+   },
+   {
+    "t": "play",
+    "uid": "scrap_charge@1",
+    "to": "shuttle_bay"
+   },
+   {
+    "t": "search"
+   },
+   {
+    "t": "search"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "burn",
+    "uid": "reroute@1"
+   },
+   {
+    "t": "play",
+    "uid": "cutting_torch@1",
+    "threat": "t2"
+   },
+   {
+    "t": "discard",
+    "uid": "inf_tunnel@1001"
+   },
+   {
+    "t": "play",
+    "uid": "steady_hands@1"
+   },
+   {
+    "t": "creep",
+    "to": "spine_a"
+   },
+   {
+    "t": "search"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "search"
+   },
+   {
+    "t": "play",
+    "uid": "load_shed@1"
+   },
+   {
+    "t": "listen"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "discard",
+    "uid": "inf_fever@1002"
+   },
+   {
+    "t": "listen"
+   },
+   {
+    "t": "play",
+    "uid": "brace@1"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "listen"
+   },
+   {
+    "t": "play",
+    "uid": "brace@2"
+   },
+   {
+    "t": "play",
+    "uid": "reroute@2",
+    "to": "spine_b"
+   },
+   {
+    "t": "search"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "brace"
+   },
+   {
+    "t": "play",
+    "uid": "hardline@1"
+   },
+   {
+    "t": "creep",
+    "to": "spine_c"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "brace"
+   },
+   {
+    "t": "creep",
+    "to": "shuttle_bay"
+   },
+   {
+    "t": "chargeShuttle",
+    "n": 20
+   },
+   {
+    "t": "search"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "burn",
+    "uid": "slag_door@1"
+   },
+   {
+    "t": "burn",
+    "uid": "override@1"
+   },
+   {
+    "t": "ventEnter"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "burn",
+    "uid": "field_repair@1"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "burn",
+    "uid": "scrap_charge@2"
+   },
+   {
+    "t": "ventExit",
+    "to": "bridge"
+   },
+   {
+    "t": "play",
+    "uid": "circuit_map@1"
+   },
+   {
+    "t": "brace"
+   },
+   {
+    "t": "discard",
+    "uid": "inf_fever@1003"
+   },
+   {
+    "t": "play",
+    "uid": "bypass@2"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "ventEnter"
+   },
+   {
+    "t": "ventExit",
+    "to": "medbay"
+   },
+   {
+    "t": "cure"
+   },
+   {
+    "t": "play",
+    "uid": "circuit_map@1"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "cure"
+   },
+   {
+    "t": "ventEnter"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "burn",
+    "uid": "brace@2"
+   },
+   {
+    "t": "ventExit",
+    "to": "shuttle_bay"
+   },
+   {
+    "t": "chargeShuttle",
+    "n": 8
+   },
+   {
+    "t": "launch"
+   }
+  ],
+  "ending": "escaped",
+  "score": 121,
+  "hash": "ccd938d3235fd036"
+ },
+ {
+  "seed": "golden-26",
+  "role": "security",
+  "depth": 2,
+  "objective": "call",
+  "bot": "heuristic",
+  "actions": [
+   {
+    "t": "search"
+   },
+   {
+    "t": "discard",
+    "uid": "push@2"
+   },
+   {
+    "t": "discard",
+    "uid": "breach_charge@1"
+   },
+   {
+    "t": "play",
+    "uid": "adrenaline@1"
+   },
+   {
+    "t": "discard",
+    "uid": "push@1"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "play",
+    "uid": "hold_line@2"
+   },
+   {
+    "t": "play",
+    "uid": "sweep@1"
+   },
+   {
+    "t": "creep",
+    "to": "spine_a"
+   },
+   {
+    "t": "search"
+   },
+   {
+    "t": "search"
+   },
+   {
+    "t": "creep",
+    "to": "spine_b"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "creep",
+    "to": "spine_c"
+   },
+   {
+    "t": "creep",
+    "to": "bridge"
+   },
+   {
+    "t": "search"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "seal",
+    "edge": [
+     "bridge",
+     "comms"
+    ]
+   },
+   {
+    "t": "listen"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "seal",
+    "edge": [
+     "bridge",
+     "spine_c"
+    ]
+   },
+   {
+    "t": "listen"
+   },
+   {
+    "t": "play",
+    "uid": "flashbang@2",
+    "to": "cryobay"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "listen"
+   },
+   {
+    "t": "discard",
+    "uid": "sidearm@1"
+   },
+   {
+    "t": "discard",
+    "uid": "suppress@2"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "seal",
+    "edge": [
+     "bridge",
+     "comms"
+    ]
+   },
+   {
+    "t": "listen"
+   },
+   {
+    "t": "play",
+    "uid": "hold_line@1"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "burn",
+    "uid": "flashbang@1"
+   },
+   {
+    "t": "ventEnter"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "ventExit",
+    "to": "shuttle_bay"
+   },
+   {
+    "t": "chargeShuttle",
+    "n": 11
+   },
+   {
+    "t": "listen"
+   },
+   {
+    "t": "ventEnter"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "ventExit",
+    "to": "medbay"
+   },
+   {
+    "t": "search"
+   },
+   {
+    "t": "creep",
+    "to": "armory"
+   },
+   {
+    "t": "listen"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "brace"
+   },
+   {
+    "t": "listen"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "creep",
+    "to": "medbay"
+   },
+   {
+    "t": "ventEnter"
+   },
+   {
+    "t": "ventExit",
+    "to": "shuttle_bay"
+   },
+   {
+    "t": "listen"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "burn",
+    "uid": "sidearm@2"
+   },
+   {
+    "t": "burn",
+    "uid": "suppress@1"
+   },
+   {
+    "t": "burn",
+    "uid": "door_charge@1"
+   },
+   {
+    "t": "burn",
+    "uid": "shotgun@1"
+   },
+   {
+    "t": "ventEnter"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "endTurn"
+   }
+  ],
+  "ending": "adrift",
+  "score": 73,
+  "hash": "58205d658e0b7a4f"
+ },
+ {
+  "seed": "golden-27",
+  "role": "medic",
+  "depth": 3,
+  "objective": "know",
+  "bot": "random",
+  "actions": [
+   {
+    "t": "play",
+    "uid": "morphine@1"
+   },
+   {
+    "t": "creep",
+    "to": "spine_a"
+   },
+   {
+    "t": "discard",
+    "uid": "quiet_step@1"
+   },
+   {
+    "t": "move",
+    "to": "cryobay"
+   },
+   {
+    "t": "play",
+    "uid": "vitals@1"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "move",
+    "to": "spine_a"
+   },
+   {
+    "t": "seal",
+    "edge": [
+     "spine_a",
+     "spine_b"
+    ]
+   },
+   {
+    "t": "listen"
+   },
+   {
+    "t": "listen"
+   },
+   {
+    "t": "discard",
+    "uid": "steady@3"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "burn",
+    "uid": "field_dressing@2"
+   },
+   {
+    "t": "play",
+    "uid": "vitals@2"
+   },
+   {
+    "t": "play",
+    "uid": "triage@1"
+   },
+   {
+    "t": "seal",
+    "edge": [
+     "spine_a",
+     "cryobay"
+    ]
+   },
+   {
+    "t": "play",
     "uid": "steady@2"
    },
    {
@@ -4639,22 +6570,76 @@
    },
    {
     "t": "burn",
-    "uid": "careful_step@1"
+    "uid": "field_dressing@1"
    },
    {
     "t": "burn",
-    "uid": "diagnostic@1"
+    "uid": "triage@2"
    },
    {
     "t": "play",
+    "uid": "sedative@1"
+   },
+   {
+    "t": "discard",
+    "uid": "steady@1"
+   },
+   {
+    "t": "discard",
+    "uid": "blood_work@1"
+   },
+   {
+    "t": "discard",
+    "uid": "quiet_step@2"
+   },
+   {
+    "t": "move",
+    "to": "medbay"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "burn",
+    "uid": "vitals@2"
+   },
+   {
+    "t": "burn",
+    "uid": "steady@1"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "burn",
     "uid": "antiseptic@1"
    },
    {
-    "t": "seal",
-    "edge": [
-     "spine_b",
-     "spine_c"
-    ]
+    "t": "burn",
+    "uid": "steady@2"
+   },
+   {
+    "t": "burn",
+    "uid": "blood_work@1"
+   },
+   {
+    "t": "listen"
+   },
+   {
+    "t": "play",
+    "uid": "vitals@1"
+   },
+   {
+    "t": "move",
+    "to": "armory"
+   },
+   {
+    "t": "discard",
+    "uid": "quiet_step@1"
+   },
+   {
+    "t": "discard",
+    "uid": "scalpel@1"
    },
    {
     "t": "endTurn"
@@ -4664,16 +6649,434 @@
     "uid": "triage@1"
    },
    {
-    "t": "burn",
-    "uid": "quarantine@1"
-   },
-   {
-    "t": "burn",
-    "uid": "diagnostic@2"
+    "t": "seal",
+    "edge": [
+     "armory",
+     "medbay"
+    ]
    },
    {
     "t": "discard",
-    "uid": "panic_shaking@1003"
+    "uid": "inf_sweat@1008"
+   },
+   {
+    "t": "creep",
+    "to": "ore_hold"
+   },
+   {
+    "t": "listen"
+   },
+   {
+    "t": "endTurn"
+   }
+  ],
+  "ending": "killed",
+  "score": 14,
+  "hash": "050c6baf5e945c5e"
+ },
+ {
+  "seed": "golden-28",
+  "role": "surveyor",
+  "depth": 4,
+  "objective": "run",
+  "bot": "greedy",
+  "actions": [
+   {
+    "t": "play",
+    "uid": "duct_map@2"
+   },
+   {
+    "t": "search"
+   },
+   {
+    "t": "play",
+    "uid": "still@1"
+   },
+   {
+    "t": "play",
+    "uid": "careful_step@3",
+    "to": "spine_a"
+   },
+   {
+    "t": "search"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "play",
+    "uid": "cache@2"
+   },
+   {
+    "t": "listen"
+   },
+   {
+    "t": "play",
+    "uid": "hand_off@1"
+   },
+   {
+    "t": "discard",
+    "uid": "pry_bar@1"
+   },
+   {
+    "t": "play",
+    "uid": "duct_map@1"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "listen"
+   },
+   {
+    "t": "play",
+    "uid": "careful_step@1",
+    "to": "spine_b"
+   },
+   {
+    "t": "creep",
+    "to": "spine_c"
+   },
+   {
+    "t": "search"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "listen"
+   },
+   {
+    "t": "creep",
+    "to": "shuttle_bay"
+   },
+   {
+    "t": "chargeShuttle",
+    "n": 10
+   },
+   {
+    "t": "play",
+    "uid": "cache@1"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "listen"
+   },
+   {
+    "t": "chargeShuttle",
+    "n": 1
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "play",
+    "uid": "wedge@1",
+    "edge": [
+     "shuttle_bay",
+     "spine_c"
+    ]
+   },
+   {
+    "t": "chargeShuttle",
+    "n": 1
+   },
+   {
+    "t": "play",
+    "uid": "marker_flare@2",
+    "to": "ore_hold"
+   },
+   {
+    "t": "play",
+    "uid": "marker_flare@1",
+    "to": "ore_hold"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "burn",
+    "uid": "sprint@1"
+   },
+   {
+    "t": "play",
+    "uid": "rappel@1",
+    "to": "medbay"
+   },
+   {
+    "t": "listen"
+   },
+   {
+    "t": "play",
+    "uid": "hand_off@2"
+   },
+   {
+    "t": "play",
+    "uid": "salv_kit@13"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "listen"
+   },
+   {
+    "t": "play",
+    "uid": "marker_flare@1",
+    "to": "shuttle_bay"
+   },
+   {
+    "t": "play",
+    "uid": "marker_flare@2",
+    "to": "shuttle_bay"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "play",
+    "uid": "careful_step@2",
+    "to": "armory"
+   },
+   {
+    "t": "listen"
+   },
+   {
+    "t": "discard",
+    "uid": "inf_sweat@1001"
+   },
+   {
+    "t": "discard",
+    "uid": "pry_bar@1"
+   },
+   {
+    "t": "play",
+    "uid": "hand_off@1"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "play",
+    "uid": "still@1"
+   },
+   {
+    "t": "listen"
+   },
+   {
+    "t": "play",
+    "uid": "salv_flare@10",
+    "to": "shuttle_bay"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "brace"
+   },
+   {
+    "t": "play",
+    "uid": "wedge@1",
+    "edge": [
+     "armory",
+     "medbay"
+    ]
+   },
+   {
+    "t": "seal",
+    "edge": [
+     "armory",
+     "ore_hold"
+    ]
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "burn",
+    "uid": "careful_step@3"
+   },
+   {
+    "t": "burn",
+    "uid": "careful_step@1"
+   },
+   {
+    "t": "brace"
+   },
+   {
+    "t": "play",
+    "uid": "duct_map@2"
+   },
+   {
+    "t": "play",
+    "uid": "duct_map@1"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "brace"
+   },
+   {
+    "t": "move",
+    "to": "medbay"
+   },
+   {
+    "t": "ventEnter"
+   },
+   {
+    "t": "ventExit",
+    "to": "bridge"
+   },
+   {
+    "t": "play",
+    "uid": "cache@2"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "seal",
+    "edge": [
+     "bridge",
+     "spine_c"
+    ]
+   },
+   {
+    "t": "play",
+    "uid": "hand_off@1"
+   },
+   {
+    "t": "play",
+    "uid": "duct_map@2"
+   },
+   {
+    "t": "discard",
+    "uid": "inf_tremor@1004"
+   },
+   {
+    "t": "play",
+    "uid": "hand_off@2"
+   },
+   {
+    "t": "play",
+    "uid": "salv_kit@13"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "play",
+    "uid": "duct_map@1"
+   },
+   {
+    "t": "play",
+    "uid": "cache@1"
+   },
+   {
+    "t": "endTurn"
+   }
+  ],
+  "ending": "adrift",
+  "score": 88,
+  "hash": "c992fea7102fda9f"
+ },
+ {
+  "seed": "golden-29",
+  "role": "pilot",
+  "depth": 5,
+  "objective": "burn",
+  "bot": "heuristic",
+  "actions": [
+   {
+    "t": "play",
+    "uid": "trim@1",
+    "to": "spine_a"
+   },
+   {
+    "t": "listen"
+   },
+   {
+    "t": "discard",
+    "uid": "stick@1"
+   },
+   {
+    "t": "play",
+    "uid": "nerve@1"
+   },
+   {
+    "t": "play",
+    "uid": "harness@2"
+   },
+   {
+    "t": "play",
+    "uid": "nerve@2"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "creep",
+    "to": "spine_b"
+   },
+   {
+    "t": "play",
+    "uid": "signal_check@2"
+   },
+   {
+    "t": "play",
+    "uid": "course_correct@1"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "play",
+    "uid": "trim@2",
+    "to": "spine_c"
+   },
+   {
+    "t": "listen"
+   },
+   {
+    "t": "search"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "play",
+    "uid": "signal_check@1"
+   },
+   {
+    "t": "creep",
+    "to": "bridge"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "creep",
+    "to": "spine_c"
+   },
+   {
+    "t": "creep",
+    "to": "spine_b"
+   },
+   {
+    "t": "listen"
+   },
+   {
+    "t": "search"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "burn",
+    "uid": "preflight@2"
    },
    {
     "t": "seal",
@@ -4684,219 +7087,164 @@
    },
    {
     "t": "play",
-    "uid": "stimulant@1"
+    "uid": "deadstick@1"
+   },
+   {
+    "t": "play",
+    "uid": "harness@1"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "seal",
+    "edge": [
+     "spine_b",
+     "spine_c"
+    ]
+   },
+   {
+    "t": "brace"
+   },
+   {
+    "t": "listen"
+   },
+   {
+    "t": "play",
+    "uid": "boost@1"
+   },
+   {
+    "t": "play",
+    "uid": "preflight@1"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "listen"
+   },
+   {
+    "t": "brace"
    },
    {
     "t": "discard",
-    "uid": "triage@2"
+    "uid": "inf_sweat@1001"
    },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "burn",
-    "uid": "scalpel@1"
-   },
-   {
-    "t": "discard",
-    "uid": "panic_tunnel@1006"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "burn",
-    "uid": "sample@1"
-   },
-   {
-    "t": "endTurn"
-   }
-  ],
-  "ending": "lost",
-  "score": 2,
-  "hash": "3f021b25a585f408"
- },
- {
-  "seed": "golden-28",
-  "role": "surveyor",
-  "depth": 4,
-  "bot": "greedy",
-  "actions": [
    {
     "t": "play",
-    "uid": "sweep@1"
-   },
-   {
-    "t": "listen"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "listen"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "listen"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "listen"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "listen"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "listen"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "listen"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "listen"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "listen"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "listen"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "listen"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "listen"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "listen"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "listen"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "listen"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "listen"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "listen"
-   },
-   {
-    "t": "endTurn"
-   }
-  ],
-  "ending": "lost",
-  "score": 13,
-  "hash": "b3c96b51fc5a8234"
- },
- {
-  "seed": "golden-29",
-  "role": "pilot",
-  "depth": 5,
-  "bot": "heuristic",
-  "actions": [
-   {
-    "t": "creep",
-    "to": "spine_a"
-   },
-   {
-    "t": "listen"
+    "uid": "preflight@1"
    },
    {
     "t": "endTurn"
    },
    {
     "t": "play",
-    "uid": "checklist@1"
+    "uid": "trim@2",
+    "to": "reactor"
+   },
+   {
+    "t": "listen"
+   },
+   {
+    "t": "brace"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "brace"
    },
    {
     "t": "play",
-    "uid": "hand_off@1",
-    "to": "spine_b"
+    "uid": "signal_check@2"
+   },
+   {
+    "t": "seal",
+    "edge": [
+     "reactor",
+     "ore_hold"
+    ]
+   },
+   {
+    "t": "seal",
+    "edge": [
+     "reactor",
+     "spine_b"
+    ]
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "play",
+    "uid": "stick@1",
+    "threat": "t2"
+   },
+   {
+    "t": "search"
    },
    {
     "t": "search"
    },
    {
     "t": "play",
-    "uid": "hand_off@2",
-    "to": "spine_c"
+    "uid": "course_correct@2"
    },
    {
     "t": "endTurn"
    },
    {
-    "t": "burn",
+    "t": "listen"
+   },
+   {
+    "t": "play",
     "uid": "course_correct@1"
    },
    {
     "t": "play",
-    "uid": "hand_off@1",
-    "to": "shuttle_bay"
-   },
-   {
-    "t": "chargeShuttle",
-    "n": 8
-   },
-   {
-    "t": "ventEnter"
+    "uid": "harness@2"
    },
    {
     "t": "endTurn"
    },
    {
     "t": "burn",
-    "uid": "docking_clamp@1"
+    "uid": "trim@1"
+   },
+   {
+    "t": "seal",
+    "edge": [
+     "reactor",
+     "ore_hold"
+    ]
+   },
+   {
+    "t": "seal",
+    "edge": [
+     "reactor",
+     "spine_b"
+    ]
+   },
+   {
+    "t": "play",
+    "uid": "harness@1"
    },
    {
     "t": "endTurn"
    },
    {
-    "t": "burn",
+    "t": "brace"
+   },
+   {
+    "t": "discard",
+    "uid": "inf_fever@1002"
+   },
+   {
+    "t": "play",
+    "uid": "signal_check@1"
+   },
+   {
+    "t": "play",
     "uid": "nerve@2"
    },
    {
@@ -4904,93 +7252,11 @@
    },
    {
     "t": "burn",
-    "uid": "checklist@1"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "burn",
-    "uid": "flight_jacket@1"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "burn",
-    "uid": "course_correct@2"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "burn",
-    "uid": "sidearm@1"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "burn",
     "uid": "nerve@1"
-   },
-   {
-    "t": "ventExit",
-    "to": "shuttle_bay"
-   },
-   {
-    "t": "chargeShuttle",
-    "n": 10
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "burn",
-    "uid": "hand_off@2"
-   },
-   {
-    "t": "ventEnter"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "burn",
-    "uid": "bail@1"
-   },
-   {
-    "t": "ventExit",
-    "to": "shuttle_bay"
-   },
-   {
-    "t": "chargeShuttle",
-    "n": 4
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "burn",
-    "uid": "hand_off@1"
-   },
-   {
-    "t": "ventEnter"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "burn",
-    "uid": "punch_it@1"
-   },
-   {
-    "t": "ventExit",
-    "to": "shuttle_bay"
    }
   ],
-  "ending": "lost",
-  "score": 18,
-  "hash": "a2bb78af7c6c27be"
+  "ending": "adrift",
+  "score": 62,
+  "hash": "77c2d22442026c4a"
  }
 ]

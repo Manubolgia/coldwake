@@ -36,13 +36,21 @@ async function bootToMenu(page: Page): Promise<void> {
   await expect(page.getByTestId('menu')).toBeVisible();
 }
 
-async function startRun(page: Page, seed: string, depth = 1): Promise<void> {
+async function startRun(
+  page: Page,
+  seed: string,
+  depth = 1,
+  objective = 'run',
+): Promise<void> {
   await bootToMenu(page);
   await page.getByTestId('seed-input').fill(seed);
   await page.locator(`[data-depth="${depth}"]`).click();
+  await page.locator(`[data-objective="${objective}"]`).click();
   await page.getByTestId('start').click();
   await expect(page.getByTestId('commands')).toBeVisible();
 }
+
+const ENDINGS = ['escaped', 'carrier', 'overload', 'relay', 'specimen', 'killed', 'adrift'];
 
 /** Play the run out through the interface only. No engine calls. */
 async function playToEnding(page: Page, maxClicks = 900): Promise<string> {
@@ -59,7 +67,7 @@ async function playToEnding(page: Page, maxClicks = 900): Promise<string> {
     const count = await buttons.count();
     if (count === 0) throw new Error('no commands rendered while the run is active');
     // Prefer progress, fall back to ending the turn.
-    const priority = ['launch', 'chargeShuttle', 'burn', 'move', 'search', 'endTurn'];
+    const priority = ['launch', 'upload', 'chargeShuttle', 'burn', 'creep', 'search', 'endTurn'];
     let clicked = false;
     for (const want of priority) {
       const candidate = page.locator(`.commands .cmd[data-action="${want}"]`).first();
@@ -78,7 +86,7 @@ async function playToEnding(page: Page, maxClicks = 900): Promise<string> {
 test('5.1 a full run plays to an ending through the interface alone', async ({ page }) => {
   await startRun(page, 'e2e-clean', 1);
   const ending = await playToEnding(page);
-  expect(['clean_break', 'carrier', 'scuttle', 'beacon', 'lost']).toContain(ending);
+  expect(ENDINGS).toContain(ending);
   await expect(page.getByTestId('score')).toBeVisible();
 });
 
@@ -93,7 +101,7 @@ test('5.2 several seeds resolve into different endings', async ({ page }) => {
   }
   expect(endings.size).toBeGreaterThanOrEqual(1);
   for (const e of endings) {
-    expect(['clean_break', 'carrier', 'scuttle', 'beacon', 'lost']).toContain(e);
+    expect(ENDINGS).toContain(e);
   }
 });
 
@@ -131,7 +139,8 @@ test('5.6 and 5.7 touch targets and noise disclosure', async ({ page }) => {
     const b = buttons.nth(i);
     const box = await b.boundingBox();
     expect(box?.height ?? 0).toBeGreaterThanOrEqual(44);
-    await expect(b).toContainText('NOISE');
+    // Noise is disclosed as the distance it carries, not as a bare number.
+    await expect(b).toContainText(/SILENT|HEARD \d+ AWAY/);
   }
   const cards = page.locator('.hand .card');
   for (let i = 0; i < (await cards.count()); i++) {
@@ -207,7 +216,7 @@ test('the manual explains every symbol, on every page, in character', async ({ p
   await expect(page.getByTestId('manual')).toBeVisible();
 
   const pages = await page.locator('.tab').allInnerTexts();
-  expect(pages.length).toBeGreaterThanOrEqual(8);
+  expect(pages.length).toBeGreaterThanOrEqual(6);
 
   const seen: string[] = [];
   for (const name of pages) {
@@ -220,23 +229,16 @@ test('the manual explains every symbol, on every page, in character', async ({ p
     seen.push(text);
   }
 
-  // The screen page has to name every readout the player can be confused by.
-  const screen = seen[pages.indexOf('THE SCREEN')] ?? '';
-  for (const label of [
-    'HOUR',
-    'POWER',
-    'SHUTTLE',
-    'REACTOR',
-    'ABOARD',
-    'STILL OUT THERE',
-    'BLOOD',
-    'KIT',
-  ]) {
-    expect(screen).toContain(label);
+  // The first page has to name all four routes, because they are the game.
+  const four = seen[pages.indexOf('THE FOUR')] ?? '';
+  for (const label of ['RUN', 'BURN', 'CALL', 'KNOW', 'CARRIER', 'ADRIFT']) {
+    expect(four).toContain(label);
   }
-  // And it draws the map symbols rather than describing them in words.
-  await page.locator('.tab[data-page="THE SCREEN"]').click();
-  expect(await page.locator('[data-testid="manual-body"] svg.swatch').count()).toBeGreaterThan(3);
+  // And the creature page names all four of them, with their numbers.
+  const aboard = seen[pages.indexOf('ABOARD')] ?? '';
+  for (const label of ['STRAY', 'HUNTER', 'CRAWLER', 'MOTHER']) {
+    expect(aboard).toContain(label);
+  }
 
   // The chooser stays reachable from the bottom of the longest page: it is a
   // column flex item and collapsed to a row of empty bars the first time.
@@ -295,4 +297,53 @@ test('5.14 reduced motion renders the boot instantly', async ({ browser }) => {
   await page.goto('/coldwake/');
   await expect(page.getByTestId('menu')).toBeVisible({ timeout: 6000 });
   await context.close();
+});
+
+test('all four routes are on screen from the first hour, with the declared one marked', async ({
+  page,
+}) => {
+  await startRun(page, 'objectives', 1, 'call');
+  await settle(page);
+  const strip = page.getByTestId('objectives');
+  await expect(strip).toBeVisible();
+  const text = await strip.innerText();
+  for (const name of ['RUN', 'BURN', 'CALL', 'KNOW']) expect(text).toContain(name);
+  // The declared route is the one carrying the mark.
+  await expect(page.locator('[data-objective="call"].declared')).toHaveCount(1);
+});
+
+test('the screen says what is about to happen before the hour is committed', async ({ page }) => {
+  await startRun(page, 'forecast', 3);
+  // Play until something is close enough to be worth forecasting.
+  let seen = false;
+  for (let i = 0; i < 25; i++) {
+    await settle(page);
+    if ((await page.getByTestId('forecast').count()) > 0) {
+      seen = true;
+      break;
+    }
+    const end = page.locator('.commands .cmd[data-action="endTurn"]').first();
+    if ((await end.count()) === 0) break;
+    await end.click({ timeout: 5000 }).catch(() => {});
+  }
+  expect(seen, 'nothing was ever perceived over 25 hours at depth 3').toBe(true);
+  await expect(page.getByTestId('forecast')).toContainText('IF THE HOUR ENDS NOW');
+});
+
+test('every command says what it costs and what it does', async ({ page }) => {
+  await startRun(page, 'consequences', 1);
+  await settle(page);
+  const listen = page.locator('.commands .cmd[data-action="listen"]').first();
+  await expect(listen).toBeVisible();
+  const text = await listen.innerText();
+  // Noise is disclosed as the distance it carries, not as a bare number.
+  expect(text).toMatch(/SILENT|HEARD \d+ AWAY/);
+  expect(text).toMatch(/compartments/i);
+});
+
+test('the infection count is on screen from the first one', async ({ page }) => {
+  await startRun(page, 'infection', 1);
+  await settle(page);
+  const strip = await page.locator('.strip').innerText();
+  expect(strip).toMatch(/INFECTION\s*0/);
 });

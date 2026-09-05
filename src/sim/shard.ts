@@ -1,6 +1,6 @@
 /** One shard of a simulation batch. Prints a JSON accumulator on stdout. */
 import { accumulate, emptyAccumulator } from './metrics';
-import { runOne, type RunConfig } from './runner';
+import { objectiveFor, runOne, type RunConfig } from './runner';
 
 type ShardSpec = Omit<RunConfig, 'seed' | 'botSeed'> & {
   seedPrefix: string;
@@ -19,6 +19,7 @@ for (let i = spec.from; i < spec.to; i++) {
       depth: spec.depth,
       bot: spec.bot,
       botSeed: `bot${i}`,
+      objective: objectiveFor(i),
       entropy: spec.entropy,
     }),
   );

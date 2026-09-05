@@ -100,13 +100,14 @@ function AnHour(): React.ReactElement {
     <>
       <h2>What an hour is</h2>
       <p>
-        {RULES.apPerTurn} time, and one card free. Spend the time on anything below; play or set
-        aside one card for nothing, and pay the printed time for any card after it.
+        {RULES.apPerTurn} time, and one free thing out of your hand. Spend the time on anything
+        below; play or set aside one thing from your hand for nothing, and pay the printed time for
+        anything after it.
       </p>
       <p>
         Your hand stays with you between hours — nothing is discarded at the end of the hour. That
-        is why setting a card aside is free once an hour and draws you a replacement: it is how a
-        hand you cannot use becomes one you can.
+        is why setting something aside is free once an hour and draws you a replacement: it is how
+        a hand you cannot use becomes one you can.
       </p>
       <h2>Time</h2>
       {(
@@ -240,8 +241,8 @@ function Hurt(): React.ReactElement {
       <h2>A wound</h2>
       <p>
         Every wound costs two things at once. It takes a capability out of your kit — you choose
-        which, and it is gone for the rest of the run — and it puts a card of infection into your
-        own deck.
+        which, and it is gone for the rest of the run — and it puts one more infection into your
+        own kit.
       </p>
       <p>
         Infection cannot pay for a wound. It is what the wound leaves behind, not something a wound
@@ -250,8 +251,8 @@ function Hurt(): React.ReactElement {
       <h2>Infection</h2>
       <p>
         There is nothing face down about it. The count is on the top strip from the first one. Each
-        card costs you something while it is in your hand, none of them can be played, and they
-        come back round every time the deck reshuffles.
+        one costs you something while it is in your hand, none of them can be played, and they come
+        back round every time your kit reshuffles.
       </p>
       {inf.map((c) => (
         <Row key={c.id} term={c.name} wide>
@@ -264,12 +265,13 @@ function Hurt(): React.ReactElement {
       </Row>
       <h2>Cutting it out</h2>
       <p>
-        The MEDBAY removes one infection card from your deck for good, for {cost('cure')}. No wound,
-        no die roll, no catch. Cards do it too — TRIAGE, ANTISEPTIC, a stimulant, a found field kit.
+        The MEDBAY takes one infection out of your kit for good, for {cost('cure')}. No wound, no
+        roll, no catch. Some of what you carry does it too — TRIAGE, ANTISEPTIC, a stimulant
+        ampoule, a found field kit.
       </p>
       <p className="dim">
-        Setting an infection card aside costs nothing once an hour and buys the rest of the hour
-        without its penalty. It does not remove it. Only the medbay does that.
+        Setting an infection aside costs nothing once an hour and buys the rest of the hour without
+        its penalty. It does not remove it. Only the medbay does that.
       </p>
     </>
   );
@@ -285,7 +287,7 @@ function TheShip(): React.ReactElement {
         chews the output instead of you.
       </Row>
       <Row term="MEDBAY" wide>
-        {cost('cure')}. One infection card out of the deck for good.
+        {cost('cure')}. One infection out of your kit for good.
       </Row>
       <Row term="ARMORY" wide>
         {cost('recharge')}. Reloads a weapon you have emptied.
@@ -297,9 +299,9 @@ function TheShip(): React.ReactElement {
         every one of them.
       </Row>
       <Row term="COMMS" wide>
-        Broadcast for {cost('beacon')}, then hold it {relayHold(1)} hours at{' '}
-        {RULES.systemActions.beacon?.drain ?? 1} power an hour. An hour with something in the room,
-        or with the pool empty, is an hour the watch does not go up — it holds where it is rather
+        Broadcast for {cost('beacon')}, then sit at the set for {relayHold(1)} hours at{' '}
+        {RULES.systemActions.beacon?.drain ?? 1} power an hour. The watch only runs while you are in
+        the room and the pool can pay; an hour anywhere else is an hour it holds where it is rather
         than resetting. Upload the specimen for {cost('upload')}.
       </Row>
       <Row term="ORE HOLD" wide>
@@ -342,7 +344,7 @@ function Deeper(): React.ReactElement {
         </Row>
       ))}
       <h2>Roles</h2>
-      <p>Each has a different deck and a different answer to the same four routes.</p>
+      <p>Each carries different things and has a different answer to the same four routes.</p>
     </>
   );
 }
@@ -362,18 +364,22 @@ export function Manual({ onClose }: { onClose: () => void }): React.ReactElement
   const Body = RENDER[page];
   const i = PAGES.indexOf(page);
   return (
-    <div className="screen manual" data-testid="manual">
-      <div className="rule">{'─'.repeat(40)}</div>
-      <div className="title glow">COLDWAKE</div>
-      <div className="rule">{'─'.repeat(40)}</div>
-      <div className="row wrap">
+    <div className="modal manual" data-testid="manual">
+      <div className="tabs" data-testid="manual-tabs">
         {PAGES.map((p) => (
-          <button key={p} className={p === page ? 'inverse' : ''} onClick={() => setPage(p)}>
+          <button
+            key={p}
+            className={`tab${p === page ? ' on' : ''}`}
+            data-page={p}
+            onClick={() => setPage(p)}
+          >
             {p}
           </button>
         ))}
       </div>
-      <Body />
+      <div data-testid="manual-body" data-page={page}>
+        <Body />
+      </div>
       <div className="row">
         <button disabled={i === 0} onClick={() => setPage(PAGES[Math.max(0, i - 1)] as Page)}>
           ← BACK
@@ -384,7 +390,7 @@ export function Manual({ onClose }: { onClose: () => void }): React.ReactElement
         >
           NEXT →
         </button>
-        <button className="primary" onClick={onClose}>
+        <button className="primary" data-testid="manual-close" onClick={onClose}>
           CLOSE
         </button>
       </div>

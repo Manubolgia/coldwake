@@ -123,7 +123,7 @@
   "motherWake": [
     "Something in the ORE HOLD stands up. The hull note changes. It knows the ship better than you do, it will not stop, and nothing you are carrying can kill it.",
     "The hold answers all of it at once. What gets up in there is not another one of them — it is the one they came from. You cannot kill it. You can only cost it time.",
-    "A sound comes up through the deck that is not machinery. The MOTHER is awake, it has your bearing, and there is no weapon aboard that means anything to it."
+    "A sound comes up through the deck plates that is not machinery. The MOTHER is awake, it has your bearing, and there is no weapon aboard that means anything to it."
   ],
   "hiveHalf": [
     "The hold is louder than it was. Something big in there is most of the way to awake.",
@@ -131,6 +131,6 @@
   ],
   "hiveNear": [
     "The hold is nearly awake. Whatever is down there is going to stand up soon, and you will not be able to kill it.",
-    "The deck is carrying a low note out of the ORE HOLD now. You do not have long before it gets up."
+    "The plating is carrying a low note out of the ORE HOLD now. You do not have long before it gets up."
   ]
 }

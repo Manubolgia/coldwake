@@ -61,7 +61,7 @@ export function wound(state: GameState, count: number, source: string): void {
       turn: state.turn,
       kind: 'alarm',
       text:
-        `>> It is in the wound. ${cardOf(got).name} goes into your deck and will keep coming back ` +
+        `>> It is in the wound. ${cardOf(got).name} goes into your kit and will keep coming back ` +
         'to hand until the medbay cuts it out.',
     });
     if (state.player.hand.some((u) => !isInfection(u))) {

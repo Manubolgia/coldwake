@@ -1,230 +1,165 @@
 import { describe, expect, it } from 'vitest';
-import { CARDS, RULES, VENT_NODES, attackPenalty, reduce, targetKind } from '../src/engine';
-import type { Card, GameState, RoleId } from '../src/engine/types';
-import { at, fresh, handOnly, put, spawn, withHand } from './helpers';
+import {
+  CARDS,
+  RULES,
+  cardOps,
+  infectionCount,
+  legalActions,
+  reduce,
+  roleDeck,
+  targetKind,
+} from '../src/engine';
+import type { Action, Card, GameState, RoleId } from '../src/engine/types';
+import { at, clearBoard, fresh, put, spawn, withHand } from './helpers';
 
-/** Build a position in which the card under test is legal to play. */
-function stage(c: Card): GameState {
-  const role = c.role as RoleId;
-  let s = fresh(role);
+const ROLE_IDS: RoleId[] = ['engineer', 'security', 'medic', 'surveyor', 'pilot'];
+
+/** A state where this card can actually be played, whatever it needs pointed at. */
+function stage(card: Card): GameState {
+  let s = clearBoard(fresh(card.role as RoleId, 1, `card-${card.id}`));
   s = put(s, (x) => {
     x.ship.power = RULES.powerCap;
-    x.player.spent = [];
+    x.ship.reactorOutput = 1;
+    x.player.ap = RULES.apPerTurn;
   });
-  const requiredNode = c.requires?.node;
-  if (requiredNode !== undefined) s = at(s, requiredNode);
-  else if (c.requires?.ventAccess === true) s = at(s, 'medbay');
-  else s = at(s, 'spine_b');
-  if (c.requires?.threatHere === true || targetKind(c.effect) === 'threat') {
-    s = spawn(s, 'contact', s.player.node);
+  const r = card.requires;
+  if (r?.node !== undefined) s = at(s, r.node);
+  if (r?.threatHere === true) {
+    s = at(s, 'spine_a');
+    s = spawn(s, 'contact', 'spine_a', 'spine_a');
   }
-  if (targetKind(c.effect) === 'spent') {
+  if (r?.unsearched === true) s = at(s, 'spine_a');
+  if (cardOps(card).includes('recharge')) {
     s = put(s, (x) => {
-      const pool = [...x.player.hand, ...x.player.deck, ...x.player.discard];
-      const weapon = pool.find((u) =>
-        ['cutting_torch@', 'scalpel@', 'sidearm@', 'service_pistol@', 'cutting_bar@'].some((w) =>
-          u.startsWith(w),
-        ),
-      );
-      if (weapon) x.player.spent.push(weapon);
+      x.player.spent = [x.player.deck.find((u) => !u.startsWith('inf_')) ?? 'x@1'];
     });
   }
-  if (c.effect.op === 'removePanic' || (c.effect.op === 'sequence' && c.id === 'triage')) {
+  if (cardOps(card).includes('cure')) {
     s = put(s, (x) => {
-      x.player.panicsGained += 1;
-      x.player.deck.push('panic_shaking@1001');
+      x.player.infectionsGained += 1;
+      x.player.deck.push(`inf_fever@${1000 + x.player.infectionsGained}`);
     });
   }
-  return withHand(s, [c.id]);
+  return withHand(s, [card.id]);
 }
 
-function targetsFor(s: GameState, c: Card): Partial<{ to: string; edge: [string, string]; threat: string; target: string }> {
-  switch (targetKind(c.effect)) {
-    case 'node': {
-      const to = s.player.node === 'spine_b' ? 'spine_c' : 'spine_a';
-      return { to };
-    }
-    case 'other':
-      return { to: 'comms' };
-    case 'vent':
-      return { to: VENT_NODES.find((v) => v !== s.player.node) as string };
-    case 'edge':
-      return { edge: ['spine_b', 'reactor'] };
-    case 'edgeHere':
-      return { edge: [s.player.node as string, s.player.node === 'spine_b' ? 'reactor' : 'spine_b'] };
-    case 'threat':
-      return { threat: s.threats.find((t) => t.node === s.player.node)?.id as string };
-    case 'spent':
-      return { target: s.player.spent[0] as string };
-    default:
-      return {};
-  }
-}
-
-const roleCards = CARDS.filter((c) => !['panic', 'salvage'].includes(c.role));
-
-describe('every card is playable and does something (gate 1.11)', () => {
-  for (const c of roleCards) {
-    it(`${c.role}: ${c.name}`, () => {
-      const before = stage(c);
-      const after = reduce(before, { t: 'play', uid: before.player.hand[0] as string, ...targetsFor(before, c) });
-      const op = c.effect.op === 'sequence' ? c.effect.steps[0]?.op : c.effect.op;
-      if (op !== 'gainAp') expect(after.player.ap).toBe(before.player.ap - c.ap);
-      expect(after.player.hand).not.toContain(before.player.hand[0]);
-      if (c.burn) expect(after.player.burned.length).toBeGreaterThan(before.player.burned.length);
-
-      switch (op) {
-        case 'gainPower':
-          expect(after.ship.power).toBeGreaterThanOrEqual(before.ship.power);
-          break;
-        case 'gainAp':
-          expect(after.player.ap).toBeGreaterThan(before.player.ap - c.ap);
-          break;
-        case 'move':
-          expect(after.player.node).not.toBe(before.player.node);
-          break;
-        case 'draw':
-          expect(after.player.deck.length + after.player.hand.length).toBeGreaterThan(0);
-          break;
-        case 'attack':
-        case 'execute':
-          // Either the threat is dead or the weapon is spent. Never neither.
-          expect(
-            after.threats.length < before.threats.length ||
-              after.player.spent.length > before.player.spent.length,
-          ).toBe(true);
-          break;
-        case 'pushThreat':
-          expect(after.threats[0]?.node).not.toBe(before.player.node);
-          break;
-        case 'sealEdge':
-          expect(after.ship.sealedEdges.length).toBe(1);
-          break;
-        case 'setNoise':
-          expect(Object.values(after.ship.noise).every((n) => n <= 3)).toBe(true);
-          break;
-        case 'addNoise':
-          expect(Object.values(after.ship.noise).reduce((a, b) => a + b, 0)).toBeGreaterThan(
-            Object.values(before.ship.noise).reduce((a, b) => a + b, 0),
-          );
-          break;
-        case 'preventWound':
-          expect(after.player.wardsThisTurn).toBe(1);
-          break;
-        case 'reactorOutput':
-          expect(after.ship.reactorOutput).toBeGreaterThanOrEqual(before.ship.reactorOutput);
-          break;
-        case 'recharge':
-          expect(after.player.spent.length).toBe(before.player.spent.length - 1);
-          break;
-        case 'removePanic':
-          expect(after.player.panicsGained).toBe(before.player.panicsGained);
-          expect(
-            [...after.player.deck, ...after.player.hand, ...after.player.discard].filter((u) =>
-              u.startsWith('panic_'),
-            ).length,
-          ).toBeLessThan(
-            [...before.player.deck, ...before.player.hand, ...before.player.discard].filter((u) =>
-              u.startsWith('panic_'),
-            ).length,
-          );
-          break;
-        case 'revealCarry':
-          expect(after.player.carry.some((x) => x.revealed)).toBe(true);
-          break;
-        case 'discardCarry':
-          expect(after.player.carry.length).toBeLessThan(before.player.carry.length);
-          break;
-        case 'chargeShuttle':
-          expect(after.ship.shuttleCharge).toBeGreaterThan(before.ship.shuttleCharge);
-          break;
-        case 'ventEnter':
-          expect(after.player.node).toBe('vents');
-          break;
-        case 'ventJump':
-          expect(VENT_NODES).toContain(after.player.node);
-          break;
-        case 'search':
-          expect(after.ship.searched.length).toBeGreaterThan(before.ship.searched.length);
-          break;
-        case 'listen':
-          expect(after.bagKnownTurn).toBe(after.turn);
-          break;
-        default:
-          break;
+describe('every card in every deck', () => {
+  it('is playable, and does something the state can see', () => {
+    for (const card of CARDS) {
+      if (card.role === 'infection') continue;
+      if (card.role === 'salvage' && card.copies === 0 && !ROLE_IDS.includes(card.role as RoleId)) {
+        // Salvage is exercised through search, below.
+        continue;
       }
-    });
-  }
+      const s = stage(card);
+      const options = legalActions(s).filter(
+        (a) => a.t === 'play' && a.uid.startsWith(`${card.id}@`),
+      );
+      expect(options.length, `${card.id} is never playable`).toBeGreaterThan(0);
+      const before = JSON.stringify({ ...s, feed: [], log: [] });
+      const after = reduce(s, options[0] as Action);
+      expect(JSON.stringify({ ...after, feed: [], log: [] }), `${card.id} changes nothing`).not.toBe(
+        before,
+      );
+      expect(after.feed.length, `${card.id} says nothing`).toBeGreaterThan(s.feed.length);
+    }
+  });
+
+  it('asks for a target only when the effect needs one', () => {
+    for (const card of CARDS) {
+      const kind = targetKind(card.effect);
+      const ops = cardOps(card);
+      const needsTarget =
+        ops.includes('move') ||
+        ops.includes('sealEdge') ||
+        ops.includes('attack') ||
+        ops.includes('execute') ||
+        ops.includes('pushThreat') ||
+        ops.includes('lure') ||
+        ops.includes('ventJump') ||
+        ops.includes('recharge');
+      expect(kind !== null, card.id).toBe(needsTarget);
+    }
+  });
+
+  it('never lets a role deck contain another role\'s card', () => {
+    for (const role of ROLE_IDS) {
+      for (const id of roleDeck(role)) {
+        expect(CARDS.find((c) => c.id === id)?.role, `${role}/${id}`).toBe(role);
+      }
+    }
+  });
 });
 
-describe('panic cards (§5.3)', () => {
-  it('cannot be played, only discarded for 1 AP', () => {
-    const s = put(fresh(), (x) => {
-      x.player.panicsGained += 1;
-      x.player.hand.push('panic_tunnel@1001');
+describe('what the cards are for', () => {
+  it('cures infection out of the kit for good', () => {
+    const s = put(withHand(clearBoard(fresh('medic')), ['triage']), (x) => {
+      x.player.infectionsGained += 1;
+      x.player.deck.push(`inf_fever@1001`);
     });
-    const uid = 'panic_tunnel@1001';
-    expect(() => reduce(s, { t: 'play', uid })).toThrow();
-    const discarded = reduce(s, { t: 'discard', uid });
-    expect(discarded.player.ap).toBe(s.player.ap - 1);
+    expect(infectionCount(s)).toBe(1);
+    const after = reduce(s, { t: 'play', uid: s.player.hand[0] as string });
+    expect(infectionCount(after)).toBe(0);
+    expect(after.stats.cures).toBe(1);
   });
 
-  it('makes listening cost more while TUNNEL VISION is held', () => {
-    const s = put(fresh(), (x) => {
-      x.player.panicsGained += 1;
-      x.player.hand.push('panic_tunnel@1001');
-      x.player.ap = 1;
-    });
-    expect(s.player.hand).toContain('panic_tunnel@1001');
-    expect(() => reduce(s, { t: 'listen' })).toThrow();
+  it('moves silently when it says it moves silently', () => {
+    const s = withHand(clearBoard(fresh('surveyor')), ['careful_step']);
+    const after = reduce(s, { t: 'play', uid: s.player.hand[0] as string, to: 'spine_a' });
+    expect(after.player.node).toBe('spine_a');
+    expect(after.ship.noise.spine_a).toBe(0);
   });
 
-  it('makes every action louder while COLD SWEAT is held', () => {
-    const s = put(fresh(), (x) => {
-      x.player.panicsGained += 1;
-      x.player.hand.push('panic_sweat@1001');
+  it('drops a bulkhead that everything but a CRAWLER has to walk around', () => {
+    const s = withHand(at(clearBoard(fresh('surveyor')), 'spine_a'), ['wedge']);
+    const after = reduce(s, {
+      t: 'play',
+      uid: s.player.hand[0] as string,
+      edge: ['spine_a', 'spine_b'],
     });
-    const moved = reduce(s, { t: 'move', to: 'spine_a' });
-    expect(moved.ship.noise.cryobay).toBe((RULES.basicActions.move?.noise ?? 2) + 1);
+    expect(after.ship.sealedEdges.length).toBe(1);
   });
 
-  it('costs a swing while SHAKING is held, and stacks with the ambush', () => {
-    const clean = fresh('security');
-    expect(attackPenalty(clean)).toBe(0);
-
-    const shaking = put(clean, (x) => {
-      x.player.panicsGained += 1;
-      x.player.hand.push('panic_shaking@1001');
+  it('empties a weapon on a miss and the armory fills it again', () => {
+    const s = put(spawn(at(clearBoard(fresh('security')), 'spine_a'), 'drifter', 'spine_a'), (x) => {
+      // A guaranteed miss: a d6 cannot beat 3 hp at −6.
+      x.player.combatPenalty = -6;
     });
-    expect(attackPenalty(shaking)).toBe(RULES.shakingPenalty);
-
-    const ambushed = put(shaking, (x) => {
-      x.player.combatPenalty = RULES.ventAmbushPenalty;
+    const armed = withHand(s, ['sidearm']);
+    const uid = armed.player.hand[0] as string;
+    const missed = reduce(armed, { t: 'play', uid, threat: armed.threats[0]!.id });
+    expect(missed.player.spent).toContain(uid);
+    const armory = put(at(missed, 'armory'), (x) => {
+      x.ship.power = RULES.powerCap;
+      x.player.ap = RULES.apPerTurn;
     });
-    expect(attackPenalty(ambushed)).toBe(RULES.shakingPenalty + RULES.ventAmbushPenalty);
+    expect(reduce(armory, { t: 'recharge', target: uid }).player.spent).not.toContain(uid);
+  });
+});
+
+describe('salvage', () => {
+  it('puts found gear in the kit rather than firing it where you stand', () => {
+    const s = put(at(clearBoard(fresh()), 'spine_a'), (x) => {
+      x.ship.salvage.spine_a = ['salv_sidearm#4'];
+    });
+    const after = reduce(s, { t: 'search' });
+    expect(after.player.discard.some((u) => u.startsWith('salv_sidearm@'))).toBe(true);
   });
 
-  it('turns swings that would have landed into misses', () => {
-    // The same swing at the same target, rolled over every die face, with and
-    // without SHAKING in hand. The penalty is real only if it costs kills.
-    const stage = (held: string[]): GameState =>
-      handOnly(spawn(at(fresh('security'), 'spine_b'), 'drifter', 'spine_b'), [
-        'service_pistol',
-        ...held,
-      ]);
-    const kills = (held: string[]): number => {
-      let n = 0;
-      for (let seed = 0; seed < 64; seed++) {
-        const s = put(stage(held), (x) => {
-          x.player.spent = [];
-          x.rng = (seed * 2654435761 + 1) >>> 0;
-        });
-        const uid = s.player.hand[0] as string;
-        const threat = s.threats[0]?.id as string;
-        if (reduce(s, { t: 'play', uid, threat }).threats.length === 0) n += 1;
-      }
-      return n;
-    };
-    expect(kills([])).toBeGreaterThan(kills(['panic_shaking']));
+  it('resolves the rest of it where it is found', () => {
+    const s = put(at(clearBoard(fresh()), 'spine_a'), (x) => {
+      x.ship.salvage.spine_a = ['salv_cell#0'];
+      x.ship.power = 0;
+    });
+    expect(reduce(s, { t: 'search' }).ship.power).toBe(3);
+  });
+
+  it('makes the corpse cost you what its text says it costs', () => {
+    const s = put(at(clearBoard(fresh()), 'spine_a'), (x) => {
+      x.ship.salvage.spine_a = ['salv_corpse#6'];
+    });
+    const after = reduce(s, { t: 'search' });
+    expect(after.ship.power).toBe(4);
+    expect(infectionCount(after)).toBe(1);
   });
 });

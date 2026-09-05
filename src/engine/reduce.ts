@@ -230,8 +230,9 @@ function applyEffect(state: GameState, effect: EffectSpec, ctx: Ctx): void {
         state,
         'player',
         pulled > 0
-          ? `>> It goes off in ${where(ctx.to)}. ${pulled} ${pulled === 1 ? 'thing turns' : 'things turn'} and ` +
-            'starts walking the wrong way. That is the best news you get today.'
+          ? `>> It goes off in ${where(ctx.to)}. ${pulled} of them ` +
+            `${pulled === 1 ? 'wheels' : 'wheel'} round and ${pulled === 1 ? 'walks' : 'walk'} the wrong way. ` +
+            'That is the best news you get today.'
           : `>> It goes off in ${where(ctx.to)}. Nothing close enough to hear it.`,
       );
       return;
@@ -278,13 +279,13 @@ function applyEffect(state: GameState, effect: EffectSpec, ctx: Ctx): void {
         const gone = removeInfection(state);
         if (gone === undefined) break;
         state.stats.cures += 1;
-        say(state, 'sys', `>> ${cardOf(gone).name} is out of you and out of the deck. It does not come back.`);
+        say(state, 'sys', `>> ${cardOf(gone).name} is out of you and out of the kit. It does not come back.`);
       }
       return;
     case 'infect':
       for (let i = 0; i < effect.n; i++) {
         const got = addInfection(state);
-        say(state, 'alarm', `>> Something got on you. ${cardOf(got).name} goes into the deck.`);
+        say(state, 'alarm', `>> Something got on you. ${cardOf(got).name} goes into the kit.`);
       }
       return;
     case 'reveal': {
@@ -338,21 +339,26 @@ function doSearch(state: GameState): void {
   resolveSalvage(state, entry);
 }
 
-/** The relay is a siege: it costs power every hour and it breaks if anything gets in. */
+/**
+ * The relay is a siege, and the siege is simple: you have to be at the
+ * transmitter, and the transmitter has to be fed. Nothing else breaks it.
+ *
+ * It used to break if anything walked into comms, which reads as a rule until
+ * you notice comms shares a bulkhead with the nest: measured at 797 blocked
+ * hours to intruders against 26 to an empty pool. Something walking in on you
+ * already costs a capability. It does not also need to cost the watch.
+ */
 function relayUpkeep(state: GameState): void {
   if (!state.ship.beaconSent) return;
   const def = RULES.systemActions.beacon;
   const drain = def?.drain ?? 1;
-  // A blocked hour is an hour lost, not the whole watch: the count holds where
-  // it is. Throwing away five hours to one bad draw is a punishment, not a rule.
-  const intruder = state.threats.some((t) => t.node === 'comms');
-  if (intruder) {
+  if (state.player.node !== 'comms') {
     state.feed.push({
       turn: state.turn,
-      kind: 'alarm',
+      kind: 'sys',
       text:
-        `>> Something is in COMMS and the carrier drops out. The watch holds at ${state.ship.relayHeld} of ` +
-        `${relayHold(state.depth)} and does not go up this hour. Get it out of that room.`,
+        `>> The transmitter wants somebody at it. The watch holds at ${state.ship.relayHeld} of ` +
+        `${relayHold(state.depth)} until you are back in COMMS.`,
     });
     return;
   }
@@ -584,7 +590,7 @@ function systemAction(state: GameState, action: Action): void {
       say(
         state,
         'alarm',
-        '>> You cut it out of the mass and bag it. It is warm and it will not stop moving. ' +
+        '>> You cut it out of the mass and seal it into a sample case. It is warm and it will not stop moving. ' +
           `Every hour you carry it, the compartment you are standing in gets ${RULES.specimenNoisePerHour} louder. ` +
           'Get it to COMMS.',
       );
@@ -682,7 +688,7 @@ function apply(state: GameState, action: Action): void {
         state,
         'player',
         isInfection(action.uid)
-          ? `>> You put ${cardOf(action.uid).name} out of your mind for now. It is still in the deck.`
+          ? `>> You put ${cardOf(action.uid).name} out of your mind for now. It is still in your kit.`
           : `>> ${cardOf(action.uid).name}, set aside for now.`,
       );
       return;
