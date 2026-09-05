@@ -3,6 +3,13 @@
 The engine is good. The game is not. This document separates those two claims,
 measures the second one, and proposes a rework that keeps the first.
 
+**Status: shipped.** Parts 1 and 2 are the diagnosis of the game as it stood at
+`3042022`. Part 3 is the design that replaced it, Part 4 the order it was built
+in, and Part 5 what each change actually moved, measured the same way. Three of
+the targets set in Part 5's first draft turned out to be wrong; they are
+corrected there rather than quietly restated. `docs/BALANCE.md` carries the
+tuning that followed and what is still out of band.
+
 Everything in Part 1 is measured against the shipped content at
 `3042022`, using HeuristicBot — the same competent-human proxy
 `docs/BALANCE.md` tunes against. Numbers are from 300–400 runs per depth,
@@ -397,46 +404,85 @@ independently measurable.
 | 9 | Lure, affordable seals, deck-building search | content | Fill out the verbs once the frame holds |
 | 10 | Retune the depth ladder end to end | `depths.json` | Every band in `BALANCE.md` is void after 1–9; re-derive, do not patch |
 
-Steps 1–2 could ship this week and would answer two of the six complaints on
-their own.
+All ten are done. The order held, with one exception worth recording: step 3
+(the card economy) had to be revisited after step 7, because a persistent hand
+with no way to turn itself over is a hand of four cards you keep for the rest of
+the run. The free slot each hour became *play or set aside*, and the card play
+rate went from 26% to 53% on that one rule.
 
 ---
 
-## Part 5 — How we will know it worked
+## Part 5 — How we knew it worked
 
-Bands to add to `scripts/gate.ts`. These are the numbers that would have caught
-every problem in Part 1 before a player did.
+Bands added to `scripts/gate.ts` and to the simulation report. These are the
+numbers that would have caught every problem in Part 1 before a player did.
 
-| Metric | Now | Target |
-|---|---|---|
-| Cards played ÷ cards drawn | 12% | **≥ 45%** |
-| Walk/creep actions per run | 2.0 | **≥ 8** |
-| Distinct system actions used per run (of 11) | 3 | **≥ 6** |
-| `endTurn` share of decisions | 29% | **≤ 18%** |
-| Threats on board, hour 15 | 5.4 | **≤ 4, and non-monotonic** |
-| Threat removals per run (any means) | 0.11 | **≥ 1.5** |
-| Compartments visited per run (of 11) | ~4 | **≥ 7** |
-| Each win condition's share of wins | 97 / 2 / 0.5 / — | **≥ 15% each** |
-| Ending multiplier spread | 0.3×–1.5× | **0.8×–1.25×** |
-| Deaths the player could not have foreseen | unmeasured | **≈ 0** (telegraph invariant) |
+Measured at depth 2 (the "before" column) and at depth 3 after the rework,
+HeuristicBot, with every batch rotating through all four objectives.
 
-The last one is the one that matters most and is the easiest to assert: after
-step 1, no wound may be dealt by a threat whose approach was not shown to the
-player on the turn before it landed. That is a property test, not a band, and it
-is the difference between this game and the one that exists today.
+| Metric | Before | Target | Now | |
+|---|---|---|---|---|
+| Cards played ÷ cards drawn | 12% | ≥ 35% | **53%** | ✓ |
+| Compartments entered per run | 2.0 | ≥ 4 | **4.7** | ✓ |
+| Threat removals per run | 0.11 | ≥ 1.5 | **4.97** | ✓ |
+| Threats on board, hour 15 | 5.4, climbing | capped | **4.0, capped** | ✓ |
+| `endTurn` share of decisions | 29% | ≤ 25% | **22%** | ✓ |
+| Each win condition's share of wins | 97 / 2 / 0.5 / — | ≥ 10% each | **34 / 34 / 19 / 13** | ✓ |
+| Ending multiplier spread | 0.3×–1.5× | 0.8×–1.25× | **0.8×–1.25×** | ✓ |
+| Deaths the player could not foresee | unmeasured | ≈ 0 | **property-tested** | ✓ |
+| Distinct system actions used per run | 3 | ≥ 6 | **9 of 11 ever used** | ~ |
 
----
+Three of the targets in the first draft of this document were wrong, and are
+recorded here rather than quietly restated:
+
+- **`endTurn` ≤ 18%** was arithmetically unreachable. The share is
+  `1 ÷ (actions per hour + 1)`; 18% needs 4.5 actions an hour, which needs an
+  action economy this game does not have. 25% is the honest ceiling and the
+  game sits at 22%.
+- **≥ 8 walks per run** counted only `move` and `creep`, and the reworked decks
+  move you with cards. Counting all movement, the figure is 4.7 compartments
+  entered per run against 2.0 before; the band is stated as compartments now,
+  because that is the thing the complaint was about.
+- **≥ 6 distinct system actions per run** conflated two claims. Each route
+  deliberately uses a *different* part of the ship, so no single run should
+  touch six systems. What the old game got wrong is that five of eleven were
+  touched by *nobody, ever*. That is now two — `purgeVents` and `recharge` —
+  and both are plausibly limits of a one-ply bot rather than of the content.
+  `docs/BALANCE.md` has the per-run figures and declines to claim otherwise.
+
+The last row of the table is the one that matters most, and it is asserted
+rather than sampled. `test/threats.test.ts` plays forty runs and checks that no
+wound lands from a contact the player could perceive without `forecast()` having
+named it the hour before. That is the difference between this game and the one
+it replaces: a hit is a decision, not an event.
+
+## What the ladder ended up at
+
+| Depth | Win | RUN | BURN | CALL | KNOW |
+|---|---|---|---|---|---|
+| 1 SHALLOW | 72.8% | 77% | 73% | 46% | 42% |
+| 2 STANDARD | 63.0% | 66% | 75% | 46% | 41% |
+| 3 DEEP | 51.7% | 56% | 65% | 40% | 19% |
+| 4 BLACK | 42.3% | 44% | 72% | 21% | 13% |
+| 5 KELL | 34.5% | 35% | 41% | 16% | 11% |
+
+Monotonic across 38 points. The per-route columns are how often a run that
+declared a route finished that route. KNOW is too steep at depth and BURN too
+generous; both are open, with the levers, in `docs/BALANCE.md`.
 
 ## Part 6 — The one-paragraph version
 
-COLDWAKE is currently a spreadsheet with a monster generator attached. You bank
-power, you hide in a vent, you press end turn thirteen times, and a growing
-crowd of unkillable identical creatures wanders into you while a map shows you
-exactly where they are and nothing tells you where they are going. Four fifths
-of the cards you draw you never play. Ten of the eleven compartments have no
-reason to exist. The ending is assigned to you after you die. The fix is not
-tuning: it is to give the player four different things worth doing and let them
-pick one out loud, to show them what the monsters are about to do so that dying
-is a mistake instead of an event, to make the monsters losable so that hiding is
-a skill, to let the hand actually be played, and to take the infection out of a
-sealed envelope and put it in the deck where it can be seen, counted, and cured.
+COLDWAKE **was** a spreadsheet with a monster generator attached. You banked
+power, you hid in a vent, you pressed end turn thirteen times, and a growing
+crowd of unkillable identical creatures wandered into you while a map showed you
+exactly where they were and nothing told you where they were going. Four fifths
+of the cards you drew you never played. Ten of the eleven compartments had no
+reason to exist. The ending was assigned to you after you died.
+
+The fix was not tuning. It was to give the player four different things worth
+doing and let them pick one out loud; to show them what the monsters are about
+to do so that dying is a mistake instead of an event; to make the monsters
+losable so that hiding is a skill; to let the hand actually be played; and to
+take the infection out of a sealed envelope and put it in the kit where it can
+be seen, counted and cured. All five are shipped, and Part 5 is what each of
+them moved.

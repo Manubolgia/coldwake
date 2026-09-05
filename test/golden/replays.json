@@ -283,36 +283,11 @@
    },
    {
     "t": "endTurn"
-   },
-   {
-    "t": "discard",
-    "uid": "inf_tremor@1004"
-   },
-   {
-    "t": "discard",
-    "uid": "inf_tunnel@1008"
-   },
-   {
-    "t": "discard",
-    "uid": "inf_fever@1001"
-   },
-   {
-    "t": "discard",
-    "uid": "inf_fever@1002"
-   },
-   {
-    "t": "brace"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "endTurn"
    }
   ],
   "ending": "killed",
-  "score": 21,
-  "hash": "176f5809c5853bc0"
+  "score": 19,
+  "hash": "0f3623e4f50a8a7e"
  },
  {
   "seed": "golden-1",
@@ -405,20 +380,17 @@
     "t": "listen"
    },
    {
-    "t": "endTurn"
-   },
-   {
-    "t": "listen"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "listen"
-   },
-   {
     "t": "creep",
     "to": "cryobay"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "brace"
+   },
+   {
+    "t": "listen"
    },
    {
     "t": "endTurn"
@@ -429,15 +401,6 @@
      "cryobay",
      "spine_a"
     ]
-   },
-   {
-    "t": "listen"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "endTurn"
    },
    {
     "t": "endTurn"
@@ -474,7 +437,7 @@
    {
     "t": "play",
     "uid": "flashbang@1",
-    "to": "ore_hold"
+    "to": "shuttle_bay"
    },
    {
     "t": "endTurn"
@@ -487,6 +450,9 @@
     "t": "brace"
    },
    {
+    "t": "listen"
+   },
+   {
     "t": "endTurn"
    },
    {
@@ -497,21 +463,14 @@
     "t": "brace"
    },
    {
-    "t": "discard",
-    "uid": "inf_tunnel@1004"
+    "t": "seal",
+    "edge": [
+     "cryobay",
+     "spine_a"
+    ]
    },
    {
-    "t": "discard",
-    "uid": "inf_sweat@1003"
-   },
-   {
-    "t": "play",
-    "uid": "adrenaline@1"
-   },
-   {
-    "t": "play",
-    "uid": "flashbang@2",
-    "to": "ore_hold"
+    "t": "listen"
    },
    {
     "t": "endTurn"
@@ -519,11 +478,28 @@
    {
     "t": "burn",
     "uid": "last_stand@1"
+   },
+   {
+    "t": "brace"
+   },
+   {
+    "t": "listen"
+   },
+   {
+    "t": "play",
+    "uid": "adrenaline@1"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "burn",
+    "uid": "suppress@1"
    }
   ],
   "ending": "adrift",
-  "score": 49,
-  "hash": "fb9bc0ed6083b743"
+  "score": 39,
+  "hash": "81025cbcd795f09a"
  },
  {
   "seed": "golden-2",
@@ -642,10 +618,6 @@
     "t": "endTurn"
    },
    {
-    "t": "play",
-    "uid": "morphine@1"
-   },
-   {
     "t": "listen"
    },
    {
@@ -653,57 +625,26 @@
     "uid": "steady@1"
    },
    {
-    "t": "endTurn"
-   },
-   {
-    "t": "ventEnter"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "burn",
-    "uid": "quiet_step@2"
-   },
-   {
-    "t": "ventExit",
-    "to": "medbay"
+    "t": "play",
+    "uid": "morphine@1"
    },
    {
     "t": "play",
-    "uid": "antiseptic@1"
-   },
-   {
-    "t": "play",
-    "uid": "vitals@2"
+    "uid": "quiet_step@2",
+    "to": "comms"
    },
    {
     "t": "endTurn"
    },
    {
-    "t": "play",
-    "uid": "vitals@1"
+    "t": "beacon"
    },
    {
-    "t": "play",
-    "uid": "field_dressing@1"
-   },
-   {
-    "t": "ventEnter"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "ventExit",
-    "to": "shuttle_bay"
-   },
-   {
-    "t": "chargeShuttle",
-    "n": 19
-   },
-   {
-    "t": "listen"
+    "t": "seal",
+    "edge": [
+     "comms",
+     "ore_hold"
+    ]
    },
    {
     "t": "search"
@@ -712,68 +653,77 @@
     "t": "endTurn"
    },
    {
-    "t": "ventEnter"
+    "t": "seal",
+    "edge": [
+     "comms",
+     "bridge"
+    ]
+   },
+   {
+    "t": "play",
+    "uid": "vitals@2"
+   },
+   {
+    "t": "play",
+    "uid": "triage@1"
    },
    {
     "t": "endTurn"
    },
    {
     "t": "burn",
-    "uid": "triage@1"
-   },
-   {
-    "t": "ventExit",
-    "to": "bridge"
+    "uid": "field_dressing@1"
    },
    {
     "t": "play",
-    "uid": "sedative@1"
-   },
-   {
-    "t": "listen"
+    "uid": "antiseptic@1"
    },
    {
     "t": "play",
     "uid": "field_dressing@2"
    },
    {
+    "t": "play",
+    "uid": "steady@3"
+   },
+   {
+    "t": "play",
+    "uid": "scalpel@1",
+    "threat": "t5"
+   },
+   {
     "t": "endTurn"
    },
    {
-    "t": "ventEnter"
+    "t": "seal",
+    "edge": [
+     "comms",
+     "ore_hold"
+    ]
+   },
+   {
+    "t": "play",
+    "uid": "steady@2"
+   },
+   {
+    "t": "play",
+    "uid": "vitals@1"
    },
    {
     "t": "endTurn"
    },
    {
     "t": "burn",
-    "uid": "steady@2"
+    "uid": "quiet_step@1"
    },
    {
-    "t": "ventExit",
-    "to": "shuttle_bay"
-   },
-   {
-    "t": "play",
+    "t": "burn",
     "uid": "triage@2"
-   },
-   {
-    "t": "chargeShuttle",
-    "n": 4
-   },
-   {
-    "t": "listen"
-   },
-   {
-    "t": "brace"
-   },
-   {
-    "t": "endTurn"
    }
   ],
-  "ending": "adrift",
-  "score": 95,
-  "hash": "a2e6ef5ef7a7c300"
+  "ending": "relay",
+  "score": 79,
+  "hash": "f141f2c6a882cdda"
  },
  {
   "seed": "golden-3",
@@ -978,7 +928,7 @@
   ],
   "ending": "killed",
   "score": 26,
-  "hash": "570a4ef164d79438"
+  "hash": "7aa925be4c93c4c5"
  },
  {
   "seed": "golden-4",
@@ -1233,29 +1183,11 @@
    },
    {
     "t": "endTurn"
-   },
-   {
-    "t": "play",
-    "uid": "signal_check@1"
-   },
-   {
-    "t": "brace"
-   },
-   {
-    "t": "play",
-    "uid": "preflight@1"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "burn",
-    "uid": "trim@2"
    }
   ],
   "ending": "adrift",
-  "score": 84,
-  "hash": "d699734623bf819a"
+  "score": 83,
+  "hash": "f0b698dc95aec43e"
  },
  {
   "seed": "golden-5",
@@ -1303,20 +1235,10 @@
     "t": "endTurn"
    },
    {
-    "t": "creep",
-    "to": "bridge"
-   },
-   {
-    "t": "armScuttle"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
     "t": "seal",
     "edge": [
-     "bridge",
-     "comms"
+     "spine_c",
+     "spine_b"
     ]
    },
    {
@@ -1339,11 +1261,72 @@
    },
    {
     "t": "play",
-    "uid": "circuit_map@1"
+    "uid": "brace@1"
    },
    {
     "t": "play",
-    "uid": "brace@1"
+    "uid": "circuit_map@1"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "play",
+    "uid": "hardline@1"
+   },
+   {
+    "t": "play",
+    "uid": "brace@2"
+   },
+   {
+    "t": "play",
+    "uid": "scrap_charge@2",
+    "to": "armory"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "listen"
+   },
+   {
+    "t": "play",
+    "uid": "reroute@2",
+    "to": "bridge"
+   },
+   {
+    "t": "armScuttle"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "ventEnter"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "ventExit",
+    "to": "shuttle_bay"
+   },
+   {
+    "t": "listen"
+   },
+   {
+    "t": "chargeShuttle",
+    "n": 8
+   },
+   {
+    "t": "play",
+    "uid": "override@1",
+    "edge": [
+     "spine_c",
+     "shuttle_bay"
+    ]
    },
    {
     "t": "search"
@@ -1352,19 +1335,19 @@
     "t": "endTurn"
    },
    {
-    "t": "seal",
-    "edge": [
-     "bridge",
-     "spine_c"
-    ]
+    "t": "chargeShuttle",
+    "n": 5
    },
    {
-    "t": "discard",
-    "uid": "inf_sweat@1001"
+    "t": "listen"
    },
    {
     "t": "play",
     "uid": "bypass@2"
+   },
+   {
+    "t": "chargeShuttle",
+    "n": 2
    },
    {
     "t": "endTurn"
@@ -1373,9 +1356,12 @@
     "t": "listen"
    },
    {
-    "t": "play",
-    "uid": "scrap_charge@2",
-    "to": "ore_hold"
+    "t": "chargeShuttle",
+    "n": 2
+   },
+   {
+    "t": "discard",
+    "uid": "cutting_torch@1"
    },
    {
     "t": "play",
@@ -1384,28 +1370,11 @@
    },
    {
     "t": "endTurn"
-   },
-   {
-    "t": "listen"
-   },
-   {
-    "t": "play",
-    "uid": "brace@2"
-   },
-   {
-    "t": "play",
-    "uid": "hardline@1"
-   },
-   {
-    "t": "ventEnter"
-   },
-   {
-    "t": "endTurn"
    }
   ],
   "ending": "overload",
-  "score": 74,
-  "hash": "38f9f0ef96fb2663"
+  "score": 125,
+  "hash": "8ce5ea1707ddc087"
  },
  {
   "seed": "golden-6",
@@ -1609,7 +1578,7 @@
   ],
   "ending": "killed",
   "score": 17,
-  "hash": "66c1dbfa607002db"
+  "hash": "018ddd2cb96e84b3"
  },
  {
   "seed": "golden-7",
@@ -1742,12 +1711,55 @@
    },
    {
     "t": "play",
-    "uid": "quiet_step@1",
-    "to": "spine_c"
+    "uid": "steady@1"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "seal",
+    "edge": [
+     "shuttle_bay",
+     "spine_c"
+    ]
    },
    {
     "t": "play",
     "uid": "vitals@1"
+   },
+   {
+    "t": "play",
+    "uid": "steady@3"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "play",
+    "uid": "vitals@2"
+   },
+   {
+    "t": "play",
+    "uid": "steady@2"
+   },
+   {
+    "t": "discard",
+    "uid": "scalpel@1"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "play",
+    "uid": "vitals@2"
+   },
+   {
+    "t": "chargeShuttle",
+    "n": 2
+   },
+   {
+    "t": "play",
+    "uid": "steady@1"
    },
    {
     "t": "endTurn"
@@ -1761,25 +1773,7 @@
     "uid": "triage@1"
    },
    {
-    "t": "burn",
-    "uid": "quiet_step@2"
-   },
-   {
-    "t": "burn",
-    "uid": "field_dressing@1"
-   },
-   {
-    "t": "creep",
-    "to": "shuttle_bay"
-   },
-   {
     "t": "ventEnter"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "endTurn"
    },
    {
     "t": "ventExit",
@@ -1789,83 +1783,95 @@
     "t": "search"
    },
    {
-    "t": "search"
-   },
-   {
-    "t": "listen"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "creep",
-    "to": "armory"
-   },
-   {
-    "t": "search"
-   },
-   {
-    "t": "search"
-   },
-   {
-    "t": "listen"
+    "t": "play",
+    "uid": "antiseptic@1"
    },
    {
     "t": "endTurn"
    },
    {
-    "t": "creep",
-    "to": "ore_hold"
+    "t": "seal",
+    "edge": [
+     "medbay",
+     "spine_a"
+    ]
    },
    {
     "t": "search"
    },
    {
-    "t": "listen"
-   },
-   {
-    "t": "ventEnter"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "ventExit",
-    "to": "bridge"
-   },
-   {
-    "t": "listen"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "burn",
-    "uid": "steady@1"
-   },
-   {
-    "t": "burn",
+    "t": "play",
     "uid": "steady@3"
    },
    {
-    "t": "ventEnter"
+    "t": "play",
+    "uid": "steady@2"
    },
    {
     "t": "endTurn"
    },
    {
+    "t": "play",
+    "uid": "vitals@1"
+   },
+   {
+    "t": "play",
+    "uid": "steady@1"
+   },
+   {
+    "t": "discard",
+    "uid": "scalpel@1"
+   },
+   {
+    "t": "play",
+    "uid": "field_dressing@1"
+   },
+   {
     "t": "endTurn"
+   },
+   {
+    "t": "play",
+    "uid": "vitals@2"
+   },
+   {
+    "t": "play",
+    "uid": "steady@3"
+   },
+   {
+    "t": "play",
+    "uid": "steady@2"
+   },
+   {
+    "t": "discard",
+    "uid": "scalpel@1"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "play",
+    "uid": "vitals@1"
+   },
+   {
+    "t": "play",
+    "uid": "field_dressing@1"
+   },
+   {
+    "t": "play",
+    "uid": "quiet_step@1",
+    "to": "spine_a"
+   },
+   {
+    "t": "play",
+    "uid": "vitals@2"
    },
    {
     "t": "endTurn"
    }
   ],
   "ending": "adrift",
-  "score": 75,
-  "hash": "bbdeabbb307f68ac"
+  "score": 73,
+  "hash": "4b310b82164edb2e"
  },
  {
   "seed": "golden-8",
@@ -1915,13 +1921,6 @@
     "t": "endTurn"
    },
    {
-    "t": "chargeShuttle",
-    "n": 1
-   },
-   {
-    "t": "endTurn"
-   },
-   {
     "t": "play",
     "uid": "careful_step@3",
     "to": "spine_c"
@@ -1940,12 +1939,12 @@
     "t": "endTurn"
    },
    {
-    "t": "listen"
-   },
-   {
     "t": "play",
     "uid": "careful_step@2",
     "to": "bridge"
+   },
+   {
+    "t": "listen"
    },
    {
     "t": "play",
@@ -2060,8 +2059,8 @@
    }
   ],
   "ending": "relay",
-  "score": 42,
-  "hash": "69ed1de8f7cded0b"
+  "score": 37,
+  "hash": "cb3198c0aa73a60c"
  },
  {
   "seed": "golden-9",
@@ -2465,12 +2464,12 @@
     "t": "endTurn"
    },
    {
-    "t": "play",
-    "uid": "hardline@1"
-   },
-   {
     "t": "chargeShuttle",
     "n": 5
+   },
+   {
+    "t": "play",
+    "uid": "hardline@1"
    },
    {
     "t": "play",
@@ -2497,67 +2496,19 @@
     "t": "endTurn"
    },
    {
+    "t": "endTurn"
+   },
+   {
     "t": "ventExit",
     "to": "bridge"
    },
    {
+    "t": "listen"
+   },
+   {
     "t": "play",
     "uid": "reroute@1",
-    "to": "spine_c"
-   },
-   {
-    "t": "listen"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "listen"
-   },
-   {
-    "t": "creep",
-    "to": "bridge"
-   },
-   {
-    "t": "discard",
-    "uid": "inf_blackout@1001"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "seal",
-    "edge": [
-     "bridge",
-     "comms"
-    ]
-   },
-   {
-    "t": "listen"
-   },
-   {
-    "t": "brace"
-   },
-   {
-    "t": "search"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "seal",
-    "edge": [
-     "bridge",
-     "spine_c"
-    ]
-   },
-   {
-    "t": "listen"
-   },
-   {
-    "t": "play",
-    "uid": "scrap_charge@1",
-    "to": "cryobay"
+    "to": "comms"
    },
    {
     "t": "endTurn"
@@ -2571,33 +2522,39 @@
     "uid": "slag_door@1"
    },
    {
+    "t": "play",
+    "uid": "cutting_torch@1",
+    "threat": "t4"
+   },
+   {
+    "t": "play",
+    "uid": "circuit_map@1"
+   },
+   {
+    "t": "play",
+    "uid": "brace@2"
+   },
+   {
+    "t": "search"
+   },
+   {
+    "t": "play",
+    "uid": "reroute@2",
+    "to": "ore_hold"
+   },
+   {
     "t": "ventEnter"
-   },
-   {
-    "t": "ventExit",
-    "to": "shuttle_bay"
-   },
-   {
-    "t": "seal",
-    "edge": [
-     "shuttle_bay",
-     "spine_c"
-    ]
-   },
-   {
-    "t": "chargeShuttle",
-    "n": 3
    },
    {
     "t": "endTurn"
    },
    {
-    "t": "launch"
+    "t": "endTurn"
    }
   ],
-  "ending": "escaped",
-  "score": 123,
-  "hash": "cdf90b4675510e48"
+  "ending": "adrift",
+  "score": 95,
+  "hash": "cc2d6a32c8e171d4"
  },
  {
   "seed": "golden-11",
@@ -2689,26 +2646,6 @@
     "t": "endTurn"
    },
    {
-    "t": "listen"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "listen"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "burn",
-    "uid": "push@1"
-   },
-   {
-    "t": "burn",
-    "uid": "sidearm@1"
-   },
-   {
     "t": "ventEnter"
    },
    {
@@ -2722,45 +2659,73 @@
     "t": "endTurn"
    },
    {
-    "t": "seal",
-    "edge": [
-     "medbay",
-     "armory"
-    ]
-   },
-   {
-    "t": "listen"
-   },
-   {
-    "t": "search"
+    "t": "ventEnter"
    },
    {
     "t": "endTurn"
    },
    {
+    "t": "ventExit",
+    "to": "bridge"
+   },
+   {
     "t": "listen"
    },
    {
-    "t": "cure"
+    "t": "discard",
+    "uid": "sidearm@1"
    },
    {
-    "t": "endTurn"
-   },
-   {
-    "t": "seal",
-    "edge": [
-     "medbay",
-     "spine_a"
-    ]
+    "t": "discard",
+    "uid": "sidearm@2"
    },
    {
     "t": "play",
-    "uid": "sweep@1"
+    "uid": "adrenaline@1"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "seal",
+    "edge": [
+     "bridge",
+     "comms"
+    ]
+   },
+   {
+    "t": "listen"
    },
    {
     "t": "play",
     "uid": "flashbang@2",
-    "to": "shuttle_bay"
+    "to": "cryobay"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "listen"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "armScuttle"
+   },
+   {
+    "t": "listen"
+   },
+   {
+    "t": "play",
+    "uid": "door_charge@1",
+    "edge": [
+     "bridge",
+     "spine_c"
+    ]
+   },
+   {
+    "t": "endTurn"
    },
    {
     "t": "ventEnter"
@@ -2769,29 +2734,12 @@
     "t": "endTurn"
    },
    {
-    "t": "ventExit",
-    "to": "ore_hold"
-   },
-   {
-    "t": "takeSpecimen"
-   },
-   {
-    "t": "search"
-   },
-   {
     "t": "endTurn"
-   },
-   {
-    "t": "creep",
-    "to": "comms"
-   },
-   {
-    "t": "upload"
    }
   ],
-  "ending": "specimen",
-  "score": 108,
-  "hash": "20df3a4f51aa36d1"
+  "ending": "adrift",
+  "score": 62,
+  "hash": "15bcd23b9aaaba2e"
  },
  {
   "seed": "golden-12",
@@ -3060,7 +3008,7 @@
   ],
   "ending": "killed",
   "score": 25,
-  "hash": "e1457ef67cf9b15b"
+  "hash": "9b593fdb9970037b"
  },
  {
   "seed": "golden-13",
@@ -3342,41 +3290,11 @@
    },
    {
     "t": "endTurn"
-   },
-   {
-    "t": "listen"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "play",
-    "uid": "wedge@1",
-    "edge": [
-     "cryobay",
-     "spine_a"
-    ]
-   },
-   {
-    "t": "listen"
-   },
-   {
-    "t": "play",
-    "uid": "marker_flare@2",
-    "to": "ore_hold"
-   },
-   {
-    "t": "play",
-    "uid": "marker_flare@1",
-    "to": "ore_hold"
-   },
-   {
-    "t": "endTurn"
    }
   ],
   "ending": "adrift",
-  "score": 88,
-  "hash": "c1834298759280a9"
+  "score": 86,
+  "hash": "c9614ebfff3ab3bc"
  },
  {
   "seed": "golden-14",
@@ -3390,26 +3308,7 @@
     "uid": "deadstick@1"
    },
    {
-    "t": "search"
-   },
-   {
-    "t": "play",
-    "uid": "course_correct@2"
-   },
-   {
-    "t": "play",
-    "uid": "harness@2"
-   },
-   {
-    "t": "play",
-    "uid": "signal_check@1"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "play",
-    "uid": "trim@2",
+    "t": "creep",
     "to": "spine_a"
    },
    {
@@ -3420,10 +3319,6 @@
     "uid": "boost@1"
    },
    {
-    "t": "play",
-    "uid": "signal_check@2"
-   },
-   {
     "t": "endTurn"
    },
    {
@@ -3432,48 +3327,34 @@
    },
    {
     "t": "play",
-    "uid": "preflight@2"
+    "uid": "signal_check@1"
+   },
+   {
+    "t": "play",
+    "uid": "course_correct@2"
    },
    {
     "t": "creep",
     "to": "spine_c"
    },
    {
+    "t": "endTurn"
+   },
+   {
     "t": "search"
    },
    {
     "t": "play",
-    "uid": "nerve@2"
-   },
-   {
-    "t": "endTurn"
+    "uid": "preflight@2"
    },
    {
     "t": "play",
-    "uid": "trim@1",
+    "uid": "trim@2",
     "to": "bridge"
    },
    {
     "t": "play",
-    "uid": "preflight@1"
-   },
-   {
-    "t": "discard",
-    "uid": "stick@1"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "listen"
-   },
-   {
-    "t": "discard",
-    "uid": "inf_tunnel@1001"
-   },
-   {
-    "t": "play",
-    "uid": "nerve@1"
+    "uid": "signal_check@2"
    },
    {
     "t": "endTurn"
@@ -3487,7 +3368,25 @@
    },
    {
     "t": "play",
-    "uid": "signal_check@1"
+    "uid": "preflight@1"
+   },
+   {
+    "t": "discard",
+    "uid": "stick@1"
+   },
+   {
+    "t": "play",
+    "uid": "nerve@1"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "listen"
+   },
+   {
+    "t": "play",
+    "uid": "nerve@2"
    },
    {
     "t": "play",
@@ -3500,22 +3399,8 @@
     "t": "listen"
    },
    {
-    "t": "play",
-    "uid": "course_correct@2"
-   },
-   {
-    "t": "play",
-    "uid": "harness@1"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "listen"
-   },
-   {
     "t": "discard",
-    "uid": "stick@1"
+    "uid": "inf_tremor@1001"
    },
    {
     "t": "play",
@@ -3525,10 +3410,19 @@
     "t": "endTurn"
    },
    {
-    "t": "armScuttle"
+    "t": "play",
+    "uid": "trim@1",
+    "to": "comms"
    },
    {
-    "t": "ventEnter"
+    "t": "beacon"
+   },
+   {
+    "t": "search"
+   },
+   {
+    "t": "play",
+    "uid": "harness@1"
    },
    {
     "t": "endTurn"
@@ -3539,46 +3433,28 @@
    },
    {
     "t": "burn",
-    "uid": "trim@1"
+    "uid": "stick@1"
    },
    {
-    "t": "ventExit",
-    "to": "medbay"
+    "t": "seal",
+    "edge": [
+     "comms",
+     "bridge"
+    ]
    },
    {
-    "t": "play",
-    "uid": "signal_check@2"
+    "t": "brace"
+   },
+   {
+    "t": "listen"
    },
    {
     "t": "play",
     "uid": "preflight@2"
    },
    {
-    "t": "endTurn"
-   },
-   {
-    "t": "ventEnter"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "burn",
-    "uid": "preflight@1"
-   },
-   {
-    "t": "burn",
-    "uid": "mayday@1"
-   },
-   {
-    "t": "ventExit",
-    "to": "shuttle_bay"
-   },
-   {
-    "t": "listen"
-   },
-   {
-    "t": "search"
+    "t": "play",
+    "uid": "course_correct@1"
    },
    {
     "t": "endTurn"
@@ -3588,14 +3464,48 @@
     "uid": "nerve@2"
    },
    {
-    "t": "ventEnter"
+    "t": "burn",
+    "uid": "nerve@1"
+   },
+   {
+    "t": "brace"
+   },
+   {
+    "t": "listen"
+   },
+   {
+    "t": "play",
+    "uid": "course_correct@2"
+   },
+   {
+    "t": "play",
+    "uid": "preflight@1"
    },
    {
     "t": "endTurn"
    },
    {
-    "t": "ventExit",
-    "to": "medbay"
+    "t": "burn",
+    "uid": "mayday@1"
+   },
+   {
+    "t": "brace"
+   },
+   {
+    "t": "seal",
+    "edge": [
+     "comms",
+     "ore_hold"
+    ]
+   },
+   {
+    "t": "listen"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "brace"
    },
    {
     "t": "listen"
@@ -3604,9 +3514,9 @@
     "t": "endTurn"
    }
   ],
-  "ending": "adrift",
-  "score": 53,
-  "hash": "0a7883f8e08e649a"
+  "ending": "killed",
+  "score": 41,
+  "hash": "b953e83265a1862c"
  },
  {
   "seed": "golden-15",
@@ -3863,9 +3773,8 @@
     "t": "endTurn"
    },
    {
-    "t": "play",
-    "uid": "scrap_charge@2",
-    "to": "spine_a"
+    "t": "burn",
+    "uid": "circuit_map@1"
    },
    {
     "t": "play",
@@ -3874,57 +3783,35 @@
    },
    {
     "t": "discard",
-    "uid": "cutting_torch@1"
+    "uid": "inf_blackout@1001"
    },
    {
     "t": "search"
-   },
-   {
-    "t": "brace"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "discard",
-    "uid": "bypass@2"
-   },
-   {
-    "t": "play",
-    "uid": "circuit_map@1"
-   },
-   {
-    "t": "brace"
    },
    {
     "t": "discard",
     "uid": "field_repair@1"
    },
    {
-    "t": "listen"
-   },
-   {
     "t": "endTurn"
    },
    {
-    "t": "play",
-    "uid": "brace@1"
+    "t": "burn",
+    "uid": "reroute@1"
    },
    {
     "t": "play",
-    "uid": "reroute@1",
-    "to": "spine_a"
+    "uid": "bypass@2"
    },
    {
-    "t": "creep",
-    "to": "cryobay"
+    "t": "brace"
    },
    {
-    "t": "seal",
-    "edge": [
-     "cryobay",
-     "spine_a"
-    ]
+    "t": "discard",
+    "uid": "cutting_torch@1"
+   },
+   {
+    "t": "listen"
    },
    {
     "t": "discard",
@@ -3934,73 +3821,35 @@
     "t": "endTurn"
    },
    {
-    "t": "discard",
+    "t": "burn",
+    "uid": "scrap_charge@2"
+   },
+   {
+    "t": "burn",
     "uid": "hardline@1"
    },
    {
-    "t": "play",
-    "uid": "scrap_charge@1",
-    "to": "comms"
-   },
-   {
-    "t": "discard",
-    "uid": "bypass@2"
-   },
-   {
-    "t": "discard",
-    "uid": "circuit_map@1"
-   },
-   {
-    "t": "play",
-    "uid": "bypass@1"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "burn",
-    "uid": "cutting_torch@1"
-   },
-   {
-    "t": "burn",
-    "uid": "steady_hands@1"
-   },
-   {
-    "t": "burn",
-    "uid": "salv_kit@12"
+    "t": "seal",
+    "edge": [
+     "cryobay",
+     "spine_a"
+    ]
    },
    {
     "t": "brace"
    },
    {
-    "t": "endTurn"
+    "t": "listen"
    },
    {
-    "t": "discard",
-    "uid": "inf_tremor@1003"
+    "t": "listen"
    },
    {
     "t": "play",
-    "uid": "scrap_charge@2",
-    "to": "spine_b"
-   },
-   {
-    "t": "brace"
-   },
-   {
-    "t": "creep",
-    "to": "spine_a"
-   },
-   {
-    "t": "move",
-    "to": "cryobay"
+    "uid": "brace@1"
    },
    {
     "t": "endTurn"
-   },
-   {
-    "t": "burn",
-    "uid": "brace@2"
    },
    {
     "t": "burn",
@@ -4008,8 +3857,8 @@
    }
   ],
   "ending": "adrift",
-  "score": 42,
-  "hash": "98e047fd82be15ea"
+  "score": 40,
+  "hash": "08e1b998d247ad14"
  },
  {
   "seed": "golden-16",
@@ -4050,12 +3899,6 @@
    {
     "t": "play",
     "uid": "hold_line@2"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "endTurn"
    },
    {
     "t": "endTurn"
@@ -4182,8 +4025,8 @@
    }
   ],
   "ending": "adrift",
-  "score": 45,
-  "hash": "c3d23b697601e6e1"
+  "score": 43,
+  "hash": "2afcaf12af891189"
  },
  {
   "seed": "golden-17",
@@ -4205,12 +4048,12 @@
     "uid": "steady@1"
    },
    {
-    "t": "endTurn"
-   },
-   {
     "t": "play",
     "uid": "quiet_step@1",
     "to": "spine_a"
+   },
+   {
+    "t": "endTurn"
    },
    {
     "t": "search"
@@ -4224,15 +4067,19 @@
     "t": "search"
    },
    {
-    "t": "endTurn"
-   },
-   {
     "t": "creep",
     "to": "spine_c"
    },
    {
+    "t": "endTurn"
+   },
+   {
     "t": "creep",
     "to": "bridge"
+   },
+   {
+    "t": "play",
+    "uid": "vitals@1"
    },
    {
     "t": "search"
@@ -4252,24 +4099,7 @@
    },
    {
     "t": "play",
-    "uid": "vitals@1"
-   },
-   {
-    "t": "play",
     "uid": "vitals@2"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "seal",
-    "edge": [
-     "bridge",
-     "spine_c"
-    ]
-   },
-   {
-    "t": "listen"
    },
    {
     "t": "play",
@@ -4279,6 +4109,13 @@
     "t": "endTurn"
    },
    {
+    "t": "seal",
+    "edge": [
+     "bridge",
+     "spine_c"
+    ]
+   },
+   {
     "t": "listen"
    },
    {
@@ -4286,8 +4123,18 @@
     "uid": "triage@1"
    },
    {
+    "t": "endTurn"
+   },
+   {
+    "t": "listen"
+   },
+   {
     "t": "play",
     "uid": "triage@2"
+   },
+   {
+    "t": "play",
+    "uid": "field_dressing@2"
    },
    {
     "t": "endTurn"
@@ -4297,11 +4144,11 @@
     "uid": "morphine@1"
    },
    {
-    "t": "discard",
-    "uid": "scalpel@1"
+    "t": "listen"
    },
    {
-    "t": "listen"
+    "t": "play",
+    "uid": "antiseptic@1"
    },
    {
     "t": "endTurn"
@@ -4314,14 +4161,8 @@
     ]
    },
    {
-    "t": "listen"
-   },
-   {
     "t": "play",
-    "uid": "field_dressing@2"
-   },
-   {
-    "t": "endTurn"
+    "uid": "vitals@1"
    },
    {
     "t": "seal",
@@ -4331,76 +4172,19 @@
     ]
    },
    {
-    "t": "play",
-    "uid": "vitals@2"
-   },
-   {
-    "t": "discard",
-    "uid": "salv_sidearm@9"
-   },
-   {
-    "t": "play",
-    "uid": "steady@1"
-   },
-   {
     "t": "endTurn"
    },
    {
-    "t": "play",
-    "uid": "vitals@1"
+    "t": "burn",
+    "uid": "quiet_step@1"
+   },
+   {
+    "t": "burn",
+    "uid": "scalpel@1"
    },
    {
     "t": "play",
-    "uid": "antiseptic@1"
-   },
-   {
-    "t": "play",
-    "uid": "triage@2"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "armScuttle"
-   },
-   {
-    "t": "brace"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "ventEnter"
-   },
-   {
-    "t": "ventExit",
-    "to": "medbay"
-   },
-   {
-    "t": "listen"
-   },
-   {
-    "t": "search"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "seal",
-    "edge": [
-     "medbay",
-     "spine_a"
-    ]
-   },
-   {
-    "t": "listen"
-   },
-   {
-    "t": "search"
-   },
-   {
-    "t": "play",
-    "uid": "blood_work@1"
+    "uid": "sedative@1"
    },
    {
     "t": "ventEnter"
@@ -4410,7 +4194,7 @@
    },
    {
     "t": "burn",
-    "uid": "quiet_step@2"
+    "uid": "steady@1"
    },
    {
     "t": "ventExit",
@@ -4418,20 +4202,47 @@
    },
    {
     "t": "play",
-    "uid": "triage@1"
-   },
-   {
-    "t": "listen"
+    "uid": "triage@2"
    },
    {
     "t": "play",
-    "uid": "steady@3"
+    "uid": "vitals@2"
+   },
+   {
+    "t": "play",
+    "uid": "field_dressing@1"
+   },
+   {
+    "t": "play",
+    "uid": "field_dressing@2"
    },
    {
     "t": "endTurn"
    },
    {
     "t": "ventEnter"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "burn",
+    "uid": "steady@3"
+   },
+   {
+    "t": "ventExit",
+    "to": "shuttle_bay"
+   },
+   {
+    "t": "chargeShuttle",
+    "n": 13
+   },
+   {
+    "t": "brace"
+   },
+   {
+    "t": "play",
+    "uid": "triage@1"
    },
    {
     "t": "endTurn"
@@ -4441,27 +4252,48 @@
     "uid": "steady@2"
    },
    {
-    "t": "ventExit",
-    "to": "shuttle_bay"
+    "t": "burn",
+    "uid": "quiet_step@2"
    },
    {
-    "t": "chargeShuttle",
-    "n": 8
+    "t": "ventEnter"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "burn",
+    "uid": "field_dressing@1"
+   },
+   {
+    "t": "ventExit",
+    "to": "bridge"
    },
    {
     "t": "play",
-    "uid": "sedative@1"
+    "uid": "blood_work@1"
+   },
+   {
+    "t": "play",
+    "uid": "antiseptic@1"
    },
    {
     "t": "listen"
+   },
+   {
+    "t": "seal",
+    "edge": [
+     "bridge",
+     "spine_c"
+    ]
    },
    {
     "t": "endTurn"
    }
   ],
   "ending": "adrift",
-  "score": 71,
-  "hash": "fcd6cd48b77d26ec"
+  "score": 74,
+  "hash": "53d8f87e29e2cd50"
  },
  {
   "seed": "golden-18",
@@ -4644,7 +4476,7 @@
   ],
   "ending": "killed",
   "score": 11,
-  "hash": "1953993179e8c318"
+  "hash": "dfeadc5c3b9f60b2"
  },
  {
   "seed": "golden-19",
@@ -4821,21 +4653,11 @@
    },
    {
     "t": "endTurn"
-   },
-   {
-    "t": "ventExit",
-    "to": "ore_hold"
-   },
-   {
-    "t": "listen"
-   },
-   {
-    "t": "endTurn"
    }
   ],
   "ending": "adrift",
-  "score": 59,
-  "hash": "178606aeb3e8e278"
+  "score": 58,
+  "hash": "c167e6403ddc0658"
  },
  {
   "seed": "golden-20",
@@ -4972,10 +4794,6 @@
     "uid": "bypass@1"
    },
    {
-    "t": "chargeShuttle",
-    "n": 3
-   },
-   {
     "t": "play",
     "uid": "steady_hands@1"
    },
@@ -4988,41 +4806,27 @@
     "uid": "hardline@1"
    },
    {
-    "t": "endTurn"
-   },
-   {
     "t": "chargeShuttle",
     "n": 4
+   },
+   {
+    "t": "endTurn"
    },
    {
     "t": "play",
     "uid": "circuit_map@1"
    },
    {
-    "t": "play",
-    "uid": "brace@2"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "play",
-    "uid": "bypass@2"
-   },
-   {
-    "t": "listen"
-   },
-   {
     "t": "chargeShuttle",
-    "n": 1
+    "n": 2
    },
    {
     "t": "launch"
    }
   ],
   "ending": "escaped",
-  "score": 141,
-  "hash": "a6761e13bf0eaee2"
+  "score": 135,
+  "hash": "e4473ceed18a46e0"
  },
  {
   "seed": "golden-21",
@@ -5153,73 +4957,45 @@
    {
     "t": "play",
     "uid": "flashbang@1",
-    "to": "bridge"
+    "to": "comms"
+   },
+   {
+    "t": "listen"
+   },
+   {
+    "t": "play",
+    "uid": "sidearm@2",
+    "threat": "t4"
    },
    {
     "t": "creep",
     "to": "comms"
    },
    {
-    "t": "discard",
-    "uid": "push@1"
-   },
-   {
-    "t": "listen"
-   },
-   {
     "t": "endTurn"
    },
    {
     "t": "burn",
-    "uid": "suppress@2"
+    "uid": "push@1"
    },
    {
-    "t": "burn",
-    "uid": "sidearm@2"
+    "t": "discard",
+    "uid": "sweep@1"
    },
    {
     "t": "play",
-    "uid": "flashbang@2",
-    "to": "armory"
+    "uid": "last_stand@1"
    },
    {
     "t": "move",
     "to": "bridge"
    },
    {
-    "t": "ventEnter"
-   },
-   {
     "t": "discard",
-    "uid": "inf_sweat@1004"
-   },
-   {
-    "t": "ventExit",
-    "to": "medbay"
+    "uid": "suppress@2"
    },
    {
     "t": "endTurn"
-   },
-   {
-    "t": "burn",
-    "uid": "sweep@1"
-   },
-   {
-    "t": "burn",
-    "uid": "hold_line@2"
-   },
-   {
-    "t": "listen"
-   },
-   {
-    "t": "listen"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "burn",
-    "uid": "adrenaline@1"
    },
    {
     "t": "burn",
@@ -5230,24 +5006,65 @@
    },
    {
     "t": "move",
-    "to": "spine_a"
-   },
-   {
-    "t": "listen"
-   },
-   {
-    "t": "listen"
+    "to": "spine_c"
    },
    {
     "t": "discard",
-    "uid": "inf_fever@1010"
+    "uid": "adrenaline@1"
+   },
+   {
+    "t": "listen"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "seal",
+    "edge": [
+     "spine_c",
+     "bridge"
+    ]
+   },
+   {
+    "t": "discard",
+    "uid": "inf_fever@1002"
+   },
+   {
+    "t": "seal",
+    "edge": [
+     "spine_c",
+     "shuttle_bay"
+    ]
+   },
+   {
+    "t": "discard",
+    "uid": "flashbang@2"
+   },
+   {
+    "t": "move",
+    "to": "spine_b"
    },
    {
     "t": "endTurn"
    },
    {
     "t": "burn",
-    "uid": "last_stand@1"
+    "uid": "suppress@1"
+   },
+   {
+    "t": "discard",
+    "uid": "inf_sweat@1004"
+   },
+   {
+    "t": "creep",
+    "to": "spine_a"
+   },
+   {
+    "t": "seal",
+    "edge": [
+     "spine_a",
+     "spine_b"
+    ]
    },
    {
     "t": "move",
@@ -5258,8 +5075,7 @@
     "to": "spine_a"
    },
    {
-    "t": "discard",
-    "uid": "inf_fever@1002"
+    "t": "endTurn"
    },
    {
     "t": "seal",
@@ -5269,23 +5085,22 @@
     ]
    },
    {
-    "t": "creep",
-    "to": "cryobay"
+    "t": "listen"
+   },
+   {
+    "t": "discard",
+    "uid": "inf_tremor@1007"
+   },
+   {
+    "t": "discard",
+    "uid": "inf_tunnel@1005"
    },
    {
     "t": "endTurn"
    },
    {
     "t": "discard",
-    "uid": "inf_sweat@1007"
-   },
-   {
-    "t": "discard",
-    "uid": "inf_tremor@1013"
-   },
-   {
-    "t": "discard",
-    "uid": "inf_tunnel@1005"
+    "uid": "inf_tremor@1010"
    },
    {
     "t": "discard",
@@ -5293,15 +5108,95 @@
    },
    {
     "t": "creep",
+    "to": "cryobay"
+   },
+   {
+    "t": "creep",
     "to": "spine_a"
    },
    {
+    "t": "discard",
+    "uid": "inf_fever@1009"
+   },
+   {
     "t": "endTurn"
+   },
+   {
+    "t": "discard",
+    "uid": "inf_fever@1012"
+   },
+   {
+    "t": "move",
+    "to": "spine_b"
+   },
+   {
+    "t": "move",
+    "to": "spine_c"
+   },
+   {
+    "t": "brace"
+   },
+   {
+    "t": "discard",
+    "uid": "inf_fever@1006"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "discard",
+    "uid": "inf_tremor@1010"
+   },
+   {
+    "t": "move",
+    "to": "shuttle_bay"
+   },
+   {
+    "t": "chargeShuttle",
+    "n": 3
+   },
+   {
+    "t": "ventEnter"
+   },
+   {
+    "t": "ventExit",
+    "to": "ore_hold"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "listen"
+   },
+   {
+    "t": "discard",
+    "uid": "inf_tunnel@1005"
+   },
+   {
+    "t": "seal",
+    "edge": [
+     "ore_hold",
+     "comms"
+    ]
+   },
+   {
+    "t": "search"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "burn",
+    "uid": "suppress@2"
+   },
+   {
+    "t": "burn",
+    "uid": "sweep@1"
    }
   ],
   "ending": "killed",
-  "score": 21,
-  "hash": "4b59b61201a8b343"
+  "score": 30,
+  "hash": "232e9e2cdf8dbfd8"
  },
  {
   "seed": "golden-22",
@@ -5437,23 +5332,15 @@
     "t": "listen"
    },
    {
+    "t": "play",
+    "uid": "morphine@1"
+   },
+   {
     "t": "chargeShuttle",
     "n": 2
    },
    {
-    "t": "discard",
-    "uid": "scalpel@1"
-   },
-   {
     "t": "endTurn"
-   },
-   {
-    "t": "burn",
-    "uid": "blood_work@1"
-   },
-   {
-    "t": "burn",
-    "uid": "morphine@1"
    },
    {
     "t": "ventEnter"
@@ -5463,15 +5350,25 @@
     "to": "medbay"
    },
    {
-    "t": "play",
-    "uid": "sedative@1"
+    "t": "search"
+   },
+   {
+    "t": "discard",
+    "uid": "scalpel@1"
+   },
+   {
+    "t": "endTurn"
    },
    {
     "t": "play",
     "uid": "field_dressing@1"
    },
    {
-    "t": "search"
+    "t": "play",
+    "uid": "field_dressing@2"
+   },
+   {
+    "t": "listen"
    },
    {
     "t": "endTurn"
@@ -5484,12 +5381,7 @@
     ]
    },
    {
-    "t": "play",
-    "uid": "steady@1"
-   },
-   {
-    "t": "play",
-    "uid": "vitals@1"
+    "t": "listen"
    },
    {
     "t": "play",
@@ -5499,15 +5391,12 @@
     "t": "endTurn"
    },
    {
-    "t": "listen"
+    "t": "play",
+    "uid": "vitals@1"
    },
    {
     "t": "play",
     "uid": "triage@2"
-   },
-   {
-    "t": "play",
-    "uid": "field_dressing@2"
    },
    {
     "t": "play",
@@ -5518,10 +5407,6 @@
    },
    {
     "t": "listen"
-   },
-   {
-    "t": "play",
-    "uid": "steady@3"
    },
    {
     "t": "play",
@@ -5533,73 +5418,11 @@
    },
    {
     "t": "endTurn"
-   },
-   {
-    "t": "play",
-    "uid": "vitals@1"
-   },
-   {
-    "t": "play",
-    "uid": "quiet_step@1",
-    "to": "spine_a"
-   },
-   {
-    "t": "play",
-    "uid": "triage@2"
-   },
-   {
-    "t": "play",
-    "uid": "field_dressing@2"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "seal",
-    "edge": [
-     "spine_a",
-     "spine_b"
-    ]
-   },
-   {
-    "t": "listen"
-   },
-   {
-    "t": "play",
-    "uid": "steady@2"
-   },
-   {
-    "t": "play",
-    "uid": "quiet_step@2",
-    "to": "cryobay"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "play",
-    "uid": "vitals@2"
-   },
-   {
-    "t": "play",
-    "uid": "field_dressing@1"
-   },
-   {
-    "t": "play",
-    "uid": "triage@1"
-   },
-   {
-    "t": "play",
-    "uid": "salv_flare@11",
-    "to": "comms"
-   },
-   {
-    "t": "endTurn"
    }
   ],
   "ending": "adrift",
-  "score": 92,
-  "hash": "92c41ad9827e346d"
+  "score": 86,
+  "hash": "50b8aafbf7f40bbf"
  },
  {
   "seed": "golden-23",
@@ -5720,6 +5543,14 @@
    },
    {
     "t": "play",
+    "uid": "wedge@1",
+    "edge": [
+     "armory",
+     "ore_hold"
+    ]
+   },
+   {
+    "t": "play",
     "uid": "salv_kit@12"
    },
    {
@@ -5730,24 +5561,11 @@
     "t": "listen"
    },
    {
-    "t": "play",
-    "uid": "salv_flare@11",
-    "to": "shuttle_bay"
-   },
-   {
     "t": "endTurn"
    },
    {
-    "t": "play",
-    "uid": "wedge@1",
-    "edge": [
-     "armory",
-     "ore_hold"
-    ]
-   },
-   {
-    "t": "play",
-    "uid": "duct_map@2"
+    "t": "burn",
+    "uid": "salv_flare@11"
    },
    {
     "t": "play",
@@ -5755,13 +5573,12 @@
    },
    {
     "t": "play",
-    "uid": "careful_step@1",
-    "to": "medbay"
+    "uid": "duct_map@2"
    },
    {
     "t": "play",
     "uid": "salv_flare@10",
-    "to": "shuttle_bay"
+    "to": "spine_c"
    },
    {
     "t": "endTurn"
@@ -5771,39 +5588,21 @@
     "uid": "duct_map@1"
    },
    {
-    "t": "play",
-    "uid": "hand_off@1"
+    "t": "brace"
    },
    {
     "t": "discard",
-    "uid": "pry_bar@1"
+    "uid": "inf_blackout@1003"
    },
    {
     "t": "play",
-    "uid": "hand_off@2"
-   },
-   {
-    "t": "discard",
-    "uid": "cache@1"
-   },
-   {
-    "t": "play",
-    "uid": "salv_kit@12"
+    "uid": "duct_map@2"
    },
    {
     "t": "endTurn"
    },
    {
-    "t": "play",
-    "uid": "still@1"
-   },
-   {
-    "t": "listen"
-   },
-   {
-    "t": "play",
-    "uid": "careful_step@2",
-    "to": "armory"
+    "t": "brace"
    },
    {
     "t": "play",
@@ -5811,37 +5610,30 @@
     "to": "ore_hold"
    },
    {
-    "t": "endTurn"
-   },
-   {
     "t": "takeSpecimen"
    },
    {
-    "t": "creep",
-    "to": "comms"
-   },
-   {
-    "t": "play",
-    "uid": "wedge@1",
-    "edge": [
-     "comms",
-     "ore_hold"
-    ]
-   },
-   {
-    "t": "play",
-    "uid": "cache@2"
+    "t": "ventEnter"
    },
    {
     "t": "endTurn"
+   },
+   {
+    "t": "ventExit",
+    "to": "bridge"
+   },
+   {
+    "t": "play",
+    "uid": "careful_step@1",
+    "to": "comms"
    },
    {
     "t": "upload"
    }
   ],
   "ending": "specimen",
-  "score": 104,
-  "hash": "c3158309175c9906"
+  "score": 91,
+  "hash": "5196408d01c4ac41"
  },
  {
   "seed": "golden-24",
@@ -6168,18 +5960,32 @@
     "t": "ventEnter"
    },
    {
+    "t": "ventExit",
+    "to": "medbay"
+   },
+   {
+    "t": "listen"
+   },
+   {
+    "t": "discard",
+    "uid": "inf_fever@1003"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "play",
+    "uid": "bypass@2"
+   },
+   {
+    "t": "ventEnter"
+   },
+   {
     "t": "endTurn"
    },
    {
     "t": "burn",
     "uid": "field_repair@1"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "burn",
-    "uid": "scrap_charge@2"
    },
    {
     "t": "ventExit",
@@ -6190,38 +5996,40 @@
     "uid": "circuit_map@1"
    },
    {
-    "t": "brace"
-   },
-   {
     "t": "discard",
-    "uid": "inf_fever@1003"
+    "uid": "inf_blackout@1004"
    },
    {
     "t": "play",
-    "uid": "bypass@2"
+    "uid": "brace@2"
+   },
+   {
+    "t": "play",
+    "uid": "scrap_charge@2",
+    "to": "armory"
    },
    {
     "t": "endTurn"
    },
    {
-    "t": "ventEnter"
+    "t": "seal",
+    "edge": [
+     "bridge",
+     "spine_c"
+    ]
    },
    {
-    "t": "ventExit",
-    "to": "medbay"
+    "t": "listen"
    },
    {
-    "t": "cure"
-   },
-   {
-    "t": "play",
-    "uid": "circuit_map@1"
+    "t": "search"
    },
    {
     "t": "endTurn"
    },
    {
-    "t": "cure"
+    "t": "burn",
+    "uid": "reroute@2"
    },
    {
     "t": "ventEnter"
@@ -6231,23 +6039,26 @@
    },
    {
     "t": "burn",
-    "uid": "brace@2"
+    "uid": "brace@1"
    },
    {
     "t": "ventExit",
     "to": "shuttle_bay"
    },
    {
+    "t": "search"
+   },
+   {
     "t": "chargeShuttle",
-    "n": 8
+    "n": 6
    },
    {
     "t": "launch"
    }
   ],
-  "ending": "escaped",
-  "score": 121,
-  "hash": "ccd938d3235fd036"
+  "ending": "carrier",
+  "score": 98,
+  "hash": "bdfb30c6c846bda8"
  },
  {
   "seed": "golden-26",
@@ -6396,26 +6207,6 @@
     "t": "endTurn"
    },
    {
-    "t": "endTurn"
-   },
-   {
-    "t": "ventExit",
-    "to": "shuttle_bay"
-   },
-   {
-    "t": "chargeShuttle",
-    "n": 11
-   },
-   {
-    "t": "listen"
-   },
-   {
-    "t": "ventEnter"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
     "t": "ventExit",
     "to": "medbay"
    },
@@ -6433,10 +6224,10 @@
     "t": "endTurn"
    },
    {
-    "t": "brace"
+    "t": "listen"
    },
    {
-    "t": "listen"
+    "t": "brace"
    },
    {
     "t": "endTurn"
@@ -6453,40 +6244,46 @@
     "to": "shuttle_bay"
    },
    {
+    "t": "chargeShuttle",
+    "n": 19
+   },
+   {
+    "t": "play",
+    "uid": "door_charge@1",
+    "edge": [
+     "shuttle_bay",
+     "spine_c"
+    ]
+   },
+   {
+    "t": "endTurn"
+   },
+   {
     "t": "listen"
    },
    {
-    "t": "endTurn"
+    "t": "search"
    },
    {
-    "t": "burn",
-    "uid": "sidearm@2"
-   },
-   {
-    "t": "burn",
-    "uid": "suppress@1"
-   },
-   {
-    "t": "burn",
-    "uid": "door_charge@1"
-   },
-   {
-    "t": "burn",
-    "uid": "shotgun@1"
-   },
-   {
-    "t": "ventEnter"
+    "t": "search"
    },
    {
     "t": "endTurn"
+   },
+   {
+    "t": "chargeShuttle",
+    "n": 5
+   },
+   {
+    "t": "listen"
    },
    {
     "t": "endTurn"
    }
   ],
   "ending": "adrift",
-  "score": 73,
-  "hash": "58205d658e0b7a4f"
+  "score": 98,
+  "hash": "a0c048e706692cb2"
  },
  {
   "seed": "golden-27",
@@ -6647,32 +6444,11 @@
    {
     "t": "burn",
     "uid": "triage@1"
-   },
-   {
-    "t": "seal",
-    "edge": [
-     "armory",
-     "medbay"
-    ]
-   },
-   {
-    "t": "discard",
-    "uid": "inf_sweat@1008"
-   },
-   {
-    "t": "creep",
-    "to": "ore_hold"
-   },
-   {
-    "t": "listen"
-   },
-   {
-    "t": "endTurn"
    }
   ],
   "ending": "killed",
   "score": 14,
-  "hash": "050c6baf5e945c5e"
+  "hash": "ab0eaa66782ece37"
  },
  {
   "seed": "golden-28",
@@ -6936,52 +6712,11 @@
    },
    {
     "t": "endTurn"
-   },
-   {
-    "t": "seal",
-    "edge": [
-     "bridge",
-     "spine_c"
-    ]
-   },
-   {
-    "t": "play",
-    "uid": "hand_off@1"
-   },
-   {
-    "t": "play",
-    "uid": "duct_map@2"
-   },
-   {
-    "t": "discard",
-    "uid": "inf_tremor@1004"
-   },
-   {
-    "t": "play",
-    "uid": "hand_off@2"
-   },
-   {
-    "t": "play",
-    "uid": "salv_kit@13"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "play",
-    "uid": "duct_map@1"
-   },
-   {
-    "t": "play",
-    "uid": "cache@1"
-   },
-   {
-    "t": "endTurn"
    }
   ],
   "ending": "adrift",
-  "score": 88,
-  "hash": "c992fea7102fda9f"
+  "score": 82,
+  "hash": "ec117ba795f814d2"
  },
  {
   "seed": "golden-29",
@@ -6990,14 +6725,6 @@
   "objective": "burn",
   "bot": "heuristic",
   "actions": [
-   {
-    "t": "play",
-    "uid": "trim@1",
-    "to": "spine_a"
-   },
-   {
-    "t": "listen"
-   },
    {
     "t": "discard",
     "uid": "stick@1"
@@ -7008,37 +6735,33 @@
    },
    {
     "t": "play",
-    "uid": "harness@2"
-   },
-   {
-    "t": "play",
     "uid": "nerve@2"
    },
    {
-    "t": "endTurn"
+    "t": "search"
    },
    {
-    "t": "creep",
-    "to": "spine_b"
+    "t": "search"
+   },
+   {
+    "t": "play",
+    "uid": "trim@1",
+    "to": "spine_a"
+   },
+   {
+    "t": "endTurn"
    },
    {
     "t": "play",
     "uid": "signal_check@2"
    },
    {
-    "t": "play",
-    "uid": "course_correct@1"
+    "t": "creep",
+    "to": "spine_b"
    },
    {
-    "t": "endTurn"
-   },
-   {
-    "t": "play",
-    "uid": "trim@2",
+    "t": "creep",
     "to": "spine_c"
-   },
-   {
-    "t": "listen"
    },
    {
     "t": "search"
@@ -7048,7 +6771,42 @@
    },
    {
     "t": "play",
-    "uid": "signal_check@1"
+    "uid": "deadstick@1"
+   },
+   {
+    "t": "creep",
+    "to": "bridge"
+   },
+   {
+    "t": "listen"
+   },
+   {
+    "t": "play",
+    "uid": "harness@2"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "listen"
+   },
+   {
+    "t": "play",
+    "uid": "harness@1"
+   },
+   {
+    "t": "creep",
+    "to": "spine_c"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "listen"
+   },
+   {
+    "t": "play",
+    "uid": "course_correct@1"
    },
    {
     "t": "creep",
@@ -7058,62 +6816,24 @@
     "t": "endTurn"
    },
    {
-    "t": "creep",
-    "to": "spine_c"
-   },
-   {
-    "t": "creep",
-    "to": "spine_b"
-   },
-   {
-    "t": "listen"
-   },
-   {
-    "t": "search"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "burn",
-    "uid": "preflight@2"
-   },
-   {
     "t": "seal",
     "edge": [
-     "spine_b",
-     "reactor"
+     "bridge",
+     "comms"
     ]
-   },
-   {
-    "t": "play",
-    "uid": "deadstick@1"
-   },
-   {
-    "t": "play",
-    "uid": "harness@1"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "seal",
-    "edge": [
-     "spine_b",
-     "spine_c"
-    ]
-   },
-   {
-    "t": "brace"
-   },
-   {
-    "t": "listen"
    },
    {
     "t": "play",
     "uid": "boost@1"
    },
    {
+    "t": "listen"
+   },
+   {
+    "t": "play",
+    "uid": "preflight@2"
+   },
+   {
     "t": "play",
     "uid": "preflight@1"
    },
@@ -7121,56 +6841,23 @@
     "t": "endTurn"
    },
    {
-    "t": "listen"
+    "t": "burn",
+    "uid": "mayday@1"
+   },
+   {
+    "t": "play",
+    "uid": "signal_check@1"
    },
    {
     "t": "brace"
    },
    {
     "t": "discard",
-    "uid": "inf_sweat@1001"
+    "uid": "inf_blackout@1001"
    },
    {
-    "t": "play",
-    "uid": "preflight@1"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "play",
-    "uid": "trim@2",
-    "to": "reactor"
-   },
-   {
-    "t": "listen"
-   },
-   {
-    "t": "brace"
-   },
-   {
-    "t": "endTurn"
-   },
-   {
-    "t": "brace"
-   },
-   {
-    "t": "play",
-    "uid": "signal_check@2"
-   },
-   {
-    "t": "seal",
-    "edge": [
-     "reactor",
-     "ore_hold"
-    ]
-   },
-   {
-    "t": "seal",
-    "edge": [
-     "reactor",
-     "spine_b"
-    ]
+    "t": "discard",
+    "uid": "inf_tunnel@1002"
    },
    {
     "t": "endTurn"
@@ -7178,74 +6865,51 @@
    {
     "t": "play",
     "uid": "stick@1",
-    "threat": "t2"
-   },
-   {
-    "t": "search"
-   },
-   {
-    "t": "search"
-   },
-   {
-    "t": "play",
-    "uid": "course_correct@2"
-   },
-   {
-    "t": "endTurn"
+    "threat": "t6"
    },
    {
     "t": "listen"
    },
    {
     "t": "play",
-    "uid": "course_correct@1"
+    "uid": "preflight@2"
    },
    {
     "t": "play",
-    "uid": "harness@2"
+    "uid": "course_correct@2"
+   },
+   {
+    "t": "ventEnter"
    },
    {
     "t": "endTurn"
    },
    {
     "t": "burn",
-    "uid": "trim@1"
+    "uid": "trim@2"
    },
    {
-    "t": "seal",
-    "edge": [
-     "reactor",
-     "ore_hold"
-    ]
+    "t": "burn",
+    "uid": "salv_flare@11"
    },
    {
-    "t": "seal",
-    "edge": [
-     "reactor",
-     "spine_b"
-    ]
+    "t": "ventExit",
+    "to": "shuttle_bay"
    },
    {
     "t": "play",
     "uid": "harness@1"
    },
    {
-    "t": "endTurn"
+    "t": "listen"
    },
    {
-    "t": "brace"
-   },
-   {
-    "t": "discard",
-    "uid": "inf_fever@1002"
+    "t": "chargeShuttle",
+    "n": 6
    },
    {
     "t": "play",
-    "uid": "signal_check@1"
-   },
-   {
-    "t": "play",
-    "uid": "nerve@2"
+    "uid": "course_correct@1"
    },
    {
     "t": "endTurn"
@@ -7253,10 +6917,52 @@
    {
     "t": "burn",
     "uid": "nerve@1"
+   },
+   {
+    "t": "ventEnter"
+   },
+   {
+    "t": "ventExit",
+    "to": "ore_hold"
+   },
+   {
+    "t": "takeSpecimen"
+   },
+   {
+    "t": "play",
+    "uid": "preflight@1"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "creep",
+    "to": "comms"
+   },
+   {
+    "t": "play",
+    "uid": "signal_check@2"
+   },
+   {
+    "t": "discard",
+    "uid": "inf_sweat@1003"
+   },
+   {
+    "t": "search"
+   },
+   {
+    "t": "play",
+    "uid": "signal_check@1"
+   },
+   {
+    "t": "endTurn"
+   },
+   {
+    "t": "upload"
    }
   ],
-  "ending": "adrift",
-  "score": 62,
-  "hash": "77c2d22442026c4a"
+  "ending": "specimen",
+  "score": 97,
+  "hash": "d6ec99e4d0129d18"
  }
 ]

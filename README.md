@@ -3,9 +3,25 @@
 A single-player, offline-first space horror board game, as an installable PWA.
 
 You wake because your cryopod failed. Eight other pods are open, none of them on
-a scheduled cycle. The *Bellwether*'s orbit is decaying and the shuttle needs
-power you have not banked yet. Most runs end badly; the interesting part is
-which bad.
+a scheduled cycle. The *Bellwether*'s orbit is decaying, and there are four
+things worth doing before it closes:
+
+| | | |
+|---|---|---|
+| **RUN** | shuttle bay | Bank the charge and fly it out. |
+| **BURN** | bridge | Arm the reactor overload and live through the countdown. |
+| **CALL** | comms | Broadcast what happened here and stay at the set until it lands. |
+| **KNOW** | ore hold | Cut a specimen out of the nest and send the readings up. |
+
+You name one of them when you wake. All four stay live, all four are tracked on
+screen, and finishing any of them ends the run as a win. Nothing is decided for
+you at the end.
+
+Nothing aboard knows where you are — it knows where the last noise was. Move
+loudly and it comes to the place you were loud. Move quietly, and it arrives,
+finds nothing, searches for an hour and gives up on you. What you can see, you
+can predict: the line under the schematic says what every visible contact will
+do if you end the hour now. A wound is a decision, not an event.
 
 One run is fifteen to thirty minutes. Phone-first, portrait, one thumb. No
 accounts, no server, no network at runtime, nothing leaves the device.
@@ -40,8 +56,8 @@ src/
     state.ts     types and initial state construction
     reduce.ts    (state, action) => state — the only way anything changes
     actions.ts   legalActions(): the canonical, exhaustive action list
-    threats.ts   the threat phase, wounds, CARRY draws
-    noise.ts     the noise phase and the bag
+    threats.ts   threat memory, the threat phase, wounds, perception, forecast
+    noise.ts     noise as distance, the bag, the board cap, the hive clock
     scoring.ts   ending detection and score
     graph.ts     the ship as a graph: distances, seals, routing
     invariants.ts asserted on every transition in dev and sim builds
@@ -73,17 +89,30 @@ Three rules hold the whole thing together:
 |---|---|
 | `random` | Uniform over legal actions. The floor. |
 | `greedy` | One-ply, immediate value only, with a weak pull toward the exit. |
-| `heuristic` | One-ply with phase awareness: bank power, read CARRY when blind, commit to an ending when the shuttle stops being reachable. The competent-human proxy. |
+| `heuristic` | One-ply with a plan: it picks a route out of the four, prices its feasibility every hour, and switches when one closes. The competent-human proxy. |
 | `search` | Two-ply expectimax over the top five candidates, sampling only the dice and the bag. The ceiling. |
 
-Bots never read a face-down CARRY card. They carry their own PRNG, separate
-from the game's, so `(gameSeed, botSeed)` reproduces a run exactly.
+Bots see exactly what the interface shows: `legalActions` and the same
+perception rules. They carry their own PRNG, separate from the game's, so
+`(gameSeed, botSeed)` reproduces a run exactly. Every batch rotates through all
+four objectives, because a harness that only ever declares RUN measures a
+quarter of the game and reports it as the whole.
+
+Two evaluator bugs found while building this are worth knowing about, because
+both made the harness measure a game nobody was playing: pricing unspent time
+made the bot hoard it and end the hour with 2.4 of 4 unspent, and scoring the
+count of listens rather than what a listen reveals turned LISTEN into a free
+point — the bot stood in one compartment listening four times an hour for seven
+hours. Neither showed up as a crash or a failing test. Both showed up in a
+trace.
 
 ## Balance
 
-`docs/BALANCE.md` carries the tuned numbers, the measurements behind them, and
-every place the shipped values differ from the v0 numbers in the design
-document — with the reason. `docs/RULES-AS-BUILT.md` is the ruleset as shipped.
+`docs/REDESIGN.md` is the analysis that produced the current game: what was
+measurably wrong with the previous one, and what each system was replaced with.
+`docs/BALANCE.md` carries the tuned numbers and the measurements behind them.
+`docs/RULES-AS-BUILT.md` is the ruleset as shipped, generated from
+`src/content/`.
 `docs/INTERFACE.md` records how the interface moves, how the ship talks, and the
 advisory voice that teaches the game while you play it. `docs/VISUALS.md` is a
 study, not a plan: whether the terminal can carry ASCII plates, icons or
@@ -106,19 +135,16 @@ otherwise green pipeline.
 The gates that can be automated are automated, and `npm run gate:mN` reports
 honestly rather than passing quietly. What remains needs a person and a phone:
 
-- **The ceiling gap.** SearchBot is now 21.2 points above HeuristicBot at depth
-  3, just over the 10–20 band, having been 7.7 points *under* it before wounds
-  started to compound. Narrowing the search shortlist is the lever;
-  `docs/BALANCE.md` has the measurement.
-- **The card play-rate gates.** Twenty-three cards sit under the floor and six
-  over the ceiling; the analysis of which of those are content problems and
-  which are limits of a one-ply bot is in the same document.
-- **Milestone 7.** Twenty runs on the real phone, the protocol in Part 10 of the
-  design document. The end-of-run survey and the telemetry export exist for
-  exactly this; export the JSON from the menu and read it against the bot's
-  numbers. The first session's export is what found the wound rule that let a
-  run absorb damage for ever — a thing 1,200 clean bot runs had reported as a
-  0% death rate without anyone reading it as a bug.
+- **Route parity.** KNOW and CALL finish less often than RUN and BURN at every
+  depth; `docs/BALANCE.md` has the spread and the levers. All four clear the
+  band that matters (a tenth of all wins), but they are not level yet.
+- **The card play-rate gates.** Cards below the floor and above the ceiling are
+  listed in the balance report, with the analysis of which are content problems
+  and which are limits of a one-ply bot.
+- **Twenty runs on a real phone.** The end-of-run survey and the telemetry
+  export exist for exactly this; export the JSON from the menu and read it
+  against the bot's numbers. Every serious design bug in this project's history
+  was found by a person playing it and not by the harness.
 - **The device checks.** Install on the phone, aeroplane mode, a complete run
   offline; the Lighthouse audit; thumb reach measured rather than eyeballed.
 

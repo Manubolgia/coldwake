@@ -396,14 +396,20 @@ function finishTurn(state: GameState): void {
     return;
   }
 
-  // The overload makes the ship worse every hour it counts down.
+  decayNoise(state);
+
+  // Both of these go on AFTER the hour's decay, or they do not happen at all:
+  // at one point an hour they were exactly cancelled by it, and an armed
+  // overload made the ship no louder than an unarmed one.
   if (state.ship.scuttleArmed && !scuttleReady(state)) {
     for (const id of Object.keys(state.ship.noise)) addNoise(state, id, RULES.scuttleNoisePerHour);
     const left = fuseTurns(state.depth) - (state.turn - state.ship.scuttleArmedTurn);
     state.feed.push({
       turn: state.turn,
       kind: 'alarm',
-      text: `>> The reactor is screaming and the whole ship can hear it. ${left} hours to critical.`,
+      text:
+        `>> The reactor is screaming and the whole ship can hear it. ${left} hours to critical, ` +
+        `and every compartment is ${RULES.scuttleNoisePerHour} louder than it was.`,
     });
   }
   // Whatever you cut out of the hold keeps calling to them.
@@ -411,8 +417,6 @@ function finishTurn(state: GameState): void {
     addNoise(state, state.player.node, RULES.specimenNoisePerHour);
     alert(state, state.player.node, RULES.specimenNoisePerHour);
   }
-
-  decayNoise(state);
   state.ship.sealedEdges = state.ship.sealedEdges.filter((e) => e.expiresTurn > state.turn);
   advanceHive(state, RULES.hivePerHour);
 

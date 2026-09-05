@@ -1,5 +1,5 @@
 {
-  "turnLimit": 18,
+  "turnLimit": 15,
   "handSize": 5,
   "apPerTurn": 4,
   "powerCap": 20,
@@ -107,18 +107,18 @@
       "node": "ore_hold",
       "ap": 2,
       "power": 0,
-      "noise": 4
+      "noise": 3
     },
     "upload": {
       "node": "comms",
       "ap": 2,
-      "power": 8,
+      "power": 5,
       "noise": 3
     },
     "armScuttle": {
       "node": "bridge",
       "ap": 3,
-      "power": 12,
+      "power": 14,
       "noise": 3,
       "fuseTurns": 5
     },
@@ -129,7 +129,7 @@
       "noise": 0
     }
   },
-  "specimenNoisePerHour": 2,
+  "specimenNoisePerHour": 1,
   "scuttleNoisePerHour": 2,
   "ventAmbushPenalty": -2,
   "shakingPenalty": -1,

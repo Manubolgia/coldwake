@@ -95,12 +95,14 @@ export async function runBatch(spec: BatchSpec): Promise<Accumulator> {
 }
 
 export function bandsFor(summary: Summary, depth: Depth): Band[] {
+  // Re-derived for the reworked game. The ladder must fall monotonically and
+  // span roughly forty points end to end; docs/BALANCE.md carries the reasoning.
   const winBands: Record<number, [number, number]> = {
-    1: [0.55, 0.65],
-    2: [0.45, 0.6],
-    3: [0.35, 0.45],
-    4: [0.25, 0.38],
-    5: [0.15, 0.25],
+    1: [0.6, 0.78],
+    2: [0.52, 0.7],
+    3: [0.42, 0.6],
+    4: [0.32, 0.5],
+    5: [0.22, 0.42],
   };
   const [min, max] = winBands[depth] ?? [0, 1];
   const routes = ['run', 'burn', 'call', 'know'];

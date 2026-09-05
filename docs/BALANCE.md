@@ -1,200 +1,189 @@
 # Balance report
 
-Everything here is measured, not asserted. The tuning loop is
+Everything here is measured, not asserted. The loop is
 `npm run sim -- --runs N --depth D --role R --bot heuristic`, which writes
 `reports/*.json` and a readable `reports/*.md`; `npm run gate:m3` runs the whole
-Part 9 battery and exits non-zero on any metric outside its band.
+battery and exits non-zero on any metric outside its band.
 
-All measurements below use **HeuristicBot**, the competent-human proxy, unless
-another bot is named.
+All measurements use **HeuristicBot**, the competent-human proxy, unless another
+bot is named. Every batch rotates through all four objectives — a harness that
+only ever declares RUN measures a quarter of the game and reports it as the
+whole.
 
-## Where the shipped numbers differ from the v0 document
+The design this implements is `docs/REDESIGN.md`. The shipped numbers are
+`docs/RULES-AS-BUILT.md`, generated from `src/content/`.
 
-The design document is explicit that Part 4's numbers are v0 and expected to
-change after simulation. They did. Each change below is a measurement, not a
-preference.
+---
 
-| Number | v0 | Shipped | Why |
-|---|---|---|---|
-| Shuttle requirement | 12 | 34 (D1–D2), 32 (D3), 31 (D4), 30 (D5) | At 12 the run resolved on turn 8–10 with nothing spent on defence: the clock never bit and the median resolution turn sat five below its band. 30 puts the median at 13–16 and makes power spent on survival cost turns you can feel. |
-| Pilot's discount | needs 9 | needs 2 less than the depth's requirement, and its two shuttle cards bank less | Same shape, rescaled: a flat delta so the role stays distinct at every depth. |
-| Reactor output at depth 2+ | starts at 1 | starts at 2 (1 at depth 5 was tried and cut) | Starting degraded is a cliff, not a slope: the reactor sits next to the nest, so the repair the player needs is exactly where the threats congregate. Depth 2 fell from ~60% to 17% on this modifier alone. Depth now escalates through the bag, the clock, the CARRY deck and the ore-hold floor instead. |
-| CARRY deck | 8 clean / 4 infested at every depth | 10/2 (D1–D2), 9/3 (D3), 8/4 (D4), 7/5 (D5) | At 8/4 the Carrier ending took 36–52% of runs at every depth and was 80% of all losses — one system dominating the loss table. The ladder now makes infection a depth pressure rather than a constant. |
-| Scuttle cost | 5 power | 10 power, on a 3-turn fuse | At 5 it was a free consolation prize taken on the turn the shuttle became unreachable. At 8 it is a real fork: the power you arm with is power you cannot bank. |
-| CARRY scan | 2 AP, 2 power | 1 AP, 1 power | At the original cost no bot ever scanned, at any depth — pillar 3 failing in the measurement. At 1/1 the scan rate is 32–44%, inside the 20–80% band the playtest protocol asks for. |
-| Purge blood | wound draws a replacement CARRY card | wound draws no card | As written, purging swapped one unknown card for another and was strictly a trap. It is now a genuine, expensive cure: one fewer sample at the price of a burn and a panic. |
-| What a wound may burn | any card in hand | any **non-panic** card in hand | The wound had just shuffled a panic in, so the wound could be paid with the panic it caused. Measured: 65% of all burns were panic, and **1,200 bot runs across every depth produced zero attrition deaths**. A playtester wrote "I discard all I have and I keep going infinitely", which was the rules working as written. See below. |
-| Beacon | 4 power | 3 power | So that broadcasting stays reachable in the runs where arming the reactor is not. |
-| Scuttle timing | arm it any time | a 3-turn fuse | Arming was a free consolation taken on the exact turn the shuttle became unreachable, which put a hard floor under the win rate at every depth. A fuse makes it a commitment: arm it before you know you have failed, or the orbit closes first. Depth 3 moved from 49.6% into band at 43.8% on this change alone. |
+## The headline: what the rework moved
 
-## Two rules the document implies but does not state
-
-Both were added because the simulation found the hole, and both are in
-`src/content/` where they can be tuned.
-
-**The nest breathes.** Every second turn, the ore hold gains 2 noise
-(`threats.json › nestNoise`). Without it, a player who simply creeps to the
-shuttle bay and waits generates no noise, triggers no bag draws, and faces zero
-threats: the measured win rate for silent play was 98.3% with 0.0 wounds and a
-single dominant route taken by 100% of runs. Pillar 1 says the player feeds the
-threat; this says the ship does too, slowly, so that silence buys time rather
-than safety.
-
-**Nothing to hear means they hunt.** A threat whose behaviour is "move toward
-the loudest node" and which is already standing on it moves toward the player
-instead. Without this, threats spawned at the nest — which is the loudest node
-by default — piled up there and never left.
-
-**SHAKING costs a swing** (`rules.json › shakingPenalty: -1`). Not a tuning
-change but a repair: the card's text promised unsteady hands and the reducer
-never read it, so one panic in four was a blank slot with flavour on it and
-discarding it for 1 AP was strictly wasted time.
-
-Its balance cost is nil, and the way that was established is worth recording,
-because "the win rate did not move" is exactly what a change the harness cannot
-see also looks like. HeuristicBot swings 168 times across 1,500 runs at depths
-1/3/5 and holds SHAKING for 41 of them, so the harness does exercise it. Setting
-the penalty to −6 — every one of those 41 swings a guaranteed miss — moves depth
-3 by 0.4 points and depths 1 and 5 not at all. At the shipped −1 nothing moves.
-
-The finding underneath that is larger than the card: **combat barely touches the
-outcome**. A competent player fights 0.1 times a run and the ending is decided
-by arithmetic and routing. Worth knowing before anyone spends a tuning pass on
-weapon numbers.
-
-## Current measurements
-
-HeuristicBot, 1,200–1,500 runs per depth, engineer, seed prefix `kell`:
-
-3,000 runs per depth.
-
-| Depth | Win rate (clean + scuttle) | Clean break | Carrier | Scuttle | Lost + beacon | Median turn | Wounds | Scan rate |
-|---|---|---|---|---|---|---|---|---|
-| 1 | 58.7% | 58% | 20% | 1% | 22% | 14 | 5.5 | 38% |
-| 2 | 55.4% | 54% | 21% | 1% | 24% | 14 | 5.9 | 41% |
-| 3 | 38.6% | 35% | 20% | 4% | 41% | 14 | 6.1 | 33% |
-| 4 | 30.5% | 22% | 28% | 8% | 41% | 14 | 6.8 | 39% |
-| 5 | 24.3% | 15% | 27% | 9% | 49% | 12 | 7.5 | 26% |
-
-**All five depths are inside their bands for the first time**, difficulty falls
-monotonically, the median resolution turn sits at 12–14 against a 12–17 target,
-and 0.2% of runs or fewer resolve before turn 8. The depth 5 overshoot that this
-document has carried since the fuse pass is gone; see the section below for why,
-because the cause is not a number anyone tuned.
-
-**Skill gap, the most important number in the project:** at depth 3,
-HeuristicBot 38.6% against RandomBot 0.2% — **38.4 points**, above the 35-point
-floor. Decisions matter, and they now matter more sharply: random play used to
-survive to a timeout, and now it runs out of things it can do.
-
-**Bot ordering (gate 2.4):** heuristic 38.6% > greedy 5.9% > random 0.2% at
-depth 3, with non-overlapping intervals.
-
-**Ceiling gap (gate 3.6):** SearchBot 59.8% against HeuristicBot 38.6% at depth
-3 — **21.2 points**, just over the 10–20 band, having been 7.7 points under it
-before the wound change. Wounds now compound, and looking two ply ahead to avoid
-one is worth much more than it was. Narrowing the search shortlist is the lever
-if this needs to come back down.
-
-## What is still outside its band
-
-Reported rather than hidden. The tuning loop is built and cheap — these are the
-next numbers to reach for, not defects in the harness.
-
-`npm run gate:m3` goes from 13 red checks to 12, and the composition is what
-matters more than the count:
-
-| Gate | Target | Before | After | Reading |
-|---|---|---|---|---|
-| 3.3 depth 5 win rate | 15–25% | 33.1% ✗ | 23.2% ✓ | Fixed, without a tuning knob. See below. |
-| 3.9 largest loss cause, depth 3 | ≤40% | 53.9% ✗ | 39.9% ✓ | Fixed. Losses now split three ways rather than being one system. |
-| 3.9 largest loss cause, depths 1/2/4/5 | ≤40% | 86% / 84% / 51% / 61% | 47% / 51% / 43% / 45% | Still red, roughly half as red. Depth 1 is now carrier-led at 47%; the rest are led by running out of things to do. |
-| 3.6 ceiling gap | 10–20 points | inside | 22.2 points ✗ | Newly red, and by two points. Wounds compound now, so looking two ply ahead to dodge one is worth much more than it was. Narrowing the search shortlist is the lever. |
-| 3.7 top action share | ≤25% | 27–30% | 28–31% | Unchanged, and unrelated: it is the free-movement cards, covered under Cards below. |
-| 3.11 ending spread | each ≥5% somewhere | Beacon under 1% | Beacon under 1% | Unchanged. Broadcasting is dominated by arming the reactor whenever the bridge is reachable, and the bridge nearly always is. |
-
-**The structural finding, and what was done about it.** The design document
-counts Clean Break *and* Scuttle as wins. Arming the reactor was available to
-any run that reached the bridge with power, which put a hard floor under the win
-rate at every depth: the deep bands were unreachable while the scuttle stayed a
-free late fallback. The first fix was a design one — the 3-turn fuse above — and
-it brought depth 3 into band while leaving depth 5 eight points high.
-
-**What closed the deep end was not a number.** Depth 5 sat at 34.8% against a
-15–25% band, and the previous entry in this table proposed lengthening the fuse
-with depth or dropping Scuttle from the win definition. Neither was needed. The
-real cause was that a wound could be paid with the panic card the wound itself
-had just handed over, so the attrition rule — the one the manual calls "how you
-die here" — had never once fired:
+Depth 2, HeuristicBot, engineer, against the same measurement on the game this
+replaced.
 
 | | Before | After |
 |---|---|---|
-| Burns paid with panic | 65% | 0% |
-| Runs ending in death by attrition (d1 / d3 / d5) | 0% / 0% / 0% | 18% / 27% / 40% |
-| Depth 5 win rate | 34.8% (band 15–25) | 24.3% |
-| Depths inside their win band | 4 of 5 | 5 of 5 |
+| Cards played of cards drawn | **12%** | **53%** |
+| Threat removals per run (killed or shaken off) | **0.11** | **4.97** |
+| Threats on the board at hour 15 | 5.4, still climbing | 4.0, capped |
+| Compartments entered per run | 2.0 | 4.7 |
+| End-the-hour share of all decisions | 29% | 22% |
+| Win split across the routes | 97 / 2 / 0.5 / — | 34 / 34 / 19 / 13 |
+| Ending multiplier spread | 0.3× – 1.5× | 0.8× – 1.25× |
+| Distinct system actions with **zero** uses | 5 of 11 | 2 of 11 |
 
-(3,000 runs a depth, seed prefix `band`. `gate:m3` on its own seeds and run
-count reads the same move as 33.1% → 23.2%.)
+The first two lines are the two complaints the rework existed to answer. The old
+game drew roughly seventy cards a run and played eight of them; it spawned 5.2
+threats a run and removed 0.11.
 
-Deep runs took the most wounds and were therefore the runs the missing rule was
-subsidising most, which is why the fix lands hardest exactly where the ladder
-was flattest. Wound counts fell slightly (6.4 → 5.5 at depth 1) because a run
-that is genuinely being worn down ends sooner. Nothing was retuned to compensate
-and nothing needed to be: every band above is the shipped content unchanged.
+## The ladder
 
-## Roles
+150 runs per objective per depth, seed prefix `bal`, engineer.
 
-Every role, 1,500 runs per depth, HeuristicBot. The band is the engineer's rate
-±7 points, per gate 4.1. Re-measured after the wound change, which moved every
-role: attrition falls hardest on the decks that spend cards to survive.
+| Depth | Win | RUN | BURN | CALL | KNOW | Wounds | Median hour |
+|---|---|---|---|---|---|---|---|
+| 1 SHALLOW | 72.8% | 77% | 73% | 46% | 42% | 3.0 | 11.9 |
+| 2 STANDARD | 63.0% | 66% | 75% | 46% | 41% | 3.6 | 12.4 |
+| 3 DEEP | 51.7% | 56% | 65% | 40% | 19% | 5.1 | 12.5 |
+| 4 BLACK | 42.3% | 44% | 72% | 21% | 13% | 5.1 | 12.0 |
+| 5 KELL | 34.5% | 35% | 41% | 16% | 11% | 6.1 | 12.3 |
 
-| Role | Depth 1 | Depth 3 | Depth 5 |
+The per-route columns are *declared-route completion*: how often a run that said
+it came up here to do a thing actually did that thing. The win column counts
+every finished route, declared or not.
+
+Difficulty falls monotonically across 38 points. The median hour sits at 12–13
+against a 12–17 target, and early resolutions (before hour 8) are 0.8–3.3% at
+depths 3–5.
+
+## Every gate at depth 3
+
+1,200 runs, seed prefix `kell`.
+
+| Check | Value | Band | |
 |---|---|---|---|
-| Engineer | 56.9% | 37.5% | 24.1% |
-| Security | 63.8% | 31.9% | 19.0% |
-| Medic | 60.3% | 31.3% | 19.9% |
-| Surveyor | 63.2% | 33.5% | 18.2% |
-| Pilot | 63.9% | 42.5% | 25.1% |
+| depth 3 win rate | 49.6% | 42–60% | PASS |
+| weakest route share of wins | 12.8% | ≥10% | PASS |
+| cards played of cards drawn | 53.2% | ≥35% | PASS |
+| compartments entered per run | 4.70 | ≥4 | PASS |
+| median resolution turn | 14 | 12–17 | PASS |
+| early resolutions (before hour 8) | 2.8% | ≤5% | PASS |
+| top action share | 22.3% | ≤25% | PASS |
+| dominant route share | 8.9% | ≤15% | PASS |
+| largest loss cause | 48.0% | ≤55% | PASS |
+| threats removed per run | 4.97 | ≥1.5 | PASS |
 
-**All fifteen role checks pass for the first time** (`npm run gate:m4`, 4.1).
-Nothing in any deck was touched to achieve it; the roles converged because the
-loss they were being measured against changed.
+Endings at depth 3: escaped 13.0%, carrier 3.8%, overload 17.0%, relay 9.5%,
+specimen 6.3%, killed 2.4%, adrift 48.0%.
 
-**The medic** has come back to the pack — 69.7% to 60.3% at depth 1 — for the
-reason the previous pass predicted rather than for a nerf. Its edge was never
-its cards; it was that the Carrier ending was ~85% of all losses at depth 1 and
-the medic is the role that reads and discards its own blood. With running out of
-things to do now a real way to lose, Carrier is 47% of depth-1 losses and the
-medic's speciality covers less of the loss table.
+---
 
-**Security and the surveyor** sit at the top of the depth-1 band (+6.9 and +6.3
-against the engineer, inside ±7 but on the edge) and the bottom of the depth-3
-one (−5.6 and −4.0). Worth watching rather than acting on.
+## Where the numbers came from
 
-**The pilot** was 74.5% two passes ago and is 63.9% now. Its discount is two
-power rather than five, its two shuttle cards bank three less between them, and
-its filler is genuinely weaker: Course Correct banks one power rather than two
-and Nerve draws one card rather than two. It is nonetheless the strongest role
-at every depth, because banking early is what survives a run that gets shorter.
+Each of these is a measurement that changed a rule, in the order they were
+found.
 
-## Cards
+**Power stopped being a timer.** The first tuning pass left the reactor paying
+2 an hour into a pool, and a trace showed the bot standing in one compartment
+for five consecutive hours waiting for the bar to fill. That is the same defect
+as the old game with four bars instead of one. The reactor now starts at 1 an
+hour and repairs to 3; most of the power in a run is cells and suits in
+compartments you have not searched. If you are not searching, you are not
+funding anything — and searching is movement, noise and risk.
 
-Twenty-three of the forty-five role cards are played in under 25% of the runs
-that draw them (gate 4.2), and six are played in over 95% (gate 4.3: bypass,
-reroute, careful step, course correct, checklist, hand off — the free power and
-free movement cards, which are the engine of every deck and have no decision
-attached to them).
+**The relay stopped resetting.** Holding the transmitter used to break whenever
+anything walked into comms. That reads as a rule until you notice comms shares a
+bulkhead with the nest: **797 blocked hours to intruders against 26 to an empty
+pool**, and CALL finished 32% of the time. The watch now runs only while you are
+at the set and the pool can pay, and nothing resets it. Something walking in on
+you already costs a capability; it does not also need to cost the watch. Runs
+that broadcast now finish the watch almost every time.
 
-The first pass at this was an evaluator problem, not a content problem: a ward,
-a spent weapon and a read bag had no value in the bot's evaluator at all, so it
-never braced, never recharged and never listened. Pricing those three moved five
-cards above the floor. What is left is genuinely under-used by a one-ply bot:
-the burn-tier panic buttons (override, load-shed, last stand, door charge,
-rappel), which pay off across several turns, and the weapons, because running is
-usually correct and a one-ply bot can always see the cheaper escape. A human
-under real pressure is not the same reader, so these are candidates for the
-SearchBot to arbitrate before anything is cut.
+**Escalation stopped making three HUNTERS.** With the board capped, every draw
+at the cap promoted a STRAY, and by hour eight the ship held three HUNTERS and
+nothing else — the crowd this rework exists to delete, in miniature. Promotion
+now happens only while STRAYS outnumber HUNTERS; the rest of the pressure goes
+into the hold.
+
+**Two per-hour noise sources were doing nothing at all.** The armed overload
+added 1 noise to every compartment each hour and the hour's decay took 1 back
+off, so an armed reactor made the ship exactly as loud as an unarmed one. The
+specimen had the same bug. Both now apply after decay, and both were retuned
+once they started to bite (fuse 2/hour, specimen 1/hour).
+
+**Bracing was capped at one.** Two braces an hour for two time was a defensive
+turtle with no decision in it. One set of the shoulders an hour; the cards that
+ward stack on top of it.
+
+## Two evaluator bugs, recorded because they are the interesting failures
+
+Neither showed up as a crash or a failing test. Both made the harness measure a
+game nobody was playing, and both were found by reading a trace rather than a
+number.
+
+**Pricing unspent time.** The evaluator scored `player.ap`, so spending time
+always looked like a loss. The bot ended the hour with **2.4 of 4 time unspent**,
+took 2.0 actions an hour, and played 2.5 cards a run — and every card and pacing
+number measured off it was wrong. An hour's unspent time is gone when the hour
+turns over; it is worth nothing and is now scored as nothing. Actions per hour
+went 2.0 → 4.1 on that one line.
+
+**Scoring the listen tally.** Information is worth an action, so the evaluator
+was given `stats.listens`. That counter only goes up, so LISTEN became a free
+point with no noise and no cost: the bot stood in one compartment listening four
+times an hour for seven consecutive hours. It now scores *contacts currently in
+view*, which is bounded by what is aboard and cannot be farmed.
+
+A third, smaller version of the same mistake: valuing cards in hand made holding
+a card strictly better than playing it, which is the old game's 88% waste with
+extra steps. Playing is now worth more than holding.
+
+---
+
+## What is still outside its band
+
+Reported rather than hidden.
+
+**KNOW is the weakest route at depth**, at 19% / 13% / 11% for depths 3–5
+against 65% / 72% / 41% for BURN. The ore hold is the nest — the loudest
+compartment on the ship, the one every noise-follower converges on — so the
+route asks you to walk into the worst room, make three noise cutting the
+specimen free, and then carry something that keeps calling. That is the right
+*shape*; the numbers are too steep. The levers, in order of how much they cost
+elsewhere: the ore hold's noise floor, `takeSpecimen`'s noise, and the upload's
+power.
+
+**BURN is the strongest at four of five depths.** Arming costs 14 power and a
+five-to-seven-hour fuse with the ship two louder everywhere per hour, and it is
+still the route a competent player completes most often. Lengthening the fuse
+is the obvious lever and it has not been tried.
+
+**Depth 1 sits at 72.8%** against a 60–78% band it passes, but at the top of it,
+and depth 5 at 34.5% is at the top of 22–42%. The ladder is correctly shaped
+and slightly generous overall.
+
+**Two system actions are still never used by the bot**, down from five.
+`purgeVents` needs CRAWLERS in the ducts or the MOTHER in them at the moment you
+are standing on the bridge with the power; `recharge` needs you to have fired a
+weapon and missed, and a one-ply bot can always see the cheaper escape. Both are
+plausibly limits of the bot rather than of the content — a human under pressure
+is not the same reader — but neither is measured, so neither is claimed. Uses
+per run at depth 3, for the record: seal 2.01, chargeShuttle 1.74, armScuttle
+0.32, cure 0.28, launch 0.17, takeSpecimen 0.17, repair 0.14, beacon 0.08,
+upload 0.08, purgeVents 0, recharge 0.
+
+**Repair fires 0.14 times a run**, which undercuts the intent behind starting
+the reactor at 1 an hour: the bot funds its runs almost entirely out of salvage
+rather than out of the reactor. Searching is doing the work the design wanted it
+to do, but the reactor is not yet the second half of that decision.
+
+**Seven cards sit under the 25% play-rate floor**: `field_repair` and
+`slag_door` at 0%, then the weapons and the one-use panic buttons.
+`field_repair` reloads a weapon the bot never fires; `slag_door` pays off across
+several hours, which a one-ply bot cannot see. **Six sit over the 95% ceiling** —
+`bypass`, `brace`, `hardline`, `reroute`, `steady_hands`, `circuit_map` — the
+free power, free movement and free information cards, which have no decision
+attached to them. Both lists are candidates for the SearchBot to arbitrate
+before anything is cut.
 
 ## The loop, for the next pass
 
@@ -203,3 +192,8 @@ SearchBot to arbitrate before anything is cut.
 3. Change **one** number in `src/content/`.
 4. Re-run. Confirm the target moved and nothing else broke.
 5. `npm run golden:regen`, review the diff, commit it with the report.
+
+And before trusting any of it: read a trace. `npx tsx scripts/trace.ts engineer 3`
+prints an hour-by-hour account of what the bot believed and why. Both of the
+worst bugs in this document were invisible in the summary and obvious in the
+trace.

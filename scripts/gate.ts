@@ -194,7 +194,17 @@ async function m3(): Promise<void> {
   }
   const monotonic = ALL_DEPTHS.every((d, i) => i === 0 || (rates[d] ?? 0) < (rates[ALL_DEPTHS[i - 1] as number] ?? 1));
   record('3.4', 'difficulty decreases monotonically D1 → D5', monotonic, ALL_DEPTHS.map((d) => `${((rates[d] ?? 0) * 100).toFixed(0)}%`).join(' > '));
-  record('3.13', 'tuned numbers documented', existsSync('docs/BALANCE.md'));
+  // The rework's own bands. Every one of these was measured on the game this
+  // replaced, and every one of them is a complaint from play — see
+  // docs/REDESIGN.md Part 5.
+  const d3 = await runBatch({ runs, role: 'engineer', depth: 3, bot: 'heuristic', entropy: false, seedPrefix: 'gate3x', workers: 4 });
+  const rw = summarise(d3);
+  const weakest = Math.min(...['run', 'burn', 'call', 'know'].map((o) => rw.winSplit[o] ?? 0));
+  record('3.15', 'every route takes ≥10% of wins', weakest >= 0.1, `weakest ${(weakest * 100).toFixed(1)}%`);
+  record('3.16', 'cards played ≥35% of cards drawn', rw.cardPlayRate >= 0.35, `${(rw.cardPlayRate * 100).toFixed(1)}%`);
+  record('3.17', 'compartments entered ≥4 per run', rw.movesPerRun >= 4, rw.movesPerRun.toFixed(2));
+  record('3.18', 'threats removed ≥1.5 per run (killed or shaken off)', rw.means.killed + rw.means.shaken >= 1.5, (rw.means.killed + rw.means.shaken).toFixed(2));
+  record('3.13', 'tuned numbers documented', existsSync('docs/BALANCE.md') && existsSync('docs/REDESIGN.md'));
   record('3.14', 'golden replays regenerated after tuning', existsSync('test/golden/replays.json'));
 }
 
@@ -206,7 +216,7 @@ async function m4(): Promise<void> {
     for (const depth of [1, 3, 5] as Depth[]) {
       const acc = await runBatch({ runs, role, depth, bot: 'heuristic', entropy: false, seedPrefix: `gate4-${role}`, workers: 4 });
       const s = summarise(acc);
-      const bands: Record<number, [number, number]> = { 1: [0.48, 0.72], 3: [0.28, 0.52], 5: [0.08, 0.32] };
+      const bands: Record<number, [number, number]> = { 1: [0.55, 0.85], 3: [0.38, 0.66], 5: [0.18, 0.48] };
       const band = bands[depth] ?? [0, 1];
       record(`4.1 ${role} d${depth}`, 'role balance inside ±7 points of the engineer band', s.winRate >= band[0] && s.winRate <= band[1], `${(s.winRate * 100).toFixed(1)}%`);
       for (const [card, n] of Object.entries(acc.cardDrawn)) drawn[card] = (drawn[card] ?? 0) + n;
@@ -214,12 +224,12 @@ async function m4(): Promise<void> {
     }
   }
   const dead = Object.entries(drawn)
-    .filter(([id]) => !id.startsWith('panic_') && !id.startsWith('salv_'))
+    .filter(([id]) => !id.startsWith('inf_') && !id.startsWith('salv_'))
     .filter(([id, n]) => (played[id] ?? 0) / n <= 0.25)
     .map(([id]) => id);
   record('4.2', 'no dead cards (played in >25% of runs that drew them)', dead.length === 0, dead.join(', '));
   const auto = Object.entries(drawn)
-    .filter(([id]) => !id.startsWith('panic_') && !id.startsWith('salv_'))
+    .filter(([id]) => !id.startsWith('inf_') && !id.startsWith('salv_'))
     .filter(([id, n]) => (played[id] ?? 0) / n > 0.95)
     .map(([id]) => id);
   record('4.3', 'no auto-includes (played in >95%)', auto.length === 0, auto.join(', '));

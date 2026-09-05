@@ -313,7 +313,9 @@ test('all four routes are on screen from the first hour, with the declared one m
 });
 
 test('the screen says what is about to happen before the hour is committed', async ({ page }) => {
-  await startRun(page, 'forecast', 3);
+  // Depth 1: a fresh profile has nothing else unlocked, and the forecast is
+  // the same machinery at every depth.
+  await startRun(page, 'forecast', 1);
   // Play until something is close enough to be worth forecasting.
   let seen = false;
   for (let i = 0; i < 25; i++) {
@@ -326,7 +328,7 @@ test('the screen says what is about to happen before the hour is committed', asy
     if ((await end.count()) === 0) break;
     await end.click({ timeout: 5000 }).catch(() => {});
   }
-  expect(seen, 'nothing was ever perceived over 25 hours at depth 3').toBe(true);
+  expect(seen, 'nothing was ever perceived over 25 hours').toBe(true);
   await expect(page.getByTestId('forecast')).toContainText('IF THE HOUR ENDS NOW');
 });
 

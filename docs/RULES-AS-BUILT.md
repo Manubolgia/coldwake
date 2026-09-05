@@ -1,9 +1,9 @@
 # The rules as built
 
-The design document's Part 4 numbers are v0. These are the numbers the game
-actually ships with, after the tuning pass in `docs/BALANCE.md`. Everything here
-is generated from `src/content/` — if the two disagree, the JSON is right and
-this file is stale.
+Everything here is generated from `src/content/`. If this file and the JSON
+disagree, the JSON is right and this file is stale. The design behind these
+numbers is `docs/REDESIGN.md`; the measurements that set them are
+`docs/BALANCE.md`.
 
 ## The ship
 
@@ -15,142 +15,144 @@ this file is stale.
               ARMORY ─── ORE HOLD ─── COMMS
 ```
 
-Vent access: medbay, ore hold, bridge, shuttle bay. Start: cryobay (safe).
-Nest: ore hold, which never falls below its noise floor and gains 2 noise every
-second turn — the ship gets worse whether or not you do anything.
+Vent access: medbay, ore hold, bridge, shuttle bay. Start: cryobay.
+Nest: ore hold, which never falls below its floor and gains noise every
+second hour — the ship gets worse whether or not you do anything.
 
-## The turn
+## The four routes
 
-Draw to 5 · spend 3 AP · noise resolves · threats act · the reactor pays out.
+One is declared at wake and scores ×1.25. All four are live for the whole run,
+all four are tracked on screen, and finishing any of them ends the run as a
+win. Nothing is computed from the state of the corpse.
 
-| Action | AP | Power | Noise |
+| Route | Where | What it takes |
+|---|---|---|
+| **RUN** | SHUTTLE BAY | Bank the shuttle's charge and fly it out. |
+| **BURN** | BRIDGE | Arm the reactor overload and live through the countdown. |
+| **CALL** | COMMS | Broadcast what happened here and stay at the set until it lands. |
+| **KNOW** | ORE HOLD | Cut a specimen out of the nest and send the readings up. |
+
+| Ending | From | × | What it is |
 |---|---|---|---|
-| Move | 1 | — | 2 |
-| Creep | 2 | — | 0 |
-| Listen | 1 | — | 0 |
-| Search | 1 | — | 2 |
-| Discard | 1 | — | 0 |
-| Enter / leave the vents | 1 each | — | 0 |
-| Repair reactor (reactor) | 2 | 0 | 3 |
-| Seal bulkhead (any spine) | 1 | 2 | 1 |
-| Purge vents (bridge) | 2 | 3 | 4 |
-| CARRY scan (medbay) | 1 | 1 | 1 |
-| Purge blood (medbay) | 2 | 2 | 1 |
-| Recharge weapon (armory) | 1 | 1 | 2 |
-| Charge shuttle (shuttle bay) | 1 | any | 1 |
-| Beacon (comms) | 2 | 3 | 5 |
-| Arm scuttle (bridge) | 3 | 10 | 3 |
-| Launch (shuttle bay) | 1 | — | 0 |
+| CLEAN BREAK | run | 1.0 | You are off the ship and nothing came with you. |
+| CARRIER | run | 0.85 | You are off the ship. So is it. |
+| OVERLOAD | burn | 1.0 | The ship is a light, and nothing aboard it outlived you by long. |
+| RELAY | call | 1.0 | Somebody a long way from here knows exactly what is on this ship, and will not come looking. |
+| SPECIMEN | know | 1.0 | You know what it is. So does everyone who will ever have to fight one. |
+| KILLED | — | 0.8 | It took the last thing you could still do, and then it took the rest. |
+| ADRIFT | — | 0.8 | The window closed with you aboard and nothing finished. |
 
-Reactor output 0–2, banked into a pool capped at 10 each turn.
-Noise 0–6; a node at 4 or more draws from the bag and resets to its floor.
+The band is 0.8× to 1.25× including the declared bonus. In the game this
+replaces it ran 0.3× to 1.5×, so the last flag set outweighed every decision
+taken before it.
 
-Purge blood does **not** draw a replacement sample — it is a real cure, paid for
-with a wound.
+## The hour
 
-### Wounds
+4 time, plus one free play-or-set-aside out of a hand of 5.
+**The hand persists between hours.** Draw back up to the hand size at the
+start of each one.
 
-A wound does three things at once: it burns a card the player chooses out of
-hand, shuffles a panic card permanently into the kit, and draws one face-down
-CARRY sample.
+| Action | Time | Power | Heard |
+|---|---|---|---|
+| move | 1 | — | 3 |
+| creep | 1 | — | 1 |
+| listen | 1 | — | silent |
+| search | 1 | — | 2 |
+| brace | 1 | — | silent |
+| discard | 1 | — | silent |
+| ventEnter | 1 | — | silent |
+| ventExit | 1 | — | silent |
+| repair | 2 | — | 3 |
+| seal | 1 | 1 | 1 |
+| purgeVents | 2 | 2 | 4 |
+| cure | 2 | 2 | 1 |
+| recharge | 1 | 1 | 2 |
+| chargeShuttle | 1 | — | 1 |
+| beacon | 2 | 2 | 5 |
+| takeSpecimen | 2 | — | 4 |
+| upload | 2 | 8 | 3 |
+| armScuttle | 3 | 12 | 3 |
+| launch | 1 | — | silent |
 
-**The burn is restricted to non-panic cards.** `legalActions` offers only
-non-panic cards during the wound phase, `resolveBurn` rejects a panic uid, and
-a hand holding nothing but panic skips the choice entirely — `burnRandomOwned`
-takes a non-panic card from the deck, then the discard, then the hand. If a
-wound is owed and no non-panic card exists anywhere, the run resolves as a death
-there rather than the debt lapsing. An invariant asserts that the wound phase
-is never entered without something in hand that can pay for it.
+Order of an hour: spend your time · any compartment at 4 noise draws ·
+everything aboard moves · the reactor pays out · noise fades by 1 · the hold wakes a little.
 
-Until the seventh release the burn could be paid with the panic card the wound
-had just handed over, which made a wound cost nothing at all: 65% of burns in
-simulation were panic, and 1200 bot runs across every depth produced **zero**
-attrition deaths. A playtester reported it as "I discard all I have and I keep
-going infinitely", which was an accurate description of the rules as shipped.
+## Noise
 
-### Panic
+A noise value is two things at once: how much noise lands in the compartment,
+and **how many compartments away it is heard**. Anything that hears it
+believes you are *there* — not where you are, where the sound was.
 
-Every panic card costs something **while it is in hand**, none can be played,
-and none can be given up to a wound:
+| Creature | Mark | HP | Wounds | Speed | Hears | Behaviour |
+|---|---|---|---|---|---|---|
+| STRAY | `S` | 2 | 1 | 1 | 2 | noise |
+| HUNTER | `H` | 3 | 2 | 1 | 4 | hunter |
+| CRAWLER | `C` | 2 | 1 | 2 | 3 | burrow |
+| MOTHER | `M` | — | 2 | 1 | everything | mother |
 
-| | While held |
+A threat that reaches its target and finds nothing searches for
+1 hour and then gives up on you entirely.
+That is the whole of hiding, and it is what `threatsShaken` scores.
+
+**The board is capped.** When the bag would spawn past the cap it escalates
+instead: a STRAY grows into a HUNTER, or, when there is nothing left to grow,
+the hold wakes further. Pressure keeps climbing; the count does not.
+
+**The MOTHER cannot be killed by anything aboard.** She wakes when the hold
+fills. A bulkhead holds her 1 hour, flooding the vents holds her
+2, and anything loud elsewhere turns her around.
+
+## Perception
+
+You perceive your own compartment and everything 1 away. A listen
+reaches 3 and names each contact: what it is, where, how far, and
+whether it is coming. Everything else on the schematic is a hollow mark
+showing where you last saw something.
+
+`forecast()` runs the real threat phase against a copy and reports where every
+**perceived** contact will be if you end the hour now, and whether it reaches
+you. The noise phase is deliberately not simulated: what comes out of the bag
+is not something the player is entitled to know in advance.
+
+## Infection
+
+A wound takes a capability you choose — gone for the rest of the run — and
+puts an infection card in your kit. There is nothing face down about it: the
+count is on the status strip from the first one.
+
+| Card | While it is in your hand |
 |---|---|
-| SHAKING | −1 on every attack roll |
-| TUNNEL VISION | Listening costs 2 AP instead of 1 |
-| COLD SWEAT | +1 noise on any action that makes noise |
-| BLACKOUT | +1 noise in the current node the moment it is drawn, then inert |
+| FEVER | While it is in your hand your grip is wrong. Everything you swing is one harder to land. |
+| TUNNEL VISION | While it is in your hand you cannot filter what you hear. Listening takes twice as long. |
+| COLD SWEAT | While it is in your hand you are clumsy. Everything you do that makes a sound makes one more. |
+| TREMOR | While it is in your hand you cannot hold still. Creeping is as loud as walking. |
+| BLACKOUT | The moment it comes to hand your vision goes and you put a hand through something. |
 
-Discarding a panic card costs 1 AP, does **not** draw a replacement, and does
-**not** remove the card — it returns on the next reshuffle. All it buys is the
-rest of this turn without the penalty, and the hand is discarded for free at end
-of turn anyway. Permanent removal is `removePanic` only: TRIAGE, FIELD DRESSING,
-STIMULANT AMPOULE, which burn it out of the deck.
+Infection cannot be given up to a wound. The MEDBAY takes one out of the kit
+for good for 2 time and 2 power — no wound, no roll.
 
-SHAKING had no effect at all until the fifth release: its text promised unsteady
-hands and the reducer never read it, so it was a blank slot pretending to be a
-penalty. `attackPenalty()` now sums it with the vent-ambush −2, and the miss line
-prints the whole sum including the penalty so a miss is never unaccountable.
+## The ladder
 
-Arming the overload starts a **3-turn fuse**. Arm it later than that and the
-orbit closes first: the run is Lost. Committing to the scuttle is a decision
-made before you know you have failed, not after.
+| Depth | Hours | Shuttle | Aboard | Hold wakes | Relay | Fuse | Carrier at | Bag |
+|---|---|---|---|---|---|---|---|---|
+| 1 SHALLOW | 18 | 28 | 3 | 14 | 3h | 5h | 7 | base |
+| 2 STANDARD | 17 | 30 | 3 | 12 | 4h | 5h | 6 | +1 drifter |
+| 3 DEEP | 16 | 32 | 4 | 10 | 4h | 6h | 6 | +1 drifter, +1 burrower |
+| 4 BLACK | 15 | 34 | 4 | 8 | 5h | 6h | 5 | +2 drifter, +1 burrower, -1 blank |
+| 5 KELL | 14 | 36 | 5 | 6 | 5h | 7h | 5 | +2 drifter, +1 burrower, -2 blank |
 
-## The bag
+The pilot lifts on 4 less at every depth.
 
-Start: 5 blank, 3 contact, 2 drifter, 1 burrower.
-Reserve: 4 contact, 2 drifter, 1 chorus.
-A blank goes back in and drags a contact out of the reserve with it.
+## Score
 
-The four ids in the engine are `contact`, `drifter`, `burrower` and `chorus`;
-the four names a player ever sees are STRAY, HUNTER, CRAWLER and MOTHER.
+| | Each |
+|---|---|
+| powerBanked | 2 |
+| nodesSearched | 3 |
+| threatsKilled | 4 |
+| threatsShaken | 2 |
+| turnsSurvived | 1 |
+| survivingCards | 2 |
+| cures | 3 |
 
-| Id | Player-facing | Mark | HP | Damage | Speed | Behaviour |
-|---|---|---|---|---|---|---|
-| contact | STRAY | `S` | 2 | 1 | 1 | Moves to the loudest node. Standing on it already, it hunts you instead. |
-| drifter | HUNTER | `H` | 3 | 2 | 1 | Hunts within 2 nodes, else the loudest node. |
-| burrower | CRAWLER | `C` | 2 | 1 | 2 | Uses the vents, ignores seals. In the reactor it degrades output instead of attacking. |
-| chorus | MOTHER | `M` | 5 | 2 | 1 | Noise +1 everywhere, every turn. Reaching the ore hold, it feeds 2 STRAYS into the bag. |
-
-Order: burrowers, drifters, contacts, chorus.
-
-Every player-facing surface reads the same field. The mark is the name's first
-letter, checked by a content test; the listen report composes from `sign` and
-`signMany`, the readout counts with `name` and `namePlural`, and the manual
-prints `name` and `text`. Up to the sixth release the same creature was a
-CONTACT in the manual, a `C` on the schematic and "something moving" in a
-listen — three vocabularies for four creatures, which a playtester read as far
-more than four things being aboard.
-
-## Depths
-
-| Depth | Turns | Shuttle | Bag | CARRY | Ore floor | On the board at wake |
-|---|---|---|---|---|---|---|
-| 1 SHALLOW | 20 | 34 | base | 10/2, 1 card | 2 | 1 |
-| 2 STANDARD | 20 | 34 | +1 drifter | 10/2, 1 card | 2 | 1 |
-| 3 DEEP | 18 | 32 | +1 drifter, +1 chorus | 9/3, 1 card | 2 | 2 |
-| 4 BLACK | 17 | 31 | +1 drifter, +1 chorus, −1 blank | 8/4, 2 cards | 3 | 3 |
-| 5 KELL | 15 | 30 | +2 drifter, +1 chorus, −2 blanks | 7/5, 2 cards | 3 | 4 |
-
-Reactor output starts at 2 at every depth; only a burrower in the reactor takes
-it down.
-
-The pilot launches on 2 less than the depth's requirement.
-
-## Endings
-
-Checked in order at the moment the run resolves.
-
-1. **Clean Break** — launched holding fewer than 2 infested. ×1.5
-2. **Carrier** — launched holding 2 or more. ×0.8
-3. **Scuttle** — the overload reached critical and you did not leave. ×1.2
-4. **Beacon** — broadcast, then died. ×0.6
-5. **Lost** — nothing armed, nothing broadcast. ×0.3
-
-Each ending carries a `verdict` (what it is, one clause) and a `how` (what
-reaches it, with `{threshold}` and `{fuse}` substituted) in `rules.json`, and
-`endingReport()` composes the run-specific "why this one, and what would have
-changed it" that the ending screen prints. The manual's ENDINGS page reads the
-same two fields, so the screen and the manual cannot drift apart.
-
-Score = banked power ×2 + nodes searched ×3 + threats killed ×4 + turns survived
-+ surviving non-panic cards ×2 + salvaged logs, all multiplied by the ending.
+Multiplied by the ending, and again by 1.25 if it is the route you declared.
