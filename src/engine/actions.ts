@@ -1,10 +1,10 @@
 import { ALL_EDGES, MAP, NODE_IDS, RULES, VENT_NODES, card, node } from './content';
-import { cardIdOf, cardOf, isPanic, isSpent } from './deck';
+import { cardIdOf, cardOf, holding, isInfection, isSpent } from './deck';
 import { neighbours } from './graph';
-import { shuttleRequirement } from './state';
+import { infectionThreshold, relayHold, shuttleRequirement } from './state';
 import type { Action, Card, EffectSpec, GameState, NodeId, Uid } from './types';
 
-export type TargetKind = 'node' | 'edge' | 'edgeHere' | 'threat' | 'vent' | 'spent' | 'other' | null;
+export type TargetKind = 'node' | 'anyNode' | 'edge' | 'edgeHere' | 'threat' | 'vent' | 'spent' | null;
 
 /** What a card needs pointed at before it can be played. */
 export function targetKind(effect: EffectSpec): TargetKind {
@@ -18,7 +18,9 @@ export function targetKind(effect: EffectSpec): TargetKind {
     case 'pushThreat':
       return 'threat';
     case 'addNoise':
-      return effect.scope === 'target' ? 'other' : null;
+      return effect.scope === 'target' ? 'anyNode' : null;
+    case 'lure':
+      return 'anyNode';
     case 'ventJump':
       return 'vent';
     case 'recharge':
@@ -45,20 +47,42 @@ export function cardOps(c: Card): string[] {
   return effectOps(c.effect);
 }
 
-/** TUNNEL VISION in hand makes listening cost double (§5.3). */
+/** TUNNEL VISION in hand makes listening cost double. */
 export function listenCost(state: GameState): number {
   const base = RULES.basicActions.listen?.ap ?? 1;
-  return state.player.hand.some((u) => cardIdOf(u) === 'panic_tunnel') ? base + 1 : base;
+  return holding(state, 'inf_tunnel') ? base + 1 : base;
+}
+
+export function creepCost(_state: GameState): number {
+  return RULES.basicActions.creep?.ap ?? 1;
+}
+
+/** TREMOR in hand means creeping is as loud as walking. */
+export function creepNoise(state: GameState): number {
+  const base = RULES.basicActions.creep?.noise ?? 1;
+  return holding(state, 'inf_tremor') ? (RULES.basicActions.move?.noise ?? 3) : base;
 }
 
 /**
- * Every penalty that applies to a swing: the vent ambush, and SHAKING while it
- * is still in hand. Panic that only occupies a slot is not panic, it is a blank
- * — each of the four now costs something you can feel while you hold it.
+ * The hand persists across hours and has its own allowance: once an hour you
+ * may play a card or set one aside for free, and everything after that costs
+ * its printed time. The free slot is what keeps the hand turning over — §3.4.
+ */
+export function cardCost(state: GameState, uid: Uid): number {
+  return state.player.freeCardUsed ? cardOf(uid).ap : 0;
+}
+
+export function discardCost(state: GameState): number {
+  return state.player.freeCardUsed ? (RULES.basicActions.discard?.ap ?? 1) : 0;
+}
+
+/**
+ * Every penalty that applies to a swing: the vent ambush, and FEVER while it
+ * is still in hand.
  */
 export function attackPenalty(state: GameState): number {
-  const shaking = state.player.hand.some((u) => cardIdOf(u) === 'panic_shaking') ? RULES.shakingPenalty : 0;
-  return state.player.combatPenalty + shaking;
+  const fever = holding(state, 'inf_fever') ? RULES.shakingPenalty : 0;
+  return state.player.combatPenalty + fever;
 }
 
 export function salvageLeft(state: GameState, id: NodeId): number {
@@ -69,6 +93,7 @@ export function systemAt(state: GameState, key: string): boolean {
   const def = RULES.systemActions[key];
   if (!def) return false;
   if (state.player.node === 'vents') return false;
+  if (def.node === '@here') return true;
   if (def.node === '@spines') return MAP.spines.includes(state.player.node);
   return def.node === state.player.node;
 }
@@ -92,27 +117,28 @@ export function requirementMet(state: GameState, c: Card): boolean {
 
 export function playable(state: GameState, uid: Uid): boolean {
   const c = cardOf(uid);
-  if (c.role === 'panic') return false;
-  if (state.player.ap < c.ap) return false;
+  if (c.role === 'infection') return false;
+  if (state.player.ap < cardCost(state, uid)) return false;
   if (c.weapon === true && isSpent(state, uid)) return false;
   if (state.player.node === 'vents') return false;
   return requirementMet(state, c);
 }
 
-/**
- * §7 rule 5: the single canonical list of everything the player may do.
- * The UI and every bot consume this and nothing else.
- */
+/** Is there anything left to cut out, and is this the place to do it? */
+export function canCure(state: GameState): boolean {
+  return state.player.hand.concat(state.player.deck, state.player.discard).some(isInfection);
+}
+
+/** The single canonical list of everything the player may do. */
 export function legalActions(state: GameState): Action[] {
   if (state.status !== 'active') return [];
   const out: Action[] = [];
   const p = state.player;
 
-  // A wound takes something you could have done with it. Panic is what the
-  // wound leaves behind, so it is never on the table here — otherwise the
-  // wound the panic paid for cost nothing at all.
+  // A wound takes something you could have done with it. Infection is what the
+  // wound leaves behind, so it is never on the table here.
   if (state.phase === 'wound') {
-    for (const uid of p.hand) if (!isPanic(uid)) out.push({ t: 'burn', uid });
+    for (const uid of p.hand) if (!isInfection(uid)) out.push({ t: 'burn', uid });
     return out;
   }
 
@@ -120,7 +146,7 @@ export function legalActions(state: GameState): Action[] {
     if (p.ap >= (RULES.basicActions.ventExit?.ap ?? 1)) {
       for (const v of VENT_NODES) out.push({ t: 'ventExit', to: v });
     }
-    if (p.ap >= (RULES.basicActions.discard?.ap ?? 1)) {
+    if (p.ap >= discardCost(state)) {
       for (const uid of p.hand) out.push({ t: 'discard', uid });
     }
     out.push({ t: 'endTurn' });
@@ -131,12 +157,17 @@ export function legalActions(state: GameState): Action[] {
   const adj = neighbours(state, here);
 
   if (p.ap >= (RULES.basicActions.move?.ap ?? 1)) for (const n of adj) out.push({ t: 'move', to: n });
-  if (p.ap >= (RULES.basicActions.creep?.ap ?? 2)) for (const n of adj) out.push({ t: 'creep', to: n });
+  if (p.ap >= creepCost(state)) for (const n of adj) out.push({ t: 'creep', to: n });
   if (p.ap >= listenCost(state)) out.push({ t: 'listen' });
   if (p.ap >= (RULES.basicActions.search?.ap ?? 1) && salvageLeft(state, here) > 0) {
     out.push({ t: 'search' });
   }
-  if (p.ap >= (RULES.basicActions.discard?.ap ?? 1)) {
+  // Bracing twice is not twice as braced. One set of the shoulders an hour,
+  // and the cards that ward are what stack on top of it.
+  if (p.ap >= (RULES.basicActions.brace?.ap ?? 1) && p.wardsThisTurn === 0) {
+    out.push({ t: 'brace' });
+  }
+  if (p.ap >= discardCost(state)) {
     for (const uid of p.hand) out.push({ t: 'discard', uid });
   }
   if (p.ap >= (RULES.basicActions.ventEnter?.ap ?? 1) && node(here).vent) {
@@ -154,7 +185,7 @@ export function legalActions(state: GameState): Action[] {
       case 'node':
         for (const n of adj) out.push({ t: 'play', uid, to: n });
         break;
-      case 'other':
+      case 'anyNode':
         for (const n of NODE_IDS) if (n !== here) out.push({ t: 'play', uid, to: n });
         break;
       case 'vent':
@@ -184,16 +215,7 @@ export function legalActions(state: GameState): Action[] {
     for (const n of adj) out.push({ t: 'seal', edge: [here, n] });
   }
   if (systemAt(state, 'purgeVents') && canAfford(state, 'purgeVents')) out.push({ t: 'purgeVents' });
-  if (systemAt(state, 'carryScan') && canAfford(state, 'carryScan')) {
-    p.carry.forEach((c, i) => {
-      if (!c.revealed) out.push({ t: 'carryScan', index: i });
-    });
-  }
-  if (systemAt(state, 'purgeBlood') && canAfford(state, 'purgeBlood')) {
-    p.carry.forEach((c, i) => {
-      if (!c.revealed) out.push({ t: 'purgeBlood', index: i });
-    });
-  }
+  if (systemAt(state, 'cure') && canAfford(state, 'cure') && canCure(state)) out.push({ t: 'cure' });
   if (systemAt(state, 'recharge') && canAfford(state, 'recharge')) {
     for (const s of p.spent) out.push({ t: 'recharge', target: s });
   }
@@ -204,6 +226,16 @@ export function legalActions(state: GameState): Action[] {
   }
   if (systemAt(state, 'beacon') && canAfford(state, 'beacon') && !state.ship.beaconSent) {
     out.push({ t: 'beacon' });
+  }
+  if (
+    systemAt(state, 'takeSpecimen') &&
+    canAfford(state, 'takeSpecimen') &&
+    !state.ship.specimenTaken
+  ) {
+    out.push({ t: 'takeSpecimen' });
+  }
+  if (systemAt(state, 'upload') && canAfford(state, 'upload') && p.carryingSpecimen) {
+    out.push({ t: 'upload' });
   }
   if (systemAt(state, 'armScuttle') && canAfford(state, 'armScuttle') && !state.ship.scuttleArmed) {
     out.push({ t: 'armScuttle' });
@@ -223,8 +255,8 @@ export function legalActions(state: GameState): Action[] {
 export type Cost = { ap: number; power: number; noise: number };
 
 /**
- * What an action costs, with the noise the player will actually make (panic
- * surcharge included). The UI shows this before every confirmation — §11.
+ * What an action costs, with the noise the player will actually make (the
+ * infection surcharge included). The UI shows this before every confirmation.
  */
 export function actionCost(state: GameState, a: Action): Cost {
   const basic = (key: string): Cost => ({
@@ -240,19 +272,24 @@ export function actionCost(state: GameState, a: Action): Cost {
   let cost: Cost;
   switch (a.t) {
     case 'move':
-    case 'creep':
     case 'search':
-    case 'discard':
+    case 'brace':
     case 'ventEnter':
     case 'ventExit':
       cost = basic(a.t);
+      break;
+    case 'discard':
+      cost = { ap: discardCost(state), power: 0, noise: 0 };
+      break;
+    case 'creep':
+      cost = { ap: creepCost(state), power: 0, noise: creepNoise(state) };
       break;
     case 'listen':
       cost = { ap: listenCost(state), power: 0, noise: 0 };
       break;
     case 'play': {
       const c = cardOf(a.uid);
-      cost = { ap: c.ap, power: 0, noise: c.noise };
+      cost = { ap: cardCost(state, a.uid), power: 0, noise: c.noise };
       break;
     }
     case 'burn':
@@ -265,7 +302,7 @@ export function actionCost(state: GameState, a: Action): Cost {
     default:
       cost = system(a.t);
   }
-  if (cost.noise > 0) cost.noise += state.player.hand.some((u) => cardIdOf(u) === 'panic_sweat') ? 1 : 0;
+  if (cost.noise > 0) cost.noise += holding(state, 'inf_sweat') ? 1 : 0;
   return cost;
 }
 
@@ -294,6 +331,8 @@ export function describe(a: Action): string {
       return 'LISTEN AT THE BULKHEAD';
     case 'search':
       return 'SEARCH THIS COMPARTMENT';
+    case 'brace':
+      return 'SET YOURSELF AGAINST THE FRAME';
     case 'discard':
       return `SET ASIDE ${cardOf(a.uid).name}`;
     case 'burn':
@@ -310,21 +349,62 @@ export function describe(a: Action): string {
       return `DROP THE BULKHEAD TO ${node(a.edge[1]).name}`;
     case 'purgeVents':
       return 'FLOOD THE VENTS';
-    case 'carryScan':
-      return 'READ YOUR BLOOD';
-    case 'purgeBlood':
-      return 'FLUSH YOUR BLOOD';
+    case 'cure':
+      return 'CUT THE INFECTION OUT';
     case 'recharge':
       return `REFILL ${cardOf(a.target).name}`;
     case 'chargeShuttle':
       return `BANK ${a.n} INTO THE SHUTTLE`;
     case 'beacon':
       return 'BROADCAST';
+    case 'takeSpecimen':
+      return 'CUT THE SPECIMEN FREE';
+    case 'upload':
+      return 'UPLOAD THE SPECIMEN';
     case 'armScuttle':
-      return 'ARM THE REACTOR';
+      return 'ARM THE OVERLOAD';
     case 'launch':
       return 'LAUNCH';
     case 'endTurn':
       return 'WAIT OUT THE HOUR';
+  }
+}
+
+/**
+ * What an action is for, in the player's terms, and what it will cost them
+ * that the cost line does not already say. Shown under the button.
+ */
+export function consequence(state: GameState, a: Action): string | null {
+  switch (a.t) {
+    case 'move':
+      return `Fast, and heard ${RULES.basicActions.move?.noise ?? 3} compartments away.`;
+    case 'creep':
+      return `Slow. Heard ${creepNoise(state)} compartment${creepNoise(state) === 1 ? '' : 's'} away, and no further.`;
+    case 'listen':
+      return `Names everything within ${RULES.listenRange} compartments and what it is doing.`;
+    case 'brace':
+      return 'The next thing that reaches you this hour does not land.';
+    case 'discard':
+      return state.player.freeCardUsed
+        ? 'Out of hand, back into the deck. It will come round again.'
+        : 'Free this hour: out of hand, back into the deck, and something else comes.';
+    case 'seal':
+      return `Shut for ${RULES.systemActions.seal?.turns ?? 3} hours. A CRAWLER ignores it; the MOTHER takes an hour to break it.`;
+    case 'purgeVents':
+      return 'Kills every CRAWLER in the ducts and holds the MOTHER there two hours.';
+    case 'cure':
+      return 'One infection card leaves your deck for good.';
+    case 'beacon':
+      return `Then hold comms ${relayHold(state.depth)} hours, ${RULES.systemActions.beacon?.drain ?? 1} power an hour, with nothing else in the room.`;
+    case 'takeSpecimen':
+      return 'It calls to everything aboard for as long as you carry it.';
+    case 'upload':
+      return 'This finishes the run.';
+    case 'armScuttle':
+      return `Then survive ${state.depth === 1 ? 4 : 5} hours. You cannot call it back.`;
+    case 'launch':
+      return `Off the ship. Carrying ${infectionThreshold(state.depth)} or more infection makes it a CARRIER.`;
+    default:
+      return null;
   }
 }

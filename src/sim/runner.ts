@@ -1,6 +1,6 @@
 import { actionKey, cardIdOf, initialState, legalActions, reduce } from '../engine';
 import { seedFrom } from '../engine/rng';
-import type { Action, Depth, Ending, GameState, RoleId } from '../engine/types';
+import type { Action, Depth, Ending, GameState, Objective, RoleId } from '../engine/types';
 import { BOTS, type BotName } from './bots';
 import { evaluateStrategic } from './eval';
 
@@ -8,6 +8,7 @@ export type RunConfig = {
   seed: string;
   role: RoleId;
   depth: Depth;
+  objective?: Objective;
   bot: BotName;
   botSeed: string;
   entropy: boolean;
@@ -15,14 +16,18 @@ export type RunConfig = {
 
 export type RunResult = {
   ending: Ending;
-  cause: 'deck' | 'timeout' | 'launch';
+  objective: Objective;
+  declared: boolean;
+  cause: 'attrition' | 'timeout' | 'objective';
   score: number;
   turn: number;
   wounds: number;
   killed: number;
   searched: number;
-  scans: number;
-  infested: number;
+  cures: number;
+  infection: number;
+  shaken: number;
+  listens: number;
   banked: number;
   actions: string[];
   route: string[];
@@ -36,7 +41,7 @@ const GUARD = 4000;
 
 export function runOne(cfg: RunConfig): RunResult {
   const bot = BOTS[cfg.bot];
-  let state: GameState = initialState(cfg.seed, cfg.role, cfg.depth);
+  let state: GameState = initialState(cfg.seed, cfg.role, cfg.depth, cfg.objective ?? 'run');
   let rng = seedFrom(`${cfg.botSeed}|${cfg.bot}|${cfg.seed}|${cfg.role}|${cfg.depth}`);
 
   const actions: string[] = [];
@@ -77,14 +82,18 @@ export function runOne(cfg: RunConfig): RunResult {
   if (!r) throw new Error('resolved run without a result');
   return {
     ending: r.ending,
+    objective: r.objective,
+    declared: r.declared,
     cause: r.cause,
     score: r.score,
     turn: r.turn,
     wounds: state.stats.wounds,
     killed: state.stats.threatsKilled,
     searched: state.ship.searched.length,
-    scans: state.stats.scans,
-    infested: r.infested,
+    cures: state.stats.cures,
+    infection: r.infection,
+    shaken: state.stats.threatsShaken,
+    listens: state.stats.listens,
     banked: state.ship.shuttleCharge,
     actions,
     route,

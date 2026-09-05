@@ -3,7 +3,7 @@
     {
       "id": "engineer",
       "name": "ENGINEER",
-      "strength": "Repairs and power. Poor in a fight.",
+      "strength": "Power, bulkheads and the reactor. Handles a fight badly.",
       "weakness": "Poor in a fight.",
       "unlock": {
         "type": "start"
@@ -12,8 +12,8 @@
     {
       "id": "security",
       "name": "SECURITY",
-      "strength": "Weapons, and can take a hit.",
-      "weakness": "Loud. Nothing technical.",
+      "strength": "The only role that can reliably put something down, and the best at making it go somewhere else.",
+      "weakness": "Loud, and nothing technical.",
       "unlock": {
         "type": "start"
       }
@@ -21,18 +21,18 @@
     {
       "id": "medic",
       "name": "MEDIC",
-      "strength": "Reads and flushes blood. Mitigates wounds.",
-      "weakness": "Slow. Hits softly.",
+      "strength": "Cuts infection out of the deck faster than anyone. Absorbs wounds.",
+      "weakness": "Slow, and hits like a clipboard.",
       "unlock": {
         "type": "win",
-        "label": "Win any run."
+        "label": "Finish any objective."
       }
     },
     {
       "id": "surveyor",
       "name": "SURVEYOR",
-      "strength": "Moves, searches, lives in the vents.",
-      "weakness": "Comes apart quickly.",
+      "strength": "Moves silently, reads the ship at four compartments, lives in the vents.",
+      "weakness": "Comes apart quickly under pressure.",
       "unlock": {
         "type": "depth",
         "depth": 3,
@@ -42,14 +42,14 @@
     {
       "id": "pilot",
       "name": "PILOT",
-      "strength": "Lifts the shuttle on less power.",
-      "weakness": "Weakest otherwise.",
+      "strength": "Banks the shuttle from anywhere and lifts on less.",
+      "weakness": "Weakest at everything that is not leaving.",
       "unlock": {
         "type": "ending",
-        "ending": "clean_break",
-        "label": "Achieve a Clean Break."
+        "ending": "escaped",
+        "label": "Finish a RUN."
       },
-      "shuttleRequired": 32
+      "shuttleRequired": 22
     }
   ]
 }

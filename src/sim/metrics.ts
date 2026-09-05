@@ -21,14 +21,17 @@ export type Accumulator = {
     wounds: number;
     killed: number;
     searched: number;
-    scans: number;
-    infested: number;
+    cures: number;
+    infection: number;
+    shaken: number;
+    listens: number;
     banked: number;
   };
   scanRuns: number;
 };
 
-export const WIN_ENDINGS: Ending[] = ['clean_break', 'scuttle'];
+/** Four routes finish the run as a win; the CARRIER is a win worth less. */
+export const WIN_ENDINGS: Ending[] = ['escaped', 'overload', 'relay', 'specimen', 'carrier'];
 export const ENTROPY_THRESHOLD = 12;
 
 export function emptyAccumulator(): Accumulator {
@@ -46,7 +49,18 @@ export function emptyAccumulator(): Accumulator {
     gapSamples: 0,
     gapUnderThreshold: 0,
     gapSum: 0,
-    sums: { score: 0, turn: 0, wounds: 0, killed: 0, searched: 0, scans: 0, infested: 0, banked: 0 },
+    sums: {
+      score: 0,
+      turn: 0,
+      wounds: 0,
+      killed: 0,
+      searched: 0,
+      cures: 0,
+      infection: 0,
+      shaken: 0,
+      listens: 0,
+      banked: 0,
+    },
     scanRuns: 0,
   };
 }
@@ -79,10 +93,12 @@ export function accumulate(acc: Accumulator, r: RunResult): void {
   acc.sums.wounds += r.wounds;
   acc.sums.killed += r.killed;
   acc.sums.searched += r.searched;
-  acc.sums.scans += r.scans;
-  acc.sums.infested += r.infested;
+  acc.sums.cures += r.cures;
+  acc.sums.infection += r.infection;
+  acc.sums.shaken += r.shaken;
+  acc.sums.listens += r.listens;
   acc.sums.banked += r.banked;
-  if (r.scans > 0) acc.scanRuns += 1;
+  if (r.cures > 0) acc.scanRuns += 1;
 }
 
 function mergeMap(into: Record<string, number>, from: Record<string, number>): void {
@@ -143,8 +159,10 @@ export type Summary = {
     wounds: number;
     killed: number;
     searched: number;
-    scans: number;
-    infested: number;
+    cures: number;
+    infection: number;
+    shaken: number;
+    listens: number;
     banked: number;
   };
 };
@@ -201,8 +219,10 @@ export function summarise(acc: Accumulator): Summary {
       wounds: acc.sums.wounds / runs,
       killed: acc.sums.killed / runs,
       searched: acc.sums.searched / runs,
-      scans: acc.sums.scans / runs,
-      infested: acc.sums.infested / runs,
+      cures: acc.sums.cures / runs,
+      infection: acc.sums.infection / runs,
+      shaken: acc.sums.shaken / runs,
+      listens: acc.sums.listens / runs,
       banked: acc.sums.banked / runs,
     },
   };

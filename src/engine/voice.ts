@@ -3,7 +3,9 @@
  *
  * Every line the player reads is composed here, so the tone stays in one place
  * and the vocabulary stays inside the fiction: the ship does not know it is a
- * board game and never says bag, token, card, deck or turn.
+ * board game and never says bag, token, card, deck or turn. It also never
+ * reports a blank — a blank is a weight in an urn, it has no referent aboard a
+ * ship, and describing five of them was the single worst line in the old game.
  *
  * Lines vary. The variant is chosen from a hash of the state rather than from
  * the game's own generator, so the same seed and the same choices always
@@ -11,10 +13,11 @@
  * random stream the rules depend on.
  */
 import narration from '../content/narration.json';
-import { TOKEN_TYPES, depthDef, node, threatDef } from './content';
+import { MAP, RULES, depthDef, node, threatDef } from './content';
 import { distance } from './graph';
 import { cardOf } from './deck';
-import type { GameState, LogLine, NodeId, ThreatType, TokenType, Uid } from './types';
+import { hiveWake, infectionThreshold, relayHold, shuttleRequirement } from './state';
+import type { GameState, Location, LogLine, NodeId, Threat, ThreatType, Uid } from './types';
 
 const POOLS = narration as Record<string, string[]>;
 
@@ -40,7 +43,7 @@ function line(state: GameState, pool: string, fill: Record<string, string | numb
   return text;
 }
 
-export function where(id: NodeId | 'vents'): string {
+export function where(id: Location): string {
   return id === 'vents' ? 'THE CRAWLSPACE' : node(id).name;
 }
 
@@ -52,40 +55,59 @@ export function cardName(uid: Uid): string {
   return cardOf(uid).name;
 }
 
-/**
- * What a return turns out to be, in words a person can act on — and in the
- * same four names the schematic prints and the manual explains. A listen that
- * said "something heavy" while the map said D and the manual said DRIFTER was
- * three vocabularies for one creature, and read as three creatures.
- */
-function signature(type: TokenType, many: boolean): string {
-  if (type === 'blank') return many ? 'are nothing at all' : 'is nothing at all';
-  const def = threatDef(type);
-  return many ? def.signMany : def.sign;
+/** How far off, in the words a person would use. */
+function range(d: number): string {
+  if (d === 0) return 'in here with you';
+  if (d === 1) return 'one compartment away';
+  if (d === Infinity) return 'somewhere behind a sealed bulkhead';
+  return `${d} compartments off`;
 }
 
 /**
- * The result of a listen, written as a sentence rather than a tally: how much
- * of what is still out there is nothing, and how much of it is not.
+ * What one contact is doing, from what the player can actually tell. This is
+ * the tracker: a thing, a place, a distance and whether it is coming. It never
+ * says how many nothings are aboard, because there is no such object.
  */
-export function sweepReport(state: GameState): string {
-  const parts: string[] = [];
-  for (const t of TOKEN_TYPES) {
-    const n = state.bag[t] ?? 0;
-    if (n === 0) continue;
-    const word = signature(t, n > 1);
-    parts.push(`${n} ${word}`);
+export function contactLine(state: GameState, t: Threat, from: NodeId): string {
+  const name = threatName(t.type);
+  const at = t.node === 'vents' ? 'inside the walls' : `in ${node(t.node).name}`;
+  const d = t.node === 'vents' ? 1 : distance(state, from, t.node, false);
+  const here = state.player.node;
+  let doing: string;
+  if (t.stalled > 0) doing = 'held where it is, and working at it';
+  else if (t.target !== null && t.target === here) doing = 'coming straight here';
+  else if (t.stance === 'hunting' && t.target !== null) {
+    doing = `heading for ${node(t.target).name}`;
+  } else if (t.stance === 'searching') doing = 'searching the compartment it is in';
+  else doing = 'drifting, with nothing to follow';
+  return `${name} ${at}, ${range(d)}, ${doing}`;
+}
+
+/**
+ * The result of a listen: everything within earshot, by name, place, distance
+ * and intent. Nothing else. If it turns up nothing, it says so in one clause.
+ */
+export function sweepReport(state: GameState, found: Threat[], reach: number): string {
+  const here = state.player.node;
+  const from: NodeId = here === 'vents' ? MAP.nest : here;
+  if (found.length === 0) {
+    return `>> You put your ear to the frame and listen out to ${reach} compartments. ${line(state, 'sweepNothing')}`;
   }
-  if (parts.length === 0) return `>> ${line(state, 'sweepNothing')}`;
-  const total = parts.length === 1 ? parts[0] : `${parts.slice(0, -1).join(', ')}, and ${parts.at(-1)}`;
-  return `>> You put your ear to the bulkhead. Of what is still unaccounted for aboard, ${total}.`;
+  const parts = found.map((t) => contactLine(state, t, from));
+  const body = parts.length === 1 ? parts[0] : `${parts.slice(0, -1).join('; ')}; and ${parts.at(-1)}`;
+  return `>> You listen out to ${reach} compartments. ${body}.`;
+}
+
+export function revealReport(state: GameState, found: Threat[], reach: number): string {
+  return sweepReport(state, found, reach);
 }
 
 export function arrival(state: GameState, to: NodeId, silent: boolean): string {
-  return `>> ${line(state, silent ? 'arriveQuiet' : 'arrive', { place: where(to) })}`;
+  const heard = RULES.basicActions.move?.noise ?? 2;
+  return `>> ${line(state, silent ? 'arriveQuiet' : 'arrive', { place: where(to), range: heard })}`;
 }
 
-export function spawnLine(state: GameState, type: ThreatType, at: NodeId | 'vents'): string {
+export function spawnLine(state: GameState, type: ThreatType, at: Location): string {
   return `>> ${line(state, 'spawn', { thing: threatName(type), place: where(at) })}`;
 }
 
@@ -101,6 +123,31 @@ export function killLine(state: GameState, type: ThreatType): string {
   return `>> ${line(state, 'kill', { thing: threatName(type) })}`;
 }
 
+export function shrugLine(state: GameState, t: Threat): string {
+  return `>> ${line(state, 'shrug', { thing: threatName(t.type), place: where(t.node) })}`;
+}
+
+export function lostYou(state: GameState, t: Threat): string {
+  return `>> ${line(state, 'lostYou', { thing: threatName(t.type), place: where(t.node) })}`;
+}
+
+export function stalledLine(state: GameState, t: Threat): string {
+  return `>> ${line(state, 'stalled', { thing: threatName(t.type), place: where(t.node) })}`;
+}
+
+export function motherWakes(state: GameState): string {
+  return `>> ${line(state, 'motherWake')}`;
+}
+
+/** The hive only speaks up when it crosses a line worth acting on. */
+export function hiveLine(state: GameState, before: number, after: number, wake: number): string | null {
+  const half = Math.ceil(wake / 2);
+  const near = Math.max(half + 1, wake - 2);
+  if (before < half && after >= half && after < near) return `>> ${line(state, 'hiveHalf')}`;
+  if (before < near && after >= near && after < wake) return `>> ${line(state, 'hiveNear')}`;
+  return null;
+}
+
 export function missLine(
   state: GameState,
   roll: number,
@@ -110,7 +157,7 @@ export function missLine(
 ): string {
   // The sum is shown the way it was actually worked out, penalty and all, so
   // "4+2 against 3" never reads as a miss the player cannot account for.
-  const sum = `${roll}+${bonus}${penalty === 0 ? '' : penalty < 0 ? `\u2212${-penalty}` : `+${penalty}`}`;
+  const sum = `${roll}+${bonus}${penalty === 0 ? '' : penalty < 0 ? `−${-penalty}` : `+${penalty}`}`;
   return `>> ${line(state, 'miss', { roll: sum, target })}`;
 }
 
@@ -126,51 +173,64 @@ export function wardLine(state: GameState): string {
   return `>> ${line(state, 'ward')}`;
 }
 
-/**
- * A sample arriving in the rack. Every wound puts one there, and until this
- * line existed it was the only thing in the game that happened silently — the
- * CARRIER ending is built out of these and nothing announced them.
- */
-export function sampleLine(state: GameState, total: number, unread: number): string {
-  return `>> ${line(state, 'sample', { total, unread })}`;
-}
-
-/**
- * What a reading means for the ending, said at the moment of the reading. The
- * threshold is the whole of the CARRIER rule, so it is never left implicit.
- */
-export function bloodLine(infested: boolean, known: number, threshold: number): string {
-  if (!infested) return '>> The sample reads clean. That one, anyway.';
-  if (known >= threshold) {
-    return (
-      `>> Infested. That is ${known} confirmed, and ${threshold} is the number: ` +
-      'lift off now and you carry it to the relay yourself. The medbay can still flush what you have not read.'
-    );
-  }
-  return (
-    `>> Infested. It is already in you. ${known} confirmed of the ${threshold} ` +
-    'that would make the shuttle a delivery rather than an escape.'
-  );
-}
-
 /** Losing a capability to a wound. Never "burn", never "card". */
 export function lost(uid: Uid): string {
   return `>> ${cardName(uid)} — you cannot do that any more.`;
 }
 
 /**
+ * What the player said they were going to do, and exactly what that takes.
+ * Printed on the first hour, so the run never has to guess what it is for.
+ */
+export function objectiveBriefing(state: GameState): string[] {
+  const def = RULES.objectives[state.objective];
+  const armScuttle = RULES.systemActions.armScuttle;
+  const beacon = RULES.systemActions.beacon;
+  const how = def.how
+    .split('{shuttle}')
+    .join(String(shuttleRequirement(state.role, state.depth)))
+    .split('{threshold}')
+    .join(String(infectionThreshold(state.depth)))
+    .split('{fuse}')
+    .join(String(depthDef(state.depth).fuseTurns))
+    .split('{power}')
+    .join(String(armScuttle?.power ?? 0))
+    .split('{hold}')
+    .join(String(relayHold(state.depth)))
+    .split('{drain}')
+    .join(String(beacon?.drain ?? 1));
+  return [
+    `-- YOU CAME UP HERE TO ${def.name}: ${def.line}`,
+    `-- ${how}`,
+    '-- Finish any of the other three instead and the run is still a win, worth less. ' +
+      'You can change your mind at any point; nothing is decided for you at the end.',
+  ];
+}
+
+/**
  * The hour opener. The narrator reads the room: what is close, how loud it is,
  * and how much of the window is left.
  */
-export function hourLine(state: GameState): string {
+export function hourLine(state: GameState, nearby: boolean): string {
   const left = depthDef(state.depth).turnLimit - state.turn;
   const here = state.player.node;
-  const near =
-    here !== 'vents' &&
-    state.threats.some((t) => t.node !== 'vents' && distance(state, t.node, here) <= 1);
-  const loud =
-    here !== 'vents' && (state.ship.noise[here] ?? 0) >= 3;
-  const pool = near ? 'hourTense' : left <= 4 ? 'hourLate' : loud ? 'hourLoud' : state.threats.length > 0 ? 'hourWatchful' : 'hourQuiet';
+  const loud = here !== 'vents' && (state.ship.noise[here] ?? 0) >= 3;
+  const pool = nearby
+    ? 'hourTense'
+    : left <= 4
+      ? 'hourLate'
+      : loud
+        ? 'hourLoud'
+        : state.threats.length > 0
+          ? 'hourWatchful'
+          : 'hourQuiet';
   const hours = left <= 0 ? 'the last of it' : left === 1 ? '1 hour left' : `${left} hours left`;
   return `-- HOUR ${state.turn}, ${hours}. ${line(state, pool)}`;
+}
+
+/** How close the hold is to standing up, as a sentence rather than a gauge. */
+export function hiveState(state: GameState): string {
+  if (state.ship.motherWoken) return 'THE MOTHER IS AWAKE';
+  const wake = hiveWake(state.depth);
+  return `HOLD ${state.ship.hive}/${wake}`;
 }

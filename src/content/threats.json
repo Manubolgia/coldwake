@@ -9,11 +9,12 @@
       "hp": 2,
       "damage": 1,
       "speed": 1,
-      "behaviour": "loudest",
+      "hearing": 2,
+      "behaviour": "noise",
       "order": 3,
-      "text": "The common one. It walks toward whatever it can hear, so it arrives where the noise was, not where you are. If it gets to you, it swings once.",
-      "sign": "sounds like a STRAY",
-      "signMany": "sound like STRAYS"
+      "text": "The common one. It has no interest in you, only in sound. It walks to wherever the last noise was, and if you are not there when it arrives it casts about and then wanders off. Two hits to put down.",
+      "sign": "a STRAY",
+      "signMany": "STRAYS"
     },
     {
       "id": "drifter",
@@ -24,12 +25,13 @@
       "hp": 3,
       "damage": 2,
       "speed": 1,
+      "hearing": 4,
+      "lockRange": 2,
       "behaviour": "hunter",
-      "hunterRange": 2,
       "order": 2,
-      "text": "Bigger, and it wants you specifically. Inside two compartments it comes straight at you; further off it settles for the noise. It hits twice as hard as a STRAY and takes one more to put down.",
-      "sign": "sounds like a HUNTER",
-      "signMany": "sound like HUNTERS"
+      "text": "Bigger, and it hears most of the ship. Inside two compartments it has you regardless of how quiet you are, and it will not lose you until you are further off than that. Hits twice as hard as a STRAY and takes three to put down.",
+      "sign": "a HUNTER",
+      "signMany": "HUNTERS"
     },
     {
       "id": "burrower",
@@ -40,44 +42,41 @@
       "hp": 2,
       "damage": 1,
       "speed": 2,
+      "hearing": 3,
       "behaviour": "burrow",
       "order": 1,
-      "text": "Lives in the ducts, so a dropped bulkhead means nothing to it and it moves two compartments at a time. In the REACTOR it chews the output instead of you.",
-      "sign": "is moving inside the walls",
-      "signMany": "are moving inside the walls"
+      "text": "Lives in the ducts, so a dropped bulkhead means nothing to it and it covers two compartments an hour. Flooding the vents from the bridge kills every one of them at once. In the REACTOR it chews the output instead of you.",
+      "sign": "a CRAWLER",
+      "signMany": "CRAWLERS"
     },
     {
-      "id": "chorus",
+      "id": "mother",
       "mark": "M",
       "name": "MOTHER",
       "namePlural": "MOTHERS",
       "glyph": "░",
-      "hp": 5,
+      "hp": 99,
       "damage": 2,
       "speed": 1,
-      "behaviour": "nest",
+      "hearing": 99,
+      "behaviour": "mother",
+      "unkillable": true,
       "order": 4,
-      "text": "One aboard, at most. It walks to the ORE HOLD singing, and the whole ship gets louder while it walks. When it gets home, more of them wake. Five to put down, so do not try.",
-      "sign": "is singing",
-      "signMany": "is singing"
+      "text": "It hears the whole ship, it never loses the thread, and NOTHING ABOARD CAN KILL IT. Weapons do not mark it. What you can do is cost it time: a bulkhead in its face holds it an hour while it takes the door apart, flooding the vents holds it two, and anything loud thrown somewhere else will turn it around. It wakes when the hold has had enough of you."
     }
   ],
   "bag": {
     "blank": 5,
     "contact": 3,
     "drifter": 2,
-    "burrower": 1,
-    "chorus": 0
+    "burrower": 1
   },
   "reserve": {
     "blank": 0,
     "contact": 4,
     "drifter": 2,
-    "burrower": 0,
-    "chorus": 1
+    "burrower": 1
   },
-  "chorusNoisePerTurn": 1,
-  "chorusArrivalContacts": 2,
   "blankEscalation": 1,
   "nestNoise": {
     "amount": 2,

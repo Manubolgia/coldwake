@@ -1,4 +1,12 @@
-import { RULES, legalActions, reduce, setInvariantChecking } from '../engine';
+import {
+  cardOf,
+  infectionCount,
+  infectionThreshold,
+  legalActions,
+  reduce,
+  setInvariantChecking,
+  turnLimit,
+} from '../engine';
 import { next, nextInt } from '../engine/rng';
 import type { RngState } from '../engine/rng';
 import type { Action, GameState } from '../engine/types';
@@ -75,6 +83,28 @@ function bestOrEndTurn(
   return endTurn;
 }
 
+/** Enough of the window left to do something better than carry it home. */
+function stillTime(state: GameState): boolean {
+  return turnLimit(state.depth) - state.turn >= 4;
+}
+
+/**
+ * A wound has to be paid in capability. Give up the cheapest thing in hand
+ * rather than the first, so the burn is a decision like any other.
+ */
+function cheapestBurn(actions: Action[]): Action {
+  const burns = actions.filter((a) => a.t === 'burn');
+  if (burns.length === 0) return actions[0] as Action;
+  return burns
+    .slice()
+    .sort((a, b) => {
+      const ca = cardOf((a as Extract<Action, { t: 'burn' }>).uid);
+      const cb = cardOf((b as Extract<Action, { t: 'burn' }>).uid);
+      const rank = (c: typeof ca): number => (c.burn ? 3 : 0) + (c.weapon === true ? 2 : 0) + c.ap;
+      return rank(ca) - rank(cb);
+    })[0] as Action;
+}
+
 export const RandomBot: Bot = {
   name: 'random',
   choose(_state, actions, rng) {
@@ -91,29 +121,23 @@ export const GreedyBot: Bot = {
 };
 
 /**
- * Known infections only. A bot must never read its own face-down CARRY cards,
- * or every balance number about the hidden clock is a lie.
+ * Launching over the line is the CARRIER, which is a win worth less. There is
+ * nothing hidden about the number any more, so this is a judgement rather than
+ * a guess: take the worse ending only when there is no better one left.
  */
-function knownInfested(state: GameState): number {
-  return state.player.carry.filter((c) => c.revealed && c.id === 'infested').length;
-}
-
-function doomed(state: GameState): boolean {
-  return knownInfested(state) >= RULES.carry.carrierThreshold;
+function wouldCarry(state: GameState): boolean {
+  return infectionCount(state) >= infectionThreshold(state.depth);
 }
 
 export const HeuristicBot: Bot = {
   name: 'heuristic',
   choose(state, actions, rng) {
     // Hard rules first: the things a competent player never gets wrong.
-    const launch = actions.find((a) => a.t === 'launch');
-    // Launching with two confirmed infections is the Carrier ending. Arm the
-    // reactor instead and take the ship with you.
-    if (launch && !(doomed(state) && !state.ship.scuttleArmed)) return [launch, rng];
-    if (state.phase === 'wound') {
-      const panic = actions.find((a) => a.t === 'burn' && a.uid.startsWith('panic_'));
-      if (panic) return [panic, rng];
-    }
+    const finish = actions.find(
+      (a) => a.t === 'upload' || (a.t === 'launch' && !(wouldCarry(state) && stillTime(state))),
+    );
+    if (finish) return [finish, rng];
+    if (state.phase === 'wound') return [cheapestBurn(actions), rng];
     return [bestOrEndTurn(state, actions, evaluateStrategic), rng];
   },
 };
@@ -125,12 +149,11 @@ export const HeuristicBot: Bot = {
 export const SearchBot: Bot = {
   name: 'search',
   choose(state, actions, rng) {
-    const launch = actions.find((a) => a.t === 'launch');
-    if (launch && !(doomed(state) && !state.ship.scuttleArmed)) return [launch, rng];
-    if (state.phase === 'wound') {
-      const panic = actions.find((a) => a.t === 'burn' && a.uid.startsWith('panic_'));
-      if (panic) return [panic, rng];
-    }
+    const finish = actions.find(
+      (a) => a.t === 'upload' || (a.t === 'launch' && !(wouldCarry(state) && stillTime(state))),
+    );
+    if (finish) return [finish, rng];
+    if (state.phase === 'wound') return [cheapestBurn(actions), rng];
     const base = evaluateStrategic(state);
     const nonEnd = actions.filter((a) => a.t !== 'endTurn');
     const shortlist = scoreActions(state, nonEnd, evaluateStrategic)

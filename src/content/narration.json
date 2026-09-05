@@ -22,7 +22,7 @@
   ],
   "hourLoud": [
     "The noise you made is still hanging in the air.",
-    "Whatever heard that is on its way.",
+    "Whatever heard that is on its way to where you made it.",
     "You were loud. The ship remembers where.",
     "Sound carries a long way through a hull this thin."
   ],
@@ -35,32 +35,32 @@
   "arrive": [
     "{place}. Your boots make more noise than you want them to.",
     "{place}. You are not quiet about it.",
-    "You cross into {place}. Anything nearby heard that.",
+    "You cross into {place}. Anything within {range} compartments heard that.",
     "{place}, at speed. Speed is loud."
   ],
   "arriveQuiet": [
-    "{place}. Heel, toe, nothing.",
-    "You put yourself into {place} without a sound.",
-    "{place}. Not so much as a breath.",
-    "You take {place} slowly, and nothing turns around."
+    "{place}. Heel, toe, nothing. Nothing aboard learned anything.",
+    "You put yourself into {place} without a sound, and without telling anything where you went.",
+    "{place}. Not so much as a breath, so nothing turns around.",
+    "You take {place} slowly. Whatever is hunting you is still hunting the last place you were loud."
   ],
   "spawn": [
-    "{thing} in {place}. It came out of the dark and it is not confused.",
-    "{thing} in {place}. It knows where the noise came from.",
-    "Something resolves in {place}. The sensors label it {thing}.",
-    "{thing}, {place}. It was probably always there.",
+    "{thing} in {place}. It came out of the dark and it is going to where the noise was.",
+    "{thing} in {place}. It heard something and it is going to look.",
+    "Something resolves in {place}. The readout labels it {thing}.",
+    "{thing}, {place}. It was probably always there. It is awake now.",
     "{thing} in {place}. It does not look for long before it starts moving."
   ],
   "blank": [
-    "Nothing there. The hull settling, or something that did not want to be seen.",
-    "The return comes back empty. It is never quite reassuring.",
-    "Nothing. You listen anyway.",
+    "Nothing comes. The hull settling, or something that did not want to be seen.",
+    "The compartment stays empty. It is never quite reassuring.",
+    "Nothing there. You keep your hand on the frame anyway.",
     "Whatever made that sound is not making it now."
   ],
   "blankWorse": [
-    "Nothing there — and the ship gets a little worse anyway. Something else woke up.",
-    "Nothing. But the count of what is unaccounted for just went up.",
-    "Empty. The dark is not: there is one more thing in it now.",
+    "Nothing comes — and the ship gets a little worse anyway. Something further in stirs.",
+    "Nothing walks in. Somewhere aft, one more thing stops sleeping.",
+    "Empty. The dark is not: there is one more thing in it than there was.",
     "Nothing there. Somewhere else, something opens its eyes."
   ],
   "wound": [
@@ -102,13 +102,35 @@
     "It reaches you and finds you braced."
   ],
   "sweepNothing": [
-    "Nothing left unaccounted for. That is worse than it sounds.",
-    "The hull is quiet all the way through. Everything that was out there has already found somewhere to be."
+    "Nothing within earshot. Whatever is aboard is further off than you can hear from here.",
+    "You hold your breath and listen through the frame. Nothing close enough to matter."
   ],
-  "sample": [
-    "It opened you up, and the rack takes a reading off the blood. {total} samples aboard now, {unread} of them unread.",
-    "Whatever is on its claws is in you now. The rack logs it: {total} samples aboard, {unread} unread.",
-    "You bleed, and the ship files it. {total} samples aboard, {unread} nobody has read.",
-    "That is skin broken. The rack draws another one off you — {total} aboard, {unread} unread."
+  "shrug": [
+    "{thing} reaches {place} and finds it empty. It starts working the corners.",
+    "{thing} arrives where the sound was. There is nothing there. It stops and listens.",
+    "{thing} is in {place} looking for something that has already gone."
+  ],
+  "lostYou": [
+    "{thing} gives up on {place}. It does not know where you are any more.",
+    "{thing} stops searching. Whatever it thought it heard, it has let go of it.",
+    "You hear {thing} move off. It has lost the thread."
+  ],
+  "stalled": [
+    "{thing} is still working at the door in {place}.",
+    "{thing} cannot get out of {place} yet, and it is not being quiet about trying.",
+    "Something heavy throws itself at a bulkhead in {place} and does not get through."
+  ],
+  "motherWake": [
+    "Something in the ORE HOLD stands up. The hull note changes. It knows the ship better than you do, it will not stop, and nothing you are carrying can kill it.",
+    "The hold answers all of it at once. What gets up in there is not another one of them — it is the one they came from. You cannot kill it. You can only cost it time.",
+    "A sound comes up through the deck that is not machinery. The MOTHER is awake, it has your bearing, and there is no weapon aboard that means anything to it."
+  ],
+  "hiveHalf": [
+    "The hold is louder than it was. Something big in there is most of the way to awake.",
+    "Down in the ORE HOLD, something has started to answer the noise you keep making."
+  ],
+  "hiveNear": [
+    "The hold is nearly awake. Whatever is down there is going to stand up soon, and you will not be able to kill it.",
+    "The deck is carrying a low note out of the ORE HOLD now. You do not have long before it gets up."
   ]
 }

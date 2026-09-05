@@ -7,6 +7,7 @@ export * from './state';
 export * from './noise';
 export * from './threats';
 export * from './scoring';
+export * from './voice';
 export * from './actions';
 export * from './invariants';
 export * from './reduce';

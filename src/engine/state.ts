@@ -14,7 +14,17 @@ import {
 import { cardIdOf, drawOne, makeUid } from './deck';
 import { bagDraw } from './noise';
 import { seedFrom, shuffle } from './rng';
-import type { CardId, Depth, GameState, NodeId, RoleId, TokenType, Uid } from './types';
+import { objectiveBriefing } from './voice';
+import type {
+  CardId,
+  Depth,
+  GameState,
+  NodeId,
+  Objective,
+  RoleId,
+  TokenType,
+  Uid,
+} from './types';
 
 export const TOTAL_TOKENS = TOKEN_TYPES.reduce(
   (sum, t) => sum + (THREATS.bag[t] ?? 0) + (THREATS.reserve[t] ?? 0),
@@ -22,14 +32,14 @@ export const TOTAL_TOKENS = TOKEN_TYPES.reduce(
 );
 
 export function emptyTokens(): Record<TokenType, number> {
-  return { blank: 0, contact: 0, drifter: 0, burrower: 0, chorus: 0 };
+  return { blank: 0, contact: 0, drifter: 0, burrower: 0 };
 }
 
 export function shuttleRequirement(role: RoleId, depth: Depth): number {
   const roleOverride = roleDef(role).shuttleRequired;
   const base = depthDef(depth).shuttleRequired;
-  // The pilot's discount is a flat delta from the depth-1 baseline, so it still
-  // costs more at depth 5.
+  // The pilot's discount is a flat delta from the baseline, so the role stays
+  // distinct at every depth.
   if (roleOverride === undefined) return base;
   return base - (RULES.shuttleRequired - roleOverride);
 }
@@ -42,22 +52,42 @@ export function oreHoldFloor(depth: Depth): number {
   return depthDef(depth).oreHoldFloor;
 }
 
+export function boardCap(depth: Depth): number {
+  return depthDef(depth).boardCap;
+}
+
+export function hiveWake(depth: Depth): number {
+  return depthDef(depth).hiveWake;
+}
+
+export function infectionThreshold(depth: Depth): number {
+  return depthDef(depth).infectionThreshold;
+}
+
+export function relayHold(depth: Depth): number {
+  return depthDef(depth).relayHold;
+}
+
+export function fuseTurns(depth: Depth): number {
+  return depthDef(depth).fuseTurns;
+}
+
 export function noiseFloor(depth: Depth, id: NodeId): number {
   return id === MAP.nest ? oreHoldFloor(depth) : node(id).noiseFloor;
 }
 
-function buildDeck(role: RoleId): CardId[] {
-  return roleDeck(role);
-}
-
-export function initialState(seed: string, role: RoleId, depth: Depth): GameState {
+export function initialState(
+  seed: string,
+  role: RoleId,
+  depth: Depth,
+  objective: Objective = 'run',
+): GameState {
   const dd = depthDef(depth);
-  let rng = seedFrom(`${seed}|${role}|${depth}`);
+  let rng = seedFrom(`${seed}|${role}|${depth}|${objective}`);
 
   // Deck: one uid per physical copy, then shuffled.
   const counts = new Map<CardId, number>();
-  const deckIds = buildDeck(role);
-  const uids: Uid[] = deckIds.map((id) => {
+  const uids: Uid[] = roleDeck(role).map((id) => {
     const n = (counts.get(id) ?? 0) + 1;
     counts.set(id, n);
     return makeUid(id, n);
@@ -65,16 +95,7 @@ export function initialState(seed: string, role: RoleId, depth: Depth): GameStat
   const [deck, rng1] = shuffle(uids, rng);
   rng = rng1;
 
-  // CARRY deck: clean/infested per depth, shuffled, then the face-down draw.
-  const carryPool: ('clean' | 'infested')[] = [
-    ...Array.from({ length: dd.carry.clean }, () => 'clean' as const),
-    ...Array.from({ length: dd.carry.infested }, () => 'infested' as const),
-  ];
-  const [carryDeck, rng2] = shuffle(carryPool, rng);
-  rng = rng2;
-  const carry = carryDeck.splice(0, dd.carry.startCards).map((id) => ({ id, revealed: false }));
-
-  // Salvage: the fixed deck shuffled and dealt two per node.
+  // Salvage: the fixed deck shuffled and dealt out across the ship.
   const [salvageDeck, rng3] = shuffle(
     SALVAGE.deck.map((s, i) => `${s.card}#${i}`),
     rng,
@@ -91,11 +112,8 @@ export function initialState(seed: string, role: RoleId, depth: Depth): GameStat
   const bag = { ...THREATS.bag };
   const reserve = { ...THREATS.reserve };
   for (const t of TOKEN_TYPES) {
-    // Positive promotes reserve into the bag; negative pulls tokens back out,
-    // which is how deeper runs get a bag with fewer blanks in it.
     const delta = dd.bag[t] ?? 0;
-    const moved =
-      delta >= 0 ? Math.min(delta, reserve[t] ?? 0) : -Math.min(-delta, bag[t] ?? 0);
+    const moved = delta >= 0 ? Math.min(delta, reserve[t] ?? 0) : -Math.min(-delta, bag[t] ?? 0);
     bag[t] = (bag[t] ?? 0) + moved;
     reserve[t] = (reserve[t] ?? 0) - moved;
   }
@@ -109,6 +127,7 @@ export function initialState(seed: string, role: RoleId, depth: Depth): GameStat
     turn: 1,
     depth,
     role,
+    objective,
     player: {
       node: MAP.start,
       ap: RULES.apPerTurn,
@@ -117,11 +136,12 @@ export function initialState(seed: string, role: RoleId, depth: Depth): GameStat
       discard: [],
       burned: [],
       spent: [],
-      carry,
+      freeCardUsed: false,
       pendingWounds: 0,
       wardsThisTurn: 0,
       combatPenalty: 0,
-      panicsGained: 0,
+      infectionsGained: 0,
+      carryingSpecimen: false,
     },
     ship: {
       power: 0,
@@ -134,22 +154,27 @@ export function initialState(seed: string, role: RoleId, depth: Depth): GameStat
       scuttleArmed: false,
       scuttleArmedTurn: 0,
       beaconSent: false,
+      relayHeld: 0,
+      specimenTaken: false,
+      hive: 0,
+      motherWoken: false,
     },
     bag,
     reserve,
     threats: [],
-    carryDeck,
-    bagKnownTurn: 0,
     nextThreatId: 1,
     phase: 'action',
     resumeEndTurn: false,
     stats: {
       threatsKilled: 0,
+      threatsShaken: 0,
+      cardsPlayed: 0,
       wounds: 0,
-      scans: 0,
+      cures: 0,
       bagDraws: 0,
       salvageScore: 0,
       ventTransits: 0,
+      listens: 0,
     },
     log: [],
     feed: [],
@@ -161,19 +186,23 @@ export function initialState(seed: string, role: RoleId, depth: Depth): GameStat
   state.feed.push({
     turn: 1,
     kind: 'sys',
-    text:
-      `You wake because your pod failed. ${turnLimit(depth)} hours before the orbit closes, ` +
-      `and the shuttle will not lift on less than ${shuttleRequirement(role, depth)} power.`,
+    text: `You wake because your pod failed. ${turnLimit(depth)} hours before the orbit closes.`,
   });
+  for (const line of objectiveBriefing(state)) {
+    state.feed.push({ turn: 1, kind: 'sys', text: line });
+  }
   return state;
 }
 
-/** Draw phase. Blackout adds noise the moment it is drawn (§5.3). */
+/**
+ * The hand persists across hours; this tops it back up. BLACKOUT costs you the
+ * moment it arrives, which is the only infection that does anything on the draw.
+ */
 export function drawUpToHandSize(state: GameState): void {
   while (state.player.hand.length < RULES.handSize) {
     const { uid } = drawOne(state);
     if (uid === undefined) break;
-    if (cardIdOf(uid) === 'panic_blackout' && typeof state.player.node === 'string' && state.player.node !== 'vents') {
+    if (cardIdOf(uid) === 'inf_blackout' && state.player.node !== 'vents') {
       state.ship.noise[state.player.node] = Math.min(
         RULES.noiseMax,
         (state.ship.noise[state.player.node] ?? 0) + 1,
@@ -181,12 +210,11 @@ export function drawUpToHandSize(state: GameState): void {
       state.feed.push({
         turn: state.turn,
         kind: 'alarm',
-        text: '>> Your vision goes. You put a hand out and knock something over.',
+        text: '>> Your vision goes. You put a hand out and knock something over. +1 noise here.',
       });
     }
   }
 }
-
 
 /**
  * A hand-written deep copy of the known shape. `structuredClone` is correct but
@@ -204,6 +232,7 @@ export function cloneState(state: GameState): GameState {
     turn: state.turn,
     depth: state.depth,
     role: state.role,
+    objective: state.objective,
     player: {
       node: p.node,
       ap: p.ap,
@@ -212,11 +241,12 @@ export function cloneState(state: GameState): GameState {
       discard: p.discard.slice(),
       burned: p.burned.slice(),
       spent: p.spent.slice(),
-      carry: p.carry.map((c) => ({ id: c.id, revealed: c.revealed })),
+      freeCardUsed: p.freeCardUsed,
       pendingWounds: p.pendingWounds,
       wardsThisTurn: p.wardsThisTurn,
       combatPenalty: p.combatPenalty,
-      panicsGained: p.panicsGained,
+      infectionsGained: p.infectionsGained,
+      carryingSpecimen: p.carryingSpecimen,
     },
     ship: {
       power: ship.power,
@@ -232,16 +262,25 @@ export function cloneState(state: GameState): GameState {
       scuttleArmed: ship.scuttleArmed,
       scuttleArmedTurn: ship.scuttleArmedTurn,
       beaconSent: ship.beaconSent,
+      relayHeld: ship.relayHeld,
+      specimenTaken: ship.specimenTaken,
+      hive: ship.hive,
+      motherWoken: ship.motherWoken,
     },
     bag: { ...state.bag },
     reserve: { ...state.reserve },
-    threats: state.threats.map((t) =>
-      t.fed === undefined
-        ? { id: t.id, type: t.type, node: t.node, hp: t.hp }
-        : { id: t.id, type: t.type, node: t.node, hp: t.hp, fed: t.fed },
-    ),
-    carryDeck: state.carryDeck.slice(),
-    bagKnownTurn: state.bagKnownTurn,
+    threats: state.threats.map((t) => ({
+      id: t.id,
+      type: t.type,
+      node: t.node,
+      hp: t.hp,
+      target: t.target,
+      stance: t.stance,
+      cold: t.cold,
+      stalled: t.stalled,
+      seenNode: t.seenNode,
+      seenTurn: t.seenTurn,
+    })),
     nextThreatId: state.nextThreatId,
     phase: state.phase,
     resumeEndTurn: state.resumeEndTurn,

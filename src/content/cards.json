@@ -1,6 +1,71 @@
 {
   "cards": [
     {
+      "id": "inf_fever",
+      "name": "FEVER",
+      "role": "infection",
+      "copies": 0,
+      "ap": 1,
+      "noise": 0,
+      "burn": false,
+      "text": "While it is in your hand your grip is wrong. Everything you swing is one harder to land.",
+      "effect": {
+        "op": "none"
+      }
+    },
+    {
+      "id": "inf_tunnel",
+      "name": "TUNNEL VISION",
+      "role": "infection",
+      "copies": 0,
+      "ap": 1,
+      "noise": 0,
+      "burn": false,
+      "text": "While it is in your hand you cannot filter what you hear. Listening takes twice as long.",
+      "effect": {
+        "op": "none"
+      }
+    },
+    {
+      "id": "inf_sweat",
+      "name": "COLD SWEAT",
+      "role": "infection",
+      "copies": 0,
+      "ap": 1,
+      "noise": 0,
+      "burn": false,
+      "text": "While it is in your hand you are clumsy. Everything you do that makes a sound makes one more.",
+      "effect": {
+        "op": "none"
+      }
+    },
+    {
+      "id": "inf_tremor",
+      "name": "TREMOR",
+      "role": "infection",
+      "copies": 0,
+      "ap": 1,
+      "noise": 0,
+      "burn": false,
+      "text": "While it is in your hand you cannot hold still. Creeping is as loud as walking.",
+      "effect": {
+        "op": "none"
+      }
+    },
+    {
+      "id": "inf_blackout",
+      "name": "BLACKOUT",
+      "role": "infection",
+      "copies": 0,
+      "ap": 1,
+      "noise": 0,
+      "burn": false,
+      "text": "The moment it comes to hand your vision goes and you put a hand through something.",
+      "effect": {
+        "op": "none"
+      }
+    },
+    {
       "id": "bypass",
       "name": "BYPASS",
       "role": "engineer",
@@ -22,43 +87,10 @@
       "ap": 1,
       "noise": 0,
       "burn": false,
-      "text": "Set yourself. The next thing that reaches you does not land.",
+      "text": "Set yourself. The next thing that reaches you this hour does not land.",
       "effect": {
         "op": "preventWound",
         "duration": "turn"
-      }
-    },
-    {
-      "id": "cutting_torch",
-      "name": "CUTTING TORCH",
-      "role": "engineer",
-      "copies": 1,
-      "ap": 2,
-      "noise": 3,
-      "burn": false,
-      "weapon": true,
-      "bonus": 2,
-      "text": "Cut it open. +2 against whatever is in reach.",
-      "effect": {
-        "op": "attack",
-        "bonus": 2
-      }
-    },
-    {
-      "id": "hardline",
-      "name": "HARDLINE",
-      "role": "engineer",
-      "copies": 1,
-      "ap": 1,
-      "noise": 2,
-      "burn": false,
-      "requires": {
-        "node": "reactor"
-      },
-      "text": "Bridge the bus by hand. The reactor gives another an hour.",
-      "effect": {
-        "op": "reactorOutput",
-        "n": 1
       }
     },
     {
@@ -69,25 +101,57 @@
       "ap": 1,
       "noise": 1,
       "burn": false,
-      "text": "Take the maintenance run. One compartment over, quietly.",
+      "text": "Take the maintenance run. One compartment over, and quietly.",
       "effect": {
         "op": "move",
         "silent": true
       }
     },
     {
-      "id": "override",
-      "name": "OVERRIDE",
+      "id": "scrap_charge",
+      "name": "SCRAP CHARGE",
+      "role": "engineer",
+      "copies": 2,
+      "ap": 1,
+      "noise": 0,
+      "burn": false,
+      "text": "Lob a handful of couplings down a corridor. Pick any compartment: it gets loud, and everything that can hear it goes there instead of here.",
+      "effect": {
+        "op": "lure",
+        "n": 3
+      }
+    },
+    {
+      "id": "cutting_torch",
+      "name": "CUTTING TORCH",
       "role": "engineer",
       "copies": 1,
       "ap": 2,
-      "noise": 2,
-      "burn": true,
-      "text": "Drop a bulkhead anywhere on the ship for three hours.",
+      "noise": 3,
+      "burn": false,
+      "text": "Cut it open. +2 against whatever is in reach.",
       "effect": {
-        "op": "sealEdge",
-        "turns": 3,
-        "anywhere": true
+        "op": "attack",
+        "bonus": 2
+      },
+      "weapon": true,
+      "bonus": 2,
+      "requires": {
+        "threatHere": true
+      }
+    },
+    {
+      "id": "hardline",
+      "name": "HARDLINE",
+      "role": "engineer",
+      "copies": 1,
+      "ap": 1,
+      "noise": 2,
+      "burn": false,
+      "text": "Bridge the bus by hand. The reactor gives one more an hour.",
+      "effect": {
+        "op": "reactorOutput",
+        "n": 1
       }
     },
     {
@@ -118,6 +182,50 @@
       }
     },
     {
+      "id": "circuit_map",
+      "name": "CIRCUIT MAP",
+      "role": "engineer",
+      "copies": 1,
+      "ap": 1,
+      "noise": 0,
+      "burn": false,
+      "text": "Pull up the deck plan and read what is moving on it. Everything within three compartments shows itself.",
+      "effect": {
+        "op": "reveal",
+        "range": 3
+      }
+    },
+    {
+      "id": "slag_door",
+      "name": "SLAG THE DOOR",
+      "role": "engineer",
+      "copies": 1,
+      "ap": 1,
+      "noise": 1,
+      "burn": true,
+      "text": "Weld the frame while it is still on the other side. Everything next door stays where it is for two hours.",
+      "effect": {
+        "op": "stall",
+        "n": 2,
+        "scope": "adjacent"
+      }
+    },
+    {
+      "id": "override",
+      "name": "OVERRIDE",
+      "role": "engineer",
+      "copies": 1,
+      "ap": 2,
+      "noise": 2,
+      "burn": true,
+      "text": "Drop a bulkhead anywhere on the ship for three hours.",
+      "effect": {
+        "op": "sealEdge",
+        "turns": 3,
+        "anywhere": true
+      }
+    },
+    {
       "id": "load_shed",
       "name": "LOAD-SHED",
       "role": "engineer",
@@ -125,57 +233,11 @@
       "ap": 2,
       "noise": 0,
       "burn": true,
-      "text": "Kill every non-essential circuit. The whole ship goes quiet.",
+      "text": "Kill every non-essential circuit. The whole ship falls silent at once.",
       "effect": {
         "op": "setNoise",
         "scope": "all",
         "n": 0
-      }
-    },
-    {
-      "id": "breaching_gun",
-      "name": "BREACHING GUN",
-      "role": "security",
-      "copies": 1,
-      "ap": 2,
-      "noise": 4,
-      "burn": false,
-      "weapon": true,
-      "bonus": 3,
-      "text": "It is very loud and it does not miss much. +3 in reach.",
-      "effect": {
-        "op": "attack",
-        "bonus": 3
-      }
-    },
-    {
-      "id": "service_pistol",
-      "name": "SERVICE PISTOL",
-      "role": "security",
-      "copies": 2,
-      "ap": 1,
-      "noise": 3,
-      "burn": false,
-      "weapon": true,
-      "bonus": 1,
-      "text": "Standard issue. +1 in reach.",
-      "effect": {
-        "op": "attack",
-        "bonus": 1
-      }
-    },
-    {
-      "id": "hold_the_line",
-      "name": "HOLD THE LINE",
-      "role": "security",
-      "copies": 2,
-      "ap": 1,
-      "noise": 1,
-      "burn": false,
-      "text": "Put your shoulder in the door. The next one does not land.",
-      "effect": {
-        "op": "preventWound",
-        "duration": "turn"
       }
     },
     {
@@ -186,26 +248,113 @@
       "ap": 1,
       "noise": 2,
       "burn": false,
+      "text": "Short bursts, centre mass. +1 against whatever is in reach.",
+      "effect": {
+        "op": "attack",
+        "bonus": 1
+      },
+      "weapon": true,
+      "bonus": 1,
       "requires": {
         "threatHere": true
-      },
-      "text": "Fire until it backs out of this compartment.",
-      "effect": {
-        "op": "pushThreat"
       }
     },
     {
-      "id": "adrenaline",
-      "name": "ADRENALINE",
+      "id": "hold_line",
+      "name": "HOLD THE LINE",
       "role": "security",
-      "copies": 1,
-      "ap": 0,
+      "copies": 2,
+      "ap": 1,
+      "noise": 0,
+      "burn": false,
+      "text": "Back to the bulkhead, weapon up. The next thing that reaches you this hour does not land.",
+      "effect": {
+        "op": "preventWound",
+        "duration": "turn"
+      }
+    },
+    {
+      "id": "flashbang",
+      "name": "FLASHBANG",
+      "role": "security",
+      "copies": 2,
+      "ap": 1,
+      "noise": 0,
+      "burn": false,
+      "text": "Throw it long. Pick any compartment: it goes loud, and everything that can hear it turns and goes there.",
+      "effect": {
+        "op": "lure",
+        "n": 4
+      }
+    },
+    {
+      "id": "push",
+      "name": "PUSH",
+      "role": "security",
+      "copies": 2,
+      "ap": 1,
       "noise": 1,
       "burn": false,
-      "text": "You find another minute inside the hour.",
+      "text": "Put your shoulder into it and drive it into the next compartment.",
       "effect": {
-        "op": "gainAp",
-        "n": 1
+        "op": "pushThreat"
+      },
+      "requires": {
+        "threatHere": true
+      }
+    },
+    {
+      "id": "sidearm",
+      "name": "SIDEARM",
+      "role": "security",
+      "copies": 2,
+      "ap": 1,
+      "noise": 2,
+      "burn": false,
+      "text": "Standard issue. +1 against whatever is in reach.",
+      "effect": {
+        "op": "attack",
+        "bonus": 1
+      },
+      "weapon": true,
+      "bonus": 1,
+      "requires": {
+        "threatHere": true
+      }
+    },
+    {
+      "id": "shotgun",
+      "name": "BREACHING GUN",
+      "role": "security",
+      "copies": 1,
+      "ap": 2,
+      "noise": 3,
+      "burn": false,
+      "text": "One shell, close. +3 against whatever is in reach.",
+      "effect": {
+        "op": "attack",
+        "bonus": 3
+      },
+      "weapon": true,
+      "bonus": 3,
+      "requires": {
+        "threatHere": true
+      }
+    },
+    {
+      "id": "breach_charge",
+      "name": "BREACHING CHARGE",
+      "role": "security",
+      "copies": 1,
+      "ap": 2,
+      "noise": 4,
+      "burn": true,
+      "text": "Set it against whatever is in the room and walk backwards. Whatever it was, it is not any more.",
+      "effect": {
+        "op": "execute"
+      },
+      "requires": {
+        "threatHere": true
       }
     },
     {
@@ -214,9 +363,9 @@
       "role": "security",
       "copies": 1,
       "ap": 1,
-      "noise": 3,
+      "noise": 2,
       "burn": true,
-      "text": "Blow the hatch. A bulkhead beside you, down for three hours.",
+      "text": "Blow the frame. One way out of this compartment is shut for three hours.",
       "effect": {
         "op": "sealEdge",
         "turns": 3,
@@ -224,16 +373,30 @@
       }
     },
     {
-      "id": "field_dressing",
-      "name": "FIELD DRESSING",
+      "id": "sweep",
+      "name": "SWEEP",
       "role": "security",
       "copies": 1,
       "ap": 1,
       "noise": 0,
       "burn": false,
-      "text": "Breathe. One panic leaves you.",
+      "text": "Work the corners with the tracker. Everything within three compartments shows itself.",
       "effect": {
-        "op": "removePanic",
+        "op": "reveal",
+        "range": 3
+      }
+    },
+    {
+      "id": "adrenaline",
+      "name": "ADRENALINE",
+      "role": "security",
+      "copies": 1,
+      "ap": 0,
+      "noise": 0,
+      "burn": false,
+      "text": "You find another minute inside the hour.",
+      "effect": {
+        "op": "gainAp",
         "n": 1
       }
     },
@@ -243,28 +406,13 @@
       "role": "security",
       "copies": 1,
       "ap": 2,
-      "noise": 4,
+      "noise": 2,
       "burn": true,
-      "requires": {
-        "threatHere": true
-      },
-      "text": "Whatever is in this compartment stops moving. It gets no chance.",
+      "text": "Take the doorway and hold it. Nothing in this compartment moves for three hours.",
       "effect": {
-        "op": "execute"
-      }
-    },
-    {
-      "id": "advance",
-      "name": "ADVANCE",
-      "role": "security",
-      "copies": 1,
-      "ap": 1,
-      "noise": 1,
-      "burn": false,
-      "text": "Move up one compartment.",
-      "effect": {
-        "op": "move",
-        "silent": true
+        "op": "stall",
+        "n": 3,
+        "scope": "here"
       }
     },
     {
@@ -275,24 +423,66 @@
       "ap": 1,
       "noise": 0,
       "burn": false,
-      "text": "Steady your hands. One panic leaves you.",
+      "text": "Work it out of yourself while you still can. One infection leaves your deck for good.",
       "effect": {
-        "op": "removePanic",
+        "op": "cure",
         "n": 1
       }
     },
     {
-      "id": "diagnostic",
-      "name": "DIAGNOSTIC",
+      "id": "field_dressing",
+      "name": "FIELD DRESSING",
       "role": "medic",
       "copies": 2,
       "ap": 1,
-      "noise": 1,
+      "noise": 0,
       "burn": false,
-      "text": "Read one of your own blood samples where you stand.",
+      "text": "Pack it and tape it. The next thing that reaches you this hour does not land.",
       "effect": {
-        "op": "revealCarry",
-        "n": 1
+        "op": "preventWound",
+        "duration": "turn"
+      }
+    },
+    {
+      "id": "steady",
+      "name": "STEADY",
+      "role": "medic",
+      "copies": 3,
+      "ap": 1,
+      "noise": 0,
+      "burn": false,
+      "text": "Count it down. Two more things come to hand.",
+      "effect": {
+        "op": "draw",
+        "n": 2
+      }
+    },
+    {
+      "id": "quiet_step",
+      "name": "QUIET STEP",
+      "role": "medic",
+      "copies": 2,
+      "ap": 1,
+      "noise": 0,
+      "burn": false,
+      "text": "One compartment over, without a sound.",
+      "effect": {
+        "op": "move",
+        "silent": true
+      }
+    },
+    {
+      "id": "vitals",
+      "name": "VITALS",
+      "role": "medic",
+      "copies": 2,
+      "ap": 1,
+      "noise": 0,
+      "burn": false,
+      "text": "Read the compartment monitors. Everything within three compartments shows itself.",
+      "effect": {
+        "op": "reveal",
+        "range": 3
       }
     },
     {
@@ -300,102 +490,15 @@
       "name": "ANTISEPTIC",
       "role": "medic",
       "copies": 1,
-      "ap": 2,
-      "noise": 1,
-      "burn": true,
-      "text": "Flush one unread sample. This one does not cost you.",
-      "effect": {
-        "op": "discardCarry",
-        "n": 1
-      }
-    },
-    {
-      "id": "scalpel",
-      "name": "SCALPEL",
-      "role": "medic",
-      "copies": 1,
-      "ap": 1,
-      "noise": 2,
-      "burn": false,
-      "weapon": true,
-      "bonus": 0,
-      "text": "Close work. +0 in reach, and quiet about it.",
-      "effect": {
-        "op": "attack",
-        "bonus": 0
-      }
-    },
-    {
-      "id": "steady",
-      "name": "STEADY",
-      "role": "medic",
-      "copies": 2,
-      "ap": 1,
-      "noise": 0,
-      "burn": false,
-      "text": "Breathe out. The next thing that reaches you does not land.",
-      "effect": {
-        "op": "preventWound",
-        "duration": "turn"
-      }
-    },
-    {
-      "id": "stimulant",
-      "name": "STIMULANT",
-      "role": "medic",
-      "copies": 1,
-      "ap": 0,
-      "noise": 0,
-      "burn": false,
-      "text": "Two more things come to hand.",
-      "effect": {
-        "op": "draw",
-        "n": 2
-      }
-    },
-    {
-      "id": "quarantine",
-      "name": "QUARANTINE",
-      "role": "medic",
-      "copies": 1,
-      "ap": 2,
-      "noise": 1,
-      "burn": true,
-      "text": "Seal the compartment beside you for three hours.",
-      "effect": {
-        "op": "sealEdge",
-        "turns": 3,
-        "anywhere": false
-      }
-    },
-    {
-      "id": "careful_step",
-      "name": "CAREFUL STEP",
-      "role": "medic",
-      "copies": 1,
-      "ap": 1,
-      "noise": 0,
-      "burn": false,
-      "text": "One compartment over. Nothing hears you.",
-      "effect": {
-        "op": "move",
-        "silent": true
-      }
-    },
-    {
-      "id": "sample",
-      "name": "SAMPLE",
-      "role": "medic",
-      "copies": 1,
       "ap": 1,
       "noise": 1,
       "burn": false,
-      "text": "Read a sample, and find something else while you are at it.",
+      "text": "It burns going in. One infection leaves your deck, and something comes to hand.",
       "effect": {
         "op": "sequence",
         "steps": [
           {
-            "op": "revealCarry",
+            "op": "cure",
             "n": 1
           },
           {
@@ -406,115 +509,140 @@
       }
     },
     {
-      "id": "vent_crawl",
-      "name": "VENT CRAWL",
-      "role": "surveyor",
-      "copies": 2,
+      "id": "scalpel",
+      "name": "SCALPEL",
+      "role": "medic",
+      "copies": 1,
       "ap": 1,
-      "noise": 0,
+      "noise": 1,
       "burn": false,
-      "requires": {
-        "ventAccess": true
-      },
-      "text": "Into the crawlspace.",
+      "text": "It is not a weapon and you are not a fighter. Nothing added to the swing.",
       "effect": {
-        "op": "ventEnter"
+        "op": "attack",
+        "bonus": 0
+      },
+      "weapon": true,
+      "bonus": 0,
+      "requires": {
+        "threatHere": true
       }
     },
     {
-      "id": "sweep",
-      "name": "SWEEP",
-      "role": "surveyor",
-      "copies": 2,
+      "id": "sedative",
+      "name": "SEDATIVE",
+      "role": "medic",
+      "copies": 1,
       "ap": 1,
       "noise": 0,
-      "burn": false,
-      "requires": {
-        "unsearched": true
-      },
-      "text": "Go through this compartment without making a sound.",
+      "burn": true,
+      "text": "Put yourself most of the way under and let the machine work. Two infections leave your deck.",
       "effect": {
-        "op": "search"
+        "op": "cure",
+        "n": 2
       }
     },
     {
-      "id": "quick_step",
-      "name": "QUICK STEP",
+      "id": "morphine",
+      "name": "MORPHINE",
+      "role": "medic",
+      "copies": 1,
+      "ap": 1,
+      "noise": 0,
+      "burn": true,
+      "text": "You will feel it later. The next two things that reach you this hour do not land.",
+      "effect": {
+        "op": "sequence",
+        "steps": [
+          {
+            "op": "preventWound",
+            "duration": "turn"
+          },
+          {
+            "op": "preventWound",
+            "duration": "turn"
+          }
+        ]
+      }
+    },
+    {
+      "id": "blood_work",
+      "name": "BLOOD WORK",
+      "role": "medic",
+      "copies": 1,
+      "ap": 2,
+      "noise": 1,
+      "burn": true,
+      "text": "A full exchange, on a table, with something aboard. Two infections leave your deck.",
+      "effect": {
+        "op": "cure",
+        "n": 2
+      }
+    },
+    {
+      "id": "careful_step",
+      "name": "CAREFUL STEP",
       "role": "surveyor",
-      "copies": 2,
+      "copies": 3,
       "ap": 1,
       "noise": 0,
       "burn": false,
-      "text": "One compartment over. Nothing hears you.",
+      "text": "One compartment over, without a sound.",
       "effect": {
         "op": "move",
         "silent": true
       }
     },
     {
-      "id": "mapping_kit",
-      "name": "MAPPING KIT",
+      "id": "duct_map",
+      "name": "DUCT MAP",
       "role": "surveyor",
-      "copies": 1,
+      "copies": 2,
       "ap": 1,
       "noise": 0,
       "burn": false,
-      "text": "Put the hull on the scope and listen to all of it at once.",
+      "text": "You have been in the ducts. Everything within four compartments shows itself.",
       "effect": {
-        "op": "listen"
+        "op": "reveal",
+        "range": 4
       }
     },
     {
-      "id": "flare",
-      "name": "FLARE",
+      "id": "cache",
+      "name": "CACHE",
       "role": "surveyor",
-      "copies": 1,
-      "ap": 1,
-      "noise": 0,
-      "burn": false,
-      "text": "Throw it somewhere else and let it shout there instead of here.",
-      "effect": {
-        "op": "addNoise",
-        "scope": "target",
-        "n": 3
-      }
-    },
-    {
-      "id": "cutting_bar",
-      "name": "CUTTING BAR",
-      "role": "surveyor",
-      "copies": 1,
-      "ap": 2,
-      "noise": 3,
-      "burn": false,
-      "weapon": true,
-      "bonus": 1,
-      "text": "Salvage tool, used badly. +1 in reach.",
-      "effect": {
-        "op": "attack",
-        "bonus": 1
-      }
-    },
-    {
-      "id": "rappel",
-      "name": "RAPPEL",
-      "role": "surveyor",
-      "copies": 1,
-      "ap": 2,
-      "noise": 0,
-      "burn": true,
-      "text": "Drop straight into any duct access. Nothing hears you.",
-      "effect": {
-        "op": "ventJump"
-      }
-    },
-    {
-      "id": "scavenge",
-      "name": "SCAVENGE",
-      "role": "surveyor",
-      "copies": 1,
+      "copies": 2,
       "ap": 1,
       "noise": 1,
+      "burn": false,
+      "text": "You know where the crew hid things. Search this compartment.",
+      "effect": {
+        "op": "search"
+      },
+      "requires": {
+        "unsearched": true
+      }
+    },
+    {
+      "id": "marker_flare",
+      "name": "MARKER FLARE",
+      "role": "surveyor",
+      "copies": 2,
+      "ap": 1,
+      "noise": 0,
+      "burn": false,
+      "text": "Pop it down a corridor. Pick any compartment: it goes loud, and everything that can hear it goes there.",
+      "effect": {
+        "op": "lure",
+        "n": 4
+      }
+    },
+    {
+      "id": "hand_off",
+      "name": "HAND OFF",
+      "role": "surveyor",
+      "copies": 2,
+      "ap": 0,
+      "noise": 0,
       "burn": false,
       "text": "Two more things come to hand.",
       "effect": {
@@ -523,17 +651,88 @@
       }
     },
     {
-      "id": "steady_nerves",
-      "name": "STEADY NERVES",
+      "id": "pry_bar",
+      "name": "PRY BAR",
+      "role": "surveyor",
+      "copies": 1,
+      "ap": 1,
+      "noise": 2,
+      "burn": false,
+      "text": "It is a tool and you use it like one. +1 against whatever is in reach.",
+      "effect": {
+        "op": "attack",
+        "bonus": 1
+      },
+      "weapon": true,
+      "bonus": 1,
+      "requires": {
+        "threatHere": true
+      }
+    },
+    {
+      "id": "wedge",
+      "name": "WEDGE",
+      "role": "surveyor",
+      "copies": 1,
+      "ap": 1,
+      "noise": 1,
+      "burn": false,
+      "text": "Jam the runner. One way out of this compartment is shut for two hours.",
+      "effect": {
+        "op": "sealEdge",
+        "turns": 2,
+        "anywhere": false
+      }
+    },
+    {
+      "id": "still",
+      "name": "STILL",
       "role": "surveyor",
       "copies": 1,
       "ap": 1,
       "noise": 0,
       "burn": false,
-      "text": "Hold still. The next thing that reaches you does not land.",
+      "text": "Stop. Breathe out. The compartment goes quiet and nothing lands on you this hour.",
       "effect": {
-        "op": "preventWound",
-        "duration": "turn"
+        "op": "sequence",
+        "steps": [
+          {
+            "op": "setNoise",
+            "scope": "here",
+            "n": 0
+          },
+          {
+            "op": "preventWound",
+            "duration": "turn"
+          }
+        ]
+      }
+    },
+    {
+      "id": "sprint",
+      "name": "SPRINT",
+      "role": "surveyor",
+      "copies": 1,
+      "ap": 1,
+      "noise": 2,
+      "burn": false,
+      "text": "You find another minute inside the hour, and everything hears you find it.",
+      "effect": {
+        "op": "gainAp",
+        "n": 1
+      }
+    },
+    {
+      "id": "rappel",
+      "name": "RAPPEL",
+      "role": "surveyor",
+      "copies": 1,
+      "ap": 1,
+      "noise": 0,
+      "burn": true,
+      "text": "Down a shaft you already know. Come out at any vent on the ship.",
+      "effect": {
+        "op": "ventJump"
       }
     },
     {
@@ -544,68 +743,21 @@
       "ap": 1,
       "noise": 1,
       "burn": false,
-      "text": "Trim the load. One more power in the pool.",
+      "text": "Trim the reserve draw. One more power in the pool.",
       "effect": {
         "op": "gainPower",
         "n": 1
       }
     },
     {
-      "id": "hand_off",
-      "name": "HAND OFF",
+      "id": "preflight",
+      "name": "PREFLIGHT",
       "role": "pilot",
       "copies": 2,
       "ap": 1,
-      "noise": 0,
-      "burn": false,
-      "text": "One compartment over. Nothing hears you.",
-      "effect": {
-        "op": "move",
-        "silent": true
-      }
-    },
-    {
-      "id": "flight_jacket",
-      "name": "FLIGHT JACKET",
-      "role": "pilot",
-      "copies": 1,
-      "ap": 1,
-      "noise": 0,
-      "burn": false,
-      "text": "Old kit, thick collar. The next one does not land.",
-      "effect": {
-        "op": "preventWound",
-        "duration": "turn"
-      }
-    },
-    {
-      "id": "sidearm",
-      "name": "SIDEARM",
-      "role": "pilot",
-      "copies": 1,
-      "ap": 1,
-      "noise": 2,
-      "burn": false,
-      "weapon": true,
-      "bonus": 1,
-      "text": "Yours since the academy. +1 in reach.",
-      "effect": {
-        "op": "attack",
-        "bonus": 1
-      }
-    },
-    {
-      "id": "docking_clamp",
-      "name": "DOCKING CLAMP",
-      "role": "pilot",
-      "copies": 1,
-      "ap": 1,
       "noise": 1,
       "burn": false,
-      "requires": {
-        "node": "shuttle_bay"
-      },
-      "text": "Clamp on and pull two power straight into the shuttle.",
+      "text": "You know the sequence by heart. Two straight into the shuttle, wherever you are standing.",
       "effect": {
         "op": "chargeShuttle",
         "n": 2
@@ -619,126 +771,113 @@
       "ap": 0,
       "noise": 0,
       "burn": false,
-      "text": "Steady. Something else comes to hand.",
+      "text": "One more thing comes to hand.",
       "effect": {
         "op": "draw",
         "n": 1
       }
     },
     {
-      "id": "punch_it",
-      "name": "PUNCH IT",
+      "id": "trim",
+      "name": "TRIM",
+      "role": "pilot",
+      "copies": 2,
+      "ap": 1,
+      "noise": 0,
+      "burn": false,
+      "text": "One compartment over, without a sound.",
+      "effect": {
+        "op": "move",
+        "silent": true
+      }
+    },
+    {
+      "id": "harness",
+      "name": "HARNESS",
+      "role": "pilot",
+      "copies": 2,
+      "ap": 1,
+      "noise": 0,
+      "burn": false,
+      "text": "Strap in against the frame. The next thing that reaches you this hour does not land.",
+      "effect": {
+        "op": "preventWound",
+        "duration": "turn"
+      }
+    },
+    {
+      "id": "signal_check",
+      "name": "SIGNAL CHECK",
+      "role": "pilot",
+      "copies": 2,
+      "ap": 1,
+      "noise": 0,
+      "burn": false,
+      "text": "Sweep the internal net. Everything within three compartments shows itself.",
+      "effect": {
+        "op": "reveal",
+        "range": 3
+      }
+    },
+    {
+      "id": "stick",
+      "name": "CONTROL STICK",
+      "role": "pilot",
+      "copies": 1,
+      "ap": 1,
+      "noise": 2,
+      "burn": false,
+      "text": "You tore it off the console. +1 against whatever is in reach.",
+      "effect": {
+        "op": "attack",
+        "bonus": 1
+      },
+      "weapon": true,
+      "bonus": 1,
+      "requires": {
+        "threatHere": true
+      }
+    },
+    {
+      "id": "boost",
+      "name": "BOOST",
+      "role": "pilot",
+      "copies": 1,
+      "ap": 1,
+      "noise": 1,
+      "burn": true,
+      "text": "Overfill the cells and hope the line holds. Four straight into the shuttle.",
+      "effect": {
+        "op": "chargeShuttle",
+        "n": 4
+      }
+    },
+    {
+      "id": "deadstick",
+      "name": "DEADSTICK",
       "role": "pilot",
       "copies": 1,
       "ap": 2,
-      "noise": 2,
+      "noise": 0,
       "burn": true,
-      "requires": {
-        "node": "shuttle_bay"
-      },
-      "text": "Everything the line will take: three into the shuttle.",
+      "text": "Run the whole ship off the emergency bus for an hour. Three power in the pool.",
       "effect": {
-        "op": "chargeShuttle",
+        "op": "gainPower",
         "n": 3
       }
     },
     {
-      "id": "bail",
-      "name": "BAIL",
+      "id": "mayday",
+      "name": "MAYDAY",
       "role": "pilot",
       "copies": 1,
-      "ap": 1,
-      "noise": 0,
+      "ap": 2,
+      "noise": 5,
       "burn": true,
-      "text": "One compartment over, and the noise dies behind you.",
+      "text": "Open every channel on the ship at once. Pick any compartment: everything aboard that can hear goes to it.",
       "effect": {
-        "op": "sequence",
-        "steps": [
-          {
-            "op": "move",
-            "silent": true
-          },
-          {
-            "op": "setNoise",
-            "scope": "here",
-            "n": 0
-          }
-        ]
-      }
-    },
-    {
-      "id": "checklist",
-      "name": "CHECKLIST",
-      "role": "pilot",
-      "copies": 1,
-      "ap": 0,
-      "noise": 0,
-      "burn": false,
-      "text": "Down the list. Something to hand, and a little power.",
-      "effect": {
-        "op": "sequence",
-        "steps": [
-          {
-            "op": "draw",
-            "n": 1
-          },
-          {
-            "op": "gainPower",
-            "n": 1
-          }
-        ]
-      }
-    },
-    {
-      "id": "panic_shaking",
-      "name": "SHAKING",
-      "role": "panic",
-      "copies": 0,
-      "ap": 1,
-      "noise": 0,
-      "burn": false,
-      "text": "While you hold it, your hands will not hold still. Everything you swing is harder to land.",
-      "effect": {
-        "op": "none"
-      }
-    },
-    {
-      "id": "panic_tunnel",
-      "name": "TUNNEL VISION",
-      "role": "panic",
-      "copies": 0,
-      "ap": 1,
-      "noise": 0,
-      "burn": false,
-      "text": "While you hold it, listening takes twice as long.",
-      "effect": {
-        "op": "none"
-      }
-    },
-    {
-      "id": "panic_sweat",
-      "name": "COLD SWEAT",
-      "role": "panic",
-      "copies": 0,
-      "ap": 1,
-      "noise": 0,
-      "burn": false,
-      "text": "While you hold it, everything you do is louder.",
-      "effect": {
-        "op": "none"
-      }
-    },
-    {
-      "id": "panic_blackout",
-      "name": "BLACKOUT",
-      "role": "panic",
-      "copies": 0,
-      "ap": 1,
-      "noise": 0,
-      "burn": false,
-      "text": "The moment it takes you, you knock something over.",
-      "effect": {
-        "op": "none"
+        "op": "lure",
+        "n": 6
       }
     },
     {
@@ -763,13 +902,47 @@
       "ap": 1,
       "noise": 2,
       "burn": false,
-      "weapon": true,
-      "bonus": 1,
-      "text": "Somebody dropped it running. +1 in reach.",
+      "text": "Somebody dropped it running. +1 against whatever is in reach.",
       "effect": {
         "op": "attack",
         "bonus": 1
+      },
+      "weapon": true,
+      "bonus": 1,
+      "keep": true,
+      "requires": {
+        "threatHere": true
       }
+    },
+    {
+      "id": "salv_flare",
+      "name": "SCRAP FLARE",
+      "role": "salvage",
+      "copies": 0,
+      "ap": 1,
+      "noise": 0,
+      "burn": false,
+      "text": "A signal flare with the cap already off. Pick any compartment: it goes loud and pulls whatever can hear it.",
+      "effect": {
+        "op": "lure",
+        "n": 4
+      },
+      "keep": true
+    },
+    {
+      "id": "salv_kit",
+      "name": "FIELD KIT",
+      "role": "salvage",
+      "copies": 0,
+      "ap": 1,
+      "noise": 0,
+      "burn": false,
+      "text": "Somebody's kit, unopened. One infection leaves your deck.",
+      "effect": {
+        "op": "cure",
+        "n": 1
+      },
+      "keep": true
     },
     {
       "id": "salv_stim",
@@ -779,10 +952,33 @@
       "ap": 1,
       "noise": 0,
       "burn": true,
-      "text": "One panic leaves you.",
+      "text": "One infection leaves your deck.",
       "effect": {
-        "op": "removePanic",
+        "op": "cure",
         "n": 1
+      }
+    },
+    {
+      "id": "salv_ration",
+      "name": "RATION TIN",
+      "role": "salvage",
+      "copies": 0,
+      "ap": 0,
+      "noise": 0,
+      "burn": true,
+      "text": "Cold, and the best thing that has happened all day. A minute back, and something to hand.",
+      "effect": {
+        "op": "sequence",
+        "steps": [
+          {
+            "op": "gainAp",
+            "n": 1
+          },
+          {
+            "op": "draw",
+            "n": 1
+          }
+        ]
       }
     },
     {
@@ -802,7 +998,7 @@
             "n": 4
           },
           {
-            "op": "drawCarry",
+            "op": "infect",
             "n": 1
           }
         ]
@@ -820,7 +1016,7 @@
       "effect": {
         "op": "addNoise",
         "scope": "here",
-        "n": 2
+        "n": 3
       }
     },
     {
@@ -831,10 +1027,10 @@
       "ap": 0,
       "noise": 0,
       "burn": true,
-      "text": "Somebody's last entry. Worth reading.",
+      "text": "Somebody's last entry. Worth reading, and worth filing.",
       "effect": {
         "op": "score",
-        "n": 5
+        "n": 2
       }
     }
   ]

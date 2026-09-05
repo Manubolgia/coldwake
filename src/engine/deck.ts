@@ -1,4 +1,4 @@
-import { card, PANIC_CARDS } from './content';
+import { card, INFECTION_CARDS } from './content';
 import { nextInt, shuffle } from './rng';
 import type { CardId, GameState, Uid } from './types';
 
@@ -11,8 +11,13 @@ export function cardOf(uid: Uid) {
   return card(cardIdOf(uid));
 }
 
-export function isPanic(uid: Uid): boolean {
-  return cardOf(uid).role === 'panic';
+/**
+ * Infection is the one attrition track. It is a card in your own deck, it is
+ * counted on the status strip from the moment you take the first one, and the
+ * medbay cuts it out. Nothing about it is face down — §3.2 of the redesign.
+ */
+export function isInfection(uid: Uid): boolean {
+  return cardOf(uid).role === 'infection';
 }
 
 export function makeUid(cardId: CardId, n: number): Uid {
@@ -24,8 +29,13 @@ export function ownedCards(state: GameState): Uid[] {
   return [...state.player.hand, ...state.player.deck, ...state.player.discard];
 }
 
-export function nonPanicCount(state: GameState): number {
-  return ownedCards(state).filter((u) => !isPanic(u)).length;
+/** The number on the status strip. Never hidden, never estimated. */
+export function infectionCount(state: GameState): number {
+  return ownedCards(state).filter(isInfection).length;
+}
+
+export function capabilityCount(state: GameState): number {
+  return ownedCards(state).filter((u) => !isInfection(u)).length;
 }
 
 /** Draw one card. Reshuffles the discard when the deck runs out. */
@@ -43,13 +53,13 @@ export function drawOne(state: GameState): { uid: Uid | undefined } {
   return { uid };
 }
 
-/** Shuffle a fresh panic card into the deck. §4.3. */
-export function addPanic(state: GameState): Uid {
-  const [idx, rng] = nextInt(state.rng, PANIC_CARDS.length);
+/** Shuffle a fresh infection card into the deck. */
+export function addInfection(state: GameState): Uid {
+  const [idx, rng] = nextInt(state.rng, INFECTION_CARDS.length);
   state.rng = rng;
-  const cardId = PANIC_CARDS[idx] as CardId;
-  state.player.panicsGained += 1;
-  const uid = makeUid(cardId, 1000 + state.player.panicsGained);
+  const cardId = INFECTION_CARDS[idx] as CardId;
+  state.player.infectionsGained += 1;
+  const uid = makeUid(cardId, 1000 + state.player.infectionsGained);
   state.player.deck.push(uid);
   const [deck, rng2] = shuffle(state.player.deck, state.rng);
   state.player.deck = deck;
@@ -57,10 +67,13 @@ export function addPanic(state: GameState): Uid {
   return uid;
 }
 
-/** Remove one panic card from hand, then deck, then discard. */
-export function removePanic(state: GameState): Uid | undefined {
+/**
+ * Cut one infection out for good. Hand first, because that is the one the
+ * player can feel; then the deck, then the discard.
+ */
+export function removeInfection(state: GameState): Uid | undefined {
   for (const pile of [state.player.hand, state.player.deck, state.player.discard]) {
-    const i = pile.findIndex((u) => isPanic(u));
+    const i = pile.findIndex((u) => isInfection(u));
     if (i >= 0) {
       const [uid] = pile.splice(i, 1);
       state.player.burned.push(uid as Uid);
@@ -79,4 +92,9 @@ export function removeFromHand(state: GameState, uid: Uid): boolean {
 
 export function isSpent(state: GameState, uid: Uid): boolean {
   return state.player.spent.includes(uid);
+}
+
+/** Does the player hold this infection right now, and is it therefore biting? */
+export function holding(state: GameState, cardId: CardId): boolean {
+  return state.player.hand.some((u) => cardIdOf(u) === cardId);
 }

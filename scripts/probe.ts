@@ -24,7 +24,7 @@ for (let i = 0; i < n; i++) {
   spawns += s.nextThreatId - 1;
   wounds += s.stats.wounds;
   killed += s.stats.threatsKilled;
-  carry += s.player.carry.length;
+  carry += s.stats.cures;
   banked += s.ship.shuttleCharge;
 }
 console.log(`${role} d${depth}: draws ${(draws/n).toFixed(1)} spawns ${(spawns/n).toFixed(1)} wounds ${(wounds/n).toFixed(2)} kills ${(killed/n).toFixed(2)} carry ${(carry/n).toFixed(2)} banked ${(banked/n).toFixed(1)} repairs ${(repairs/n).toFixed(2)} charges ${(charges/n).toFixed(2)} creeps ${(creeps/n).toFixed(1)} endTurn ${(endTurnPct/acts*100).toFixed(1)}%`);
