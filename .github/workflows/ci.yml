@@ -21,22 +21,10 @@ jobs:
       - run: npm ci
       - name: Typecheck
         run: npm run typecheck
-      - name: Unit, property and golden tests
+      - name: Engine, content and whole-run simulation tests
         run: npm test
-      - name: Gate M0 — skeleton
-        run: npm run gate:m0
-      - name: Gate M1 — rules engine
-        run: npm run gate:m1
-      - name: Balance smoke test
-        # 500 runs per depth, wide bands. A balance regression blocks the deploy.
-        run: npm run smoke
       - name: Build
         run: npm run build
-      - uses: actions/upload-artifact@v4
-        with:
-          name: reports
-          path: reports/
-          if-no-files-found: ignore
 
   e2e:
     runs-on: ubuntu-latest

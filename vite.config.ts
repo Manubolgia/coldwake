@@ -13,7 +13,7 @@ export default defineConfig({
   plugins: [
     react(),
     VitePWA({
-      registerType: 'prompt',
+      registerType: 'autoUpdate',
       injectRegister: null,
       includeAssets: ['icon-192.png', 'icon-512.png', 'icon-maskable.png'],
       workbox: {
@@ -24,13 +24,13 @@ export default defineConfig({
       manifest: {
         name: 'COLDWAKE',
         short_name: 'COLDWAKE',
-        description: 'A single-player, offline-first space horror board game.',
+        description: 'A solo sci-fi survival RPG. You wake alone on a dying ship.',
         start_url: '.',
         scope: '.',
         display: 'standalone',
         orientation: 'portrait',
-        background_color: '#0A0705',
-        theme_color: '#0A0705',
+        background_color: '#04060b',
+        theme_color: '#04060b',
         icons: [
           { src: 'icon-192.png', sizes: '192x192', type: 'image/png' },
           { src: 'icon-512.png', sizes: '512x512', type: 'image/png' },

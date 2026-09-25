@@ -1,77 +1,40 @@
-/**
- * Generates the PWA icons. No image library and no network: the icons are
- * drawn as raw pixels and encoded here, so the repo stays self-contained.
- */
-import { deflateSync } from 'node:zlib';
-import { writeFileSync } from 'node:fs';
-import { join } from 'node:path';
+// npm run icons — renders the PWA icons from SVG with the bundled Chromium.
+import { chromium } from '@playwright/test';
 
-const VOID: [number, number, number] = [0x0a, 0x07, 0x05];
-const PHOSPHOR: [number, number, number] = [0xff, 0xb0, 0x00];
-
-function crc32(buf: Buffer): number {
-  let c = ~0;
-  for (const byte of buf) {
-    c ^= byte;
-    for (let k = 0; k < 8; k++) c = (c >>> 1) ^ (0xedb88320 & -(c & 1));
-  }
-  return ~c >>> 0;
+function svg(size: number, maskable: boolean): string {
+  const pad = maskable ? 0.2 : 0.08;
+  const r = maskable ? 0 : size * 0.22;
+  const s = size * (1 - pad * 2);
+  const o = size * pad;
+  const u = s / 100;
+  return `<svg xmlns="http://www.w3.org/2000/svg" width="${size}" height="${size}" viewBox="0 0 ${size} ${size}">
+  <defs>
+    <radialGradient id="bg" cx="0.5" cy="0.35" r="0.8">
+      <stop offset="0" stop-color="#12304a"/><stop offset="1" stop-color="#04060b"/>
+    </radialGradient>
+    <filter id="glow" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="${u * 3}"/></filter>
+  </defs>
+  <rect width="${size}" height="${size}" rx="${r}" fill="url(#bg)"/>
+  <g transform="translate(${o} ${o})">
+    <rect x="${32 * u}" y="${12 * u}" width="${36 * u}" height="${76 * u}" rx="${18 * u}" fill="none" stroke="#5ce1e6" stroke-width="${6 * u}" filter="url(#glow)"/>
+    <rect x="${32 * u}" y="${12 * u}" width="${36 * u}" height="${76 * u}" rx="${18 * u}" fill="#5ce1e6" fill-opacity="0.12" stroke="#bdf6f8" stroke-width="${3 * u}"/>
+    <rect x="${41 * u}" y="${24 * u}" width="${18 * u}" height="${40 * u}" rx="${9 * u}" fill="none" stroke="#5ce1e6" stroke-opacity="0.6" stroke-width="${2 * u}"/>
+    <circle cx="${50 * u}" cy="${44 * u}" r="${5 * u}" fill="#ff4d5e" filter="url(#glow)"/>
+    <circle cx="${50 * u}" cy="${44 * u}" r="${2.6 * u}" fill="#ffe4e6"/>
+  </g>
+</svg>`;
 }
 
-function chunk(type: string, data: Buffer): Buffer {
-  const len = Buffer.alloc(4);
-  len.writeUInt32BE(data.length);
-  const body = Buffer.concat([Buffer.from(type, 'ascii'), data]);
-  const crc = Buffer.alloc(4);
-  crc.writeUInt32BE(crc32(body));
-  return Buffer.concat([len, body, crc]);
+const browser = await chromium.launch(process.env.PLAYWRIGHT_CHROMIUM ? { executablePath: process.env.PLAYWRIGHT_CHROMIUM } : {});
+const page = await browser.newPage();
+for (const [file, size, maskable] of [
+  ['public/icon-192.png', 192, false],
+  ['public/icon-512.png', 512, false],
+  ['public/icon-maskable.png', 512, true],
+] as const) {
+  await page.setViewportSize({ width: size, height: size });
+  await page.setContent(`<html><body style="margin:0;background:transparent">${svg(size, maskable)}</body></html>`);
+  await page.screenshot({ path: file, omitBackground: !maskable, clip: { x: 0, y: 0, width: size, height: size } });
+  console.log('wrote', file);
 }
-
-function png(size: number, pixel: (x: number, y: number) => [number, number, number]): Buffer {
-  const raw = Buffer.alloc(size * (size * 3 + 1));
-  let o = 0;
-  for (let y = 0; y < size; y++) {
-    raw[o++] = 0;
-    for (let x = 0; x < size; x++) {
-      const [r, g, b] = pixel(x, y);
-      raw[o++] = r;
-      raw[o++] = g;
-      raw[o++] = b;
-    }
-  }
-  const ihdr = Buffer.alloc(13);
-  ihdr.writeUInt32BE(size, 0);
-  ihdr.writeUInt32BE(size, 4);
-  ihdr[8] = 8;
-  ihdr[9] = 2;
-  return Buffer.concat([
-    Buffer.from([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a]),
-    chunk('IHDR', ihdr),
-    chunk('IDAT', deflateSync(raw, { level: 9 })),
-    chunk('IEND', Buffer.alloc(0)),
-  ]);
-}
-
-/** A bulkhead frame with the threat block inside it. No illustration. */
-function draw(size: number, inset: number) {
-  return (x: number, y: number): [number, number, number] => {
-    const u = x / size;
-    const v = y / size;
-    const lo = inset;
-    const hi = 1 - inset;
-    const border = 0.055;
-    const onFrame =
-      u >= lo && u <= hi && v >= lo && v <= hi &&
-      (u <= lo + border || u >= hi - border || v <= lo + border || v >= hi - border);
-    const blockLo = 0.5 - (0.5 - lo) * 0.42;
-    const blockHi = 1 - blockLo;
-    const onBlock = u >= blockLo && u <= blockHi && v >= blockLo && v <= blockHi;
-    return onFrame || onBlock ? PHOSPHOR : VOID;
-  };
-}
-
-const out = join('public');
-writeFileSync(join(out, 'icon-192.png'), png(192, draw(192, 0.14)));
-writeFileSync(join(out, 'icon-512.png'), png(512, draw(512, 0.14)));
-writeFileSync(join(out, 'icon-maskable.png'), png(512, draw(512, 0.24)));
-console.log('wrote icon-192.png, icon-512.png, icon-maskable.png');
+await browser.close();

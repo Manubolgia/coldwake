@@ -1,111 +1,118 @@
-import { del, get, set } from 'idb-keyval';
-import type { Depth, Ending, GameState, RoleId } from '../engine/types';
+import type { GameState, RoleId } from '../game/types';
+import { VERSION } from '../game/generate';
 
-const RUN_KEY = 'coldwake:run';
-const META_KEY = 'coldwake:meta';
-const TELEMETRY_KEY = 'coldwake:telemetry';
+const SAVE_KEY = 'coldwake.save.v3';
+const PROFILE_KEY = 'coldwake.profile.v3';
 
-export type Meta = {
-  runs: number;
-  roles: RoleId[];
-  depths: Depth[];
-  endings: Record<string, number>;
-  best: Record<string, number>;
-  daily: Record<string, { score: number; ending: Ending }>;
-  crt: boolean;
-  guidance: boolean;
-  reducedMotion: boolean;
-  bootSeen: boolean;
-};
-
-export type RunTelemetry = {
-  seed: string;
+export interface RunRecord {
+  date: string;
+  name: string;
   role: RoleId;
-  depth: Depth;
-  started: number;
-  finished?: number;
-  turnMs: number[];
-  actions: Record<string, number>;
-  ending?: Ending;
-  score?: number;
-  abandonedAtTurn?: number;
-  survey?: { tension: number; pointlessTurn: boolean; understoodLoss: boolean; note: string };
+  ship: string;
+  incident: string;
+  title: string;
+  won: boolean;
+  score: number;
+  rounds: number;
+  difficulty: string;
+}
+
+export interface Settings {
+  sound: boolean;
+  volume: number;
+  textSize: 'small' | 'medium' | 'large';
+  reducedMotion: boolean;
+}
+
+export interface Profile {
+  unlocks: string[];
+  history: RunRecord[];
+  tipsDone: boolean;
+  settings: Settings;
+  lastRole: RoleId;
+  lastDifficulty: 'story' | 'standard' | 'nightmare';
+}
+
+const DEFAULT_PROFILE: Profile = {
+  unlocks: [],
+  history: [],
+  tipsDone: false,
+  settings: { sound: true, volume: 0.7, textSize: 'medium', reducedMotion: false },
+  lastRole: 'engineer',
+  lastDifficulty: 'standard',
 };
 
-export const DEFAULT_META: Meta = {
-  runs: 0,
-  roles: ['engineer', 'security'],
-  depths: [1],
-  endings: {},
-  best: {},
-  daily: {},
-  crt: true,
-  guidance: true,
-  reducedMotion: false,
-  bootSeen: false,
-};
-
-export async function loadMeta(): Promise<Meta> {
-  const stored = (await get<Meta>(META_KEY)) ?? null;
-  return stored ? { ...DEFAULT_META, ...stored } : DEFAULT_META;
-}
-
-export async function saveMeta(meta: Meta): Promise<void> {
-  await set(META_KEY, meta);
-}
-
-export async function loadRun(): Promise<GameState | null> {
-  return (await get<GameState>(RUN_KEY)) ?? null;
-}
-
-export async function saveRun(state: GameState | null): Promise<void> {
-  if (state === null) await del(RUN_KEY);
-  else await set(RUN_KEY, state);
-}
-
-export async function loadTelemetry(): Promise<RunTelemetry[]> {
-  return (await get<RunTelemetry[]>(TELEMETRY_KEY)) ?? [];
-}
-
-export async function pushTelemetry(run: RunTelemetry): Promise<void> {
-  const all = await loadTelemetry();
-  all.push(run);
-  // Keep the file small enough to paste back into a conversation.
-  await set(TELEMETRY_KEY, all.slice(-200));
-}
-
-export async function updateLastTelemetry(patch: Partial<RunTelemetry>): Promise<void> {
-  const all = await loadTelemetry();
-  const last = all[all.length - 1];
-  if (!last) return;
-  all[all.length - 1] = { ...last, ...patch };
-  await set(TELEMETRY_KEY, all);
-}
-
-/** §4.14 unlocks: access to new problems, never power creep. */
-export function applyUnlocks(meta: Meta, ending: Ending, depth: Depth, score: number, role: RoleId): Meta {
-  const next: Meta = {
-    ...meta,
-    runs: meta.runs + 1,
-    endings: { ...meta.endings, [ending]: (meta.endings[ending] ?? 0) + 1 },
-    best: { ...meta.best },
-    roles: [...meta.roles],
-    depths: [...meta.depths],
-  };
-  const key = `${role}:${depth}`;
-  next.best[key] = Math.max(next.best[key] ?? 0, score);
-  const won = (['escaped', 'overload', 'relay', 'specimen', 'carrier'] as Ending[]).includes(ending);
-  if (won && !next.roles.includes('medic')) next.roles.push('medic');
-  if (ending === 'escaped' && !next.roles.includes('pilot')) next.roles.push('pilot');
-  if (won) {
-    const nextDepth = (depth + 1) as Depth;
-    if (nextDepth <= 5 && !next.depths.includes(nextDepth)) next.depths.push(nextDepth);
+function read<T>(key: string): T | null {
+  try {
+    const raw = localStorage.getItem(key);
+    return raw ? (JSON.parse(raw) as T) : null;
+  } catch {
+    return null;
   }
-  if (next.depths.includes(3) && !next.roles.includes('surveyor')) next.roles.push('surveyor');
-  next.depths.sort((a, b) => a - b);
-  return next;
 }
 
-export function dailySeed(date = new Date()): string {
-  return `daily-${date.toISOString().slice(0, 10)}`;
+function write(key: string, value: unknown): void {
+  try {
+    localStorage.setItem(key, JSON.stringify(value));
+  } catch {
+    /* storage full or blocked: the game still runs, it just won't remember */
+  }
+}
+
+export function loadGame(): GameState | null {
+  const s = read<GameState>(SAVE_KEY);
+  if (!s || s.version !== VERSION || s.status !== 'playing') return null;
+  return s;
+}
+
+export function saveGame(s: GameState | null): void {
+  if (!s || s.status !== 'playing') {
+    try {
+      localStorage.removeItem(SAVE_KEY);
+    } catch {
+      /* ignore */
+    }
+    return;
+  }
+  write(SAVE_KEY, s);
+}
+
+export function loadProfile(): Profile {
+  const p = read<Partial<Profile>>(PROFILE_KEY);
+  return {
+    ...DEFAULT_PROFILE,
+    ...p,
+    settings: { ...DEFAULT_PROFILE.settings, ...(p?.settings ?? {}) },
+  };
+}
+
+export function saveProfile(p: Profile): void {
+  write(PROFILE_KEY, p);
+}
+
+/** Record a finished run and work out what it unlocked. */
+export function recordRun(p: Profile, s: GameState): { profile: Profile; newUnlocks: string[] } {
+  const e = s.ending;
+  if (!e) return { profile: p, newUnlocks: [] };
+  const rec: RunRecord = {
+    date: new Date().toISOString(),
+    name: s.player.name,
+    role: s.player.role,
+    ship: s.scenario.shipName,
+    incident: s.scenario.incident,
+    title: e.title,
+    won: e.won,
+    score: e.score,
+    rounds: s.round,
+    difficulty: s.difficulty,
+  };
+  const unlocks = new Set(p.unlocks);
+  const before = new Set(p.unlocks);
+  if (e.won) unlocks.add('escaped');
+  if (s.progress.truth) unlocks.add('truth');
+  const newUnlocks = [...unlocks].filter((u) => !before.has(u));
+  return {
+    profile: { ...p, unlocks: [...unlocks], history: [rec, ...p.history].slice(0, 60) },
+    newUnlocks,
+  };
 }

@@ -1,391 +1,71 @@
-import { expect, test, type Browser, type Page } from '@playwright/test';
+import { expect, test } from '@playwright/test';
 
-type Debug = {
-  state: {
-    status: string;
-    turn: number;
-    phase: string;
-    player: { ap: number };
-    result?: { ending: string; score: number };
-  } | null;
-  actions: { t: string }[];
-};
+// Drives a whole run through the real interface: title, setup, cards, dice,
+// actions, rounds, until an ending or a step cap. Fails on any page error.
 
-const debug = (page: Page): Promise<Debug> =>
-  page.evaluate(() => (window as unknown as { __coldwake: Debug }).__coldwake);
-
-async function isResolving(page: Page): Promise<boolean> {
-  return (await page.getByTestId('terminal').getAttribute('data-resolving').catch(() => null)) === 'yes';
-}
-
-/** Tap the terminal through whatever it is saying and wait for it to hand back. */
-async function settle(page: Page): Promise<void> {
-  for (let i = 0; i < 30 && (await isResolving(page)); i++) {
-    await page.getByTestId('terminal').click({ timeout: 1000 }).catch(() => {});
-    await page.waitForTimeout(120);
-  }
-  await page
-    .waitForSelector('[data-testid="terminal"][data-resolving="no"]', { timeout: 8000 })
-    .catch(() => {});
-}
-
-async function bootToMenu(page: Page): Promise<void> {
+test('a run can be played from title to ending', async ({ page }) => {
+  test.setTimeout(300_000);
+  const errors: string[] = [];
+  page.on('pageerror', (e) => errors.push(e.message));
   await page.goto('./');
-  const boot = page.getByTestId('boot');
-  if (await boot.isVisible().catch(() => false)) await boot.click();
-  await expect(page.getByTestId('menu')).toBeVisible();
-}
-
-async function startRun(
-  page: Page,
-  seed: string,
-  depth = 1,
-  objective = 'run',
-): Promise<void> {
-  await bootToMenu(page);
-  await page.getByTestId('seed-input').fill(seed);
-  await page.locator(`[data-depth="${depth}"]`).click();
-  await page.locator(`[data-objective="${objective}"]`).click();
-  await page.getByTestId('start').click();
-  await expect(page.getByTestId('commands')).toBeVisible();
-}
-
-const ENDINGS = ['escaped', 'carrier', 'overload', 'relay', 'specimen', 'killed', 'adrift'];
-
-/** Prefer progress, fall back to ending the hour. `burn` first: a wound owed
- *  is the only thing the interface will let you do, so it has to be paid. */
-const PRIORITY = ['burn', 'launch', 'upload', 'chargeShuttle', 'search', 'creep', 'endTurn'];
-
-/**
- * Play the run out through the interface only. No engine calls.
- *
- * One round trip per click rather than ten: reading the status, the terminal's
- * state and every command's action in a single evaluate. Three full runs at
- * ~75 clicks each is 2,250 round trips the naive way, which is inside a CI
- * runner's patience locally and outside it on a shared one.
- */
-async function playToEnding(page: Page, maxClicks = 1200): Promise<string> {
-  for (let i = 0; i < maxClicks; i++) {
-    const look = await page.evaluate((priority) => {
-      const w = window as unknown as { __coldwake?: { state: { status: string } | null } };
-      const status = w.__coldwake?.state?.status ?? null;
-      const resolving =
-        document.querySelector('[data-testid="terminal"]')?.getAttribute('data-resolving') === 'yes';
-      const actions = [...document.querySelectorAll('.commands .cmd')].map(
-        (el) => el.getAttribute('data-action') ?? '',
-      );
-      const want = priority.find((p) => actions.includes(p)) ?? actions[0] ?? null;
-      return { status, resolving, count: actions.length, want };
-    }, PRIORITY);
-
-    if (look.status === null || look.status !== 'active') break;
-    if (look.resolving) {
-      await settle(page);
-      continue;
-    }
-    if (look.count === 0) throw new Error('no commands rendered while the run is active');
-    await page.locator(`.commands .cmd[data-action="${look.want}"]`).first().click();
-  }
-  await expect(page.getByTestId('ending')).toBeVisible({ timeout: 20_000 });
-  return (await page.getByTestId('ending').getAttribute('data-ending')) ?? '';
-}
-
-/**
- * A page that prints rather than types. The two tests that play whole runs are
- * about whether the interface can reach an ending, not about the terminal's
- * pacing — and waiting out fifteen hours of reading-pace prose three times over
- * is what put this file outside a CI runner's patience. The typing itself has
- * its own tests, above.
- */
-async function instantPage(browser: Browser): Promise<Page> {
-  const context = await browser.newContext({ reducedMotion: 'reduce' });
-  return context.newPage();
-}
-
-test('5.1 a full run plays to an ending through the interface alone', async ({ browser }) => {
-  const page = await instantPage(browser);
-  await startRun(page, 'e2e-clean', 1);
-  const ending = await playToEnding(page);
-  expect(ENDINGS).toContain(ending);
-  await expect(page.getByTestId('score')).toBeVisible();
-  await page.context().close();
-});
-
-test('5.2 several seeds resolve into different endings', async ({ browser }) => {
-  const page = await instantPage(browser);
-  const endings = new Set<string>();
-  // Depth 1 only: deeper runs are locked until one is cleared, which is the
-  // meta-progression working as designed. One objective each, so the three runs
-  // are actually chasing different parts of the ship.
-  for (const [seed, objective] of [
-    ['seed-a', 'run'],
-    ['seed-b', 'burn'],
-    ['seed-c', 'know'],
-  ] as const) {
-    await startRun(page, seed, 1, objective);
-    endings.add(await playToEnding(page));
-    await page.getByTestId('ending-continue').click();
-  }
-  expect(endings.size).toBeGreaterThanOrEqual(1);
-  for (const e of endings) {
-    expect(ENDINGS).toContain(e);
-  }
-  await page.context().close();
-});
-
-test('5.3 every legal action has a control in the interface', async ({ page }) => {
-  await startRun(page, 'parity', 1);
-  for (let sample = 0; sample < 25; sample++) {
-    await settle(page);
-    const d = await debug(page);
-    if (d.state === null || d.state.status !== 'active') break;
-    const rendered = await page.locator('.commands .cmd').count();
-    expect(rendered).toBe(d.actions.length);
-    await page.locator('.commands .cmd').first().click();
-  }
-});
-
-test('5.4 no horizontal scroll at any phone width', async ({ page }) => {
-  for (const width of [320, 360, 390, 414, 430]) {
-    await page.setViewportSize({ width, height: 840 });
-    await startRun(page, `w${width}`, 1);
-    const [scrollWidth, clientWidth] = await page.evaluate(() => [
-      document.documentElement.scrollWidth,
-      document.documentElement.clientWidth,
-    ]);
-    expect(scrollWidth, `width ${width}`).toBe(clientWidth);
-  }
-});
-
-test('5.6 and 5.7 touch targets and noise disclosure', async ({ page }) => {
-  await startRun(page, 'targets', 1);
-  await settle(page);
-  const buttons = page.locator('.commands .cmd');
-  const count = await buttons.count();
-  expect(count).toBeGreaterThan(0);
-  for (let i = 0; i < count; i++) {
-    const b = buttons.nth(i);
-    const box = await b.boundingBox();
-    expect(box?.height ?? 0).toBeGreaterThanOrEqual(44);
-    // Noise is disclosed as the distance it carries, not as a bare number.
-    await expect(b).toContainText(/SILENT|HEARD \d+ AWAY/);
-  }
-  const cards = page.locator('.hand .card');
-  for (let i = 0; i < (await cards.count()); i++) {
-    const box = await cards.nth(i).boundingBox();
-    expect(box?.height ?? 0).toBeGreaterThanOrEqual(44);
-    expect(box?.width ?? 0).toBeGreaterThanOrEqual(44);
-  }
-});
-
-test('the terminal writes its output rather than printing it', async ({ page }) => {
-  await startRun(page, 'typing', 1);
-  await settle(page);
-  await page.locator('.commands .cmd[data-action="endTurn"]').first().click();
-  // Caught mid-sentence, the terminal is shorter than it will be.
-  const mid = (await page.getByTestId('terminal').innerText()).length;
-  await settle(page);
-  await page.waitForTimeout(300);
-  const finished = (await page.getByTestId('terminal').innerText()).length;
-  expect(finished).toBeGreaterThanOrEqual(mid);
-  await expect(page.getByTestId('terminal')).toHaveAttribute('data-complete', 'yes');
-  // And when it has nothing to say, it waits with a cursor.
-  await expect(page.locator('.caret.idle')).toBeVisible();
-});
-
-test('5.14 reduced motion prints instead of typing, and never takes the screen', async ({ browser }) => {
-  const context = await browser.newContext({ reducedMotion: 'reduce' });
-  const page = await context.newPage();
-  await page.goto('/coldwake/');
-  await expect(page.getByTestId('menu')).toBeVisible({ timeout: 2000 });
-  await page.getByTestId('start').click();
-  await expect(page.getByTestId('commands')).toBeVisible();
-  await page.locator('.commands .cmd[data-action="endTurn"]').first().click();
-  await expect(page.getByTestId('terminal')).toHaveAttribute('data-resolving', 'no');
-  await expect(page.getByTestId('terminal')).toHaveAttribute('data-complete', 'yes');
-  await expect(page.getByTestId('commands')).toBeVisible();
-  await context.close();
-});
-
-test('5.14 a run that resolves under reduced motion still shows its ending', async ({ browser }) => {
-  // Regression. The ending screen used to be handed over by the terminal's
-  // completion callback, which never fires when the terminal prints instantly:
-  // a resolved run sat on a dead board with no ending and no score.
-  const page = await instantPage(browser);
-  await startRun(page, 'reduced-ending', 1);
-  const ending = await playToEnding(page);
-  expect(ENDINGS).toContain(ending);
-  await expect(page.getByTestId('score')).toBeVisible();
-  await page.context().close();
-});
-
-test('the advisory voice explains itself, and can be switched off', async ({ page }) => {
-  await bootToMenu(page);
-  await expect(page.getByTestId('guidance-toggle')).toContainText('ON');
-  await page.getByTestId('start').click();
-  await expect(page.getByTestId('commands')).toBeVisible();
-  await settle(page);
-  // It says something about the shuttle before the player has done anything.
-  await expect(page.getByTestId('terminal')).toContainText('shuttle');
-
-  await page.getByTestId('menu-button').click();
-  await page.getByTestId('guidance-toggle').click();
-  await expect(page.getByTestId('guidance-toggle')).toContainText('OFF');
-});
-
-// The same list voice.test.ts checks the written strings against, and for the
-// same reason it carries an exception: a ship has deck plates, and the narrator
-// is allowed to mention them. Without the guard this test failed or passed on
-// which hour opener the narrator happened to draw.
-const BOARD_GAME_WORDS = /\b(cards?|tokens?|nodes?|turns?|AP)\b|\bdecks?\b(?![ -]plate)/i;
-
-test('nothing on screen mentions cards, decks or turns', async ({ page }) => {
-  await startRun(page, 'immersion', 1);
-  await settle(page);
-  const shown = (await page.locator('#root').innerText()).replace(/COLDWAKE/g, '');
-  expect(shown).not.toMatch(BOARD_GAME_WORDS);
-  await page.locator('.commands .cmd[data-action="endTurn"]').first().click();
-  await settle(page);
-  const after = (await page.locator('#root').innerText()).replace(/COLDWAKE/g, '');
-  expect(after).not.toMatch(BOARD_GAME_WORDS);
-});
-
-test('the manual explains every symbol, on every page, in character', async ({ page }) => {
-  await bootToMenu(page);
-  await page.getByTestId('manual-open').click();
-  await expect(page.getByTestId('manual')).toBeVisible();
-
-  const pages = await page.locator('.tab').allInnerTexts();
-  expect(pages.length).toBeGreaterThanOrEqual(6);
-
-  const seen: string[] = [];
-  for (const name of pages) {
-    await page.locator(`.tab[data-page="${name}"]`).click();
-    await expect(page.getByTestId('manual-body')).toHaveAttribute('data-page', name);
-    const text = await page.getByTestId('manual-body').innerText();
-    // Every page says something; none of them says it like a rulebook.
-    expect(text.length).toBeGreaterThan(300);
-    expect(text).not.toMatch(/\b(cards?|tokens?|nodes?|bag|AP)\b|\bdecks?\b(?![ -]plate)/i);
-    seen.push(text);
-  }
-
-  // The first page has to name all four routes, because they are the game.
-  const four = seen[pages.indexOf('THE FOUR')] ?? '';
-  for (const label of ['RUN', 'BURN', 'CALL', 'KNOW', 'CARRIER', 'ADRIFT']) {
-    expect(four).toContain(label);
-  }
-  // And the creature page names all four of them, with their numbers.
-  const aboard = seen[pages.indexOf('ABOARD')] ?? '';
-  for (const label of ['STRAY', 'HUNTER', 'CRAWLER', 'MOTHER']) {
-    expect(aboard).toContain(label);
-  }
-
-  // The chooser stays reachable from the bottom of the longest page: it is a
-  // column flex item and collapsed to a row of empty bars the first time.
-  await page.locator('.modal').evaluate((el) => el.scrollTo(0, el.scrollHeight));
-  await expect(page.getByTestId('manual-tabs')).toBeInViewport();
-  const tab = await page.locator('.tab.on').boundingBox();
-  expect(tab?.height ?? 0).toBeGreaterThan(16);
-
-  await page.getByTestId('manual-close').click();
-  await expect(page.getByTestId('manual')).toHaveCount(0);
-});
-
-test('5.15 the CRT treatment can be switched off and the game still plays', async ({ page }) => {
-  await bootToMenu(page);
-  await page.getByTestId('crt-toggle').click();
-  await expect(page.locator('html')).toHaveAttribute('data-crt', 'off');
-  await page.getByTestId('start').click();
-  await expect(page.getByTestId('commands')).toBeVisible();
-  await page.locator('.commands .cmd').first().click();
-  const d = await debug(page);
-  expect(d.state?.status).toBe('active');
-});
-
-test('5.17 a killed tab resumes the run', async ({ page }) => {
-  await startRun(page, 'resume-me', 1);
-  await page.locator('.commands .cmd[data-action="endTurn"]').first().click();
-  await settle(page);
-  await page.locator('.commands .cmd[data-action="endTurn"]').first().click();
-  await settle(page);
-  const before = (await debug(page)).state?.turn ?? 0;
-  expect(before).toBeGreaterThan(1);
+  await page.evaluate(() => localStorage.clear());
   await page.reload();
-  const boot = page.getByTestId('boot');
-  if (await boot.isVisible().catch(() => false)) await boot.click();
-  await page.getByTestId('resume').click();
-  const after = (await debug(page)).state?.turn ?? 0;
-  expect(after).toBeGreaterThanOrEqual(before - 1);
-});
 
-test('5.14 the boot sequence types itself out', async ({ page }) => {
-  // The foreground page: Chromium throttles timers in a background context,
-  // which would stretch the type-out to minutes and prove nothing.
-  await page.goto('/coldwake/', { waitUntil: 'commit' });
-  // Sampled against the readout's own state rather than the clock: caught
-  // while it is unfinished, the text must be shorter than when it finishes.
-  await page.waitForSelector('[data-testid="boot"][data-complete="no"]', { timeout: 6000 });
-  const partial = (await page.getByTestId('boot').innerText()).length;
-  await page.waitForSelector('[data-testid="boot"][data-complete="yes"]', { timeout: 15_000 });
-  const full = (await page.getByTestId('boot').innerText()).length;
-  expect(full).toBeGreaterThan(partial);
-});
+  await page.getByRole('button', { name: 'New story' }).click();
+  await expect(page.getByRole('heading', { name: 'Who wakes up?' })).toBeVisible();
+  await page.locator('summary').click();
+  await page.getByLabel('Ship seed').fill('E2E1');
+  await page.getByTestId('wake').click();
 
-test('5.14 reduced motion renders the boot instantly', async ({ browser }) => {
-  const context = await browser.newContext({ reducedMotion: 'reduce' });
-  const page = await context.newPage();
-  await page.goto('/coldwake/');
-  await expect(page.getByTestId('menu')).toBeVisible({ timeout: 6000 });
-  await context.close();
-});
+  await expect(page.locator('.story')).toBeVisible();
+  await page.getByRole('button', { name: 'Continue' }).click();
+  await expect(page.getByText('Your dice', { exact: false })).toBeVisible();
+  await page.getByText('Skip tips').click();
 
-test('all four routes are on screen from the first hour, with the declared one marked', async ({
-  page,
-}) => {
-  await startRun(page, 'objectives', 1, 'call');
-  await settle(page);
-  const strip = page.getByTestId('objectives');
-  await expect(strip).toBeVisible();
-  const text = await strip.innerText();
-  for (const name of ['RUN', 'BURN', 'CALL', 'KNOW']) expect(text).toContain(name);
-  // The declared route is the one carrying the mark.
-  await expect(page.locator('[data-objective="call"].declared')).toHaveCount(1);
-});
+  await expect(page.locator('.shipmap')).toBeVisible();
+  await expect(page.locator('.die')).toHaveCount(3);
 
-test('the screen says what is about to happen before the hour is committed', async ({ page }) => {
-  // Depth 1: a fresh profile has nothing else unlocked, and the forecast is
-  // the same machinery at every depth.
-  await startRun(page, 'forecast', 1);
-  // Play until something is close enough to be worth forecasting.
-  let seen = false;
-  for (let i = 0; i < 25; i++) {
-    await settle(page);
-    if ((await page.getByTestId('forecast').count()) > 0) {
-      seen = true;
+  let ended = false;
+  const tap = async (l: ReturnType<typeof page.locator>) => {
+    // The screen can change under the click (a card opens, the run ends): just go round again.
+    await l.click({ timeout: 2000 }).catch(() => undefined);
+  };
+  for (let i = 0; i < 500; i++) {
+    if (await page.locator('.ending').count()) {
+      ended = true;
       break;
     }
-    const end = page.locator('.commands .cmd[data-action="endTurn"]').first();
-    if ((await end.count()) === 0) break;
-    await end.click({ timeout: 5000 }).catch(() => {});
+    if (await page.locator('.story').count()) {
+      const choices = page.locator('.story .choice');
+      if (await choices.count()) await tap(choices.first());
+      else await tap(page.locator('.story').getByRole('button', { name: 'Continue' }));
+      continue;
+    }
+    // Prefer objectives and moves, like a player heading for the exit would.
+    const goal = page.locator('.group.goal .action:not([disabled])');
+    const move = page.locator('.group.move .action:not([disabled])');
+    const any = page.locator('.action:not([disabled])');
+    const moves = await move.count();
+    if (await goal.count()) await tap(goal.first());
+    else if (moves && i % 3 !== 2) await tap(move.nth(i % moves));
+    else if (await any.count()) await tap(any.first());
+    else await tap(page.getByTestId('end-round'));
   }
-  expect(seen, 'nothing was ever perceived over 25 hours').toBe(true);
-  await expect(page.getByTestId('forecast')).toContainText('IF THE HOUR ENDS NOW');
+  expect(ended, 'the run reached an ending').toBe(true);
+  await expect(page.getByTestId('again')).toBeVisible();
+  expect(errors).toEqual([]);
 });
 
-test('every command says what it costs and what it does', async ({ page }) => {
-  await startRun(page, 'consequences', 1);
-  await settle(page);
-  const listen = page.locator('.commands .cmd[data-action="listen"]').first();
-  await expect(listen).toBeVisible();
-  const text = await listen.innerText();
-  // Noise is disclosed as the distance it carries, not as a bare number.
-  expect(text).toMatch(/SILENT|HEARD \d+ AWAY/);
-  expect(text).toMatch(/compartments/i);
-});
-
-test('the infection count is on screen from the first one', async ({ page }) => {
-  await startRun(page, 'infection', 1);
-  await settle(page);
-  const strip = await page.locator('.strip').innerText();
-  expect(strip).toMatch(/INFECTION\s*0/);
+test('a run in progress survives a reload', async ({ page }) => {
+  await page.goto('./');
+  await page.evaluate(() => localStorage.clear());
+  await page.reload();
+  await page.getByRole('button', { name: 'New story' }).click();
+  await page.getByTestId('wake').click();
+  await page.getByRole('button', { name: 'Continue' }).click();
+  await page.getByText('Skip tips').click();
+  const title = await page.locator('.roompanel h2').innerText();
+  await page.reload();
+  await page.getByRole('button', { name: 'Continue your story' }).click();
+  await expect(page.locator('.roompanel h2')).toHaveText(title);
 });
