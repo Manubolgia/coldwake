@@ -424,6 +424,16 @@ export function Menu({
           />
         </div>
         <div className="toggle-row">
+          <span>Narration speed</span>
+          <div className="segmented four" style={{ width: 250 }}>
+            {(['slow', 'normal', 'fast', 'instant'] as const).map((t) => (
+              <button key={t} className={(settings.textSpeed ?? 'normal') === t ? 'sel' : ''} onClick={() => onSettings({ ...settings, textSpeed: t })} style={{ textAlign: 'center' }}>
+                <b style={{ fontSize: 12 }}>{t[0]!.toUpperCase() + t.slice(1)}</b>
+              </button>
+            ))}
+          </div>
+        </div>
+        <div className="toggle-row">
           <span>Text size</span>
           <div className="segmented" style={{ width: 210 }}>
             {(['small', 'medium', 'large'] as const).map((t) => (

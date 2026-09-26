@@ -265,6 +265,8 @@ export interface Ending {
   epilogue: string[];
   score: number;
   exit: ExitId | null;
+  /** Illustration for the ending screen. */
+  art: string;
 }
 
 export interface GameState {

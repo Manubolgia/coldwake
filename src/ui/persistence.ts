@@ -22,7 +22,11 @@ export interface Settings {
   volume: number;
   textSize: 'small' | 'medium' | 'large';
   reducedMotion: boolean;
+  /** How fast the narrator writes. */
+  textSpeed: TextSpeed;
 }
+
+export type TextSpeed = 'slow' | 'normal' | 'fast' | 'instant';
 
 export interface Profile {
   unlocks: string[];
@@ -37,7 +41,7 @@ const DEFAULT_PROFILE: Profile = {
   unlocks: [],
   history: [],
   tipsDone: false,
-  settings: { sound: true, volume: 0.7, textSize: 'medium', reducedMotion: false },
+  settings: { sound: true, volume: 0.7, textSize: 'medium', reducedMotion: false, textSpeed: 'normal' },
   lastRole: 'engineer',
   lastDifficulty: 'standard',
 };

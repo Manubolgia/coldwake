@@ -1,15 +1,15 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { getActions } from '../../game/engine';
 import type { Action, ActionOption, GameState } from '../../game/types';
-import { Actions, keyOf } from './Actions';
-import { Coach } from './Coach';
-import { Dock } from './Dock';
-import { RoomPanel, Threats } from './RoomPanel';
-import { Goals, Sheet, type SheetTab } from './Sheets';
-import { ShipMap } from './ShipMap';
-import { StoryModal } from './StoryModal';
-import { TopBar } from './TopBar';
+import { PACE, useNarration } from '../narration';
 import type { Settings } from '../persistence';
+import { Coach } from './Coach';
+import { Deck, type Tab } from './Deck';
+import { Hud } from './Hud';
+import { MapOverlay, MapPanel } from './MapOverlay';
+import { Narrator } from './Narrator';
+import { Sheet, type SheetTab } from './Sheets';
+import { Stage } from './Stage';
 
 function useWide(): boolean {
   const q = '(min-width: 900px)';
@@ -35,6 +35,7 @@ export function Game({
   showTips,
   onTipsDone,
   hurt,
+  onSettled,
 }: {
   s: GameState;
   dispatch: (a: Action) => void;
@@ -47,17 +48,34 @@ export function Game({
   showTips: boolean;
   onTipsDone: () => void;
   hurt: number;
+  /** The run is over and the narrator has said its last line. */
+  onSettled: () => void;
 }) {
   const options = useMemo(() => getActions(s), [s]);
   const unused = s.dice.filter((d) => !d.used);
   const [selected, setSelected] = useState<number | null>(null);
   const [sheet, setSheet] = useState<SheetTab | null>(null);
-  const [flashKey, setFlashKey] = useState<string | null>(null);
+  const [map, setMap] = useState(false);
+  const [tab, setTab] = useState<Tab | null>('room');
   const [rolling, setRolling] = useState(false);
-  const [highlight, setHighlight] = useState<string | null>(null);
-  const scrollRef = useRef<HTMLDivElement>(null);
-  const card = s.cards[0];
   const wide = useWide();
+
+  const speed = settings.textSpeed ?? 'normal';
+  const pace = PACE[speed];
+  const narr = useNarration(s, speed);
+  const card = s.cards[0] ?? null;
+  const telling = card && !narr.busy ? card : null;
+  const locked = narr.busy || !!card || s.status !== 'playing';
+
+  // The run has ended: let the narrator finish the last moments, then move on.
+  const over = s.status !== 'playing';
+  const settled = useRef(onSettled);
+  settled.current = onSettled;
+  useEffect(() => {
+    if (!over || narr.busy) return;
+    const t = window.setTimeout(() => settled.current(), 1600);
+    return () => window.clearTimeout(t);
+  }, [over, narr.busy]);
 
   // Keep a sensible die selected: the one you picked, else the highest.
   const sel = selected !== null && unused.some((d) => d.id === selected) ? selected : unused.length ? unused.reduce((a, b) => (b.value > a.value ? b : a)).id : null;
@@ -70,11 +88,16 @@ export function Game({
     return () => window.clearTimeout(t);
   }, [s.round]);
 
+  // Something just came into the room: put the ways to deal with it in front of you.
+  const hasDanger = options.some((o) => o.group === 'danger');
+  const hadDanger = useRef(hasDanger);
   useEffect(() => {
-    scrollRef.current?.scrollTo({ top: 0, behavior: 'smooth' });
-  }, [s.player.room]);
+    if (hasDanger && !hadDanger.current) setTab('danger');
+    hadDanger.current = hasDanger;
+  }, [hasDanger]);
 
   const act = (o: ActionOption) => {
+    if (locked) return;
     if (o.id === 'take') {
       dispatch({ type: 'act', id: o.id, target: o.target!, die: -1 });
       return;
@@ -83,72 +106,74 @@ export function Game({
     dispatch(o.target !== undefined ? { type: 'act', id: o.id, target: o.target, die: sel } : { type: 'act', id: o.id, die: sel });
   };
 
-  const onRoom = (id: string) => {
-    const opt = options.find((o) => (o.id === 'move' || o.id === 'force') && o.target === id);
-    if (!opt) return;
-    const k = keyOf(opt);
-    setFlashKey(k);
-    setHighlight(id);
-    window.setTimeout(() => {
-      setFlashKey(null);
-      setHighlight(null);
-    }, 1300);
-    const el = scrollRef.current?.querySelector(`[data-action="${CSS.escape(k)}"]`);
-    el?.scrollIntoView({ behavior: 'smooth', block: 'center' });
-  };
+  const narrator = (
+    <Narrator
+      s={s}
+      lines={narr.lines}
+      shown={narr.shown}
+      busy={narr.busy}
+      onSkip={narr.skip}
+      onLineDone={narr.lineDone}
+      card={card}
+      pace={pace}
+      onChoose={(i) => dispatch({ type: 'choose', index: i })}
+      onContinue={() => dispatch({ type: 'continue' })}
+    />
+  );
+
+  const deck = (
+    <Deck
+      s={s}
+      options={options}
+      die={sel}
+      onDie={setSelected}
+      tab={tab}
+      onTab={setTab}
+      onAct={act}
+      onEnd={() => !locked && dispatch({ type: 'endRound' })}
+      locked={locked}
+      rolling={rolling}
+      pinned={wide}
+      flashKey={null}
+    />
+  );
+
+  // A hit shakes the screen. Animated in place: remounting would lose the narrator's place.
+  const root = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    if (!hurt || settings.reducedMotion) return;
+    root.current?.animate(
+      [
+        { transform: 'translate(0, 0)' },
+        { transform: 'translate(-6px, 2px)' },
+        { transform: 'translate(5px, -3px)' },
+        { transform: 'translate(-4px, 1px)' },
+        { transform: 'translate(3px, 0)' },
+        { transform: 'translate(0, 0)' },
+      ],
+      { duration: 450 },
+    );
+  }, [hurt, settings.reducedMotion]);
 
   return (
-    <div className={`game ${hurt ? 'shake' : ''}`} key={hurt ? `h${hurt}` : undefined}>
-      <TopBar s={s} onMenu={() => setSheet('menu')} />
-      <div className="side">
-        <div className="mapwrap">
-          <div className="mapcard">
-            <ShipMap s={s} onRoom={onRoom} highlight={highlight} />
-            <div className="maplegend">
-              <span>
-                <i style={{ background: 'var(--cyan)' }} />
-                You
-              </span>
-              <span>
-                <i style={{ background: 'var(--red)' }} />
-                Creature
-              </span>
-              <span>
-                <i style={{ background: 'rgba(255,77,94,.35)', borderRadius: 2 }} />
-                Can hear you
-              </span>
-              <span>
-                <i style={{ background: 'var(--cyan)', transform: 'rotate(45deg)', borderRadius: 1 }} />
-                Objective
-              </span>
-            </div>
+    <div className={`game ${wide ? 'wide' : 'narrow'} ${telling ? 'telling' : ''}`} ref={root}>
+      <Hud s={s} onSheet={setSheet} />
+      <Stage s={s} card={telling} onMap={() => setMap(true)} showMinimap={!wide}>
+        {narrator}
+      </Stage>
+      {wide ? (
+        <aside className="rail">
+          <div className="railmap">
+            <MapPanel s={s} options={options} die={sel} onAct={act} locked={locked} />
           </div>
-        </div>
-        {wide && (
-          <>
-            <Threats s={s} />
-            <div style={{ display: 'grid', gap: 12 }}>
-              <Goals s={s} />
-            </div>
-          </>
-        )}
-      </div>
-      <div className="scroll" ref={scrollRef}>
-        <RoomPanel s={s} />
-        {!wide && <Threats s={s} />}
-        <Actions options={options} die={sel} onAct={act} flashKey={flashKey} />
-      </div>
-      <Dock
-        s={s}
-        selected={sel}
-        onSelect={setSelected}
-        onEnd={() => dispatch({ type: 'endRound' })}
-        onSheet={(t) => setSheet(t)}
-        rolling={rolling}
-      />
-      {showTips && !card && !sheet && <Coach onDone={onTipsDone} />}
-      {card && <StoryModal s={s} card={card} onChoose={(i) => dispatch({ type: 'choose', index: i })} onContinue={() => dispatch({ type: 'continue' })} />}
-      {sheet && !card && (
+          {deck}
+        </aside>
+      ) : (
+        deck
+      )}
+      {showTips && !locked && !sheet && !map && <Coach onDone={onTipsDone} />}
+      {map && !wide && <MapOverlay s={s} options={options} die={sel} onAct={act} onClose={() => setMap(false)} locked={locked} />}
+      {sheet && (
         <Sheet
           s={s}
           tab={sheet}

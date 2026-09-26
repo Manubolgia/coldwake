@@ -38,7 +38,7 @@ export function goalRooms(s: GameState): { goals: Set<string>; secret: Set<strin
   return { goals, secret };
 }
 
-export function ShipMap({ s, onRoom, highlight }: { s: GameState; onRoom: (id: string) => void; highlight?: string | null }) {
+export function ShipMap({ s, onRoom, highlight, mini = false }: { s: GameState; onRoom?: (id: string) => void; highlight?: string | null; mini?: boolean }) {
   const me = s.player.room;
   const adj = useMemo(() => new Set(neighbours(s, me)), [s, me]);
   const dist = useMemo(() => distances(s, me), [s, me]);
@@ -49,12 +49,12 @@ export function ShipMap({ s, onRoom, highlight }: { s: GameState; onRoom: (id: s
   for (const c of visible) (byRoom[c.room] ??= []).push(c);
 
   return (
-    <svg className="shipmap" viewBox={`0 0 ${GRID_W * CW} ${GRID_H * CH}`} role="img" aria-label="Ship map">
+    <svg className={`shipmap ${mini ? 'mini' : ''}`} viewBox={`0 0 ${GRID_W * CW} ${GRID_H * CH}`} role="img" aria-label="Ship map">
       <defs>
-        <marker id="arrow" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse">
+        <marker id={mini ? 'arrow-mini' : 'arrow'} viewBox="0 0 10 10" refX="7" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse">
           <path d="M0 0 L10 5 L0 10 z" fill="var(--red)" />
         </marker>
-        <filter id="mapglow" x="-50%" y="-50%" width="200%" height="200%">
+        <filter id={mini ? 'mapglow-mini' : 'mapglow'} x="-50%" y="-50%" width="200%" height="200%">
           <feGaussianBlur stdDeviation="3" />
         </filter>
       </defs>
@@ -86,12 +86,12 @@ export function ShipMap({ s, onRoom, highlight }: { s: GameState; onRoom: (id: s
           <g
             key={r.id}
             className={cls}
-            onClick={() => onRoom(r.id)}
+            onClick={onRoom ? () => onRoom(r.id) : undefined}
             style={{ ['--accent' as string]: accent }}
-            role={adj.has(r.id) ? 'button' : undefined}
+            role={onRoom && adj.has(r.id) ? 'button' : undefined}
             aria-label={r.known ? roomShort(s, r.id) : 'Unexplored room'}
           >
-            {isMe && <rect x={x - 3} y={y - 3} width={RW + 6} height={RH + 6} rx={9} className="me-glow" filter="url(#mapglow)" />}
+            {isMe && <rect x={x - 3} y={y - 3} width={RW + 6} height={RH + 6} rx={9} className="me-glow" filter={`url(#${mini ? 'mapglow-mini' : 'mapglow'})`} />}
             <rect x={x} y={y} width={RW} height={RH} rx={7} className="room-box" />
             {heard && <rect x={x} y={y} width={RW} height={RH} rx={7} className="heard-box" />}
             <text
@@ -140,7 +140,7 @@ export function ShipMap({ s, onRoom, highlight }: { s: GameState; onRoom: (id: s
           const dx = tx - px;
           const dy = ty - py;
           const len = Math.hypot(dx, dy) || 1;
-          arrow = <line x1={px + (dx / len) * 7} y1={py + (dy / len) * 7} x2={tx - (dx / len) * 18} y2={ty - (dy / len) * 14} className="intent" markerEnd="url(#arrow)" />;
+          arrow = <line x1={px + (dx / len) * 7} y1={py + (dy / len) * 7} x2={tx - (dx / len) * 18} y2={ty - (dy / len) * 14} className="intent" markerEnd={`url(#${mini ? 'arrow-mini' : 'arrow'})`} />;
         }
         return (
           <g key={c.id} className={`creature ${plan.kind}`}>

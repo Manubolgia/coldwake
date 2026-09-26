@@ -2,16 +2,20 @@ import { useState } from 'react';
 
 const TIPS: { title: string; text: string }[] = [
   {
+    title: 'The narrator',
+    text: 'Everything that happens is told in the middle of the screen, a line at a time. Tap it to hear the rest at once. When it stops talking, it is your move.',
+  },
+  {
     title: 'Your dice',
     text: 'At the bottom are this round’s dice, already rolled. Tap one to pick it. Every action uses one die, and higher is better.',
   },
   {
     title: 'Pick, then act',
-    text: 'Each action shows what your picked die will do. Green is clean. Amber works, with a cost. Red fails. Try picking a different die and watch them change.',
+    text: 'The buttons above your dice — Here, Kit, Move and the rest — open what you can do. Each action shows what your die will do: green is clean, amber works at a cost, red fails.',
   },
   {
-    title: 'Noise',
-    text: 'Most actions make noise. Rooms that can hear you glow red on the map, and anything in them comes toward you when the round ends. Moving on a high die is silent.',
+    title: 'Noise and the map',
+    text: 'Most actions make noise. Tap the map in the corner to see the whole ship: rooms that can hear you glow red, and anything in them comes for you when the round ends.',
   },
   {
     title: 'The round ends',
@@ -19,7 +23,7 @@ const TIPS: { title: string; text: string }[] = [
   },
   {
     title: 'Getting out',
-    text: 'Goals shows your two ways off the ship, step by step, and your secret objective. Diamonds on the map mark rooms you need. Good luck.',
+    text: 'Goals, at the top, shows your two ways off the ship, step by step, and your secret objective. Diamonds on the map mark rooms you need. Good luck.',
   },
 ];
 

@@ -41,3 +41,29 @@ describe('whole runs', () => {
     expect(rate('story')).toBeGreaterThan(rate('nightmare'));
   });
 });
+
+describe('endings', () => {
+  it('two runs that end the same way rarely read the same', () => {
+    const byKind: Record<string, { titles: Set<string>; openings: Set<string>; n: number }> = {};
+    for (let i = 0; i < 160; i++) {
+      const { state } = playOut(`end-${i}`, ROLES[i % 5]!, 'standard');
+      const e = state.ending!;
+      const k = e.won ? `won:${e.exit}` : 'lost';
+      const b = (byKind[k] ??= { titles: new Set(), openings: new Set(), n: 0 });
+      b.titles.add(e.title);
+      b.openings.add(e.epilogue[0]!);
+      b.n++;
+    }
+    for (const [k, b] of Object.entries(byKind)) {
+      if (b.n < 8) continue;
+      expect(b.titles.size, `${k} titles`).toBeGreaterThan(2);
+      expect(b.openings.size, `${k} opening lines`).toBeGreaterThan(2);
+    }
+  });
+
+  it('the same run always gets the same ending', () => {
+    const a = playOut('same-ending', 'marine', 'standard').state.ending;
+    const b = playOut('same-ending', 'marine', 'standard').state.ending;
+    expect(a).toEqual(b);
+  });
+});

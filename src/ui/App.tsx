@@ -100,7 +100,6 @@ export function App() {
       updateProfile(p);
       setNewUnlocks(u);
       saveGame(null);
-      window.setTimeout(() => setScreen('ending'), 900);
     },
     [profile, updateProfile],
   );
@@ -137,7 +136,7 @@ export function App() {
   if (screen === 'howto') return <HowTo onBack={() => setScreen(returnTo)} />;
   if (screen === 'memorial') return <Memorial history={profile.history} onBack={() => setScreen('title')} />;
   if (screen === 'ending' && game?.ending) {
-    return <Ending s={game} newUnlocks={newUnlocks} onAgain={() => setScreen('setup')} onTitle={() => setScreen('title')} />;
+    return <Ending s={game} newUnlocks={newUnlocks} speed={settings.textSpeed ?? 'normal'} onAgain={() => setScreen('setup')} onTitle={() => setScreen('title')} />;
   }
   if (screen === 'game' && game) {
     return (
@@ -166,6 +165,7 @@ export function App() {
         showTips={!profile.tipsDone}
         onTipsDone={() => updateProfile({ ...profile, tipsDone: true })}
         hurt={hurt}
+        onSettled={() => setScreen('ending')}
       />
     );
   }

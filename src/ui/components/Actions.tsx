@@ -2,12 +2,12 @@ import { STAT_NAMES } from '../../game/content/roles';
 import type { ActionOption } from '../../game/types';
 import { Icon } from '../art/Icon';
 
-const GROUPS: { id: ActionOption['group']; title: string }[] = [
-  { id: 'danger', title: 'Danger' },
-  { id: 'goal', title: 'Objectives' },
-  { id: 'room', title: 'Here' },
-  { id: 'kit', title: 'Your kit' },
-  { id: 'move', title: 'Move' },
+export const GROUPS: { id: ActionOption['group']; title: string; short: string; icon: string }[] = [
+  { id: 'danger', title: 'Danger', short: 'Danger', icon: 'fight' },
+  { id: 'goal', title: 'Objectives', short: 'Goal', icon: 'goals' },
+  { id: 'room', title: 'In this room', short: 'Here', icon: 'search' },
+  { id: 'kit', title: 'Your kit', short: 'Kit', icon: 'box' },
+  { id: 'move', title: 'Move on', short: 'Move', icon: 'move' },
 ];
 
 const BAND_LABEL = { clean: 'Clean', cost: 'Cost', fail: 'Fail' } as const;
@@ -16,36 +16,7 @@ export function keyOf(o: ActionOption): string {
   return `${o.id}|${o.target ?? ''}`;
 }
 
-export function Actions({
-  options,
-  die,
-  onAct,
-  flashKey,
-}: {
-  options: ActionOption[];
-  die: number | null;
-  onAct: (o: ActionOption) => void;
-  flashKey: string | null;
-}) {
-  return (
-    <div className="actions">
-      {GROUPS.map((g) => {
-        const list = options.filter((o) => o.group === g.id);
-        if (!list.length) return null;
-        return (
-          <section key={g.id} className={`group ${g.id}`} aria-label={g.title}>
-            <div className="eyebrow">{g.title}</div>
-            {list.map((o) => (
-              <ActionRow key={keyOf(o)} o={o} die={die} onAct={onAct} flash={flashKey === keyOf(o)} />
-            ))}
-          </section>
-        );
-      })}
-    </div>
-  );
-}
-
-function ActionRow({ o, die, onAct, flash }: { o: ActionOption; die: number | null; onAct: (o: ActionOption) => void; flash: boolean }) {
+export function ActionRow({ o, die, onAct, flash }: { o: ActionOption; die: number | null; onAct: (o: ActionOption) => void; flash: boolean }) {
   const free = o.id === 'take';
   const out = die !== null ? o.outcomes[die] : undefined;
   const bandCls = !o.flat && !free && out ? `b-${out.band}` : '';
