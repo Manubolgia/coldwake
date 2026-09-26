@@ -1,7 +1,7 @@
 import type { ReactNode } from 'react';
 import type { CreatureKind, Hazard } from '../../game/types';
 import { creatureAt, limb, blob } from './creatures';
-import { P, glowMat, mat, pts2, scaleAt, seeded, type V3 } from './kit3d';
+import { P, Scene, glowMat, mat, pts2, scaleAt, seeded, type V3 } from './kit3d';
 import type { RoomArt } from './rooms';
 import { onFloor, shell, stars, type Built, type Look } from './scene';
 
@@ -565,10 +565,16 @@ export function vignette(key: string): RoomArt | null {
       }
       return { built: b, look: look(RED, { hazeO: 0.14, grade: '#ff0020', gradeO: 0.16, dust: '#ffc2c8' }) };
     }
-    case 'end-pods':
-      return space({ seed: 3, planet: true, ship: 'far', pod: true });
-    case 'end-shuttle':
-      return space({ seed: 5, planet: true, ship: 'far', shuttle: true });
+    case 'end-pods': {
+      const r = spaceScene({ seed: 3, planet: true, ship: { at: [-4, 3, 40], yaw: 0.5, pitch: 0.25, roll: 0.2 } });
+      return { ...r, over: (space({ seed: 3, pod: true }).under as ReactNode[]).filter((n) => String((n as { key?: string }).key) === 'pod') };
+    }
+    case 'end-shuttle': {
+      const r = spaceScene({ seed: 5, planet: true, ship: { at: [-4, 3, 40], yaw: 0.5, pitch: 0.25, roll: 0.2 } });
+      return { ...r, over: (space({ seed: 5, shuttle: true }).under as ReactNode[]).filter((n) => String((n as { key?: string }).key) === 'sh') };
+    }
+    case 'title':
+      return spaceScene({ seed: 2, planet: true, bg: false, ship: { at: [0.5, 1.4, 21], yaw: 0.62, pitch: 0.28, roll: -0.12 } });
     case 'end-beacon': {
       const b = shell({ lamp: '#ffe9c4', lampI: 1.3, door: 'open', doorGlow: '#fff1d8', seed: 51, back: 8 });
       const p = person(0, 6.2, 'stand', '#1a1d22', '#fff1d8');
@@ -576,8 +582,10 @@ export function vignette(key: string): RoomArt | null {
       b.sc.light([0, 0.4, 8.6], '#fff1d8', 2, 2.5);
       return { built: b, look: look('#ffe9c4', { hazeO: 0.16, dust: '#fff8e8', grade: '#ffcf8a', gradeO: 0.1 }) };
     }
-    case 'end-jump':
-      return space({ seed: 7, streaks: true, ship: 'near' });
+    case 'end-jump': {
+      const r = spaceScene({ seed: 7, ship: { at: [0, 0.6, 19], yaw: -Math.PI / 2 + 0.25, pitch: 0.18 } });
+      return { ...r, under: space({ seed: 7, streaks: true }).under };
+    }
     case 'end-burn':
       return space({ seed: 9, explosion: true });
     case 'end-lost': {
@@ -648,6 +656,80 @@ function Veins() {
   );
 }
 
+
+// ── the ship itself ────────────────────────────────────────────────────
+
+/** A long-haul ship, modelled nose along +x, placed with a yaw/pitch at a point. */
+function ship3d(sc: Scene, at: V3, yaw: number, pitch: number, roll = 0, alarm = true) {
+  sc.xf = { yaw, pitch, roll, t: at };
+  const hull = mat('#5d6570', { spec: 0.7, jitter: 0.16 });
+  const dark = mat('#3a414b', { spec: 0.4, jitter: 0.15 });
+  const trim = mat('#b88a2a', { spec: 0.3 });
+  // Spine and main hull.
+  sc.box([-6, -0.6, -0.9], [4.6, 0.6, 0.9], hull, { split: 4 });
+  // Tapered nose.
+  const nose: V3 = [6.6, -0.1, 0];
+  const f: V3[] = [[4.6, -0.6, -0.9], [4.6, 0.6, -0.9], [4.6, 0.6, 0.9], [4.6, -0.6, 0.9]];
+  for (let i = 0; i < 4; i++) sc.poly([f[i]!, f[(i + 1) % 4]!, nose], hull);
+  sc.poly([[5.2, 0.25, -0.45], [5.2, 0.25, 0.45], [6, 0.02, 0.2], [6, 0.02, -0.2]], glowMat('#9fe8ff', 0.5));
+  // Command tower with a lit window strip.
+  sc.box([2, 0.6, -0.55], [3.6, 1.45, 0.55], hull, { split: 2 });
+  sc.box([3.6, 1.05, -0.45], [3.64, 1.25, 0.45], glowMat('#ffd9a8', 1.1));
+  sc.box([2.1, 1.05, -0.57], [3.5, 1.2, -0.55], glowMat('#ffd9a8', 0.9));
+  sc.box([2.1, 1.05, 0.55], [3.5, 1.2, 0.57], glowMat('#ffd9a8', 0.9));
+  sc.box([2.6, 1.45, -0.05], [2.7, 2.2, 0.05], dark);
+  // Cargo pods slung under the spine.
+  for (const x of [-4.6, -2.6, -0.6]) {
+    sc.box([x, -1.5, -1.25], [x + 1.6, -0.6, 1.25], x === -2.6 ? trim : dark, { split: 2 });
+    sc.box([x + 0.1, -1.1, -1.27], [x + 1.5, -1.0, -1.25], glowMat('#5ce1e6', 0.35));
+  }
+  // Radiator fins.
+  for (const x of [-4.2, -2.4]) sc.box([x, 0.6, -0.05], [x + 1.2, 2.3, 0.05], mat('#2b3038', { spec: 0.7 }), { split: 2 });
+  // Ring habitat.
+  const ringX = 0.8;
+  for (let i = 0; i < 16; i++) {
+    const a0 = (i / 16) * Math.PI * 2;
+    const a1 = ((i + 1) / 16) * Math.PI * 2;
+    const r = 2.2;
+    const p = (a: number, dx: number): V3 => [ringX + dx, Math.sin(a) * r, Math.cos(a) * r];
+    sc.poly([p(a0, -0.25), p(a1, -0.25), p(a1, 0.25), p(a0, 0.25)], hull, { n: [0, Math.sin((a0 + a1) / 2), Math.cos((a0 + a1) / 2)] });
+    sc.poly([p(a0, 0.25), p(a1, 0.25), p(a1, -0.25), p(a0, -0.25)], dark, { n: [0, -Math.sin((a0 + a1) / 2), -Math.cos((a0 + a1) / 2)] });
+    sc.poly([p(a0, -0.26), p(a1, -0.26), [ringX - 0.26, Math.sin(a1) * 1.9, Math.cos(a1) * 1.9], [ringX - 0.26, Math.sin(a0) * 1.9, Math.cos(a0) * 1.9]], i % 3 ? dark : glowMat('#ffd9a8', 0.35), { n: [-1, 0, 0] });
+  }
+  for (const a of [0, Math.PI / 2, Math.PI, (3 * Math.PI) / 2]) sc.box([ringX - 0.08, Math.min(0, Math.sin(a) * 2) - 0.08, Math.min(0, Math.cos(a) * 2) - 0.08], [ringX + 0.08, Math.max(0, Math.sin(a) * 2) + 0.08, Math.max(0, Math.cos(a) * 2) + 0.08], dark);
+  // Engine block and nozzles.
+  sc.box([-7.6, -1.1, -1.3], [-6, 1.1, 1.3], dark, { split: 2 });
+  for (const [y, z] of [[0.5, 0.6], [0.5, -0.6], [-0.5, 0.6], [-0.5, -0.6]] as const) {
+    const ring = (r: number, x: number) => Array.from({ length: 10 }, (_, i) => [x, y + Math.sin((i / 10) * Math.PI * 2) * r, z + Math.cos((i / 10) * Math.PI * 2) * r] as V3);
+    sc.poly(ring(0.42, -7.62), mat('#1d2126'), { n: [-1, 0, 0] });
+    sc.poly(ring(0.3, -7.64), glowMat('#5ce1e6', 1.4), { n: [-1, 0, 0] });
+  }
+  // Running lights down the hull.
+  for (let x = -5.4; x < 4.4; x += 0.7) {
+    sc.box([x, 0.1, -0.92], [x + 0.18, 0.22, -0.9], glowMat('#ffd27f', 0.7));
+    sc.box([x, 0.1, 0.9], [x + 0.18, 0.22, 0.92], glowMat('#ffd27f', 0.7));
+  }
+  if (alarm) sc.box([3.02, 2.18, -0.05], [3.12, 2.28, 0.05], glowMat(RED, 2));
+  sc.xf = null;
+}
+
+function spaceScene(o: { seed: number; ship?: { at: V3; yaw: number; pitch: number; roll?: number }; planet?: boolean; bg?: boolean }): RoomArt {
+  const sc = new Scene();
+  sc.ambient = [0.004, 0.006, 0.012];
+  sc.fog = { c: [0, 0, 0], d: 0.004 };
+  // The sun, off to the upper left, and blue light thrown back by the planet.
+  sc.light([-70, 35, 75], '#fff1d8', 2.4, 80);
+  sc.light([-20, 30, -30], '#9fb8d8', 0.35, 60);
+  sc.light([30, -40, 10], '#3a7fc4', 0.9, 60);
+  if (o.ship) ship3d(sc, o.ship.at, o.ship.yaw, o.ship.pitch, o.ship.roll);
+  const base = space({ seed: o.seed, planet: o.planet });
+  return {
+    built: { sc, cones: [], hw: 0, floor: -100, ceil: 0, back: 0 },
+    look: { ...base.look, bg: o.bg === false ? 'none' : base.look.bg },
+    under: o.bg === false ? (o.planet ? <g>{(base.under as ReactNode[]).filter((n) => ['d', 'pl', 'atm'].includes(String((n as { key?: string }).key)))}</g> : null) : base.under,
+  };
+}
+
 // ── space ──────────────────────────────────────────────────────────────
 
 function space(o: { seed: number; planet?: boolean; ship?: 'far' | 'near'; pod?: boolean; shuttle?: boolean; streaks?: boolean; explosion?: boolean }): RoomArt {
@@ -664,10 +746,10 @@ function space(o: { seed: number; planet?: boolean; ship?: 'far' | 'near'; pod?:
         <stop offset="1" stopColor="#1f7a8a" stopOpacity={0} />
       </radialGradient>
       <radialGradient id={`pl${o.seed}`} cx="0.3" cy="0.25" r="0.8">
-        <stop offset="0" stopColor="#9fd8ff" />
-        <stop offset="0.35" stopColor="#3a7fc4" />
-        <stop offset="0.75" stopColor="#0c2340" />
-        <stop offset="1" stopColor="#02060d" />
+        <stop offset="0" stopColor="#6fb0e0" />
+        <stop offset="0.3" stopColor="#24598f" />
+        <stop offset="0.65" stopColor="#0a1c33" />
+        <stop offset="1" stopColor="#02050b" />
       </radialGradient>
       <radialGradient id={`boom${o.seed}`} cx="0.5" cy="0.5" r="0.5">
         <stop offset="0" stopColor="#ffffff" />

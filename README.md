@@ -19,10 +19,14 @@ offline PWA. No accounts, no server, nothing leaves the device.
 
 ## How it plays
 
-1. **Roll.** Three dice each round, already rolled.
-2. **Act.** Pick a die, then an action. Every action shows exactly what that
-   die will do before you commit: **clean**, **cost** or **fail**.
-3. **End the round.** Anything in your room strikes. Anything that heard you
+1. **Listen.** A narrator in the middle of the screen tells you what just
+   happened, a line at a time, like a game master at the table, then opens
+   the round by saying where things stand. Tap it to hear the rest at once.
+2. **Roll.** Three dice each round, already rolled.
+3. **Act.** Pick a die, then open Here, Kit, Move, Goal or Danger and pick an
+   action. Every action shows exactly what that die will do before you
+   commit: **clean**, **cost** or **fail**.
+4. **End the round.** Anything in your room strikes. Anything that heard you
    comes closer. The ship does something. The clock ticks.
 
 Finish either of your two ways off the ship before the clock runs out.
@@ -32,8 +36,9 @@ Finish either of your two ways off the ship before the clock runs out.
 - **Rooms** stay anonymous until you've stood next to them. Walking into one
   for the first time draws a discovery: a body, a stash, a survivor, a log,
   a fire, an ambush.
-- **Story cards** are events with choices. Choices that need a check roll a
-  fresh die against your stat, and the card shows your odds first.
+- **Story cards** are events with choices, told by the narrator over the
+  scene. Choices that need a check show your odds first, then roll a fresh
+  die in front of you before the result is read out.
 - **Logs** hidden around the ship add up to the truth of what happened. Learn
   it and you fight back harder.
 - **Stress** fills from horror. At the top you panic, and some panics leave
@@ -41,7 +46,14 @@ Finish either of your two ways off the ship before the clock runs out.
 
 Five incidents (*The Specimen*, *The Signal*, *MOTHER*, *The Guest*, *The
 Bloom*), five creature types, four ways off, eight secret objectives, seven
-roles (two unlocked by playing), three difficulties, 20 room types.
+roles (two unlocked by playing), three difficulties, 20 room types. Every
+line of the epilogue is drawn from a pool of variants, so two runs that end
+the same way still read differently.
+
+Everything fits on one screen: the room you are in fills it, drawn as a lit
+3D scene that shows its fire, darkness or hull breach and whatever is in
+there with you; the map sits in a corner and opens full size; the Goals,
+You, Log and Menu sheets open over the top.
 
 ## Running it
 
@@ -55,6 +67,9 @@ npm run e2e          # Playwright: plays a whole run through the real UI
 npm run sim -- 500 standard        # bot win rates per role
 npm run icons        # re-render the PWA icons
 ```
+
+With `npm run dev` running, `/coldwake/gallery.html` shows every
+illustration on one page (`?only=cryo,stalker&w=390&h=600` to narrow it).
 
 ## What is where
 
@@ -70,9 +85,15 @@ src/
     bot.ts         a competent-player bot used by the tests
     content/       every room, creature, event, discovery, item and line of prose
   ui/            React and hand-written CSS
-    art/           every illustration, drawn as SVG in code
+    art/           every illustration, rendered in code
+      kit3d.tsx      a tiny flat-shaded 3D renderer that outputs SVG
+      scene.tsx      the room shell, light shafts, bloom, haze, vignette
+      rooms.tsx      the 20 compartments
+      creatures.tsx  backlit creature silhouettes built from tapered limbs
+      vignettes.tsx  events, finds, hazards, the ship in space, endings
+    narration.ts   the narrator: pacing, round openings, the reading queue
     audio.ts       every sound, synthesised with WebAudio
-    components/    title, setup, game, story cards, sheets, ending
+    components/    title, setup, game (HUD, stage, narrator, deck, map), sheets, ending
 test/            engine, content and simulation tests
 e2e/             Playwright
 docs/DESIGN.md   research, pillars and rules

@@ -110,6 +110,26 @@ export class Scene {
   floorY: number | null = null;
   /** Bias added to everything drawn while set (the shell draws first). */
   layer = 0;
+  /** Model transform applied to everything added while set: yaw, then pitch, then move. */
+  xf: { yaw: number; pitch: number; roll?: number; t: V3 } | null = null;
+
+  private apply(v: V3, dir = false): V3 {
+    const x = this.xf;
+    if (!x) return v;
+    let [a, b, c] = v;
+    if (x.roll) {
+      const cr = Math.cos(x.roll);
+      const sr = Math.sin(x.roll);
+      [a, b] = [a * cr - b * sr, a * sr + b * cr];
+    }
+    const cy = Math.cos(x.yaw);
+    const sy = Math.sin(x.yaw);
+    [a, c] = [a * cy + c * sy, -a * sy + c * cy];
+    const cp = Math.cos(x.pitch);
+    const sp = Math.sin(x.pitch);
+    [b, c] = [b * cp - c * sp, b * sp + c * cp];
+    return dir ? [a, b, c] : [a + x.t[0], b + x.t[1], c + x.t[2]];
+  }
   lights: Light[] = [];
   ambient: RGB = [0.006, 0.008, 0.012];
   fog: Fog = { c: [0.002, 0.003, 0.005], d: 0.13 };
@@ -127,7 +147,11 @@ export class Scene {
 
   /** A flat polygon. Normal from the winding (counter-clockwise from the lit side) unless given. */
   poly(pts: V3[], m: Mat, opts: { n?: V3; glow?: boolean; bias?: number } = {}): this {
-    const n = opts.n ?? norm(cross(sub(pts[1]!, pts[0]!), sub(pts[pts.length - 1]!, pts[0]!)));
+    let n = opts.n ?? norm(cross(sub(pts[1]!, pts[0]!), sub(pts[pts.length - 1]!, pts[0]!)));
+    if (this.xf) {
+      pts = pts.map((p) => this.apply(p));
+      n = this.apply(n, true);
+    }
     this.faces.push({ pts, n, mat: m, glow: opts.glow ?? !!m.e, seed: seedCounter++, bias: (opts.bias ?? 0) + this.layer });
     return this;
   }

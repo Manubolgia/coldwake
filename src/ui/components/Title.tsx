@@ -1,4 +1,5 @@
 import { useEffect, useRef } from 'react';
+import { Art } from '../art/Art';
 import { Icon } from '../art/Icon';
 
 function Starfield({ reduced }: { reduced: boolean }) {
@@ -54,39 +55,6 @@ function Starfield({ reduced }: { reduced: boolean }) {
   return <canvas ref={ref} className="starfield" aria-hidden="true" />;
 }
 
-function Ship() {
-  return (
-    <svg className="title-ship" viewBox="0 0 520 260" aria-hidden="true">
-      <defs>
-        <linearGradient id="hull" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0" stopColor="#1c2a3d" />
-          <stop offset="1" stopColor="#070b12" />
-        </linearGradient>
-        <filter id="shipglow" x="-50%" y="-50%" width="200%" height="200%">
-          <feGaussianBlur stdDeviation="6" />
-        </filter>
-        <radialGradient id="planet" cx="0.35" cy="0.3" r="0.8">
-          <stop offset="0" stopColor="#3a86c4" />
-          <stop offset="0.6" stopColor="#123456" />
-          <stop offset="1" stopColor="#040a14" />
-        </radialGradient>
-      </defs>
-      <circle cx="430" cy="250" r="170" fill="url(#planet)" opacity="0.55" />
-      <path d="M270 250 a170 170 0 0 1 300 -120" stroke="#7fd6ff" strokeOpacity="0.35" strokeWidth="2" fill="none" />
-      <g className="art-breathe" style={{ transformOrigin: '260px 130px' }}>
-        <path d="M60 128 L150 104 L330 98 L420 112 L470 128 L420 144 L330 158 L150 152 Z" fill="url(#hull)" stroke="#5ce1e6" strokeOpacity="0.4" />
-        <path d="M150 104 L170 76 L260 72 L280 98 M150 152 L170 180 L260 184 L280 158" fill="#0b121d" stroke="#5ce1e6" strokeOpacity="0.3" />
-        <path d="M200 110 H320 M200 146 H320 M110 128 H440" stroke="#5ce1e6" strokeOpacity="0.15" />
-        {[190, 214, 238, 262, 286, 310].map((x, i) => (
-          <rect key={x} x={x} y={120} width={8} height={4} fill={i === 3 ? '#ff4d5e' : '#ffd27f'} opacity={i === 3 ? 0.9 : 0.5} className={i === 3 ? 'art-blink' : undefined} />
-        ))}
-        <ellipse cx="52" cy="128" rx="18" ry="10" fill="#5ce1e6" opacity="0.6" filter="url(#shipglow)" />
-        <ellipse cx="56" cy="128" rx="7" ry="5" fill="#dffcff" />
-      </g>
-    </svg>
-  );
-}
-
 export function Title({
   hasSave,
   onContinue,
@@ -109,7 +77,9 @@ export function Title({
   return (
     <main className="title-screen">
       <Starfield reduced={reduced} />
-      <Ship />
+      <div className="title-art" aria-hidden="true">
+        <Art art="title" className="scene-art" />
+      </div>
       <div className="title-block">
         <h1 className="logo">COLDWAKE</h1>
         <p className="tagline">You wake alone. Something else is awake too.</p>

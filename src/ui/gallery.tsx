@@ -6,7 +6,7 @@ import './styles.css';
 
 const params = new URLSearchParams(location.search);
 const only = params.get('only')?.split(',');
-const extra = ['stalker', 'crawler', 'changed', 'drone', 'mimic', 'hull', 'box', 'speaker', 'light', 'photo', 'vent', 'eye', 'door', 'fire', 'dark', 'breach', 'pipe', 'body', 'wall', 'survivor', 'spores', 'room', 'wire', 'log', 'truth', 'panic', 'scan', 'infection', 'alarm', 'end-pods', 'end-shuttle', 'end-beacon', 'end-jump', 'end-burn', 'end-lost'];
+const extra = ['title', 'stalker', 'crawler', 'changed', 'drone', 'mimic', 'hull', 'box', 'speaker', 'light', 'photo', 'vent', 'eye', 'door', 'fire', 'dark', 'breach', 'pipe', 'body', 'wall', 'survivor', 'spores', 'room', 'wire', 'log', 'truth', 'panic', 'scan', 'infection', 'alarm', 'end-pods', 'end-shuttle', 'end-beacon', 'end-jump', 'end-burn', 'end-lost'];
 const all = [...Object.keys(ROOMS), ...extra].filter((k) => !only || only.includes(k));
 const w = Number(params.get('w') ?? 300);
 const h = Number(params.get('h') ?? 300);

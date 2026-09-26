@@ -28,6 +28,14 @@ export function HowTo({ onBack }: { onBack: () => void }) {
         </div>
         <div className="card">
           <h3>
+            <Icon name="journal" /> The narrator
+          </h3>
+          <p>
+            Like a game master at the table, the narrator tells you what happens in the middle of the screen, a line at a time, then waits for your move. Story cards are told the same way, and a check rolls its die in front of you. Tap the narrator to hear the rest at once; the whole story so far is in the Log. You can change how fast it speaks in the Menu.
+          </p>
+        </div>
+        <div className="card">
+          <h3>
             <Icon name="dice" /> Dice
           </h3>
           <div className="demo">
@@ -36,7 +44,7 @@ export function HowTo({ onBack }: { onBack: () => void }) {
             <DieFace value={1} />
           </div>
           <p>
-            Each round you get three dice, already rolled. Tap one, then tap an action. Every action shows exactly what that die will do before you commit — so the question is never “will this work?” but “which die do I spend where?”
+            Each round you get three dice, already rolled. Tap one, then open what you want to do — Here, Kit, Move, Goal, or Danger when something is in the room — and tap an action. Every action shows exactly what that die will do before you commit — so the question is never “will this work?” but “which die do I spend where?”
           </p>
           <p>Badly hurt (2 health or less), you roll one fewer. A companion adds a die of their own.</p>
         </div>

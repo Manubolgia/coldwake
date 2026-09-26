@@ -55,7 +55,7 @@ export function Deck({
           <div className="drawer-head">
             <span className="eyebrow">{g?.title}</span>
             {!pinned && (
-              <button className="drawer-x" onClick={() => onTab(null)} aria-label="Close">
+              <button className="drawer-x" onClick={() => onTab(null)} aria-label="Close actions">
                 <Icon name="x" size={16} />
               </button>
             )}

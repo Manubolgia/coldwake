@@ -169,26 +169,50 @@ the ship never fills up.
 Reach a way off and finish it, and the game writes the epilogue from the run:
 how you left, who came with you, whether you carried something out, whether you
 learned the truth, whether your secret objective was done, whether the thing is
-still alive. Die, and it writes that instead. Every run is kept on the
-memorial.
+still alive, and a last line about afterwards. Die, and it writes that instead.
+Every one of those lines, and the ending's title, is drawn at random from a
+pool of variants, seeded by the run, so the same run always ends the same way
+and the next one almost never does. Every run is kept on the memorial.
 
 ## 5. Interface
 
-- **Top bar:** health, stress, clock, menu.
-- **Board:** the ship map, always on screen. Tap an adjacent room to go there.
-- **Room card:** illustrated backdrop for the compartment, its name, hazards,
-  and the latest thing that happened.
-- **Dice tray:** your dice, the round's noise, End Round.
-- **Actions:** grouped (danger first, then the room, then your kit), each with
-  a one-line effect and the outcome for the selected die, colour-coded.
-- **Sheets:** Goals, You (stats and kit), Journal — slide up on demand.
-- Desktop gets two columns; nothing is hidden on a phone, only moved.
+One screen, no scrolling. The story happens in the middle of it.
 
-Visual direction: deep-space navy, cyan interface light, amber for caution,
-red for danger, violet for stress. SVG illustrations for every compartment and
-creature, drawn in code, so the whole game ships offline. Procedural ambient
-audio (hull drone, heartbeat when something is close, stingers). Reduced
-motion and larger text settings.
+- **HUD** (top): health, stress, the clock, and buttons for the Goals, You,
+  Log and Menu sheets.
+- **Stage** (the rest of the screen): the room you are in, full-bleed. It
+  shows the room as it is now — burning, dark, open to space, with whatever
+  is in there with you. Its name and status chips sit top left; a minimap
+  sits top right and opens the full map, where tapping a neighbouring room
+  shows what going there costs. Visible threats run along the bottom.
+- **The narrator** sits over the lower middle of the stage, like a game
+  master at the table. Everything the engine logs is told there a line at a
+  time, at reading pace (slow, normal, fast or instant, in the Menu), with
+  pauses on punctuation and between lines. Tapping it says the rest at once.
+  Each round opens with a line of table talk: the round, the clock, what the
+  things you can see are about to do, and what the dice came up. Story cards
+  are told in the same panel after the narrator has finished speaking, and
+  the scene behind switches to the card's picture; a check rolls its die in
+  the panel before the result is read. Nothing can be done while the
+  narrator is speaking or a card is waiting.
+- **Deck** (bottom): the dice, noise, End round, and a row of tabs — Danger,
+  Goal, Here, Kit, Move — each opening its actions in a drawer above the
+  dice, so a long list never pushes the story off screen. Danger opens by
+  itself when something comes into the room.
+- Wide screens put the map and the action list in a column on the right and
+  keep the list open.
+
+**Art.** Every picture is rendered in code, offline. Rooms are small 3D
+scenes built from boxes, prisms and lathed shapes, lit by coloured point
+lights with falloff, fogged with depth, with contact shadows under furniture,
+light shafts under lamps, bloom on anything that glows, and film grain. Walls
+and floors are split into panels so the light falls off across the plating.
+Creatures are painted silhouettes built from tapered limbs, backlit with a
+rim of light, wet highlights and glowing eyes, and placed into the 3D scene at
+a depth. Events, finds, hazards and endings reuse the same pieces; the ship
+itself is a 3D model lit by a distant sun. Procedural ambient audio (hull
+drone, heartbeat when something is close, stingers). Reduced motion and
+larger text settings.
 
 ## 6. Engine
 
