@@ -1,6 +1,7 @@
 import { useEffect, useRef } from 'react';
 import { Art } from '../art/Art';
 import { Icon } from '../art/Icon';
+import { backToLibrary, inLibrary } from '../library';
 
 function Starfield({ reduced }: { reduced: boolean }) {
   const ref = useRef<HTMLCanvasElement>(null);
@@ -98,6 +99,11 @@ export function Title({
           <button className="btn wide ghost" onClick={onMemorial}>
             The memorial
           </button>
+          {inLibrary && (
+            <button className="btn wide ghost" onClick={backToLibrary}>
+              Back to the library
+            </button>
+          )}
         </div>
         <div className="title-foot">
           <button onClick={onSound} aria-label={sound ? 'Mute sound' : 'Turn sound on'}>
